@@ -1,0 +1,139 @@
+<div class="test">
+
+  <header role="banner">       
+      
+  <nav class="navbar navbar-default" id="navbar" role="navigation" style="margin-top:20px;"> 
+      
+    <div class="container-fluid">
+      
+      <!-- Collapse Icon and Logo -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <!--<a class="navbar-brand" href="#">Whats On-->
+        <a class="navbar-brand" href="#"><img id="thelogo" src="assets/img/logo.jpg" alt="Whats On">
+        </a>
+        
+      </div>
+        
+      <!-- Navigation Bar -->
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-left">
+            <li class="active"><a href="./index.html">Home</a></li>
+            <li><a href="#">About</a></li> 
+            <li><a href="#">Für Veranstalter</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Kontakt</a></li>
+        </ul> 
+    
+      <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Anmelden</a></li>
+      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Registrieren</a></li>
+      </ul>  
+    
+      </div>
+    </div>
+      </nav>
+      
+    <div>
+         <form>
+          <div class="form-group" style="display:inline;">
+              <div class="input-group">
+                  <input class="form-control" type="text" placeholder="Finde dein Event!">
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+              </div>
+          </div>
+      </form>
+        
+      </div>
+            
+
+  </header>    
+  
+
+  <div class="mainContainer container-fluid">
+  
+  	<div class="panel panel-default car-panel" style="width: 800px; height: 500px; overflow: hidden; margin-left: 0px; margin-right:0px; margin-top: 100px;">
+  		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="width: 800px; height: 500px; overflow: hidden;">
+		  		<!-- Indicators -->
+		  		<ol class="carousel-indicators">
+		   		 <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+		    		<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+		  		</ol>
+		
+		  	<div class="carousel-inner" role="listbox">
+		    <div class="item active">
+		      <img src="assets/img/thumbnail.jpg" width="800px;" height="500px;">
+		      <div class="carousel-caption">
+		        <h3> Event 1</h3>
+    			 <p> Yay </p>
+		      </div>
+		    </div>
+		    <div class="item">
+		      <img src="assets/img/thumbnail2.jpg" width="800px;" height="500px;">
+		      <div class="carousel-caption">
+		         <h3> Event 2</h3>
+    			 <p> Yay </p>
+		      </div>
+		    </div>
+		  </div>
+		
+		  <!-- Controls -->
+		  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+		    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+		    <span class="sr-only">Previous</span>
+		  </a>
+		  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+		    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+		    <span class="sr-only">Next</span>
+		  </a>
+		</div>
+  	</div>
+  	
+
+  	<!-- <spinner height="500" width="900"/> -->
+    <div class="row">
+      <div class="col-md-4">
+      	<filt filters="{{filters}}"/>
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+        	{{#each events}}
+        		<div class="col-xs-6 col-md-3">
+    				<a href="#" class="thumbnail">
+     					<img src="assets/img/thumbnail.jpg" alt="...">
+    				</a>
+  				</div>
+        	{{/each}}
+		</div>
+      </div>
+  	</div>
+  	
+  	<nav aria-label="Page navigation" class="centered">
+  		<ul class="pagination">
+    		<li>
+     		 <a href="#" aria-label="Previous">
+        		<span aria-hidden="true">&laquo;</span>
+      		</a>
+   		 </li>
+    		<li><a href="#">1</a></li>
+    		<li><a href="#">2</a></li>
+    		<li><a href="#">3</a></li>
+    		<li><a href="#">4</a></li>
+    		<li><a href="#">5</a></li>
+    		<li>
+     		 <a href="#" aria-label="Next">
+       		 <span aria-hidden="true">&raquo;</span>
+      		</a>
+   		 </li>
+  		</ul>
+	</nav>
+  </div>
+  <div id="loading" style="visibility: {{loading ? 'visible' : 'hidden'}}">
+    <span class="glyphicon glyphicon-repeat glyphicon-refresh-animate" style="font-size:2.6em"></span>
+  </div>
+</div>

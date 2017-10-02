@@ -1,0 +1,104 @@
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+@-webkit-keyframes spinw {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@-moz-keyframes spinm {
+    from { -moz-transform: rotate(0deg);}
+    to { -moz-transform: rotate(360deg);}
+}
+
+.car-panel {
+	position: relative;
+	transform: translate(-50%, 0%);
+	left: 50%;
+}
+
+.centered {
+	position: relative;
+	transform: translate(-50%, 0%);
+	left: 50%;
+}
+
+.glyphicon-refresh-animate {
+    -animation: spin 0.7s infinite linear;
+    -ms-animation: spin 0.7s infinite linear;
+    -webkit-animation: spinw 0.7s infinite linear;
+    -moz-animation: spinm 0.7s infinite linear;
+     transform-origin: 50% 45%;
+}
+
+.mainContainer{
+  margin: 20px;
+  position: absolute;
+  top:40px;
+}
+    
+.modalEdit {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+}
+
+.navbar-brand>img{
+    width:400px;    
+}
+    
+.spinner {
+	position: absolute;
+	background-color: #FFF;
+	border: 1px solid black;
+	border-radius: 10px;
+}
+
+.spinner-content {
+	position: absolute;
+	top: 0px;
+	left:0px;
+	width:100%;
+}
+    
+.spinner-panel {
+	border: 1px solid #CCC;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.test {
+    position: absolute;
+	left: 10%;
+	width: 80%;
+	top: 40px;
+}
+    
+#content{
+  /*position: absolute;*/
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+    
+/*#navbar {
+	position:fixed;
+	left: 10%;
+	top: 20px;
+	width: 80%;
+}*/
+    
+#thelogo {
+    width:110px;
+    margin-top: -10px;
+    }

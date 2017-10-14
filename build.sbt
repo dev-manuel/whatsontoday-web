@@ -1,4 +1,4 @@
-name := """WhatsOnTest"""
+name := """WhatsOn"""
 organization := "com.whatson"
 
 version := "1.0-SNAPSHOT"
@@ -10,7 +10,7 @@ scalaVersion := "2.12.2"
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.0" % Test
 libraryDependencies ++= Seq(
-   "org.postgresql" % "postgresql" % "9.4-1206-jdbc42",
+  "org.postgresql" % "postgresql" % "9.4-1206-jdbc42",
   "com.typesafe.play" %% "play-slick" % "3.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "3.0.0"
 )

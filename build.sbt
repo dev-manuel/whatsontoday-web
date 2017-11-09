@@ -15,7 +15,8 @@ libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.0
 libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "9.4-1206-jdbc42",
   "com.typesafe.play" %% "play-slick" % "3.0.0",
-  "com.typesafe.play" %% "play-slick-evolutions" % "3.0.0"
+  "com.typesafe.play" %% "play-slick-evolutions" % "3.0.0",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )
 
 // Adds additional packages into Twirl

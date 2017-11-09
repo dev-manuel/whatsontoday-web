@@ -12,6 +12,9 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import slick.dbio.Effect.Transactional
+import play.api.libs.json._
+import java.util.Locale.Category
+import whatson.db.CategoryTable
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -35,13 +38,19 @@ class HomeController @Inject()(cc: ControllerComponents, protected val dbConfigP
     Ok.sendFile(new java.io.File("./public/index.html"))
   }
   
-  def events() = Action { implicit request: Request[AnyContent] =>
-    log.debug("Rest request for test implementation of events")
-    db.run(EventTable.event.insertOrUpdate((Some(1),"test3")))
+  def events() = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request for events")
     
-    val q = for(e <- EventTable.event) yield e.name;
-    db.run(q.result).foreach(y => log.debug(y.toString()))
+    val q = for(e <- EventTable.event) yield e;
     
-    Ok("yay")
+    db.run(q.result).map(x => Ok(Json.toJson(x)))
+  }
+  
+  def categories() = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request for categories")
+    
+    val q = for(e <- CategoryTable.category) yield e;
+    
+    db.run(q.result).map(x => Ok(Json.toJson(x)))
   }
 }

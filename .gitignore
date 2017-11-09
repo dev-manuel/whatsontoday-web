@@ -26,3 +26,4 @@ project/plugins/project/
 *.iws
 .idea
 out
+/bin/

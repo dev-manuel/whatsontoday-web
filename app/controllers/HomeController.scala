@@ -37,7 +37,7 @@ class HomeController @Inject()(cc: ControllerComponents, protected val dbConfigP
   
   def events() = Action { implicit request: Request[AnyContent] =>
     log.debug("Rest request for test implementation of events")
-    db.run(EventTable.event.insertOrUpdate((Some(1),"test2")))
+    db.run(EventTable.event.insertOrUpdate((Some(1),"test3")))
     
     val q = for(e <- EventTable.event) yield e.name;
     db.run(q.result).foreach(y => log.debug(y.toString()))

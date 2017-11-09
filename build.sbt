@@ -5,7 +5,7 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala, SwaggerPlugin)
 
-swaggerDomainNameSpaces := Seq("models")
+swaggerDomainNameSpaces := Seq("whatson.model")
 
 scalaVersion := "2.12.2"
 

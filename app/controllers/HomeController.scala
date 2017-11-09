@@ -37,20 +37,4 @@ class HomeController @Inject()(cc: ControllerComponents, protected val dbConfigP
     log.debug("Rest request for the main page")
     Ok.sendFile(new java.io.File("./public/index.html"))
   }
-  
-  def events() = Action.async { implicit request: Request[AnyContent] =>
-    log.debug("Rest request for events")
-    
-    val q = for(e <- EventTable.event) yield e;
-    
-    db.run(q.result).map(x => Ok(Json.toJson(x)))
-  }
-  
-  def categories() = Action.async { implicit request: Request[AnyContent] =>
-    log.debug("Rest request for categories")
-    
-    val q = for(e <- CategoryTable.category) yield e;
-    
-    db.run(q.result).map(x => Ok(Json.toJson(x)))
-  }
 }

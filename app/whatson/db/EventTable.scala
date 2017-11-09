@@ -5,8 +5,9 @@ import slick.lifted.ProvenShape.proveShapeOf
 import java.sql.Timestamp
 import whatson.db.ParticipantTable._
 import whatson.db.UserTable._
+import whatson.model.Event
 
-class EventTable(tag: Tag) extends Table[(Option[Int],String,Timestamp,Timestamp,Option[Int],Int)](tag, "event") {
+class EventTable(tag: Tag) extends Table[Event](tag, "event") {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
   
@@ -16,7 +17,7 @@ class EventTable(tag: Tag) extends Table[(Option[Int],String,Timestamp,Timestamp
   def creatorID = column[Option[Int]]("creator_fk")
   def categoryID = column[Int]("category_fk")
   
-  def * = (id.?,name,from,to,creatorID,categoryID)
+  def * = (id.?,name,from,to,creatorID,categoryID) <> (Event.tupled, Event.unapply)
   
   def creator = foreignKey("creator",creatorID,user)(_.id)
   def category = foreignKey("category",categoryID,CategoryTable.category)(_.id)

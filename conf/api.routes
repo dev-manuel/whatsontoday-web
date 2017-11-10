@@ -7,6 +7,7 @@
 #        $ref: '#/definitions/whatson.model.Event'
 ###
 GET    /events       controllers.EventController.events
+
 ###
 #  summary: Query the event with a specific id
 #  responses:
@@ -16,6 +17,15 @@ GET    /events       controllers.EventController.events
 #        $ref: '#/definitions/whatson.model.Event'
 ###
 GET    /events/:id   controllers.EventController.getEvent(id: Long)
+
+###
+#  summary: Delete an event
+#  responses:
+#    200:
+#      description: Event deleted
+###
+GET    /events/:id   controllers.EventController.deleteEvent(id: Long)
+
 ###
 #  summary: Create an event
 #  responses:
@@ -25,6 +35,7 @@ GET    /events/:id   controllers.EventController.getEvent(id: Long)
 #        $ref: '#/definitions/whatson.model.Event'
 ###
 POST   /events       controllers.EventController.createEvent
+
 ###
 #  summary: Update an event with a specific id
 #  responses:
@@ -45,3 +56,42 @@ PUT    /events/:id   controllers.EventController.updateEvent(id: Long)
 #        $ref: '#/definitions/whatson.model.Category'
 ###
 GET    /categories   controllers.CategoryController.categories
+
+
+###
+#  summary: Query the user with a specific id
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.User'
+###
+GET    /user/:id     controllers.UserController.getUser(id: Long)
+
+###
+#  summary: Delete an user
+#  responses:
+#    200:
+#      description: success
+###
+GET    /user/:id     controllers.UserController.deleteUser(id: Long)
+
+###
+#  summary: Create an user
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.User'
+###
+POST   /user         controllers.EventController.createUser
+
+###
+#  summary: Update an user with a specific id
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.User'
+###
+PUT    /user/:id   controllers.UserController.updateUser(id: Long)

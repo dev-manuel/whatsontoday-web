@@ -43,6 +43,12 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     Status(501)
   }
   
+  def deleteEvent(id: Long) = Action { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get event")
+    
+    Status(501)
+  }
+  
   def createEvent() = Action { implicit request: Request[AnyContent] =>
     log.debug("Rest request to create event")
     

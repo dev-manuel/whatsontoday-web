@@ -1,6 +1,6 @@
-->  /events events.Routes
+->    /events         events.Routes
 
-->  /user user.Routes
+->    /user           user.Routes
 
 ###
 #  summary: Query all categories
@@ -10,4 +10,14 @@
 #      schema:
 #        $ref: '#/definitions/whatson.model.Category'
 ###
-GET    /categories   controllers.CategoryController.categories
+GET   /categories     controllers.CategoryController.categories
+
+###
+#  summary: Get a specific location
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Location'
+###
+GET   /location/:id   controllers.LocationController.getLocation(id: Long)

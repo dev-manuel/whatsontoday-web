@@ -1,0 +1,37 @@
+###
+#  summary: Query the user with a specific id
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.User'
+###
+GET      /:id   controllers.UserController.getUser(id: Long)
+
+###
+#  summary: Delete an user
+#  responses:
+#    200:
+#      description: success
+###
+DELETE   /:id   controllers.UserController.deleteUser(id: Long)
+
+###
+#  summary: Create an user
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.User'
+###
+POST     /      controllers.UserController.createUser
+
+###
+#  summary: Update an user with a specific id
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.User'
+###
+PUT      /:id   controllers.UserController.updateUser(id: Long)

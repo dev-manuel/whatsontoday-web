@@ -4,7 +4,7 @@ import java.sql.Timestamp
 import play.api.libs.json._
 import whatson.util.DateTime._
 
-case class Event(id: Option[Int],name: String, from: Timestamp, to: Timestamp, creatorId: Option[Int], categoryId: Int) {
+case class Event(id: Option[Int],name: String, from: Timestamp, to: Timestamp, creatorId: Option[Int], categoryId: Int, locationId: Int) {
   
 }
 

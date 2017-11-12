@@ -14,13 +14,16 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") {
   def from = column[Timestamp]("fromtime")
   def to = column[Timestamp]("totime")
   
-  def creatorID = column[Option[Int]]("creator_fk")
-  def categoryID = column[Int]("category_fk")
+  def creatorId = column[Option[Int]]("creator_fk")
+  def categoryId = column[Int]("category_fk")
   
-  def * = (id.?,name,from,to,creatorID,categoryID) <> (Event.tupled, Event.unapply)
+  def locationId = column[Int]("location_fk")
   
-  def creator = foreignKey("creator",creatorID,user)(_.id)
-  def category = foreignKey("category",categoryID,CategoryTable.category)(_.id)
+  def * = (id.?,name,from,to,creatorId,categoryId, locationId) <> (Event.tupled, Event.unapply)
+  
+  def creator = foreignKey("creator",creatorId,user)(_.id.?)
+  def category = foreignKey("category",categoryId,CategoryTable.category)(_.id)
+  def location = foreignKey("location",locationId,LocationTable.location)(_.id)
   def participants = participant.filter(_.eventID === id).flatMap(_.participant)
 }
 

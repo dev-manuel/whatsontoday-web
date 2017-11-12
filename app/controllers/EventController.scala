@@ -18,6 +18,7 @@ import whatson.db.CategoryTable
 import whatson.model.EventH._
 import whatson.model.Event
 import play.api.mvc.Results
+import play.api.libs.typedmap.TypedKey
 
 /**
  * This Controller handles API Requests concerning events
@@ -43,19 +44,25 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     Status(501)
   }
   
+  def searchEvents(search: Option[String], location: Option[Int], category: Option[Int]) = Action { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get event")
+    
+    Status(501)
+  }
+  
   def deleteEvent(id: Long) = Action { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get event")
     
     Status(501)
   }
   
-  def createEvent() = Action { implicit request: Request[AnyContent] =>
+  def createEvent() = Action(parse.json(eventReads)) { implicit request: Request[Event] =>
     log.debug("Rest request to create event")
     
     Status(501)
   }
   
-  def updateEvent(id: Long) = Action { implicit request: Request[AnyContent] =>
+  def updateEvent(id: Long) = Action(parse.json(eventReads)) { implicit request: Request[Event] =>
     log.debug("Rest request to update event")
     
     Status(501)

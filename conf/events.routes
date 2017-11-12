@@ -9,6 +9,16 @@
 GET      /      controllers.EventController.events
 
 ###
+#  summary: Query all events by name, location, categories
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Event'
+###
+GET      /      controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int])
+
+###
 #  summary: Query the event with a specific id
 #  responses:
 #    200:
@@ -24,7 +34,7 @@ GET      /:id   controllers.EventController.getEvent(id: Long)
 #    200:
 #      description: Event deleted
 ###
-DELETE      /:id   controllers.EventController.deleteEvent(id: Long)
+DELETE   /:id   controllers.EventController.deleteEvent(id: Long)
 
 ###
 #  summary: Create an event

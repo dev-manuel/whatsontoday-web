@@ -38,13 +38,13 @@ class UserController @Inject()(cc: ControllerComponents, protected val dbConfigP
     Status(501)
   }
   
-  def createUser() = Action { implicit request: Request[AnyContent] =>
+  def createUser() = Action(parse.json(userReads)) { implicit request: Request[User] =>
     log.debug("Rest request to create user")
     
     Status(501)
   }
   
-  def updateUser(id: Long) = Action { implicit request: Request[AnyContent] =>
+  def updateUser(id: Long) = Action(parse.json(userReads)) { implicit request: Request[User] =>
     log.debug("Rest request to update user")
     
     Status(501)

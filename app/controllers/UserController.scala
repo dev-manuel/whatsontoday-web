@@ -5,7 +5,6 @@ import play.api._
 import play.api.mvc._
 import scala.concurrent.ExecutionContext
 import slick.jdbc.PostgresProfile.api._
-import whatson.db.EventTable
 import play.api.db.slick.HasDatabaseConfigProvider
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
@@ -14,10 +13,12 @@ import scala.concurrent.duration.Duration
 import slick.dbio.Effect.Transactional
 import play.api.libs.json._
 import java.util.Locale.Category
-import whatson.db.CategoryTable
+import whatson.db._
+import whatson.db.UserTable._
 import whatson.model.UserH._
-import whatson.model.User
+import whatson.model._
 import play.api.mvc.Results
+import whatson.db.Util._
 
 class UserController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)
     (implicit context: ExecutionContext)
@@ -38,10 +39,12 @@ class UserController @Inject()(cc: ControllerComponents, protected val dbConfigP
     Status(501)
   }
   
-  def createUser() = Action(parse.json(userReads)) { implicit request: Request[User] =>
+  def createUser() = Action.async(parse.json(userReads)) { implicit request: Request[User] =>
     log.debug("Rest request to create user")
     
-    Status(501)
+    val inserted = db.run(insertAndReturn[User,UserTable](user,request.body))
+    
+    inserted.map(x => Ok(Json.toJson(x)))
   }
   
   def updateUser(id: Long) = Action(parse.json(userReads)) { implicit request: Request[User] =>

@@ -18,6 +18,10 @@ DELETE   /:id   controllers.UserController.deleteUser(id: Long)
 
 ###
 #  summary: Create an user
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.User'
 #  responses:
 #    200:
 #      description: success

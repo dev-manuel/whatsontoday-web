@@ -1,9 +1,9 @@
 package whatson.db
 
 import slick.jdbc.PostgresProfile.api._
-import whatson.model.Rating
+import whatson.model._
 
-class RatingTable(tag: Tag) extends Table[Rating](tag, "rating") {
+class RatingTable(tag: Tag) extends Table[Rating](tag, "rating") with HasID[Rating] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def rating = column[Float]("rating")
   

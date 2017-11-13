@@ -6,8 +6,9 @@ import java.sql.Timestamp
 import whatson.db.ParticipantTable._
 import whatson.db.UserTable._
 import whatson.model.Event
+import whatson.model.HasID
 
-class EventTable(tag: Tag) extends Table[Event](tag, "event") {
+class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasID[Event]  {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
   

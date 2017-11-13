@@ -21,3 +21,17 @@ GET   /categories     controllers.CategoryController.categories
 #        $ref: '#/definitions/whatson.model.Location'
 ###
 GET   /location/:id   controllers.LocationController.getLocation(id: Long)
+
+###
+#  summary: Create a location
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.Location'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Location'
+###
+POST   /location   controllers.LocationController.createLocation()

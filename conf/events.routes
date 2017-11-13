@@ -38,6 +38,10 @@ DELETE   /:id   controllers.EventController.deleteEvent(id: Long)
 
 ###
 #  summary: Create an event
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.Event'
 #  responses:
 #    200:
 #      description: success

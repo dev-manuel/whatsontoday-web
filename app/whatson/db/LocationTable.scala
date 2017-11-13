@@ -1,9 +1,9 @@
 package whatson.db
 
 import slick.jdbc.PostgresProfile.api._
-import whatson.model.Location
+import whatson.model._
 
-class LocationTable(tag: Tag) extends Table[Location](tag, "location"){
+class LocationTable(tag: Tag) extends Table[Location](tag, "location") with HasID[Location] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
   

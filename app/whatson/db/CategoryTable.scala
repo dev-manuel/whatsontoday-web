@@ -2,9 +2,9 @@ package whatson.db
 
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape.proveShapeOf
-import whatson.model.Category
+import whatson.model._
 
-class CategoryTable(tag: Tag) extends Table[Category](tag, "category") {
+class CategoryTable(tag: Tag) extends Table[Category](tag, "category") with HasID[Category] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
   def parentID = column[Int]("parent_fk")

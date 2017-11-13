@@ -7,7 +7,7 @@ import play.api.libs.json._
 
 object DateTime {
   implicit object timestampFormat extends Format[Timestamp] {
-    val format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS'Z'")
+    val format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     def reads(json: JsValue) = {
       val str = json.as[String]
       JsSuccess(new Timestamp(format.parse(str).getTime))

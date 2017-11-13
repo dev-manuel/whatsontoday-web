@@ -17,8 +17,10 @@ import java.util.Locale.Category
 import whatson.db.CategoryTable
 import whatson.model.EventH._
 import whatson.model.Event
+import whatson.db.EventTable._
 import play.api.mvc.Results
 import play.api.libs.typedmap.TypedKey
+import whatson.db.Util._
 
 /**
  * This Controller handles API Requests concerning events
@@ -56,10 +58,12 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     Status(501)
   }
   
-  def createEvent() = Action(parse.json(eventReads)) { implicit request: Request[Event] =>
+  def createEvent() = Action.async(parse.json(eventReads)) { implicit request: Request[Event] =>
     log.debug("Rest request to create event")
     
-    Status(501)
+    val inserted = db.run(insertAndReturn[Event,EventTable](event,request.body))
+    
+    inserted.map(x => Ok(Json.toJson(x)))
   }
   
   def updateEvent(id: Long) = Action(parse.json(eventReads)) { implicit request: Request[Event] =>

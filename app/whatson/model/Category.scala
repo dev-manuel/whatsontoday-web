@@ -2,8 +2,8 @@ package whatson.model
 
 import play.api.libs.json._
 
-case class Category(id: Option[Int], name: String, parentId: Int) {
-  
+case class Category(id: Option[Int], name: String, parentId: Int) extends HasCopy[Category] {
+  def cpy(id: Option[Int]) = this.copy(id = id)
 }
 
 object CategoryH {

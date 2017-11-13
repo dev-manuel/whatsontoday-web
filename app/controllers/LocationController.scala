@@ -14,10 +14,13 @@ import scala.concurrent.duration.Duration
 import slick.dbio.Effect.Transactional
 import play.api.libs.json._
 import java.util.Locale.Category
-import whatson.db.CategoryTable
-import whatson.model.UserH._
-import whatson.model.User
+import whatson.model.LocationH._
+import whatson.model._
 import play.api.mvc.Results
+import whatson.db.Util._
+import whatson.db._
+import whatson.db.LocationTable._
+
 
 class LocationController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)
     (implicit context: ExecutionContext)
@@ -30,5 +33,13 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
     log.debug("Rest request to get location")
     
     Status(501)
+  }
+  
+  def createLocation() = Action.async(parse.json(locationReads)) { implicit request: Request[Location] =>
+    log.debug("Rest request to create user")
+    
+    val inserted = db.run(insertAndReturn[Location,LocationTable](location,request.body))
+    
+    inserted.map(x => Ok(Json.toJson(x)))
   }
 }

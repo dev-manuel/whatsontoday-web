@@ -1,12 +1,12 @@
 package whatson.db
 
 import slick.jdbc.PostgresProfile.api._
-import whatson.model.User
+import whatson.model._
 import slick.lifted.ProvenShape.proveShapeOf
 import java.sql.Timestamp
 import whatson.db.ParticipantTable._
 
-class UserTable(tag: Tag) extends Table[User](tag, "users") {
+class UserTable(tag: Tag) extends Table[User](tag, "users") with HasID[User] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
   

@@ -60,7 +60,7 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
     } yield e
     
-    db.run(q.result).map(x => Ok(Json.toJson(x)))
+    returnPaged(q,db)
   }
   
   def deleteEvent(id: Int) = Action.async { implicit request: Request[AnyContent] =>

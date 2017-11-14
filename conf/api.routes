@@ -20,7 +20,7 @@ GET   /categories     controllers.CategoryController.categories
 #      schema:
 #        $ref: '#/definitions/whatson.model.Location'
 ###
-GET   /location/:id   controllers.LocationController.getLocation(id: Long)
+GET   /location/:id   controllers.LocationController.getLocation(id: Int)
 
 ###
 #  summary: Create a location

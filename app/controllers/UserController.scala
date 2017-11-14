@@ -27,16 +27,26 @@ class UserController @Inject()(cc: ControllerComponents, protected val dbConfigP
   
   val log = Logger("api.users")
   
-  def getUser(id: Long) = Action { implicit request: Request[AnyContent] =>
+  def getUser(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get user")
     
-    Status(501)
+    val q = for(e <- user if e.id === id.bind) yield e;
+    
+    db.run(q.result).map(x => x.headOption match {
+      case Some(r) => Ok(Json.toJson(r))
+      case _ => NotFound
+    })
   }
   
-  def deleteUser(id: Long) = Action { implicit request: Request[AnyContent] =>
+  def deleteUser(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get user")
     
-    Status(501)
+    val q = user.filter(_.id === id.bind).delete
+    
+    db.run(q).map {
+      case 0 => NotFound
+      case x => Ok(Json.toJson(x))
+    }
   }
   
   def createUser() = Action.async(parse.json(userReads)) { implicit request: Request[User] =>
@@ -47,9 +57,14 @@ class UserController @Inject()(cc: ControllerComponents, protected val dbConfigP
     inserted.map(x => Ok(Json.toJson(x)))
   }
   
-  def updateUser(id: Long) = Action(parse.json(userReads)) { implicit request: Request[User] =>
+  def updateUser(id: Int) = Action.async(parse.json(userReads)) { implicit request: Request[User] =>
     log.debug("Rest request to update user")
     
-    Status(501)
+    val q = user.filter(_.id === id.bind).update(request.body)
+    
+    db.run(q).map {
+      case 0 => NotFound
+      case x => Ok(Json.toJson(x))
+    }
   }
 }

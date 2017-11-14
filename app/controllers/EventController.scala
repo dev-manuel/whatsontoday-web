@@ -40,22 +40,38 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     db.run(q.result).map(x => Ok(Json.toJson(x)))
   }
   
-  def getEvent(id: Long) = Action { implicit request: Request[AnyContent] =>
+  def getEvent(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get event")
     
-    Status(501)
+    val q = for(e <- EventTable.event if e.id === id.bind) yield e;
+    
+    db.run(q.result).map(x => x.headOption match {
+      case Some(r) => Ok(Json.toJson(r))
+      case _ => NotFound
+    })
   }
   
-  def searchEvents(search: Option[String], location: Option[Int], category: Option[Int]) = Action { implicit request: Request[AnyContent] =>
-    log.debug("Rest request to get event")
+  def searchEvents(search: Option[String], location: Option[Int], category: Option[Int]) = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to search events")
     
-    Status(501)
+    val q = for {
+      e <- event if e.name like search.map(y => "%"++y++"%").getOrElse("%%").bind
+                 if e.categoryId - category.getOrElse(-1).bind === -1 || category.getOrElse(-1).bind === -1
+                 if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
+    } yield e
+    
+    db.run(q.result).map(x => Ok(Json.toJson(x)))
   }
   
-  def deleteEvent(id: Long) = Action { implicit request: Request[AnyContent] =>
+  def deleteEvent(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get event")
     
-    Status(501)
+    val q = event.filter(_.id === id.bind).delete
+    
+    db.run(q).map {
+      case 0 => NotFound
+      case x => Ok(Json.toJson(x))
+    }
   }
   
   def createEvent() = Action.async(parse.json(eventReads)) { implicit request: Request[Event] =>
@@ -66,9 +82,14 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     inserted.map(x => Ok(Json.toJson(x)))
   }
   
-  def updateEvent(id: Long) = Action(parse.json(eventReads)) { implicit request: Request[Event] =>
+  def updateEvent(id: Int) = Action(parse.json(eventReads)).async { implicit request: Request[Event] =>
     log.debug("Rest request to update event")
     
-    Status(501)
+    val q = event.filter(_.id === id.bind).update(request.body)
+    
+    db.run(q).map {
+      case 0 => NotFound
+      case x => Ok(Json.toJson(x))
+    }
   }
 }

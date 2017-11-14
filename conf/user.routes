@@ -6,7 +6,7 @@
 #      schema:
 #        $ref: '#/definitions/whatson.model.User'
 ###
-GET      /:id   controllers.UserController.getUser(id: Long)
+GET      /:id   controllers.UserController.getUser(id: Int)
 
 ###
 #  summary: Delete an user
@@ -14,7 +14,7 @@ GET      /:id   controllers.UserController.getUser(id: Long)
 #    200:
 #      description: success
 ###
-DELETE   /:id   controllers.UserController.deleteUser(id: Long)
+DELETE   /:id   controllers.UserController.deleteUser(id: Int)
 
 ###
 #  summary: Create an user
@@ -38,4 +38,4 @@ POST     /      controllers.UserController.createUser
 #      schema:
 #        $ref: '#/definitions/whatson.model.User'
 ###
-PUT      /:id   controllers.UserController.updateUser(id: Long)
+PUT      /:id   controllers.UserController.updateUser(id: Int)

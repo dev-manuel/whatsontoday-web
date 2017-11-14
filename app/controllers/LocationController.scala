@@ -29,10 +29,15 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
   
   val log = Logger("api.location")
   
-  def getLocation(id: Long) = Action { implicit request: Request[AnyContent] =>
+  def getLocation(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get location")
     
-    Status(501)
+    val q = for(l <- location if l.id === id.bind) yield l;
+    
+    db.run(q.result).map(x => x.headOption match {
+      case Some(r) => Ok(Json.toJson(r))
+      case _ => NotFound
+    })
   }
   
   def createLocation() = Action.async(parse.json(locationReads)) { implicit request: Request[Location] =>

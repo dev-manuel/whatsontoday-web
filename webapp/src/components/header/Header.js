@@ -2,12 +2,11 @@
 import React from 'react';
 import {Menu, Search, Icon, Dropdown} from 'semantic-ui-react';
 
-// Import rescources
+// Import resources
 import logo from '../../img/logo1.jpg';
 import PopupMenu from './PopupMenu';
 
-const Header = () => {
-    return(
+const Header = () => (
         <Menu>
             <Menu.Item>
                 <img src={logo} />
@@ -45,10 +44,7 @@ const Header = () => {
                 <PopupMenu/>
             </Menu.Item>  
         </Menu>
-
-        
-    )
-}
+)
 
 
 

@@ -5,13 +5,10 @@ import React from 'react';
 import Header from '../components/header/Header';
 import CategoryTile from '../components/categoryTile/CategoryTile'
 
-const Home = () => {
-
-    return(
+const Home = () => (
         <div>
             <CategoryTile title='Education'/>
         </div>
-    )
-}
+)
 
 export default Home;

@@ -6,9 +6,7 @@ import {Switch, Route} from 'react-router-dom';
 import Header from '../components/header/Header';
 import HomeView from './Home';
 
-const BaseView = () => {
-
-    return(
+const BaseView = () => (
         <div>
             <Header/>
 
@@ -16,7 +14,7 @@ const BaseView = () => {
                 <Route exact path='/' component={HomeView}/>
             </Switch>
         </div>
-    )
-}
+)
+
 
 export default BaseView;

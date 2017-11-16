@@ -4,8 +4,7 @@ import {Popup, Menu, Icon} from 'semantic-ui-react';
 
 // Todo: Embed in menu item
 
-const PopupMenu = () => {
-    return(
+const PopupMenu = () => (
         <Popup
             trigger={<Icon name='sidebar' />}
             content='Lorem Ipsum!'
@@ -13,8 +12,7 @@ const PopupMenu = () => {
             hoverable
             basic
         />
-    )
-}
+)
 
 
 export default PopupMenu;

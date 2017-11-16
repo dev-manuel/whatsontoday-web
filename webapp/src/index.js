@@ -4,16 +4,15 @@ import ReactDOM from 'react-dom';
 import {Router, Route} from 'react-router';
 import {HashRouter, IndexRoute} from 'react-router-dom'
 
-// Import rescources
-import Home from './views/Home';
-import Foo from './components/sample/Foo'
+// Import resources
+import BaseView from './views/BaseView';
 import 'semantic-ui-less/semantic.less';
 
 
 // Setup of local page routing
 const routing = (
     <HashRouter>
-        <Route path='/' component={Home}/>
+        <BaseView/>
     </HashRouter>
 );
 

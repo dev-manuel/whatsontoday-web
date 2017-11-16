@@ -1,0 +1,22 @@
+// Import modules
+import React from 'react';
+import {Switch, Route} from 'react-router-dom';
+
+// Import resources
+import Header from '../components/header/Header';
+import HomeView from './Home';
+
+const BaseView = () => {
+
+    return(
+        <div>
+            <Header/>
+
+            <Switch>
+                <Route exact path='/' component={HomeView}/>
+            </Switch>
+        </div>
+    )
+}
+
+export default BaseView;

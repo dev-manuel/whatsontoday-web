@@ -1,20 +1,17 @@
 // Import modules
 import React from 'react';
-import {Button} from 'semantic-ui-react';
-import {Link} from 'react-router-dom';
 
-// Import rescources
+// Import resources
 import Header from '../components/header/Header';
-import Heading from '../components/sample/Heading';
-import Foo from '../components/sample/Foo';
+import CategoryTile from '../components/categoryTile/CategoryTile'
 
-const Sample = () => {
+const Home = () => {
 
     return(
         <div>
-            <Header/>
+            <CategoryTile title='Education'/>
         </div>
     )
 }
 
-export default Sample;
+export default Home;

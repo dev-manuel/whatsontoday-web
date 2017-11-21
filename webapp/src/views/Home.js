@@ -3,11 +3,11 @@ import React from 'react';
 
 // Import resources
 import Header from '../components/header/Header';
-import CategoryTile from '../components/categoryTile/CategoryTile'
+import Slider from '../components/slider/Slider'
 
 const Home = () => (
         <div>
-            <CategoryTile title='Education'/>
+            <Slider title='Education'/>
         </div>
 )
 

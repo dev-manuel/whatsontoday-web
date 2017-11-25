@@ -3,7 +3,7 @@ import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 
 // Import resources
-import Header from '../components/header/Header';
+import Header from '../components/header';
 import HomeView from './Home';
 
 const BaseView = () => (

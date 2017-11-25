@@ -2,15 +2,16 @@
 import React from 'react';
 
 // Import resources
-import Header from '../components/header/Header';
-import Slider from '../components/slider/Slider';
-import CategoryTileTable from '../components/categoryTileTable/CategoryTileTable';
-import CategoryTile from '../components/categoryTile/CategoryTile'
+import Header from '../components/header';
+import Slider from '../components/slider';
+import CategoryTileTable from '../components/categoryTileTable';
+import EvenTileTable from '../components/eventTileTable';
 
 const Home = () => (
         <div>
             <Slider title='Education'/>
             <CategoryTileTable/>
+            <EvenTileTable/>
         </div>
 )
 

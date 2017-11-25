@@ -6,34 +6,31 @@ import {Grid, Segment, Container, Card} from 'semantic-ui-react';
 import CategoryTile from '../categoryTile/CategoryTile';
 
 
+// An array of all catagories which should be displayed as a tile
+// the elements of this array must be objects with following fields:
+// name: the text displayed in the tile
 const categories = [
     {name: 'Business'},
     {name: 'Party'},
     {name: 'Science'},
-    {name: 'Technology'}
+    {name: 'Technology'},
+    {name: 'Sport'}
 ]
 
 
-
-const CategoryTileTable = () => {
-    return (
-
-        <Segment style={{ minHeight: 600, padding: '9em 0em' }}>
-        <Grid columns="1" stackable stretched>
-            <Grid.Column stretched width="16">
-                <Container>
-                <Card.Group itemsPerRow="4" stackable>  
-                { 
-                    categories.map( (content, index) => (
-                        <CategoryTile title={content.name} key={index} />
-                    ))
-                }
-                </Card.Group>
-                </Container>
-            </Grid.Column>
-        </Grid>
-    </Segment>
-    )
-}
+const CategoryTileTable = () => (
+    <Grid columns="1" stackable centered style={{"margin-top": 50}} >
+        <Grid.Row>
+        {
+            // iterate over all all elements in the categories array and render a CategoryTile according to the data
+            categories.map( (content, index) => (
+                <Grid.Column width="2">
+                    <CategoryTile title={content.name} key={index} />
+                </Grid.Column>
+            ))
+        }
+        </Grid.Row>   
+    </Grid>
+)
 
 export default CategoryTileTable;

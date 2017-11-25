@@ -1,13 +1,17 @@
 // Import modules
 import React from 'react';
 import {Card, Icon, Image} from 'semantic-ui-react';
-import exampleTileImage from '../../img/example_tile.png'
+
+// Import resources
+import './CategoryTile.less';
+import exampleTileImage from '../../img/example_tile.png';
+
 
 const CategoryTile = ({title}) => (
-    <Card>
-      <Image src={exampleTileImage} />
+    <Card className="cardDimensions">
+      <Image src={exampleTileImage} class="cardDimensions"/>
       <Card.Content>
-        <Card.Header>
+        <Card.Header className="cardText">
           {title}
         </Card.Header>
       </Card.Content>

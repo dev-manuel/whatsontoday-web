@@ -2,11 +2,11 @@
 import React from 'react';
 
 // Import resources
-
+import FilterPanel from '../components/filterPanel'
 
 const SERP = () => (
         <div>
-            <p>SERPView</p>
+            <FilterPanel/>
         </div>
 )
 

@@ -2,13 +2,16 @@
 import React from 'react';
 
 // Import resources
+import './SERP.less'
 import FilterPanel from '../components/filterPanel';
-import EventTileBig from '../components/eventTileBig';
+import EventTileTableBig from '../components/eventTileTableBig';
 
 const SERP = () => (
-        <div>
+        <div className="pageContent">
             <FilterPanel/>
-            <EventTileBig/>
+            <div className="tileTable">
+                <EventTileTableBig/>
+            </div>
         </div>
 )
 

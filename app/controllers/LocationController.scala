@@ -29,6 +29,16 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
   
   val log = Logger("api.location")
   
+  def searchLocations(search: String) = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to search locations")
+    
+    val q = for {
+      l <- location if l.name like ("%"++search++"%").bind
+    } yield l
+    
+    returnPaged(q,db)
+  }
+  
   def getLocation(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get location")
     

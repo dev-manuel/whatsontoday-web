@@ -1,6 +1,6 @@
-->    /events         events.Routes
+->     /events         events.Routes
 
-->    /user           user.Routes
+->     /user           user.Routes
 
 ###
 #  summary: Query all categories
@@ -10,7 +10,26 @@
 #      schema:
 #        $ref: '#/definitions/whatson.model.Category'
 ###
-GET   /categories     controllers.CategoryController.categories
+GET    /categories     controllers.CategoryController.categories
+
+###
+#  summary: Search locations by name
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Location'
+###
+GET    /location       controllers.LocationController.searchLocations(search: String)
 
 ###
 #  summary: Get a specific location
@@ -20,7 +39,7 @@ GET   /categories     controllers.CategoryController.categories
 #      schema:
 #        $ref: '#/definitions/whatson.model.Location'
 ###
-GET   /location/:id   controllers.LocationController.getLocation(id: Int)
+GET    /location/:id   controllers.LocationController.getLocation(id: Int)
 
 ###
 #  summary: Create a location
@@ -34,4 +53,4 @@ GET   /location/:id   controllers.LocationController.getLocation(id: Int)
 #      schema:
 #        $ref: '#/definitions/whatson.model.Location'
 ###
-POST   /location   controllers.LocationController.createLocation()
+POST   /location       controllers.LocationController.createLocation()

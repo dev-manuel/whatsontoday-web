@@ -26,6 +26,7 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasID[Event] 
   def category = foreignKey("category",categoryId,CategoryTable.category)(_.id)
   def location = foreignKey("location",locationId,LocationTable.location)(_.id)
   def participants = participant.filter(_.eventID === id).flatMap(_.participant)
+  
   def ratings = RatingTable.rating.filter(_.entityId === id)
 }
 

@@ -12,8 +12,6 @@ class LocationTable(tag: Tag) extends Table[Location](tag, "location") with HasI
   def longitude = column[Float]("longitude")
 
   def * = (id.?,name,latitude,longitude) <> (Location.tupled, Location.unapply)
-  
-  def ratings = RatingTable.rating.filter(_.entityId === id)
 }
 
 object LocationTable {

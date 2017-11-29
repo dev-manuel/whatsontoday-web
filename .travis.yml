@@ -4,3 +4,6 @@ jdk: oraclejdk8
 
 scala:
    - 2.12.2
+
+notifications:
+    slack: whatsontoday:K22qCdNZ7GFj20Hrt8hU3DoS

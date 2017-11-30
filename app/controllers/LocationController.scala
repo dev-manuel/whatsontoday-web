@@ -14,7 +14,7 @@ import scala.concurrent.duration.Duration
 import slick.dbio.Effect.Transactional
 import play.api.libs.json._
 import java.util.Locale.Category
-import whatson.model.LocationH._
+import whatson.model.Location._
 import whatson.model._
 import play.api.mvc.Results
 import whatson.db.Util._

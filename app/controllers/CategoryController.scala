@@ -15,7 +15,7 @@ import slick.dbio.Effect.Transactional
 import play.api.libs.json._
 import java.util.Locale.Category
 import whatson.db.CategoryTable
-import whatson.model.CategoryH._
+import whatson.model.Category._
 
 /**
  * This Controller handles API Requests concerning categories

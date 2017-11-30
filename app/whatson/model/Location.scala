@@ -17,15 +17,17 @@ case class Location(id: Option[Int], name: String, latitude: Float, longitude: F
     
     Math.acos( Math.sin(fromAngle(latitude)) * Math.sin(fromAngle(b.latitude)) 
         + Math.cos(fromAngle(latitude)) * Math.cos(fromAngle(b.latitude))
-        + Math.cos(fromAngle(longitude-b.longitude))) * LocationH.earthRadius
+        + Math.cos(fromAngle(longitude-b.longitude))) * Location.earthRadius
   }
   
   private def fromAngle(a: Float) = a/180*Math.PI;
 }
 
-object LocationH {
+object Location {
   implicit val locationReads = Json.reads[Location]
   implicit val locationWrites = Json.writes[Location]
   
   val earthRadius = 6371
+  
+  val tupled = (this.apply _).tupled
 }

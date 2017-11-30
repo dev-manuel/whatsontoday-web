@@ -6,7 +6,9 @@ case class Category(id: Option[Int], name: String, parentId: Int) extends HasCop
   def cpy(id: Option[Int]) = this.copy(id = id)
 }
 
-object CategoryH {
+object Category {
   implicit val categoryReads = Json.reads[Category]
   implicit val categoryWrites = Json.writes[Category]
+  
+  val tupled = (this.apply _).tupled
 }

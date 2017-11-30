@@ -15,7 +15,7 @@ import play.api.libs.json._
 import java.util.Locale.Category
 import whatson.db._
 import whatson.db.UserTable._
-import whatson.model.UserH._
+import whatson.model.User._
 import whatson.model._
 import play.api.mvc.Results
 import whatson.db.Util._

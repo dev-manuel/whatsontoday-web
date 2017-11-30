@@ -8,6 +8,7 @@ import whatson.db.EventCategoryTable._
 import whatson.db.UserTable._
 import whatson.model.Event
 import whatson.model.HasID
+import whatson.model.detail._
 
 class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Event]  {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)

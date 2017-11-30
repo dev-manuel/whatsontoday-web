@@ -6,9 +6,11 @@ case class User(id: Option[Int], name: String, pwHash: String, email: String) ex
   def cpy(i: Option[Int]) = this.copy(id = i)
 }
 
-object UserH {
+object User {
   implicit val userReads = Json.reads[User]
   
   //TODO: Hide pwHash when writing
   implicit val userWrites = Json.writes[User]
+  
+  val tupled = (this.apply _).tupled
 }

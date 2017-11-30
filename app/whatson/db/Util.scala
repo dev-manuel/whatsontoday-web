@@ -24,6 +24,11 @@ import play.api.mvc.Results
 import play.api.libs.typedmap.TypedKey
 
 object Util extends Results {
+  val fromAngle = SimpleFunction.unary[Float, Float]("fromangle")
+  def geoDistance(a: Rep[Float], b:Rep[Float], c:Rep[Float], d:Rep[Float]) =
+    SimpleFunction[Float]("geodistance").apply(Seq(a,b,c,d))
+  
+  
   def insertAndReturn[T, U <: HasID[T]](a: TableQuery[U], b: U#TableElementType) = {
     (a returning a.map(x => x.id) into ((event,i) => event.cpy(Some(i))) += b)
   }

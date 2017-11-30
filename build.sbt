@@ -3,6 +3,8 @@ organization := "com.whatson"
 
 version := "1.0-SNAPSHOT"
 
+scalaVersion in ThisBuild := "2.12.2"
+
 lazy val root = (project in file(".")).enablePlugins(PlayScala, SwaggerPlugin)
 
 swaggerDomainNameSpaces := Seq("whatson.model")

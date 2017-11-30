@@ -28,3 +28,8 @@ project/plugins/project/
 out
 /bin/
 .settings/
+
+.cache-main
+.cache-tests
+.ensime
+.g8/

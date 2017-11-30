@@ -9,5 +9,4 @@ GET     /                           controllers.HomeController.index
 GET     /events                     controllers.HomeController.events
 
 # Map static resources from the /public folder to the /assets URL path
-# TODO: Hande static file requests by /assets/*file
-GET     /*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

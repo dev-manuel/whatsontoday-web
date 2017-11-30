@@ -9,6 +9,10 @@ const merge = require('webpack-merge');
 const webpack = require('webpack');
 
 module.exports = merge(baseConfig, {
+    output: {
+        publicPath: 'assets/', // Define a base path. (Play server provide resource file on /assets/* route) 
+    },
+
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')

@@ -37,7 +37,7 @@ object Util extends Results {
     val page = request.headers.get("X-Page").map(_.toInt).getOrElse(0)
     val pageSize = request.headers.get("X-Page-Size").map(_.toInt).getOrElse(20)
     
-    (q.drop(page*pageSize).take(pageSize),q.distinct.length)
+    (q.drop(page*pageSize).take(pageSize),q.length)
   }
   
   def runTwo[A,B,C](a: (Query[A,B, Seq], Rep[C]), db: Database) = 

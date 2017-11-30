@@ -21,6 +21,7 @@ import whatson.db.EventTable._
 import play.api.mvc.Results
 import play.api.libs.typedmap.TypedKey
 import whatson.db.Util._
+import whatson.db.EventCategoryTable
 
 /**
  * This Controller handles API Requests concerning events

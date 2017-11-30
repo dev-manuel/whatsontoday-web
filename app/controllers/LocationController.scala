@@ -59,7 +59,6 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
     db.run(q.result).map(_.headOption).flatMap {
       case Some(r) => {
         val s = location.sortBy(y => geoDistance(r.latitude, r.longitude, y.latitude, y.longitude))
-        log.debug(s.result.statements.toString())
         returnPaged(s, db)
       }
       case None => Future(NotFound)

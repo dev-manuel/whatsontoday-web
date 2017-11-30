@@ -10,12 +10,17 @@ class RatingTable(tag: Tag) extends Table[Rating](tag, "rating") with HasID[Rati
   def userId = column[Int]("user_fk")
   
   def entityId = column[Int]("entity_fk")
+  
+  def entityType = column[Int]("entity_type")
 
-  def * = (id.?,rating,userId,entityId) <> (Rating.tupled, Rating.unapply)
+  def * = (id.?,rating,userId,entityId,entityType) <> (Rating.tupled, Rating.unapply)
   
   def user = foreignKey("user",userId,UserTable.user)(_.id)
 }
 
 object RatingTable {
   val rating = TableQuery[RatingTable]
+  
+  val eventType = 0
+  val locationType = 1
 }

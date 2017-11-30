@@ -8,7 +8,7 @@ import whatson.db.UserTable._
 import whatson.model.Event
 import whatson.model.HasID
 
-class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasID[Event]  {
+class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Event]  {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
   
@@ -27,7 +27,7 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasID[Event] 
   def location = foreignKey("location",locationId,LocationTable.location)(_.id)
   def participants = participant.filter(_.eventID === id).flatMap(_.participant)
   
-  def ratings = RatingTable.rating.filter(_.entityId === id)
+  val entityType = RatingTable.eventType
 }
 
 object EventTable {

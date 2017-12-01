@@ -22,7 +22,7 @@ import play.api.mvc.Results
 import play.api.libs.typedmap.TypedKey
 import whatson.db.Util._
 import whatson.db.EventCategoryTable
-import whatson.model.detail.EventDetail
+import whatson.model.detail.EventDetail._
 
 /**
  * This Controller handles API Requests concerning events
@@ -47,7 +47,7 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     
     val q = for(e <- EventTable.event if e.id === id.bind) yield e;
     
-    db.run(EventDetail.detailed(q)).map(x => x.headOption match {
+    db.run(q.detailed).map(x => x.headOption match {
       case Some(r) => Ok(Json.toJson(r))
       case _ => NotFound
     })
@@ -62,8 +62,7 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
     } yield e
     
-    val s = EventDetail.detailed((queryPaged(q.sortColumn(sort))))
-    
+    val s = q.sortColumn(sort).queryPaged.detailed
     returnPaged(s,q,db)
   }
   

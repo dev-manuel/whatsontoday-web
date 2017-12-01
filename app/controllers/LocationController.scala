@@ -36,7 +36,7 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
       l <- location if l.name like ("%"++search.getOrElse("")++"%").bind
     } yield l
     
-    returnPaged(q,db)
+    q.returnPaged(db)
   }
   
   def getLocation(id: Int) = Action.async { implicit request: Request[AnyContent] =>
@@ -58,7 +58,7 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
     db.run(q.result).map(_.headOption).flatMap {
       case Some(r) => {
         val s = location.sortBy(y => geoDistance(r.latitude, r.longitude, y.latitude, y.longitude))
-        returnPaged(s, db)
+        s.returnPaged(db)
       }
       case None => Future(NotFound)
     }

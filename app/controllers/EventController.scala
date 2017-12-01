@@ -14,7 +14,7 @@ import scala.concurrent.duration.Duration
 import slick.dbio.Effect.Transactional
 import play.api.libs.json._
 import java.util.Locale.Category
-import whatson.db.CategoryTable
+import whatson.db._
 import whatson.model.Event._
 import whatson.model.Event
 import whatson.db.EventTable._
@@ -22,6 +22,7 @@ import play.api.mvc.Results
 import play.api.libs.typedmap.TypedKey
 import whatson.db.Util._
 import whatson.db.EventCategoryTable
+import whatson.model.detail.EventDetail
 
 /**
  * This Controller handles API Requests concerning events
@@ -38,6 +39,8 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     
     val q = for(e <- EventTable.event) yield e;
     
+    val s = q.join(UserTable.user).on(_.creatorId === _.id)
+    
     db.run(q.result).map(x => Ok(Json.toJson(x)))
   }
   
@@ -46,7 +49,7 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     
     val q = for(e <- EventTable.event if e.id === id.bind) yield e;
     
-    db.run(q.result).map(x => x.headOption match {
+    db.run(EventDetail.detailed(q)).map(x => x.headOption match {
       case Some(r) => Ok(Json.toJson(r))
       case _ => NotFound
     })
@@ -57,11 +60,13 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     
     val q = for {
       e <- event if e.name like search.map(y => "%"++y++"%").getOrElse("%%").bind
-                 if e.categoryId - category.getOrElse(-1).bind === -1 || category.getOrElse(-1).bind === -1
+                 if e.categories.filter(_.id === category.getOrElse(-1)).exists
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
     } yield e
     
-    returnPaged(q,db)
+    val s = EventDetail.detailed((queryPaged(q)))
+    
+    returnPaged(s,q,db)
   }
   
   def deleteEvent(id: Int) = Action.async { implicit request: Request[AnyContent] =>

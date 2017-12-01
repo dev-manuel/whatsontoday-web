@@ -22,6 +22,7 @@ import whatson.model.Event
 import whatson.db.EventTable._
 import play.api.mvc.Results
 import play.api.libs.typedmap.TypedKey
+import slick.dbio.DBIOAction
 
 object Util extends Results {
   val fromAngle = SimpleFunction.unary[Float, Float]("fromangle")
@@ -45,5 +46,18 @@ object Util extends Results {
     
   def returnPaged[A,B](a: Query[A,B, Seq], db: Database)(implicit request: Request[_], ec: ExecutionContext, tjs: Writes[B]) = {
     runTwo(paged(a),db).map(x => Ok(Json.toJson(x._1)).withHeaders("X-Number-Items" -> x._2.toString()))
+  }
+  
+  def returnPaged[A,B,C](a: DBIOAction[Seq[A],NoStream,Nothing], q: Query[B,C,Seq], db: Database)(implicit request: Request[_], ec: ExecutionContext, tjs: Writes[A]) = {
+    db.run(a).zip(db.run(q.length.result)).map(x => {
+      Ok(Json.toJson(x._1)).withHeaders("X-Number-Items" -> x._2.toString())
+    })
+  }
+  
+  def queryPaged[A,B,C](q: Query[B,C, Seq])(implicit request: Request[A]) = {
+    val page = request.headers.get("X-Page").map(_.toInt).getOrElse(0)
+    val pageSize = request.headers.get("X-Page-Size").map(_.toInt).getOrElse(20)
+    
+    q.drop(page*pageSize).take(pageSize)
   }
 }

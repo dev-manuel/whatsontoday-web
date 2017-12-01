@@ -18,7 +18,6 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Ev
   def to = column[Timestamp]("totime")
   
   def creatorId = column[Option[Int]]("creator_fk")
-  def categoryId = column[Int]("category_fk")
   
   def locationId = column[Int]("location_fk")
   

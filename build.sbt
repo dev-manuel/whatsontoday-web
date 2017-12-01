@@ -26,3 +26,5 @@ libraryDependencies ++= Seq(
 
 // Adds additional packages into conf/routes
 // play.sbt.routes.RoutesKeys.routesImport += "com.whatson.binders._"
+
+javaOptions in Test += "-Dconfig.file=conf/application.test.conf"

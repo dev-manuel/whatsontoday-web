@@ -4,6 +4,19 @@ import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
 import play.api.test._
 import play.api.test.Helpers._
+import whatson.db.EventTable
+import javax.inject._
+import play.api.db.slick.HasDatabaseConfigProvider
+import play.api.db.slick.DatabaseConfigProvider
+import slick.jdbc.JdbcProfile
+import whatson.model.Event._
+import whatson.model.Event
+import whatson.db.EventTable._
+import whatson.db.Util._
+import java.sql.Timestamp
+import java.time.LocalDateTime
+import play.api._
+import slick.jdbc.DB2Profile
 
 /**
  * Add your spec here.
@@ -11,35 +24,17 @@ import play.api.test.Helpers._
  *
  * For more information, see https://www.playframework.com/documentation/latest/ScalaTestingWithScalaTest
  */
-class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
+class HomeControllerSpec extends PlaySpec 
+  with GuiceOneAppPerTest with Injecting {
 
+  val log = Logger("api.events")
+  
   "HomeController GET" should {
-
-    /*"render the index page from a new instance of controller" in {
-      val controller = new HomeController(stubControllerComponents(), st)
-      val home = controller.index().apply(FakeRequest(GET, "/"))
-
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+    
+    "render the index page from a new instance of controller" in {
+      val events = route(app, FakeRequest(GET, "/api/events")).get
+      
+      status(events) mustBe OK
     }
-
-    "render the index page from the application" in {
-      val controller = inject[HomeController]
-      val home = controller.index().apply(FakeRequest(GET, "/"))
-
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
-    }
-
-    "render the index page from the router" in {
-      val request = FakeRequest(GET, "/")
-      val home = route(app, request).get
-
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
-    }*/
   }
 }

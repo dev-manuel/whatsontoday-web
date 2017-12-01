@@ -8,6 +8,12 @@ scala:
 notifications:
     slack: whatsontoday:K22qCdNZ7GFj20Hrt8hU3DoS
 
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database "WhatsOnDBTest";' -U postgres
+
 # Use container-based infrastructure
 sudo: false
 

@@ -5,10 +5,15 @@
 #    name: X-Page
 #    schema:
 #      type: integer
+#    default: 0
 #  - in: header
 #    name: X-Page-Size
 #    schema:
 #      type: integer
+#    default: 20
+#  - name: sort
+#    description: Specifies wich column to sort by
+#    default: id
 #  responses:
 #    200:
 #      description: success

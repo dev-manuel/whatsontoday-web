@@ -22,7 +22,6 @@ import whatson.db._
 import whatson.db.LocationTable._
 import scala.concurrent.Future
 
-
 class LocationController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)
     (implicit context: ExecutionContext)
     extends AbstractController(cc) 
@@ -30,11 +29,11 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
   
   val log = Logger("api.location")
   
-  def searchLocations(search: String) = Action.async { implicit request: Request[AnyContent] =>
+  def searchLocations(search: Option[String]) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to search locations")
     
     val q = for {
-      l <- location if l.name like ("%"++search++"%").bind
+      l <- location if l.name like ("%"++search.getOrElse("")++"%").bind
     } yield l
     
     returnPaged(q,db)

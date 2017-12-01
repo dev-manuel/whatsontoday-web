@@ -29,7 +29,7 @@ GET    /categories            controllers.CategoryController.categories
 #      schema:
 #        $ref: '#/definitions/whatson.model.Location'
 ###
-GET    /location              controllers.LocationController.searchLocations(search: String)
+GET    /location              controllers.LocationController.searchLocations(search: Option[String])
 
 ###
 #  summary: Get a specific location

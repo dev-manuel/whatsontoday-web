@@ -60,7 +60,7 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     
     val q = for {
       e <- event if e.name like search.map(y => "%"++y++"%").getOrElse("%%").bind
-                 if e.categories.filter(_.id === category.getOrElse(-1)).exists
+                 if e.categories.filter(_.id === category.getOrElse(-1)).exists || category.getOrElse(-1).bind === -1
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
     } yield e
     

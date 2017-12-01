@@ -10,7 +10,7 @@ import whatson.db._
 import scala.concurrent.ExecutionContext
 
 case class EventDetail(id: Option[Int],name: String, from: Timestamp, 
-    to: Timestamp, creator: User, categories: List[Category], avgRating: Option[Float]) extends Rateable {
+    to: Timestamp, creator: User, categories: List[Category], avgRating: Option[Float], location: Location) extends Rateable {
   
 }
 
@@ -21,17 +21,17 @@ object EventDetail {
   val tupled = (this.apply _).tupled
   
   def detailed(q: Query[EventTable, Event, Seq])(implicit ec: ExecutionContext) = {
-    val s = q.join(UserTable.user).on(_.creatorId === _.id)
+    val s = q.join(UserTable.user).on(_.creatorId === _.id).join(LocationTable.location).on(_._1.locationId === _.id)
     val t = s.result.flatMap(y => {
-      DBIO.sequence(y.map(x => {
-        val s = EventTable.event.filter(_.id === x._1.id).map(_.avgRating)
-        val c = for(j <- EventCategoryTable.eventCategory if j.eventID === x._1.id;
+      DBIO.sequence(y.map{case ((event,creator),location) => {
+        val s = EventTable.event.filter(_.id === event.id).map(_.avgRating)
+        val c = for(j <- EventCategoryTable.eventCategory if j.eventID === event.id;
           c <- CategoryTable.category if c.id === j.categoryID) yield c
         
         s.result.zip(c.result).map(o => {
-          EventDetail(x._1.id,x._1.name,x._1.from,x._1.to,x._2,o._2.toList,o._1.headOption.flatten)
+          EventDetail(event.id,event.name,event.from,event.to,creator,o._2.toList,o._1.headOption.flatten,location)
         })
-      }))
+      }})
     })
     t
   }

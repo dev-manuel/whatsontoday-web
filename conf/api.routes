@@ -1,6 +1,6 @@
-->     /events                events.Routes
+->     /events                         events.Routes
 
-->     /user                  user.Routes
+->     /user                           user.Routes
 
 ###
 #  summary: Query all categories
@@ -10,7 +10,7 @@
 #      schema:
 #        $ref: '#/definitions/whatson.model.Category'
 ###
-GET    /categories            controllers.CategoryController.categories
+GET    /categories                     controllers.CategoryController.categories
 
 ###
 #  summary: Search locations by name
@@ -29,7 +29,7 @@ GET    /categories            controllers.CategoryController.categories
 #      schema:
 #        $ref: '#/definitions/whatson.model.Location'
 ###
-GET    /location              controllers.LocationController.searchLocations(search: Option[String])
+GET    /location                       controllers.LocationController.searchLocations(search: Option[String])
 
 ###
 #  summary: Get a specific location
@@ -39,7 +39,7 @@ GET    /location              controllers.LocationController.searchLocations(sea
 #      schema:
 #        $ref: '#/definitions/whatson.model.Location'
 ###
-GET    /location/:id          controllers.LocationController.getLocation(id: Int)
+GET    /location/:id                   controllers.LocationController.getLocation(id: Int)
 
 ###
 #  summary: Get locations nearby a specific location
@@ -49,7 +49,7 @@ GET    /location/:id          controllers.LocationController.getLocation(id: Int
 #      schema:
 #        $ref: '#/definitions/whatson.model.Location'
 ###
-GET    /location/nearby/:id   controllers.LocationController.getNearby(id: Int)
+GET    /location/nearby/:id            controllers.LocationController.getNearby(id: Int)
 
 ###
 #  summary: Create a location
@@ -63,4 +63,14 @@ GET    /location/nearby/:id   controllers.LocationController.getNearby(id: Int)
 #      schema:
 #        $ref: '#/definitions/whatson.model.Location'
 ###
-POST   /location              controllers.LocationController.createLocation()
+POST   /location                       controllers.LocationController.createLocation()
+
+###
+#  summary: Rate a specific entity
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Rating'
+###
+GET    /rating/:id/:entityType/:rate   controllers.RatingController.rateEntity(id: Int, entityType: Int, rate: Float)

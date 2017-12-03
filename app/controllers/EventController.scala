@@ -53,7 +53,7 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
     })
   }
   
-  def searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort: Option[String]) = Action.async { implicit request: Request[AnyContent] =>
+  def searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort: Option[String], sortDir: Boolean) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to search events")
     
     val q = for {
@@ -62,7 +62,7 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
     } yield e
     
-    val s = q.sortColumn(sort).queryPaged.detailed
+    val s = q.sortColumn(sort,sortDir).queryPaged.detailed
     returnPaged(s,q,db)
   }
   

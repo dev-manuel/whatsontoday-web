@@ -20,7 +20,7 @@
 #      schema:
 #        $ref: '#/definitions/whatson.model.Event'
 ###
-GET      /   controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort:Option[String])
+GET      /   controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort:Option[String], sortDir: Boolean)
 
 ###
 #  summary: Query the event with a specific id

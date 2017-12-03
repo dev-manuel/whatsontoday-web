@@ -23,6 +23,8 @@ import whatson.db.EventTable._
 import play.api.mvc.Results
 import play.api.libs.typedmap.TypedKey
 import slick.dbio.DBIOAction
+import slick.lifted.ColumnOrdered
+import slick.ast.TypedType
 
 object Util extends Results {
   val fromAngle = SimpleFunction.unary[Float, Float]("fromangle")
@@ -61,5 +63,9 @@ object Util extends Results {
       
       (q.drop(page*pageSize).take(pageSize),q.length)
     }
+  }
+  
+  implicit class RepUtils[A](rep: Rep[A]) {
+    def dir(b: Boolean)(implicit t: TypedType[A]) = if(b) columnToOrdered(rep).asc else columnToOrdered(rep).desc
   }
 }

@@ -32,7 +32,7 @@ class HomeControllerSpec extends PlaySpec
   "HomeController GET" should {
     
     "render the index page from a new instance of controller" in {
-      val events = route(app, FakeRequest(GET, "/api/events")).get
+      val events = route(app, FakeRequest(GET, "/api/categories")).get
       
       status(events) mustBe OK
     }

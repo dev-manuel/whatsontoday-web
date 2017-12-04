@@ -10,7 +10,7 @@ let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed d
 for(let i = 0; i < 3; i++) loremIpsum = loremIpsum + loremIpsum;
 
 
-const EventDetails = () => (
+const EventDetails = ({date, locationName, price, extraInformation, descriptionLong}) => (
         <div>
             <Grid>
                 <Grid.Row>
@@ -19,9 +19,13 @@ const EventDetails = () => (
                     </Grid.Column>
                     <Grid.Column width="6">
                         <h2>Wann?</h2>
+                        <p>{date}</p>
                         <h2>Wo?</h2>
+                        <p>{locationName}</p>
                         <h2>Kosten</h2>
-                        <h2>Weitere Infos</h2>                        
+                        <p>{price}</p>
+                        <h2>Weitere Infos</h2>    
+                        <p>{extraInformation}</p>                    
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

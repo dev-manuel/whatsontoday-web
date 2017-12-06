@@ -4,7 +4,6 @@ import Slick from 'react-slick';
 import {Grid} from 'semantic-ui-react';
 
 // Import resources
-import eventImage from '../../img/eventImage.jpg';
 import './Slider.less';
 
 class Slider extends React.Component {

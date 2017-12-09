@@ -4,9 +4,9 @@ import Slick from 'react-slick';
 import {Grid} from 'semantic-ui-react';
 
 // Import resources
-import './Slider.less';
+import './imageSlider.less';
 
-class Slider extends React.Component {
+class ImageSlider extends React.Component {
 
     render() {
         const settings = {
@@ -46,4 +46,4 @@ class Slider extends React.Component {
 }
     
 
-export default Slider;
+export default ImageSlider;

@@ -3,7 +3,7 @@ import React from 'react';
 import {Grid, Rating} from 'semantic-ui-react';
 
 // Import resources
-import ImageSlider from '../slider/imageSlider';
+import ImageSlider from '../imageSlider';
 
 
 const EventOverview = ({eventName, date, rating, description, categories}) => (

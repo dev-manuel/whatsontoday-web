@@ -8,7 +8,7 @@ import HomeView from './Home';
 import SERPView from './SERP';
 import EventView from './Event';
 import _404 from './404';
-
+import Footer from '../components/footer'
 const BaseView = () => (
         <div>
             <Header/>
@@ -17,8 +17,11 @@ const BaseView = () => (
                 <Route exact path='/' component={HomeView}/>
                 <Route path='/SERP' component={SERPView}/> {/* Todo: render specific SERP according to URL parameters */}
                 <Route path='/event' component={EventView}/>
+
                 <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
             </Switch>
+
+            <Footer/>
         </div>
 )
 

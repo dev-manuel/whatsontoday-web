@@ -6,7 +6,7 @@ import {Grid, Rating} from 'semantic-ui-react';
 import EventOverview from '../components/eventOverview';
 import EventDetails from '../components/eventDetails';
 import LocationDetails from '../components/locationDetails';
-//import OrganizerDetails from '../components/organizerDetails';
+import OrganizerDetails from '../components/organizerDetails';
 //import EventRecommender from '../components/eventRecommender';
 
 let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ';
@@ -22,7 +22,16 @@ const data = {
     descriptionLong: loremIpsum + loremIpsum +loremIpsum,
     price: '10€',
     locationName: 'AwesomeLocation',
-    extraInformation: 'TL;DR'
+    extraInformation: 'TL;DR',
+}
+
+const organizerData = {
+    name: 'AwesomeOrganizer',
+    description: loremIpsum,
+    rating: 4,
+    contactLink: '#',
+    moreAboutLink: '#',
+    imageLink: '#'
 }
 
 const Event = () => (
@@ -30,10 +39,9 @@ const Event = () => (
             <EventOverview {...data}/>
             <EventDetails {...data}/>
             <LocationDetails/>
-            {
-                //<OrganizerDetails/>
-                //<EventRecommender/>
-            }
+            <OrganizerDetails {...organizerData}/>
+            {/*<EventRecommender/>*/}
+            
         </div>
 )
 

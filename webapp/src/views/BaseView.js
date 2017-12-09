@@ -8,7 +8,8 @@ import HomeView from './Home';
 import SERPView from './SERP';
 import EventView from './Event';
 import _404 from './404';
-import Footer from '../components/footer'
+import Footer from '../components/footer';
+
 const BaseView = () => (
         <div>
             <Header/>

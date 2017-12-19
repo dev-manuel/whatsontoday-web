@@ -3,31 +3,13 @@ import React from 'react';
 import {Grid, Segment, Container, Card} from 'semantic-ui-react';
 
 // Import resources
-import EventTile from '../eventTile';
+import EventTile from './eventTile';
 
-
-// An array of all events which should be displayed as a tile
-// the elements of this array must be objects with following fields:
-// name: {String} the name of the event displayed in the tile
-// date: { Todo: Type..} when does the event take place
-// categories: { [String]} list of all categories (hashtags) the event is assigned to
-const events = [
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business']},
-]
-
-
-const EventTileTable = () => {
+/**
+ * JSX component to render multiple event tiles in a tabular shape
+ * @param {{eventList: [{name: string, date: string, categories: [string], imageURI: string, target: string}] }} props 
+ */
+const EventTileTable = ({eventList}) => {
 
     /**
      * Returns an array with arrays of the given size.
@@ -49,9 +31,9 @@ const EventTileTable = () => {
     }
 
 
-    let eventTiles = events.map( (content, index) => (
+    const eventTiles = eventList.map( (entryListEntry, index) => (
         <Grid.Column key={index % 3} width="2">
-            <EventTile name={content.name} date={content.date} categories={content.catagories} />
+            <EventTile {...entryListEntry} />
         </Grid.Column>
     ))
     

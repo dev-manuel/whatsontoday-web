@@ -9,7 +9,7 @@ import EvenTileTable from '../components/eventTileTable';
 import exampleTileImage from '../img/example_tile.png';
 
 
-const CategoryList = [
+const categoryList = [
     {name: 'StartUp', imageURI: exampleTileImage, target: '#'},
     {name: 'Wissenschaft', imageURI: exampleTileImage, target: '#'},
     {name: 'Party', imageURI: exampleTileImage, target: '#'},
@@ -17,11 +17,26 @@ const CategoryList = [
     {name: 'Kultur', imageURI: exampleTileImage, target: '#'},
 ]
 
+const eventList = [
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},
+    {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},    
+]
+
 const Home = () => (
         <div>
             <Slider title='Education'/>
-            <CategoryTileTable categoryList={CategoryList}/>
-            <EvenTileTable/>
+            <CategoryTileTable categoryList={categoryList}/>
+            <EvenTileTable eventList={eventList}/>
         </div>
 )
 

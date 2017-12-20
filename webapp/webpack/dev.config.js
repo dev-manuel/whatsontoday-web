@@ -23,6 +23,10 @@ module.exports = merge(baseConfig, {
         port:9000
     },
 
+    module: {
+        loaders: [shared.createLessLoader(false)]
+    },
+
     plugins: [
         // Configure extract-text-plugin
         // This plugin will extract the style data into a seperate css file

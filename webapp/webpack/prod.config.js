@@ -1,6 +1,9 @@
 // Lode webpack base configuration
 const baseConfig = require('./base.config.js');
 
+// Load shared configuration
+const shared = require('./shared');
+
 // Load webpack-plugins here!
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -11,6 +14,10 @@ const webpack = require('webpack');
 module.exports = merge(baseConfig, {
     output: {
         publicPath: 'assets/', // Define a base path. (Play server provide resource file on /assets/* route) 
+    },
+
+    module: {
+        loaders: [shared.createLessLoader(true)]
     },
 
     plugins: [

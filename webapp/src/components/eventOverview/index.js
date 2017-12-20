@@ -6,7 +6,7 @@ import {Grid, Rating} from 'semantic-ui-react';
 import ImageSlider from '../imageSlider';
 
 
-const EventOverview = ({eventName, date, rating, description, categories}) => (
+const EventOverview = ({name, date, rating, description, categories}) => (
         <div>
             <Grid>
                 <Grid.Row>
@@ -14,7 +14,7 @@ const EventOverview = ({eventName, date, rating, description, categories}) => (
                         <ImageSlider />
                     </Grid.Column>
                     <Grid.Column width="8">
-                        <h2>{eventName}</h2>
+                        <h2>{name}</h2>
                         <h3 style={{color: 'gray'}}>{date}</h3>
                         <Rating defaultRating={rating} maxRating={5} disabled />
                         <p>{description}</p>

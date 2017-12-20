@@ -8,12 +8,14 @@ import EventDetails from '../components/eventDetails';
 import LocationDetails from '../components/locationDetails';
 import OrganizerDetails from '../components/organizerDetails';
 import EventRecommender from '../components/eventRecommender';
+import exampleTileImage from '../img/example_tile.png';
+
+
 
 let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ';
 
-
-const data = {
-    eventName: 'CoolEvent',
+const eventData = {
+    name: 'CoolEvent',
     date: '29. September 2018 (Samstag)',
     rating: 3,
     description: loremIpsum,
@@ -31,27 +33,34 @@ const organizerData = {
     rating: 4,
     contactLink: '#',
     moreAboutLink: '#',
-    imageLink: '#'
+    imageURI: '#'
 }
 
-const recommenderData = {
-    events: [
-        {name: 'CoolEventOne'},
-        {name: 'CoolEventTwo'},
-        {name: 'CoolEventThree'},
-        {name: 'CoolEventFour'},
-        {name: 'CoolEventFive'},
-        {name: 'CoolEventSix'},
+const locationData = {
+    name: 'CoolLocation',
+    rating: 4,
+    description: loremIpsum,
+    target: '#',
+    address: {}}
+
+const recommenderData = [
+        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
+        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
+        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
+        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
+        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
+        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
+        
     ]
-}
+
 
 const Event = () => (
         <div style={{marginLeft: '11%', marginRight: '11%'}}>
-            <EventOverview {...data}/>
-            <EventDetails {...data}/>
-            <LocationDetails/>
+            <EventOverview {...eventData}/>
+            <EventDetails {...eventData}/>
+            <LocationDetails {...locationData}/>
             <OrganizerDetails {...organizerData}/>
-            <EventRecommender {...recommenderData}/>
+            <EventRecommender eventList={recommenderData}/>
             
         </div>
 )

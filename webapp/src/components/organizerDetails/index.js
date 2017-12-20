@@ -10,7 +10,7 @@ let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed d
 const floatRight = {style: {float: 'right'}};
 
 
-const OrganizerDetails = ({name, description, rating, contactLink, moreAboutLink, imageLink}) => (
+const OrganizerDetails = ({name, description, rating, contactLink, moreAboutLink, imageURI}) => (
         <div>
             <Grid>
                 <Grid.Row>

@@ -2,9 +2,8 @@ package whatson.db
 
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape.proveShapeOf
-import whatson.model._
-import whatson.db.EventTable._
 import whatson.db.CategoryTable._
+import whatson.db.EventTable._
 
 class EventCategoryTable(tag: Tag) extends Table[(Int,Int)](tag, "eventcategory") {
   def categoryID = column[Int]("category_fk")

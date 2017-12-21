@@ -1,30 +1,15 @@
 package whatson.db
 
+import scala.concurrent.ExecutionContext
+
+import play.api._
+import play.api.libs.json._
+import play.api.mvc._
+import slick.ast.TypedType
+import slick.dbio.DBIOAction
+import slick.jdbc.JdbcProfile
 import slick.jdbc.PostgresProfile.api._
 import whatson.model.HasID
-import whatson.model.Event
-import slick.jdbc.JdbcProfile
-import javax.inject._
-import play.api._
-import play.api.mvc._
-import scala.concurrent.ExecutionContext
-import slick.jdbc.PostgresProfile.api._
-import play.api.db.slick.HasDatabaseConfigProvider
-import play.api.db.slick.DatabaseConfigProvider
-import slick.jdbc.JdbcProfile
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-import slick.dbio.Effect.Transactional
-import play.api.libs.json._
-import java.util.Locale.Category
-import whatson.model.Event._
-import whatson.model.Event
-import whatson.db.EventTable._
-import play.api.mvc.Results
-import play.api.libs.typedmap.TypedKey
-import slick.dbio.DBIOAction
-import slick.lifted.ColumnOrdered
-import slick.ast.TypedType
 
 object Util extends Results {
   val fromAngle = SimpleFunction.unary[Float, Float]("fromangle")

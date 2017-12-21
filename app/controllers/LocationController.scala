@@ -1,26 +1,19 @@
 package controllers
 
+import scala.concurrent.{ExecutionContext, Future}
+
 import javax.inject._
 import play.api._
-import play.api.mvc._
-import scala.concurrent.ExecutionContext
-import slick.jdbc.PostgresProfile.api._
-import whatson.db.EventTable
-import play.api.db.slick.HasDatabaseConfigProvider
-import play.api.db.slick.DatabaseConfigProvider
-import slick.jdbc.JdbcProfile
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-import slick.dbio.Effect.Transactional
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json._
-import java.util.Locale.Category
-import whatson.model.Location._
-import whatson.model._
-import play.api.mvc.Results
-import whatson.db.Util._
+import play.api.mvc._
+import slick.jdbc.JdbcProfile
+import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import whatson.db.LocationTable._
-import scala.concurrent.Future
+import whatson.db.Util._
+import whatson.model._
+import whatson.model.Location._
 
 class LocationController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)
     (implicit context: ExecutionContext)
@@ -35,7 +28,7 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
     val q = for {
       l <- location if l.name like ("%"++search.getOrElse("")++"%").bind
     } yield l
-    
+
     q.returnPaged(db)
   }
   

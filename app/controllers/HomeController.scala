@@ -1,20 +1,12 @@
 package controllers
 
+import scala.concurrent.ExecutionContext
+
 import javax.inject._
 import play.api._
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.mvc._
-import scala.concurrent.ExecutionContext
-import slick.jdbc.PostgresProfile.api._
-import whatson.db.EventTable
-import play.api.db.slick.HasDatabaseConfigProvider
-import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-import slick.dbio.Effect.Transactional
-import play.api.libs.json._
-import java.util.Locale.Category
-import whatson.db.CategoryTable
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the

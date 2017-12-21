@@ -2,7 +2,7 @@ package whatson.util
 
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import play.api.Play.current
+
 import play.api.libs.json._
 
 object DateTime {

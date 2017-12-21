@@ -1,32 +1,27 @@
 package controllers
 
+import scala.concurrent.ExecutionContext
+
 import javax.inject._
 import play.api._
-import play.api.mvc._
-import scala.concurrent.ExecutionContext
-import slick.jdbc.PostgresProfile.api._
-import play.api.db.slick.HasDatabaseConfigProvider
-import play.api.db.slick.DatabaseConfigProvider
-import slick.jdbc.JdbcProfile
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-import slick.dbio.Effect.Transactional
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json._
-import java.util.Locale.Category
+import play.api.mvc._
+import slick.jdbc.JdbcProfile
+import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import whatson.db.UserTable._
-import whatson.model.User._
-import whatson.model._
-import play.api.mvc.Results
 import whatson.db.Util._
+import whatson.model._
+import whatson.model.User._
 
 class UserController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)
     (implicit context: ExecutionContext)
     extends AbstractController(cc) 
     with HasDatabaseConfigProvider[JdbcProfile]{
-  
+
   val log = Logger("api.users")
-  
+
   def getUser(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get user")
     

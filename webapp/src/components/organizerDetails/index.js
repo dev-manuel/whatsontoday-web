@@ -6,29 +6,25 @@ import {Grid, Rating} from 'semantic-ui-react';
 // ...
 
 let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ';
-for(let i = 0; i < 3; i++) loremIpsum = loremIpsum + loremIpsum;
+
+const floatRight = {style: {float: 'right'}};
 
 
-const EventDetails = ({date, locationName, price, extraInformation, descriptionLong}) => (
+const OrganizerDetails = ({name, description, rating, contactLink, moreAboutLink, imageURI}) => (
         <div>
             <Grid>
                 <Grid.Row>
                     <Grid.Column width="10">
-                        <p>{loremIpsum}</p>
+                        <h2>{name}<span {...floatRight}><Rating defaultRating={rating} maxRating={5} disabled /></span></h2>
+                        <p>{description}</p>
+                        <a href={contactLink}>{name} kontaktieren</a> <a {...floatRight} href={moreAboutLink}>Mehr zu {name}</a>
                     </Grid.Column>
                     <Grid.Column width="6">
-                        <h2>Wann?</h2>
-                        <p>{date}</p>
-                        <h2>Wo?</h2>
-                        <p>{locationName}</p>
-                        <h2>Kosten</h2>
-                        <p>{price}</p>
-                        <h2>Weitere Infos</h2>    
-                        <p>{extraInformation}</p>                    
+                        <p>Im a image too!</p>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
         </div>
 )
 
-export default EventDetails;
+export default OrganizerDetails;

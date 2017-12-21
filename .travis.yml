@@ -11,7 +11,7 @@ notifications:
 env:
   global:
   - USER="whats-on-today-bot"
-  - EMAIL="whats-on-today-bot@whats-on.today"
+  - EMAIL="edgar.dorausch@whats-on.today"
   - REPO="WhatsOnToday.github.io"
   - GH_REPO="github.com/WhatsOnToday/WhatsOnToday.github.io.git"
   - secure: SxNayQUX/TU9GqbZfPIf8U0UnOY5vjk2FlTuNgPPU/IEFMOG6S7uXiufB0H5OCM/Yy1RFeQIDVlxdHGGDhU7VbiWjWIfricK0XcRfwpMZt3rweSJCaoiicgDEcUafCGdfYB0oJPrTjfOee+PkcCY721P6MUpIJ8esA4UR5uJCbMJftJ5VsaTuVltLX03qJKgCI9K2KDQai2QJ4WwkJtVk468xmou9znZn04HkViRiHKodtn3ODT/xK+5uenORMCa+AINcWPA6QH49L6LOpmEUIlmD72rnVQQlHzOEe0pqcQERplk2O2m6WeuYXrCQFj1X/Og4CDYak7GkVKZYA4x12woSy2TIjACM2mWKyJNOyDIbL1xh2bfp1IIz1P/FZQ4Eriud+oZw+Ics5Mrh965sLfdnWY7njI5kucKJYo3KpezGnMuyPHyDIn8I2zd4tR6/yjq2fJtMi/kTn+ie/Z4NSD/oh3bYCivWWyWdQan8Eg/HNvhafpoU3lLDHTnjgc22vLhlmwZkqKPwMfc82pbOXVzg+fl+4GpHb2lkxD/kIEqf4qNnjnrqd/JESKyUv7AmEKIjrIvJKG7iaaWZ+k0VZZl8iaeXRJWYrU3w3RUlB21Yq5rv0wDwLYbEZJoU3Y3fe/BKYnnIG+SDwyidCUlCJDaHvuUWrlTvefBC25b1qI=

@@ -38,8 +38,8 @@ before_cache:
 
 after_success:
   - MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
-  - git clone git://${GH_REPO} $HOME
-  - cp $HOME/target/swagger/swagger.json $HOME/$REPO/rest_doc
+  - git clone git://${GH_REPO} $HOME/$REPO
+  - cp $TRAVIS_BUILD_DIR/target/swagger/swagger.json $HOME/$REPO/rest_doc
   - cd $HOME/$REPO
   - git remote
   - git config user.email ${EMAIL}

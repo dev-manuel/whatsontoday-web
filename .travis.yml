@@ -37,6 +37,8 @@ before_cache:
   - find $HOME/.sbt        -name "*.lock"               -print -delete
 
 after_success:
+  - cd $TRAVIS_BUILD_DIR
+  - sbt package
   - MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
   - git clone git://${GH_REPO} $HOME/$REPO
   - ls $TRAVIS_BUILD_DIR -R

@@ -38,7 +38,7 @@ before_cache:
 
 after_success:
   - cd $TRAVIS_BUILD_DIR
-  - sbt package
+  - sbt swagger
   - MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
   - git clone git://${GH_REPO} $HOME/$REPO
   - ls $TRAVIS_BUILD_DIR -R
@@ -47,6 +47,6 @@ after_success:
   - git remote
   - git config user.email ${EMAIL}
   - git config user.name ${USER}
-  - git add .
+  - git add swagger.json
   - git commit -m ${MESSAGE}
   - git push "https://${GH_TOKEN}@${GH_REPO}" master

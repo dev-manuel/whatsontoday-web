@@ -14,7 +14,7 @@ env:
   - EMAIL="whats-on-today-bot@whats-on.today"
   - REPO="WhatsOnToday.github.io"
   - GH_REPO="github.com/WhatsOnToday/WhatsOnToday.github.io.git"
-  - secure: sdbLsuqUEJk09SN3MBRsmGjAp/fHSbxDaNmm7HhkRjNYAdM9J6evJ/1RlEqO1ap4jvctdmg6EhFmr3jIcjsjQ2kAc81nYQC9FnnCt8eZJFMaKK9H5VG9S4LednbaaQWQgHf+8usgfQed8ZQlfP0mEzVvzuy4yk5VLqOCOMxyawOjLZo6jcur9dQzvy00AGlkKm2mEqpSKzfWnek81Mwwa6sg2fWA7oCRa2HOlg/GBph97I+xEs1VrgHZTRXpsflZeaFTGwjhsgLc59MQ3OxhAgcz4RIpEgjSb1xrsZx6NIiyYWiAqN9BALxvyDul2P9JK2vwQ5+m+42JG7m/y6B6bvMmIkEktw5pm6Aotse/oSyjaSD+OoyaEyuxFn+Wniwl0ARgxVYMQNu+iBQ2nISgz7pbvPu6Tuz8xyDCXYEZdABEp07o56T2zgWf3W7aoU6C4uihcAoKcS1FeXkmS5QAI5Il9UVtk/dPx0+2qX2VV72PxYkW4+btdQzw6LAFk+g0PNdX8+Jz4HglQpUlsbe5AHLIVf9896cJFIxEmDOjjp72ehqvzD+SBQA1QJoC01PEewEsHIq6j0J1XdYLSsZc+0+XI5Gbmqe1xwSKo7+KgVl8DgYepw+Fn03yLQRIVHZv4OjOcQuhRrZF1wM852Sp56eMZTfcgRrm2zj+Zqcw9yw=
+  - secure: isBfSQxqlC31yZiT0Jb9Oe/BOxKz7rEBDsMuYinKgQe+24w8Qm4GGKKiqnoqbihaP+MSwlSoL6kfm8XsD8Vq4VAZJqPJUiZ8ZWLkwqbNjCGbn9VsPSqg//bVmGYBAmZQnW/5dRyK0LCCneXkywvo9+G2TX5xzR1kMBEbTccQrJHi/DUzQp3q/UP3TECSAoQIR3wDZcUEWC/bjMjvKjYju++BHY5j3rUMCpmHnuxK9SJsIG8GwqmAqxZK/RYgpixd4p8Mfy2u0Eqgp+81Ek1BNb4ncq/dqe9KgeYNdpKZBEQPQc1Gb/AZaXSdZ/L1tDQiKCAB6ZxZTh2zldh9AMQp3ilQKBnJwjHB4Y49SinntYPNh/d0mDo1+EPeYCtLGO+ymnyPZSRbstoOyRMTis7iMNeFIFpCeL0HGoODcA1LJH0/bxpmB3Xi4rWSoMUSQkS/ZrQbf/VKL/gvGm37cLSRZSrCjiv7VM2dvdNt8ox0m7JLNkfiTQfeGubW/jTM94bqD/s5Avvl9boJObgm36E692lgjOFCuHP6OGKea9oqNiH9WojNYmI9gmf1uLfIwmpmLOVEAJsoeZvtKq3Th9O+TNUmQbxUrYw/0qm9/NDKQ0g5b2nzFfd4nT1LwEAVncyBCLX/XsQq72SxMGi/PtpxvrXLNFlphktMdiXXdXlBoJU=
 services:
   - postgresql
 
@@ -46,4 +46,4 @@ after_success:
   - git config user.name ${USER}
   - git add swagger.json
   - git commit -m "Travis auto-commit"
-  - git push "https://${GH_TOKEN}@${GH_REPO}" master
+  - git push "https://${GH_TOKEN}@${GH_REPO}" master > /dev/null 2>&1

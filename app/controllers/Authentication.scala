@@ -21,19 +21,25 @@ import whatson.service._
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import whatson.model._
 import whatson.model.SignInForm._
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import javax.inject._
+import slick.jdbc.JdbcProfile
+import whatson.db.UserTable
+import slick.jdbc.PostgresProfile.api._
 
 class Authentication@Inject() (
-  silhouette: Silhouette[AuthEnv], //TODO
-  userService: UserService, //TODO
-  authInfoRepository: AuthInfoRepository, //TODO
-  credentialsProvider: CredentialsProvider, //TODO
-  socialProviderRegistry: SocialProviderRegistry, //TODO
+  silhouette: Silhouette[AuthEnv],
+  userService: UserService,
+  authInfoRepository: AuthInfoRepository,
+  credentialsProvider: CredentialsProvider,
+  socialProviderRegistry: SocialProviderRegistry,
   configuration: Configuration,
-  clock: Clock, //TODO
+  clock: Clock,
   cc: ControllerComponents,
   cache: AsyncCacheApi,
-  passwordHasher: PasswordHasher)
-    extends AbstractController(cc) {
+  passwordHasher: PasswordHasher,
+  protected val dbConfigProvider: DatabaseConfigProvider)
+    extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
   
   
 
@@ -87,8 +93,9 @@ class Authentication@Inject() (
           Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
         case None =>
           val authInfo = passwordHasher.hash(data.password)
-          val user = User(None, data.firstName + " " + data.lastName, data.email, loginInfo.providerID, loginInfo.providerKey)
+          val user = User(None, data.firstName + " " + data.lastName, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey)
           for {
+            i <- db.run(UserTable.user += user)
             authInfo <- authInfoRepository.add(loginInfo, authInfo)
             authenticator <- silhouette.env.authenticatorService.create(loginInfo)
             token <- silhouette.env.authenticatorService.init(authenticator)

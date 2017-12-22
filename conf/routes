@@ -39,6 +39,21 @@ GET    /signOut                  controllers.Authentication.signOut
 POST   /signIn                   controllers.Authentication.login
 
 ###
+#  summary: Returns the currently logged in user
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.User'
+###
+POST   /user                   controllers.Authentication.user
+
+###
 #  summary: Create a new account
 #  parameters:
 #    - name: body

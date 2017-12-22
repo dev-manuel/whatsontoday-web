@@ -74,3 +74,33 @@ POST   /location                       controllers.LocationController.createLoca
 #        $ref: '#/definitions/whatson.model.Rating'
 ###
 GET    /rating/:id/:entityType/:rate   controllers.RatingController.rateEntity(id: Int, entityType: Int, rate: Float)
+
+###
+#  summary: Get a specific image
+#  responses:
+#    200:
+#      description: success
+###
+GET    /images/:id            controllers.ImageController.get(id: Int)
+
+###
+#  summary: Get bytes of a specific image
+#  responses:
+#    200:
+#      description: success
+###
+GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int)
+
+###
+#  summary: Create an image
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.Image'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Image'
+###
+POST   /images                       controllers.ImageController.createImage()

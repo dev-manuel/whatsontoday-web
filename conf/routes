@@ -18,8 +18,37 @@ GET    /docs/swagger-ui/*file    controllers.Assets.at(path:String="/public/lib/
 ### NoDocs ###
 GET    /assets/*file             controllers.Assets.versioned(path="/public", file: Asset)
 
+###
+#  summary: Sign out of account
+#  responses:
+#    200:
+#      description: success
+###
 GET    /signOut                  controllers.Authentication.signOut
-POST   /signIn                   controllers.Authentication.submit
-POST   /signUp                   controllers.Authentication.submit
+
+###
+#  summary: Sign into an existing account
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.SignInForm'
+#  responses:
+#    200:
+#      description: success
+###
+POST   /signIn                   controllers.Authentication.login
+
+###
+#  summary: Create a new account
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.SignUpForm.Data'
+#  responses:
+#    200:
+#      description: success
+###
+POST   /signUp                   controllers.Authentication.signUp
+
 GET    /authenticate/:provider   controllers.Authentication.authenticate(provider)
 POST   /authenticate/:provider   controllers.Authentication.authenticate(provider)

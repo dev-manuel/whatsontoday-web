@@ -6,44 +6,42 @@ import {Grid} from 'semantic-ui-react';
 // Import resources
 import './imageSlider.less';
 
-class Slider extends React.Component {
+const ImageSlider = ({imageURIList}) => {
+    const settings = {
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    };
+    return (
+        <div className="sliderContainer">
+            <Slick {...settings}>
+                <div><img src={imageURIList[0]}/></div>
+                <div><img src={imageURIList[1]}/></div>
+                <div><img src={imageURIList[2]}/></div>
+                <div><img src={imageURIList[3]}/></div>
+            </Slick>
 
-    render() {
-        const settings = {
-			infinite: true,
-			speed: 500,
-			slidesToShow: 1,
-            slidesToScroll: 1,
-        };
-        return (
-          	<div className="sliderContainer">
-            	<Slick {...settings}>
-					<div><h3>1</h3></div>
-					<div><h3>2</h3></div>
-					<div><h3>3</h3></div>
-					<div><h3>4</h3></div>
-            	</Slick>
-
-                <Grid centered>
-                    <Grid.Row>
-                        <Grid.Column width={4}>
-                            image
-                        </Grid.Column>
-                        <Grid.Column width={4}>
-                            image
-                        </Grid.Column>
-                        <Grid.Column width={4}>
-                            image
-                        </Grid.Column>
-                        <Grid.Column width={4}>
-                            image
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-         	</div>
-        )
-    }
+            <Grid centered>
+                <Grid.Row>
+                    <Grid.Column width={4}>
+                        <img src={imageURIList[1]} />
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                        <img src={imageURIList[2]} />
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                        <img src={imageURIList[3]} />
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                        More...
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+        </div>
+    )
 }
+
     
 
-export default Slider;
+export default ImageSlider;

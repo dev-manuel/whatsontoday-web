@@ -5,6 +5,7 @@ import {Grid} from 'semantic-ui-react';
 
 // Import resources
 import './imageSlider.less';
+import Thumbnail from './thumbnail';
 
 const ImageSlider = ({imageURIList}) => {
     const settings = {
@@ -25,13 +26,13 @@ const ImageSlider = ({imageURIList}) => {
             <Grid centered>
                 <Grid.Row>
                     <Grid.Column width={4}>
-                        <img src={imageURIList[1]} />
+                        <Thumbnail imageURI={imageURIList[1]} />
                     </Grid.Column>
                     <Grid.Column width={4}>
-                        <img src={imageURIList[2]} />
+                        <Thumbnail imageURI={imageURIList[2]} />
                     </Grid.Column>
                     <Grid.Column width={4}>
-                        <img src={imageURIList[3]} />
+                        <Thumbnail imageURI={imageURIList[3]} />
                     </Grid.Column>
                     <Grid.Column width={4}>
                         More...

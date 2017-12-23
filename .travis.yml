@@ -39,6 +39,7 @@ cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt
+    - ./webapp/node_modules/
 
 before_cache:
   # Cleanup the cached directories to avoid unnecessary cache updates

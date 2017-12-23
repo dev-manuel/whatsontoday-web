@@ -8,6 +8,13 @@ scala:
 notifications:
     slack: whatsontoday:K22qCdNZ7GFj20Hrt8hU3DoS
 
+env:
+  global:
+  - USER="whats-on-today-bot"
+  - EMAIL="whats-on-today-bot@whats-on.today"
+  - REPO="WhatsOnToday.github.io"
+  - GH_REPO="github.com/WhatsOnToday/WhatsOnToday.github.io.git"
+  - secure: isBfSQxqlC31yZiT0Jb9Oe/BOxKz7rEBDsMuYinKgQe+24w8Qm4GGKKiqnoqbihaP+MSwlSoL6kfm8XsD8Vq4VAZJqPJUiZ8ZWLkwqbNjCGbn9VsPSqg//bVmGYBAmZQnW/5dRyK0LCCneXkywvo9+G2TX5xzR1kMBEbTccQrJHi/DUzQp3q/UP3TECSAoQIR3wDZcUEWC/bjMjvKjYju++BHY5j3rUMCpmHnuxK9SJsIG8GwqmAqxZK/RYgpixd4p8Mfy2u0Eqgp+81Ek1BNb4ncq/dqe9KgeYNdpKZBEQPQc1Gb/AZaXSdZ/L1tDQiKCAB6ZxZTh2zldh9AMQp3ilQKBnJwjHB4Y49SinntYPNh/d0mDo1+EPeYCtLGO+ymnyPZSRbstoOyRMTis7iMNeFIFpCeL0HGoODcA1LJH0/bxpmB3Xi4rWSoMUSQkS/ZrQbf/VKL/gvGm37cLSRZSrCjiv7VM2dvdNt8ox0m7JLNkfiTQfeGubW/jTM94bqD/s5Avvl9boJObgm36E692lgjOFCuHP6OGKea9oqNiH9WojNYmI9gmf1uLfIwmpmLOVEAJsoeZvtKq3Th9O+TNUmQbxUrYw/0qm9/NDKQ0g5b2nzFfd4nT1LwEAVncyBCLX/XsQq72SxMGi/PtpxvrXLNFlphktMdiXXdXlBoJU=
 services:
   - postgresql
 
@@ -27,3 +34,16 @@ before_cache:
   # Cleanup the cached directories to avoid unnecessary cache updates
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
   - find $HOME/.sbt        -name "*.lock"               -print -delete
+
+after_success:
+  - cd $TRAVIS_BUILD_DIR
+  - sbt swagger
+  - git clone git://${GH_REPO} $HOME/$REPO
+  - cp $TRAVIS_BUILD_DIR/target/swagger/swagger.json $HOME/$REPO/rest_doc
+  - cd $HOME/$REPO/rest_doc
+  - git remote
+  - git config user.email ${EMAIL}
+  - git config user.name ${USER}
+  - git add swagger.json
+  - git commit -m "Travis auto-commit"
+  - git push "https://${GH_TOKEN}@${GH_REPO}" master > /dev/null 2>&1

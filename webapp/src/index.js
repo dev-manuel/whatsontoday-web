@@ -7,6 +7,8 @@ import {HashRouter, IndexRoute} from 'react-router-dom'
 // Import resources
 import BaseView from './views/BaseView';
 import 'semantic-ui-less/semantic.less';
+import 'slick-carousel/slick/slick.less';
+import 'slick-carousel/slick/slick-theme.less';
 
 
 // Setup of local page routing

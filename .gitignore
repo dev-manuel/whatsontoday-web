@@ -1,15 +1,22 @@
 logs
 .vscode
-node_modules/
 public/
+ 
+ 
+### Node ###
+# Logs
+npm-debug.log*
+yarn-debug.log*
 yarn.lock
-
+package-lock.json
+node_modules/
+ 
 # Created by https://www.gitignore.io/api/sbt
-
+ 
 ### SBT ###
 # Simple Build Tool
 # http://www.scala-sbt.org/release/docs/Getting-Started/Directories.html#configuring-version-control
-
+ 
 dist/*
 target/
 lib_managed/
@@ -19,12 +26,12 @@ project/plugins/project/
 .history
 .cache
 .lib/
-
+ 
 # End of https://www.gitignore.io/api/sbt
-
-
+ 
+ 
 # For IntelliJ
-
+ 
 *.iml
 *.ipr
 *.iws
@@ -32,8 +39,5 @@ project/plugins/project/
 out
 /bin/
 .settings/
-
+ 
 .cache-main
-.cache-tests
-.ensime
-.g8/

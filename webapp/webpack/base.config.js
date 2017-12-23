@@ -20,35 +20,6 @@ module.exports = {
     
     module: {
         loaders: [
-
-            // Loading less-files
-            {
-                test: /\.(less|config)/, // Loading .less or .config files
-                use: ExtractTextPlugin.extract({ // Instructs webpack to store the style data in a seperate css-file (see plugins!)
-                    use: [
-                        { loader: "css-loader",
-                            //options: {minimize: true}
-                        },
-                        {
-                            loader: "less-loader",
-                            options: {
-                                paths: [shared.ROOT_DIR, shared.NODE_MODULES_DIR], // Instructs less-loader not to use the webpack resolver
-                                plugins: [
-
-                                    // (Ugly) workaround to configurate semantic-ui-less with files in the 
-                                    // SRC_DIR/semantic-ui directory
-                                    new RewriteImportPlugin({
-                                        paths: {
-                                            '../../theme.config': `${shared.SRC_DIR}/semantic-ui/theme.config`,
-                                        },
-                                    }),
-                                ],
-                            },
-                        }
-                    ],
-                }),
-            },
-
             // Loading image- and font-files
             {
                 test: /\.(png|jpg|gif|woff|svg|eot|ttf|woff2)$/,

@@ -3,10 +3,13 @@ import { Icon, Image as ImageComponent, Item, Segment } from 'semantic-ui-react'
 
 import exampleTileImage from '../../img/example_tile.png';
 
-
-const ItemExampleExtraContent = ({name, date, categories, description}) => (
+/**
+ * 
+ * @param {{name: string, date: string, categories: string, description: string, imageURI: string, target: string }} props 
+ */
+const ItemExampleExtraContent = ({name, date, categories, description, imageURI, target}) => (
     <Segment>
-        <Item.Group>
+        <Item.Group href='#'>
             <Item>
             <Item.Image size='small' src={exampleTileImage}/>
 

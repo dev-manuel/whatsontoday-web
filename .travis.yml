@@ -5,6 +5,9 @@ jdk: oraclejdk8
 scala:
    - 2.12.2
 
+node_js:
+  "6"
+
 notifications:
     slack: whatsontoday:K22qCdNZ7GFj20Hrt8hU3DoS
 
@@ -20,6 +23,13 @@ services:
 
 before_script:
   - psql -c 'create database "WhatsOnDBTest";' -U postgres
+
+script:
+  - cd ./webapp/
+  - npm install
+  - npm run build
+  - cd ../
+  - sbt ++$TRAVIS_SCALA_VERSION test
 
 # Use container-based infrastructure
 sudo: false

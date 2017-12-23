@@ -6,7 +6,7 @@ import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncod
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services._
 import com.mohiva.play.silhouette.api.util._
-import com.mohiva.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings}
+import com.mohiva.play.silhouette.crypto._
 import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.util._
@@ -18,6 +18,12 @@ import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
 import whatson.auth._
 import whatson.service._
+import com.mohiva.play.silhouette.impl.providers.oauth2._
+import com.mohiva.play.silhouette.impl.providers.state._
+import com.mohiva.play.silhouette.api.crypto._
+import net.ceedubs.ficus.readers.ArbitraryTypeReader._
+import net.ceedubs.ficus.Ficus._
+import scala.collection.immutable._
 
 class SilhouetteModule extends AbstractModule with ScalaModule {
    override def configure() = {
@@ -64,7 +70,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     val passwordHasherRegisty = PasswordHasherRegistry(passwordHasher)
     new CredentialsProvider(authInfoRepository, passwordHasherRegisty)
   }
-  
+
   /**
    * Provides the social provider registry.
    *
@@ -77,12 +83,12 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
    */
   @Provides
   def provideSocialProviderRegistry(
-    /*facebookProvider: FacebookProvider*/): SocialProviderRegistry = {
+    facebookProvider: FacebookProvider): SocialProviderRegistry = {
 
-    SocialProviderRegistry(Seq(/*facebookProvider*/))
+    SocialProviderRegistry(Seq(facebookProvider))
   }
-  
-    /**
+
+   /**
    * Provides the Facebook provider.
    *
    * @param httpLayer The HTTP layer implementation.
@@ -90,12 +96,43 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
    * @param configuration The Play configuration.
    * @return The Facebook provider.
    */
-  /*@Provides
+  @Provides
   def provideFacebookProvider(
     httpLayer: HTTPLayer,
-    stateProvider: DefaultSocialStateHandler,
+    stateProvider: SocialStateHandler,
     configuration: Configuration): FacebookProvider = {
 
-    new FacebookProvider(httpLayer, stateProvider, s)
-  }*/
+    new FacebookProvider(httpLayer, stateProvider,
+                         configuration.underlying.as[OAuth2Settings]("silhouette.facebook"))
+  }
+
+  /**
+    * Provides the SocialStateHandler.
+    *
+    */
+  @Provides
+  def provideSocialStateHandler(
+    csrfHandler: CsrfStateItemHandler,
+    signer: Signer,
+    configuration: Configuration): SocialStateHandler = {
+    new DefaultSocialStateHandler(Set(csrfHandler),signer)
+  }
+
+  /**
+    * Provides the JcaSigner.
+    */
+  @Provides
+  def provideJcaSigner(
+    configuration: Configuration): Signer = {
+    new JcaSigner(configuration.underlying.as[JcaSignerSettings]("silhouette.signer"))
+  }
+
+  /**
+    * Provides the CsrfStateSettings.
+    */
+  @Provides
+  def provideCsrfStateSettings(
+    configuration: Configuration): CsrfStateSettings = {
+    configuration.underlying.as[CsrfStateSettings]("silhouette.csrfState")
+  }
 }

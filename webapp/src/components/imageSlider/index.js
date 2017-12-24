@@ -28,16 +28,21 @@ class ImageSlider extends React.Component{
             adaptiveHeight: true
         };
 
-        //setInterval(()=>{this.next()}, 2000)
+        const imageCount = this.props.imageURIList.length;
+        const sliderEntries = [];
+
+        // create a slider entry for each image (max 4); Todo: pretty display if only one image
+        for(let imageIndex = 0; imageIndex < imageCount && imageIndex < 4; imageIndex++){
+            sliderEntries.push(
+                <div><img src={this.props.imageURIList[imageIndex]}/></div>
+            )
+        }
 
         return (
             <div>
-                <div className="sliderContainer">
+                <div className="imageSliderContainer">
                     <Slick ref={ slider => {this.slider = slider}} {...settings}>
-                        <div><img src={this.props.imageURIList[0]}/></div>
-                        <div><img src={this.props.imageURIList[1]}/></div>
-                        <div><img src={this.props.imageURIList[2]}/></div>
-                        <div><img src={this.props.imageURIList[3]}/></div>
+                        {sliderEntries}
                     </Slick>
                 </div>
                 <ThumbnailList imageURIList={this.props.imageURIList} goTo={this.goTo}/>  

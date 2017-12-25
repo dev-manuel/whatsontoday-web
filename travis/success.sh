@@ -1,4 +1,3 @@
-echo $TRAVIS_BRANCH
 if [ $TRAVIS_BRANCH = "develop" ]
 then
     echo "Updating api documentation..."

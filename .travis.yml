@@ -24,12 +24,7 @@ services:
 before_script:
   - psql -c 'create database "WhatsOnDBTest";' -U postgres
 
-script:
-  - cd ./webapp/
-  - npm install
-  - npm run build
-  - cd ../
-  - sbt ++$TRAVIS_SCALA_VERSION test
+script: ./travis/build.sh
 
 # Use container-based infrastructure
 sudo: false
@@ -46,6 +41,4 @@ before_cache:
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
   - find $HOME/.sbt        -name "*.lock"               -print -delete
 
-after_success:
-  - chmod +x ./travis/success.sh
-  - ./travis/success.sh
+after_success: ./travis/success.sh

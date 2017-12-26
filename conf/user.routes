@@ -1,14 +1,4 @@
 ###
-#  summary: Query the user with a specific id
-#  responses:
-#    200:
-#      description: success
-#      schema:
-#        $ref: '#/definitions/whatson.model.User'
-###
-GET      /:id   controllers.UserController.getUser(id: Int)
-
-###
 #  summary: Delete an user
 #  responses:
 #    200:
@@ -39,3 +29,53 @@ POST     /      controllers.UserController.createUser
 #        $ref: '#/definitions/whatson.model.User'
 ###
 PUT      /:id   controllers.UserController.updateUser(id: Int)
+
+###
+#  summary: Sign out of account
+#  responses:
+#    200:
+#      description: success
+###
+GET    /signOut                  controllers.Authentication.signOut
+
+###
+#  summary: Sign into an existing account
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.SignInForm'
+#  responses:
+#    200:
+#      description: success
+###
+POST   /signIn                   controllers.Authentication.login
+
+###
+#  summary: Returns the currently logged in user
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.User'
+###
+GET   /                          controllers.Authentication.user
+
+###
+#  summary: Create a new account
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.SignUpForm.Data'
+#  responses:
+#    200:
+#      description: success
+###
+POST   /signUp                   controllers.Authentication.signUp
+
+GET    /authenticate/:provider   controllers.Authentication.authenticate(provider)
+POST   /authenticate/:provider   controllers.Authentication.authenticate(provider)

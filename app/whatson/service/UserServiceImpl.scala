@@ -48,12 +48,17 @@ class UserServiceImpl @Inject()(
     val q = for {
       u <- user if u.providerId === profile.loginInfo.providerID && u.providerKey === profile.loginInfo.providerKey
     } yield u
+    val qa = q.map(x => (x.name,x.email))
 
-    val u = User(None,profile.firstName + " " + profile.lastName,
+    val u = (profile.firstName.getOrElse("") + " " + profile.lastName.getOrElse(""),
+             profile.email.getOrElse(""))
+    val userInsert = User(None,profile.firstName.getOrElse("") + " " + profile.lastName.getOrElse(""),
                  profile.email.getOrElse(""),None,None,None,
                  profile.loginInfo.providerID,profile.loginInfo.providerKey)
 
-    db.run(q.update(u))
-    db.run(q.result).map(_.head)
+    db.run(qa.update(u)).flatMap {
+      case 0 => db.run(user += userInsert)
+      case i => Future(i)
+    }.flatMap(_ => db.run(q.result)).map(_.head)
   }
 }

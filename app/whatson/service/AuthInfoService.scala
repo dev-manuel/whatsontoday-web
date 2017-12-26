@@ -51,7 +51,7 @@ class AuthInfoService @Inject()(
 
         db.run(q.update((b,c.getOrElse(""),a))).map ( x => PasswordInfo(a,b,c).asInstanceOf[T] )
       }
-      case _ => Future.never
+      case _ => Future(authInfo)
     }
   }
 
@@ -74,7 +74,7 @@ class AuthInfoService @Inject()(
 
         Future(PasswordInfo(a,b,c).asInstanceOf[T])
       }
-      case _ => Future.never
+      case _ => Future(authInfo)
     }
   }
 
@@ -100,7 +100,7 @@ class AuthInfoService @Inject()(
 
         Future(PasswordInfo(a,b,c).asInstanceOf[T])
       }
-      case _ => Future.never
+      case _ => Future(authInfo)
     }
   }
 

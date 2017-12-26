@@ -84,7 +84,6 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   @Provides
   def provideSocialProviderRegistry(
     facebookProvider: FacebookProvider): SocialProviderRegistry = {
-
     SocialProviderRegistry(Seq(facebookProvider))
   }
 
@@ -115,7 +114,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     csrfHandler: CsrfStateItemHandler,
     signer: Signer,
     configuration: Configuration): SocialStateHandler = {
-    new DefaultSocialStateHandler(Set(csrfHandler),signer)
+    new DefaultSocialStateHandler(Set(),signer)
   }
 
   /**

@@ -1,14 +1,14 @@
 package whatson.db
 
+import java.sql.Timestamp
+
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape.proveShapeOf
-import java.sql.Timestamp
-import whatson.db.ParticipantTable._
 import whatson.db.EventCategoryTable._
+import whatson.db.ParticipantTable._
 import whatson.db.UserTable._
-import whatson.model._
 import whatson.db.Util._
-import whatson.model.detail._
+import whatson.model._
 
 class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Event] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)

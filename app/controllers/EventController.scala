@@ -1,27 +1,19 @@
 package controllers
 
+import scala.concurrent.ExecutionContext
+
 import javax.inject._
 import play.api._
-import play.api.mvc._
-import scala.concurrent.ExecutionContext
-import slick.jdbc.PostgresProfile.api._
-import whatson.db.EventTable
-import play.api.db.slick.HasDatabaseConfigProvider
-import play.api.db.slick.DatabaseConfigProvider
-import slick.jdbc.JdbcProfile
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-import slick.dbio.Effect.Transactional
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json._
-import java.util.Locale.Category
+import play.api.mvc._
+import slick.jdbc.JdbcProfile
+import slick.jdbc.PostgresProfile.api._
 import whatson.db._
-import whatson.model.Event._
-import whatson.model.Event
 import whatson.db.EventTable._
-import play.api.mvc.Results
-import play.api.libs.typedmap.TypedKey
 import whatson.db.Util._
-import whatson.db.EventCategoryTable
+import whatson.model.Event
+import whatson.model.Event._
 import whatson.model.detail.EventDetail._
 
 /**
@@ -36,7 +28,7 @@ class EventController @Inject()(cc: ControllerComponents, protected val dbConfig
   
   def events() = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request for events")
-    
+
     val q = for(e <- EventTable.event) yield e;
     
     db.run(q.result).map(x => Ok(Json.toJson(x)))

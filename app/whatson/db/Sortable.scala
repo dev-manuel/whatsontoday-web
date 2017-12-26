@@ -1,6 +1,6 @@
 package whatson.db
 
-import slick.jdbc.PostgresProfile.api._
+import scala.language.higherKinds
 
 trait Sortable[R,O] {
   def sortColumn[U,C[D]](name: String, dir: Boolean): R

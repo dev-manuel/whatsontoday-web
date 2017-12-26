@@ -1,22 +1,26 @@
 package whatson.db
 
 import slick.jdbc.PostgresProfile.api._
-import whatson.model._
 import slick.lifted.ProvenShape.proveShapeOf
-import java.sql.Timestamp
 import whatson.db.ParticipantTable._
+import whatson.model._
 
 class UserTable(tag: Tag) extends Table[User](tag, "users") with HasID[User] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
-  
+
+  def pwSalt = column[String]("pwsalt")
   def pwHash = column[String]("pwhash")
+  def pwHasher = column[String]("pwhasher")
+
+  def providerId = column[String]("provider_id")
+  def providerKey = column[String]("provider_key")
   
   def email = column[String]("email")
   
   def events = participant.filter(_.userID === id).flatMap(_.eventFK)
 
-  def * = (id.?,name,pwHash,email) <> (User.tupled, User.unapply)
+  def * = (id.?,name,email,pwHash.?, pwSalt.?, pwHasher.? ,providerId, providerKey) <> (User.tupled, User.unapply)
 }
 
 object UserTable {

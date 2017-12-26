@@ -1,6 +1,7 @@
 package whatson.model.detail
 
 import play.api.libs.json._
+import whatson.model._
 
 case class ImageDetail(id: Option[Int], name: String, url: String) extends HasCopy[ImageDetail] {
   def cpy(i: Option[Int]) = this.copy(id = i)

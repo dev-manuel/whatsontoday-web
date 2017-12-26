@@ -5,17 +5,16 @@ import {Menu, Search, Icon, Dropdown} from 'semantic-ui-react';
 // Import resources
 import logo from '../../img/logo1.jpg';
 import PopupMenu from './PopupMenu';
+import './menu.less'
 
 const Header = () => (
-        <Menu>
+        <Menu className='headerMenu' borderless>
             <Menu.Item>
                 <img src={logo} />
             </Menu.Item>
 
             <Menu.Item>
-                <Search 
-                loading
-                />
+                <Search/>
             </Menu.Item>
 
             <Menu.Item position='right'>

@@ -1,6 +1,6 @@
 // Import modules
 import React from 'react';
-import {Menu, Search, Icon, Dropdown, Container} from 'semantic-ui-react';
+import {Menu, Search, Icon, Button} from 'semantic-ui-react';
 
 // Import resources
 import logo from '../../img/logo1.jpg';
@@ -20,7 +20,41 @@ const Header = () => (
             </Menu.Item>
 
             <Menu.Item className='headerButtons'>
-                 <a 
+
+                <Button 
+                    className='headerButtonStyle'
+                    basic
+                    color='teal'                    
+                >
+                    <Icon name='newspaper' /> Blog
+                </Button>
+
+                <Button 
+                    className='headerButtonStyle'
+                    basic
+                    color='teal'
+                >
+                    <Icon name='plus' /> Add Event
+                </Button>
+
+                <Button 
+                    className='headerButtonStyle'
+                    basic
+                    color='teal'
+                >
+                    <Icon name='sign in' /> Sign In
+                </Button>
+
+                <Button 
+                    className='headerButtonStyle'
+                    basic
+                    color='teal'
+                >
+                    <Icon name='signup' /> Sign Up
+                </Button>
+
+
+                 {/* <a 
                     className='headerButtonStyle'
                     href='#'
                  >
@@ -50,7 +84,7 @@ const Header = () => (
                  >
                     <Icon name='signup' />
                     Sign Up
-                </a>
+                </a> */}
             </Menu.Item>
 
             <Menu.Item className='headerPopup'>

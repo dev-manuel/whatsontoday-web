@@ -19,6 +19,7 @@ import whatson.model._
 import play.api.mvc.Results
 import whatson.db.Util._
 import whatson.db._
+import whatson.model.detail.LocationDetail._
 import whatson.db.LocationTable._
 import scala.concurrent.Future
 
@@ -35,8 +36,9 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
     val q = for {
       l <- location if l.name like ("%"++search.getOrElse("")++"%").bind
     } yield l
-    
-    q.returnPaged(db)
+
+    val s = q.queryPaged.detailed
+    returnPaged(s,q,db)
   }
   
   def getLocation(id: Int) = Action.async { implicit request: Request[AnyContent] =>
@@ -44,7 +46,7 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
     
     val q = for(l <- location if l.id === id.bind) yield l;
     
-    db.run(q.result).map(x => x.headOption match {
+    db.run(q.detailed).map(x => x.headOption match {
       case Some(r) => Ok(Json.toJson(r))
       case _ => NotFound
     })
@@ -55,7 +57,7 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
     
     val q = for(l <- location if l.id === id.bind) yield l;
     
-    db.run(q.result).map(_.headOption).flatMap {
+    db.run(q.detailed).map(_.headOption).flatMap {
       case Some(r) => {
         val s = location.sortBy(y => geoDistance(r.latitude, r.longitude, y.latitude, y.longitude))
         s.returnPaged(db)

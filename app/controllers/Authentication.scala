@@ -149,7 +149,8 @@ class Authentication@Inject() (
                token <- silhouette.env.authenticatorService.init(authenticator)
              } yield {
                silhouette.env.eventBus.publish(LoginEvent(user, request))
-               Ok(Json.obj("token" -> token))
+               //Ok(Json.obj("token" -> token))
+               Redirect("http://" + request.host + "?token=" + token)
              }
            }
          case _ => Future.failed(new ProviderException(s"Cannot authenticate with unexpected social provider $provider"))

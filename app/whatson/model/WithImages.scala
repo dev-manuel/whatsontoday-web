@@ -2,6 +2,6 @@ package whatson.model
 
 import whatson.model.detail._
 
-trait HasImages {
+trait WithImages {
   val images: Seq[ImageDetail]
 }

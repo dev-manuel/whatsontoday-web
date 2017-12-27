@@ -10,7 +10,7 @@ import whatson.model._
 import whatson.db.Util._
 import whatson.model.detail._
 
-class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Event] {
+class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Event] with HasImages[Event] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
 
@@ -29,7 +29,7 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Ev
   def categories = eventCategory.filter(_.eventID === id).flatMap(_.categoryFK)
 
 
-  val entityType = RatingTable.eventType
+  val entityType = EntityType.Event
 }
 
 object EventTable {

@@ -15,6 +15,6 @@ class ImageEntityTable(tag: Tag) extends Table[ImageEntity](tag, "imageentity") 
   def image = foreignKey("image",imageId,ImageTable.image)(_.id)
 }
 
-object ImageEntitxTable {
+object ImageEntityTable {
   val imageEntity = TableQuery[ImageEntityTable]
 }

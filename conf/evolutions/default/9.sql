@@ -1,12 +1,12 @@
 # --- !Ups
 
-CREATE TABLE hasimages (
+CREATE TABLE imageentity (
 image_fk BIGSERIAL,
 entity_fk BIGSERIAL,
 entity_type smallint
 );
 
-ALTER TABLE hasimages
+ALTER TABLE imageentity
       ADD CONSTRAINT hasimages_image_fk
       FOREIGN KEY (image_fk)
       REFERENCES images
@@ -15,4 +15,4 @@ ALTER TABLE hasimages
 
 # --- !Downs
 
-DROP TABLE IF EXISTS hasimages;
+DROP TABLE IF EXISTS imageentity;

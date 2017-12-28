@@ -6,11 +6,10 @@
 @wLogo: 10%;
 @wSearch: 50%;
 @wButtons: 40%;
-@wPopup: 5%;
 
 @wSpacer: 10%;
 
-@wTotal: @wLogo + @wButtons + @wSearch + @wPopup + @wSpacer + @wSpacer;
+@wTotal: @wLogo + @wButtons + @wSearch + @wSpacer + @wSpacer;
 
 
 
@@ -30,10 +29,6 @@
 
 .headerButtons{
     width: 100% * @wButtons / @wTotal;
-}
-
-.headerPopup{
-    width: 100% * @wPopup / @wTotal;
 }
 
 .headerSpacer{
@@ -64,6 +59,8 @@
     padding-right: 10px !important;
 }
 
-
+.headerDropdownButton {
+    margin-left: 25px;
+}
 
 

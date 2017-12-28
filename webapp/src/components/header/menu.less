@@ -1,32 +1,61 @@
 
-.headerMenu {
-    border-radius: 0px !important;
-}
+//
+// ─── VARIABLES ──────────────────────────────────────────────────────────────────
+//
+
+@wLogo: 10%;
+@wSearch: 50%;
+@wButtons: 40%;
+@wPopup: 5%;
+
+@wSpacer: 10%;
+
+@wTotal: @wLogo + @wButtons + @wSearch + @wPopup + @wSpacer + @wSpacer;
+
+
+
+//
+// ─── CLASSES ────────────────────────────────────────────────────────────────────
+//
+
+// Normalize (to 100%)
 
 .headerLogo {
-    width: 10%;
+    width: 100% * @wLogo / @wTotal;
 }
 
 .headerSearch{
-    width: 40%;
+    width: 100% * @wSearch / @wTotal;
 }
 
 .headerButtons{
-    width: 35%;
+    width: 100% * @wButtons / @wTotal;
 }
 
 .headerPopup{
-    width: 5%;
+    width: 100% * @wPopup / @wTotal;
 }
 
 .headerSpacer{
-    width: 5%
+    width: 100% * @wSpacer / @wTotal;
+}
+
+
+.headerLogo {
+    width: 100% * @wLogo / @wTotal;
+}
+
+
+
+
+
+.headerMenu {
+    border-radius: 0px !important;
 }
 
 .headerSearchBar {
     width: 100% !important;
 }
-
 
 .headerButtonStyle {
     margin-left: 15px !important;
@@ -36,38 +65,5 @@
 }
 
 
-// @wLogo: 10%;
-// @wSearch: 60%;
-// @wButtons: 25%;
-// @wPopup: 5%;
-
-// @wSpacer: 0%;
-
-// @wTotal: @wLogo + @wButtons + @wSearch + @wPopup + @wSpacer;
 
 
-
-
-// .headerMenu {
-//     border-radius: 0px !important;
-// }
-
-// .headerLogo {
-//     width: @wLogo/@wTotal;
-// }
-
-// .headerSearch{
-//     width: @wSearch/@wTotal;
-// }
-
-// .headerButtons{
-//     width: @wButtons/@wTotal;
-// }
-
-// .headerPopup{
-//     width: @wPopup/@wTotal;
-// }
-
-// .headerSpacer{
-//     width: @wSpacer/@wTotal;
-// }

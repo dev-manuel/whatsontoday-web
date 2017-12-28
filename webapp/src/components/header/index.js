@@ -16,7 +16,8 @@ const Header = () => (
             </Menu.Item>
 
             <Menu.Item className='headerSearch'>
-                <Search/>
+                {/* About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846 */}
+                <Search className='headerSearchBar' input={{ fluid: true }} showNoResults={false}/>
             </Menu.Item>
 
             <Menu.Item className='headerButtons'>

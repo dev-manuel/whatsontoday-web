@@ -13,7 +13,14 @@
 #    default: 20
 #  - name: sort
 #    description: Specifies wich column to sort by
-#    default: id
+#    default: "id"
+#    enum: ["id","name","from","to","rating","location"]
+#  - name: sortDir
+#    description: Specifies wether to sort ascending(true) or descending
+#  - name: location
+#    description: If sort is set to location, events will be ordered by distance to the given location
+#  - name: category
+#    description: Specifies the category of the event
 #  responses:
 #    200:
 #      description: success
@@ -34,6 +41,11 @@ GET      /:id                         controllers.EventController.getEvent(id: I
 
 ###
 #  summary: Delete an event
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
 #  responses:
 #    200:
 #      description: Event deleted
@@ -43,9 +55,13 @@ DELETE   /:id                         controllers.EventController.deleteEvent(id
 ###
 #  summary: Create an event
 #  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/definitions/whatson.model.Event'
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.Event'
 #  responses:
 #    200:
 #      description: success
@@ -57,9 +73,13 @@ POST     /                            controllers.EventController.createEvent
 ###
 #  summary: Update an event with a specific id
 #  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/definitions/whatson.model.Event'
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.Event'
 #  responses:
 #    200:
 #      description: success

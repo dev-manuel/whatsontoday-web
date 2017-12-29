@@ -57,6 +57,8 @@ GET    /signOut                  controllers.Authentication.signOut
 #    - name: body
 #      schema:
 #        $ref: '#/definitions/whatson.model.SignInForm'
+#      description: >
+#        The user data. If rememberMe is true, the authentication token will be valid for several days.
 #  responses:
 #    200:
 #      description: success
@@ -93,6 +95,7 @@ GET   /                          controllers.UserController.getUser
 #    - name: body
 #      schema:
 #        $ref: '#/definitions/whatson.model.SignUpForm.Data'
+#      description: The user data. The password must not be hashed.
 #  responses:
 #    200:
 #      description: success

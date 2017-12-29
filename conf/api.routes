@@ -54,9 +54,13 @@ GET    /location/nearby/:id            controllers.LocationController.getNearby(
 ###
 #  summary: Create a location
 #  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/definitions/whatson.model.Location'
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.Location'
 #  responses:
 #    200:
 #      description: success
@@ -67,6 +71,13 @@ POST   /location                       controllers.LocationController.createLoca
 
 ###
 #  summary: Rate a specific entity
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: entityType
+#    enum: ["Event","Location","User"]
 #  responses:
 #    200:
 #      description: success

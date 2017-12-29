@@ -13,7 +13,9 @@ const inactiveStyle = {
 
 const Thumbnail = ({imageURI, isActive = false, onClick}) => {
     return (
-        <img src={imageURI} className={isActive ? 'activeThumbnail' : 'inactiveThumbnail'} onClick={onClick}/>
+        <div className={isActive ? 'activeThumbnail' : 'inactiveThumbnail'} onClick={onClick}>
+            <img src={imageURI} className='thumbnailImage'/>
+        </div>
     )
 }
 

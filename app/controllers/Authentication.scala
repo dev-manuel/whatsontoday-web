@@ -109,15 +109,6 @@ class Authentication@Inject() (
       case error =>
         Future.successful(Unauthorized(Json.obj("message" -> "invalid.data")))
     }
-}
-
-  /**
-    * Returns the user.
-    *
-    * @return The result to display.
-    */
-  def user = silhouette.SecuredAction.async { implicit request =>
-    Future.successful(Ok(Json.toJson(request.identity)))
   }
 
   /**

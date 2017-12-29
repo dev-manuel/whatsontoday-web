@@ -1,37 +1,47 @@
 ###
-#  summary: Delete an user
-#  responses:
-#    200:
-#      description: success
-###
-DELETE   /:id   controllers.UserController.deleteUser(id: Int)
-
-###
-#  summary: Create an user
+#  summary: Delete the currently logged in user
 #  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/definitions/whatson.model.User'
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
 #  responses:
 #    200:
-#      description: success
-#      schema:
-#        $ref: '#/definitions/whatson.model.User'
+#      description: User deleted
+#    401:
+#      description: Access forbidden
 ###
-POST     /      controllers.UserController.createUser
+DELETE   /   controllers.UserController.deleteUser
 
 ###
-#  summary: Update an user with a specific id
+#  summary: Update the currently logged in user
+#  description: >
+#      The request body will get updated soon.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.User'
 #  responses:
 #    200:
-#      description: success
+#      description: User updated
 #      schema:
 #        $ref: '#/definitions/whatson.model.User'
+#    401:
+#      description: Access forbidden
 ###
-PUT      /:id   controllers.UserController.updateUser(id: Int)
+PUT      /     controllers.UserController.updateUser
 
 ###
 #  summary: Sign out of account
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
 #  responses:
 #    200:
 #      description: success
@@ -40,13 +50,22 @@ GET    /signOut                  controllers.Authentication.signOut
 
 ###
 #  summary: Sign into an existing account
+#  description: >
+#      The access token to this account is returned.
+#      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
 #  parameters:
 #    - name: body
 #      schema:
 #        $ref: '#/definitions/whatson.model.SignInForm'
+#      description: >
+#        The user data. If rememberMe is true, the authentication token will be valid for several days.
 #  responses:
 #    200:
 #      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.AccessToken'
+#    401:
+#      description: Access forbidden
 ###
 POST   /signIn                   controllers.Authentication.login
 
@@ -59,23 +78,49 @@ POST   /signIn                   controllers.Authentication.login
 #      type: string
 #  responses:
 #    200:
-#      description: success
+#      description: Success
 #      schema:
 #        $ref: '#/definitions/whatson.model.User'
+#    401:
+#      description: Access forbidden
 ###
-GET   /                          controllers.Authentication.user
+GET   /                          controllers.UserController.getUser
 
 ###
 #  summary: Create a new account
+#  description: >
+#      A new account gets created. The access token to this account is returned.
+#      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
 #  parameters:
 #    - name: body
 #      schema:
 #        $ref: '#/definitions/whatson.model.SignUpForm.Data'
+#      description: The user data. The password must not be hashed.
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.AccessToken'
+#    400:
+#      description: User already exists
+###
+POST   /signUp                   controllers.Authentication.signUp
+
+###
+#  summary: Authenticate user via a social provider
+#  description: >
+#      This method authenticates a user via a social network.
+#      If the authorisation is successfull, the user gets redirected to the home page(index).
+#      The webapplication can then get the authorisation token from the url parameter called token.
+#      Note: This method is not supposed to be called in an ajax request. Provide a link to this url instead.
+#  parameters:
+#    - name: provider
+#      enum: ["facebook"]
 #  responses:
 #    200:
 #      description: success
 ###
-POST   /signUp                   controllers.Authentication.signUp
-
 GET    /authenticate/:provider   controllers.Authentication.authenticate(provider)
+
+### NoDocs ###
 POST   /authenticate/:provider   controllers.Authentication.authenticate(provider)

@@ -31,18 +31,14 @@ class ThumbnailList extends React.Component {
         for(let imageIndex = 0; imageIndex < imageCount && imageIndex < 4; imageIndex++){
             console.log(imageIndex);
             columns.push(
-                <Grid.Column width={4}>
-                    <Thumbnail isActive={this.state.sliderIndex===imageIndex} imageURI={this.props.imageURIList[imageIndex]} onClick={ ()=>{this.setSliderIndex(imageIndex)} } />
-                </Grid.Column>
+                <Thumbnail isActive={this.state.sliderIndex===imageIndex} imageURI={this.props.imageURIList[imageIndex]} onClick={ ()=>{this.setSliderIndex(imageIndex)} } />
             )
         }
 
         return (
-            <Grid centered>
-                <Grid.Row>
-                    {columns}
-                </Grid.Row>
-            </Grid>
+            <div className='thumbnailList'>
+                {columns}
+            </div>
         )
     }
 }

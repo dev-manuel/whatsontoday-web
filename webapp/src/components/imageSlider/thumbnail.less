@@ -1,16 +1,39 @@
 
 .activeThumbnail {
-    border: 1px solid yellowgreen;
+    border: 2px solid olivedrab;
 
-    &:hover {
-        border:1px solid yellow;
-    }
+    display: inline-block;
+
+    height: 77px;
+    width: 77px;
+
+    box-shadow: 0px 0px 2px olivedrab;
+
+    border-radius: 4px;
+
 }
 
 .inactiveThumbnail {
-    border: 1px solid gray;
+    border: 1px solid #CCC;
+
+    display: inline-block;
+
+    width: 77px;
+    height: 77px;
+
+    border-radius: 4px;
+    
 
     &:hover {
-        border: 1px solid yellow;
+        border: 1px solid #888;
     }
+}
+
+.thumbnailImage {
+    width: 100%;
+}
+
+.thumbnailList {
+    margin-top: 13px; 
+    text-align:center;
 }

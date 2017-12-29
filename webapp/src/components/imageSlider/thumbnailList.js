@@ -1,7 +1,5 @@
 // Import modules
 import React from 'react';
-import {Grid} from 'semantic-ui-react';
-
 
 // Import resources
 import Thumbnail from './thumbnail';
@@ -29,7 +27,6 @@ class ThumbnailList extends React.Component {
 
         // create a thumbnail for each image (max 4); Todo: pretty display if only one image
         for(let imageIndex = 0; imageIndex < imageCount && imageIndex < 4; imageIndex++){
-            console.log(imageIndex);
             columns.push(
                 <Thumbnail isActive={this.state.sliderIndex===imageIndex} imageURI={this.props.imageURIList[imageIndex]} onClick={ ()=>{this.setSliderIndex(imageIndex)} } />
             )
@@ -41,13 +38,6 @@ class ThumbnailList extends React.Component {
             </div>
         )
     }
-}
-
-
-const Thumbnails = ({imageURI, isActive = false, onClick}) => {
-    return (
-        <img src={imageURI} className={isActive ? 'activeThumbnail' : 'inactiveThumbnail'} onClick={onClick}/>
-    )
 }
 
 export default ThumbnailList;

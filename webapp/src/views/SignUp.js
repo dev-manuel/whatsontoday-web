@@ -1,7 +1,9 @@
 import React from 'react'
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import {Grid} from 'semantic-ui-react'
 
-// Copied from https://react.semantic-ui.com/layouts/login
+import SignUpPanel from '../components/signUpPanel';
+
+// Inspired by https://react.semantic-ui.com/layouts/login
 
 const SignUp = () => (
   <div className='login-form'>
@@ -28,38 +30,9 @@ const SignUp = () => (
       style={{ height: '100%' }}
       verticalAlign='middle'
     >
-      <Grid.Column style={{ maxWidth: 450 }}>
-        <Header color='grey' as='h2' textAlign='center'>
-          SignUp to WhatsOn
-        </Header>
-        <Form size='large'>
-          <Segment>
-            <Form.Input
-              fluid
-              icon='user'
-              iconPosition='left'
-              placeholder='E-mail address'
-            />
-            <Form.Input
-              fluid
-              icon='lock'
-              iconPosition='left'
-              placeholder='Password'
-              type='password'
-            />
-            <Form.Input
-              fluid
-              icon='lock'
-              iconPosition='left'
-              placeholder='Repeat password'
-              type='password'
-            />
-            <Form.Checkbox label='I agree to the Terms and Conditions' />
-
-            <Button color='olive' fluid size='large'>Let's go!</Button>
-          </Segment>
-        </Form>
-      </Grid.Column>
+        <Grid.Column style={{ maxWidth: 450 }}>
+            <SignUpPanel/>
+        </Grid.Column>
     </Grid>
   </div>
 )

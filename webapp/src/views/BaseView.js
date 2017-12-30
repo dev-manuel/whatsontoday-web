@@ -10,6 +10,7 @@ import SERPView from './SERP';
 import EventView from './Event';
 import Organizer from './Organizer';
 import SignIn from './SignIn';
+import SignUp from './SignUp';
 
 import _404 from './404';
 import Footer from '../components/footer';
@@ -24,6 +25,7 @@ const BaseView = () => (
                 <Route path='/event' component={EventView}/>
                 <Route path='/organizer' component={Organizer}/>
                 <Route path='/signin' component={SignIn}/>
+                <Route path='/signup' component={SignUp}/>
 
                 <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
             </Switch>

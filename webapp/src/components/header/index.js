@@ -41,6 +41,7 @@ const Header = () => (
                         className='headerButtonStyle'
                         basic
                         color='teal'
+                        href='#signin'
                     >
                         <Icon name='sign in' /> Sign In
                     </Button>
@@ -49,6 +50,7 @@ const Header = () => (
                         className='headerButtonStyle'
                         basic
                         color='teal'
+                        href='#signup'
                     >
                         <Icon name='signup' /> Sign Up
                     </Button>

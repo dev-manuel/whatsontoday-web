@@ -12,9 +12,7 @@ import scala.concurrent.ExecutionContext
 case class EventDetail(id: Option[Int], name: String, from: Timestamp,
                        to: Timestamp, creator: User, categories: List[Category],
                        avgRating: Option[Float], location: Location,
-                       images: List[ImageDetail]) extends Rateable with WithImages {
-
-}
+                       images: List[Int]) extends Rateable with WithImages
 
 object EventDetail {
   implicit val eventDetailReads = Json.reads[EventDetail]
@@ -36,7 +34,9 @@ object EventDetail {
             ) yield c
 
             s.result.zip(c.result).zip(imgs.result).map(o => {
-              EventDetail(event.id, event.name, event.from, event.to, creator, o._1._2.toList, o._1._1.headOption.flatten, location, o._2.map(x => ImageDetail(x)).toList)
+              EventDetail(event.id, event.name, event.from, event.to, creator,
+                          o._1._2.toList, o._1._1.headOption.flatten,
+                          location, o._2.toList)
             })
           }
         })

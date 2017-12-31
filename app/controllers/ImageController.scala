@@ -1,26 +1,20 @@
 package controllers
 
+import scala.concurrent.ExecutionContext
+
 import javax.inject._
 import play.api._
-import play.api.mvc._
-import scala.concurrent.ExecutionContext
-import slick.jdbc.PostgresProfile.api._
-import whatson.db.EventTable
-import play.api.db.slick.HasDatabaseConfigProvider
-import play.api.db.slick.DatabaseConfigProvider
-import slick.jdbc.JdbcProfile
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-import slick.dbio.Effect.Transactional
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json._
-import java.util.Locale.Category
-import whatson.model.Image._
-import whatson.model._
-import play.api.mvc.Results
-import whatson.db.Util._
+import play.api.mvc._
+import slick.jdbc.JdbcProfile
+import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import whatson.db.ImageTable._
-import scala.concurrent.Future
+import whatson.db.Util._
+import whatson.model._
+import whatson.model.Image._
+
 
 class ImageController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)
     (implicit context: ExecutionContext)
@@ -57,5 +51,17 @@ class ImageController @Inject()(cc: ControllerComponents, protected val dbConfig
     val inserted = db.run(insertAndReturn[Image,ImageTable](image,request.body))
 
     inserted.map(x => Ok(Json.toJson(x)))
+  }
+
+  def attachImage(id: Int, entityType: String, entityId: Int) = Action.async { implicit request =>
+    log.debug("Rest request to attach image")
+
+    val imgEnt = ImageEntity(id, entityId, EntityType.withName(entityType))
+    val inserted = db.run(ImageEntityTable.imageEntity += imgEnt)
+
+    inserted.map {
+      case 0 => NotFound
+      case _ => Ok(Json.toJson(imgEnt))
+    }
   }
 }

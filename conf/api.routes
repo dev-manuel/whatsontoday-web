@@ -8,7 +8,7 @@
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Category'
+#        $ref: '#/definitions/whatson.model.detail.CategoryDetail'
 ###
 GET    /categories                     controllers.CategoryController.categories
 
@@ -104,3 +104,13 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 #        $ref: '#/definitions/whatson.model.Image'
 ###
 POST   /images                       controllers.ImageController.createImage()
+
+###
+#  summary: Attach an image
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.ImageEntity'
+###
+GET   /images/attach                       controllers.ImageController.attachImage(id: Int, entityType: String, entityId: Int)

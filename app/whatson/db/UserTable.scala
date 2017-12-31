@@ -6,7 +6,7 @@ import slick.lifted.ProvenShape.proveShapeOf
 import java.sql.Timestamp
 import whatson.db.ParticipantTable._
 
-class UserTable(tag: Tag) extends Table[User](tag, "users") with HasID[User] {
+class UserTable(tag: Tag) extends Table[User](tag, "users") with HasID[User] with HasImages[User] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
   
@@ -17,6 +17,8 @@ class UserTable(tag: Tag) extends Table[User](tag, "users") with HasID[User] {
   def events = participant.filter(_.userID === id).flatMap(_.eventFK)
 
   def * = (id.?,name,pwHash,email) <> (User.tupled, User.unapply)
+
+  val entityType = EntityType.User
 }
 
 object UserTable {

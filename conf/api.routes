@@ -27,7 +27,7 @@ GET    /categories                     controllers.CategoryController.categories
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Location'
+#        $ref: '#/definitions/whatson.model.detail.LocationDetail'
 ###
 GET    /location                       controllers.LocationController.searchLocations(search: Option[String])
 
@@ -37,7 +37,7 @@ GET    /location                       controllers.LocationController.searchLoca
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Location'
+#        $ref: '#/definitions/whatson.model.detail.LocationDetail'
 ###
 GET    /location/:id                   controllers.LocationController.getLocation(id: Int)
 
@@ -47,7 +47,7 @@ GET    /location/:id                   controllers.LocationController.getLocatio
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Location'
+#        $ref: '#/definitions/whatson.model.detail.LocationDetail'
 ###
 GET    /location/nearby/:id            controllers.LocationController.getNearby(id: Int)
 
@@ -73,7 +73,7 @@ POST   /location                       controllers.LocationController.createLoca
 #      schema:
 #        $ref: '#/definitions/whatson.model.Rating'
 ###
-GET    /rating/:id/:entityType/:rate   controllers.RatingController.rateEntity(id: Int, entityType: Int, rate: Float)
+GET    /rating/:id/:entityType/:rate   controllers.RatingController.rateEntity(id: Int, entityType: String, rate: Float)
 
 ###
 #  summary: Get a specific image

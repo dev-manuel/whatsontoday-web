@@ -26,6 +26,8 @@ project/plugins/project/
 .history
 .cache
 .lib/
+
+.g8/
  
 # End of https://www.gitignore.io/api/sbt
  

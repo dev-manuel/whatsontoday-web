@@ -11,6 +11,6 @@ case class Event(id: Option[Int],name: String, from: Timestamp, to: Timestamp, c
 object Event {
   implicit val eventReads = Json.reads[Event]
   implicit val eventWrites = Json.writes[Event]
-  
+
   val tupled = (this.apply _).tupled
 }

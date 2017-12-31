@@ -8,7 +8,7 @@
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Category'
+#        $ref: '#/definitions/whatson.model.detail.CategoryDetail'
 ###
 GET    /categories                     controllers.CategoryController.categories
 
@@ -27,7 +27,7 @@ GET    /categories                     controllers.CategoryController.categories
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Location'
+#        $ref: '#/definitions/whatson.model.detail.LocationDetail'
 ###
 GET    /location                       controllers.LocationController.searchLocations(search: Option[String])
 
@@ -37,7 +37,7 @@ GET    /location                       controllers.LocationController.searchLoca
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Location'
+#        $ref: '#/definitions/whatson.model.detail.LocationDetail'
 ###
 GET    /location/:id                   controllers.LocationController.getLocation(id: Int)
 
@@ -47,7 +47,7 @@ GET    /location/:id                   controllers.LocationController.getLocatio
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Location'
+#        $ref: '#/definitions/whatson.model.detail.LocationDetail'
 ###
 GET    /location/nearby/:id            controllers.LocationController.getNearby(id: Int)
 
@@ -84,4 +84,44 @@ POST   /location                       controllers.LocationController.createLoca
 #      schema:
 #        $ref: '#/definitions/whatson.model.Rating'
 ###
-GET    /rating/:id/:entityType/:rate   controllers.RatingController.rateEntity(id: Int, entityType: Int, rate: Float)
+GET    /rating/:id/:entityType/:rate   controllers.RatingController.rateEntity(id: Int, entityType: String, rate: Float)
+
+###
+#  summary: Get a specific image
+#  responses:
+#    200:
+#      description: success
+###
+GET    /images/:id            controllers.ImageController.get(id: Int)
+
+###
+#  summary: Get bytes of a specific image
+#  responses:
+#    200:
+#      description: success
+###
+GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int)
+
+###
+#  summary: Create an image
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.Image'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Image'
+###
+POST   /images                       controllers.ImageController.createImage()
+
+###
+#  summary: Attach an image
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.ImageEntity'
+###
+GET   /images/attach                       controllers.ImageController.attachImage(id: Int, entityType: String, entityId: Int)

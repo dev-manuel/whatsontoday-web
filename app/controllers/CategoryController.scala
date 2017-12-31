@@ -8,9 +8,8 @@ import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.json._
 import play.api.mvc._
 import slick.jdbc.JdbcProfile
-import slick.jdbc.PostgresProfile.api._
-import whatson.db.CategoryTable
-import whatson.model.Category._
+import whatson.db._
+import whatson.model.detail.CategoryDetail._
 
 /**
  * This Controller handles API Requests concerning categories
@@ -27,6 +26,6 @@ class CategoryController @Inject()(cc: ControllerComponents, protected val dbCon
     
     val q = for(e <- CategoryTable.category) yield e;
     
-    db.run(q.result).map(x => Ok(Json.toJson(x)))
+    db.run(q.detailed).map(x => Ok(Json.toJson(x)))
   }
 }

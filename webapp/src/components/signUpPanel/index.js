@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
+import {AXIOS} from '../../index';
+
 
 
 class SignUpPanel extends React.Component {
@@ -8,6 +10,8 @@ class SignUpPanel extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            showSuccess: false,
+
             emailValue: '',
             emailError: false,
             passwordValue: '',
@@ -79,59 +83,79 @@ class SignUpPanel extends React.Component {
 
         this.setState(errors);
         if(success){
-            // Todo
+            AXIOS.post('/user/signUp', {
+                    "firstName": "",
+                    "lastName": "",
+                    "email": this.state.emailValue,
+                    "password": this.state.passwordValue
+            }).then( res => {
+                console.log(res.data)
+                this.setState({showSuccess: true});
+            }).catch( err => {
+                console.log(err)
+            })
         }
     }
-
-
+    
+    
+    
+    
     render(){
-        return (
-            <div>
-                <Header color='grey' as='h2' textAlign='center'>
-                    SignUp to WhatsOn
+        if(this.state.showSuccess){
+            return (
+                <Header color='grey' as='h1' textAlign='center'>
+                    Registration successful
                 </Header>
-                <Form size='large' onSubmit={this.handleSubmit.bind(this)}>
-                    <Segment>
-                    <Form.Input
-                        error={this.state.emailError}
-                        value={this.state.emailValue}
-                        fluid
-                        icon='user'
-                        iconPosition='left'
-                        placeholder='E-mail address'
-                        onChange={ event => { this.setState({emailValue: event.target.value}) }}
-                    />
-                    <Form.Input
-                        error={this.state.passwordError}
-                        value={this.state.passwordValue}                        
-                        fluid
-                        icon='lock'
-                        iconPosition='left'
-                        placeholder='Password'
-                        type='password'
-                        onChange={ event => { this.setState({passwordValue: event.target.value}) }}
-                    />
-                    <Form.Input
-                        error={this.state.repeatPasswordError}
-                        value={this.state.repeatPasswordValue}                        
-                        fluid
-                        icon='lock'
-                        iconPosition='left'
-                        placeholder='Repeat password'
-                        type='password'
-                        onChange={ event => { this.setState({repeatPasswordValue: event.target.value}) }}
-                    />
-                    <Form.Checkbox
-                        checked={this.state.acceptValue}
-                        error={this.state.acceptError}
-                        onChange={ () => {this.setState((prevState, props)=>({acceptValue: !prevState.acceptValue}))} }
-                        label='I agree to the Terms and Conditions'
-                    />
-                    <Button color='olive' fluid size='large'>Let's go!</Button>
-                    </Segment>
-                </Form>
-            </div>
-        )
+            )
+        } else {
+            return (
+                <div>
+                    <Header color='grey' as='h2' textAlign='center'>
+                        SignUp to WhatsOn
+                    </Header>
+                    <Form size='large' onSubmit={this.handleSubmit.bind(this)}>
+                        <Segment>
+                        <Form.Input
+                            error={this.state.emailError}
+                            value={this.state.emailValue}
+                            fluid
+                            icon='user'
+                            iconPosition='left'
+                            placeholder='E-mail address'
+                            onChange={ event => { this.setState({emailValue: event.target.value}) }}
+                        />
+                        <Form.Input
+                            error={this.state.passwordError}
+                            value={this.state.passwordValue}                        
+                            fluid
+                            icon='lock'
+                            iconPosition='left'
+                            placeholder='Password'
+                            type='password'
+                            onChange={ event => { this.setState({passwordValue: event.target.value}) }}
+                        />
+                        <Form.Input
+                            error={this.state.repeatPasswordError}
+                            value={this.state.repeatPasswordValue}                        
+                            fluid
+                            icon='lock'
+                            iconPosition='left'
+                            placeholder='Repeat password'
+                            type='password'
+                            onChange={ event => { this.setState({repeatPasswordValue: event.target.value}) }}
+                        />
+                        <Form.Checkbox
+                            checked={this.state.acceptValue}
+                            error={this.state.acceptError}
+                            onChange={ () => {this.setState((prevState, props)=>({acceptValue: !prevState.acceptValue}))} }
+                            label='I agree to the Terms and Conditions'
+                        />
+                        <Button color='olive' fluid size='large'>Let's go!</Button>
+                        </Segment>
+                    </Form>
+                </div>
+            )
+        }
     }
 
 }

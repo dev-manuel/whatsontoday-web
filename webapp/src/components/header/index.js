@@ -6,7 +6,39 @@ import {Menu, Search, Icon, Button, Dropdown} from 'semantic-ui-react';
 import logo from '../../img/logo1.jpg';
 import './menu.less'
 
-const Header = () => (
+const Header = ({loggedIn}) => {
+
+    const conditionalButtons = loggedIn ? [(
+        <Button 
+            className='headerButtonStyle'
+            basic
+            color='teal'
+            href='#'
+        >
+            <Icon name='sign out' /> Sign Out
+        </Button>
+    )] : [(
+        <Button 
+            className='headerButtonStyle'
+            basic
+            color='teal'
+            href='#signin'
+        >
+            <Icon name='sign in' /> Sign In
+        </Button>
+    ),
+    (
+        <Button 
+            className='headerButtonStyle'
+            basic
+            color='teal'
+            href='#signup'
+        >
+            <Icon name='signup' /> Sign Up
+        </Button>
+    )]
+
+    return (
         <Menu borderless className='headerMenu' size='large'>
             <Menu.Item className='headerSpacer'/>
 
@@ -37,25 +69,8 @@ const Header = () => (
                         <Icon name='plus' /> Add Event
                     </Button>
 
-                    <Button 
-                        className='headerButtonStyle'
-                        basic
-                        color='teal'
-                        href='#signin'
-                    >
-                        <Icon name='sign in' /> Sign In
-                    </Button>
-
-                    <Button 
-                        className='headerButtonStyle'
-                        basic
-                        color='teal'
-                        href='#signup'
-                    >
-                        <Icon name='signup' /> Sign Up
-                    </Button>
-
-
+                    {conditionalButtons}
+                    
                     <Dropdown icon='sidebar' pointing className='item headerDropdownButton'>
                         <Dropdown.Menu>
                             <Dropdown.Item>Lorem</Dropdown.Item>
@@ -67,8 +82,8 @@ const Header = () => (
 
             <Menu.Item className='headerSpacer'/>
         </Menu>
-)
-
+    )
+}
 
 
 export default Header;

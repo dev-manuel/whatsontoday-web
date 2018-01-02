@@ -15,24 +15,36 @@ import SignUp from './SignUp';
 import _404 from './404';
 import Footer from '../components/footer';
 
-const BaseView = () => (
-        <div>
-            <Header/>
+class BaseView extends React.Component {
+    
+    constructor(props){
+        super(props);
+        this.state = {
+            loggedIn: false,
+            token: ''
+        }
+    }
 
-            <Switch>
-                <Route exact path='/' component={HomeView}/>
-                <Route path='/SERP' component={SERPView}/> {/* Todo: render specific SERP according to URL parameters */}
-                <Route path='/event' component={EventView}/>
-                <Route path='/organizer' component={Organizer}/>
-                <Route path='/signin' component={SignIn}/>
-                <Route path='/signup' component={SignUp}/>
+    render() {
+        return (
+            <div>
+                <Header loggedIn={this.state.loggedIn}/>
 
-                <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
-            </Switch>
+                <Switch>
+                    <Route exact path='/' component={HomeView}/>
+                    <Route path='/SERP' component={SERPView}/> {/* Todo: render specific SERP according to URL parameters */}
+                    <Route path='/event' component={EventView}/>
+                    <Route path='/organizer' component={Organizer}/>
+                    <Route path='/signin' component={SignIn}/>
+                    <Route path='/signup' component={SignUp}/>
 
-            <Footer/>
-        </div>
-)
+                    <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
+                </Switch>
 
+                <Footer/>
+            </div>
+        )
+    }
+}
 
 export default BaseView;

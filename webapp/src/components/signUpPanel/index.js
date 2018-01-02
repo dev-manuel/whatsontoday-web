@@ -1,7 +1,8 @@
 import React from 'react'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
-import {AXIOS} from '../../index';
+import {GLOBAL} from '../../index';
+import ModalError from './modal';
 
 
 
@@ -20,6 +21,8 @@ class SignUpPanel extends React.Component {
             repeatPasswordError: false,
             acceptValue: false,
             acceptError: false,
+
+            showModalError: false
         }
     }
 
@@ -83,16 +86,19 @@ class SignUpPanel extends React.Component {
 
         this.setState(errors);
         if(success){
-            AXIOS.post('/user/signUp', {
+            GLOBAL.axios.post('/user/signUp', {
                     "firstName": "",
                     "lastName": "",
                     "email": this.state.emailValue,
                     "password": this.state.passwordValue
             }).then( res => {
-                console.log(res.data)
                 this.setState({showSuccess: true});
+                GLOBAL.token = res.data.token;
+                console.log(GLOBAL);
+                this.props.setLoginState(true);
             }).catch( err => {
-                console.log(err)
+                //console.log(err);
+                this.setState({showModalError: true});
             })
         }
     }
@@ -110,6 +116,8 @@ class SignUpPanel extends React.Component {
         } else {
             return (
                 <div>
+                    <ModalError show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
+
                     <Header color='grey' as='h2' textAlign='center'>
                         SignUp to WhatsOn
                     </Header>

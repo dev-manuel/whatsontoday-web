@@ -21,8 +21,13 @@ class BaseView extends React.Component {
         super(props);
         this.state = {
             loggedIn: false,
-            token: ''
         }
+    }
+
+    setLogInState( state){
+        this.setState({
+            loggedIn: state
+        });
     }
 
     render() {
@@ -36,7 +41,7 @@ class BaseView extends React.Component {
                     <Route path='/event' component={EventView}/>
                     <Route path='/organizer' component={Organizer}/>
                     <Route path='/signin' component={SignIn}/>
-                    <Route path='/signup' component={SignUp}/>
+                    <Route path='/signup' render={() => (<SignUp setLoginState={this.setLogInState.bind(this)} />)}/>
 
                     <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
                 </Switch>

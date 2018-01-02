@@ -5,7 +5,7 @@ import SignUpPanel from '../components/signUpPanel';
 
 // Inspired by https://react.semantic-ui.com/layouts/login
 
-const SignUp = () => (
+const SignUp = ({setLoginState}) => (
   <div className='login-form'>
     {/*
       Heads up! The styles below are necessary for the correct render of this example.
@@ -31,7 +31,7 @@ const SignUp = () => (
       verticalAlign='middle'
     >
         <Grid.Column style={{ maxWidth: 450 }}>
-            <SignUpPanel/>
+            <SignUpPanel setLoginState={setLoginState}/>
         </Grid.Column>
     </Grid>
   </div>

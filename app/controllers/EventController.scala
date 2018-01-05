@@ -17,16 +17,19 @@ import whatson.model.Event._
 import whatson.model.detail.EventDetail._
 import com.mohiva.play.silhouette.api._
 import whatson.auth._
+import whatson.service._
 
 /**
  * This Controller handles API Requests concerning events
  */
 class EventController @Inject()(cc: ControllerComponents,
                                 protected val dbConfigProvider: DatabaseConfigProvider,
-                                silhouette: Silhouette[AuthEnv])
+                                val silhouette: Silhouette[AuthEnv],
+                                val organizerService: OrganizerService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
-    with HasDatabaseConfigProvider[JdbcProfile] {
+    with HasDatabaseConfigProvider[JdbcProfile]
+    with Util {
 
   val log = Logger("api.events")
 
@@ -65,10 +68,10 @@ class EventController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def createEvent() = silhouette.SecuredAction.async(parse.json(eventReads)) { implicit request =>
+  def createEvent() = organizerRequest(parse.json(eventReads)) { case (request,organizer) =>
     log.debug("Rest request to create event")
 
-    val e = request.body.copy(creatorId = request.identity.id)
+    val e = request.body.copy(creatorId = organizer.id)
 
     val inserted = db.run(insertAndReturn[Event,EventTable](event,e))
 

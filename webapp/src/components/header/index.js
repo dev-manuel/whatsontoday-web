@@ -6,83 +6,107 @@ import {Menu, Search, Icon, Button, Dropdown} from 'semantic-ui-react';
 import logo from '../../img/logo1.jpg';
 import './menu.less'
 
-const Header = ({global}) => {
+class Header extends React.Component {
 
-    const conditionalButtons = global.loggedIn ? [(
-        <Button 
-            className='headerButtonStyle'
-            basic
-            color='teal'
-            href='#'
-        >
-            <Icon name='sign out' /> Sign Out
-        </Button>
-    )] : [(
-        <Button 
-            className='headerButtonStyle'
-            basic
-            color='teal'
-            href='#signin'
-        >
-            <Icon name='sign in' /> Sign In
-        </Button>
-    ),
-    (
-        <Button 
-            className='headerButtonStyle'
-            basic
-            color='teal'
-            href='#signup'
-        >
-            <Icon name='signup' /> Sign Up
-        </Button>
-    )]
+    onSignOut(){
+        if(this.props.global.loggedIn){
+            this.props.global.axios.get('/user/signOut',{
+                headers: {
+                    'x-auth-token': this.props.global.token,
+                }
+            }).then( res => {
+                this.props.global.update({
+                    loggedIn: false,
+                    token: null,
+                });
+            }).catch( err => {
+                //console.log(err);
+                // Todo...
+            })
+        }
+    }
 
-    return (
-        <Menu borderless className='headerMenu' size='large'>
-            <Menu.Item className='headerSpacer'/>
+    render(){
+        const conditionalButtons = this.props.global.loggedIn ? [(
+            <Button 
+                className='headerButtonStyle'
+                basic
+                color='teal'
+                href='#'
+                key={0}
+                onClick={this.onSignOut.bind(this)}
+            >
+                <Icon name='sign out' /> Sign Out
+            </Button>
+        )] : [(
+            <Button 
+                className='headerButtonStyle'
+                basic
+                color='teal'
+                href='#signin'
+                key={1}
+            >
+                <Icon name='sign in' /> Sign In
+            </Button>
+        ),
+        (
+            <Button 
+                className='headerButtonStyle'
+                basic
+                color='teal'
+                href='#signup'
+                key={2}
+            >
+                <Icon name='signup' /> Sign Up
+            </Button>
+        )]
 
-            <Menu.Item className='headerLogo'>
-                <img src={logo} />
-            </Menu.Item>
+        return (
+            <Menu borderless className='headerMenu' size='large'>
+                <Menu.Item className='headerSpacer'/>
 
-            <Menu.Item className='headerSearch'>
-                {/* About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846 */}
-                <Search className='headerSearchBar' input={{ fluid: true }} showNoResults={false}/>
-            </Menu.Item>
+                <Menu.Item className='headerLogo'>
+                    <img src={logo} />
+                </Menu.Item>
 
-            <Menu.Item className='headerButtons'>
+                <Menu.Item className='headerSearch'>
+                    {/* About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846 */}
+                    <Search className='headerSearchBar' input={{ fluid: true }} showNoResults={false}/>
+                </Menu.Item>
 
-                    <Button 
-                        className='headerButtonStyle'
-                        basic
-                        color='teal'                    
-                    >
-                        <Icon name='newspaper' /> Blog
-                    </Button>
+                <Menu.Item className='headerButtons'>
 
-                    <Button 
-                        className='headerButtonStyle'
-                        basic
-                        color='teal'
-                    >
-                        <Icon name='plus' /> Add Event
-                    </Button>
+                        <Button 
+                            className='headerButtonStyle'
+                            basic
+                            color='teal'                    
+                        >
+                            <Icon name='newspaper' /> Blog
+                        </Button>
 
-                    {conditionalButtons}
-                    
-                    <Dropdown icon='sidebar' pointing className='item headerDropdownButton'>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>Lorem</Dropdown.Item>
-                            <Dropdown.Item>Ipsum</Dropdown.Item>
-                            <Dropdown.Item>Dolor</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-            </Menu.Item>  
+                        <Button 
+                            className='headerButtonStyle'
+                            basic
+                            color='teal'
+                        >
+                            <Icon name='plus' /> Add Event
+                        </Button>
 
-            <Menu.Item className='headerSpacer'/>
-        </Menu>
-    )
+                        {conditionalButtons}
+                        
+                        <Dropdown icon='sidebar' pointing className='item headerDropdownButton'>
+                            <Dropdown.Menu>
+                                <Dropdown.Item>Lorem</Dropdown.Item>
+                                <Dropdown.Item>Ipsum</Dropdown.Item>
+                                <Dropdown.Item>Dolor</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                </Menu.Item>  
+
+                <Menu.Item className='headerSpacer'/>
+            </Menu>
+        )
+    }
 }
 
 

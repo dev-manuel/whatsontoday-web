@@ -57,10 +57,10 @@ class EventController @Inject()(cc: ControllerComponents,
     returnPaged(s,q,db)
   }
 
-  def deleteEvent(id: Int) = silhouette.SecuredAction.async { implicit request =>
+  def deleteEvent(id: Int) = organizerRequest(parse.default) { (request,organizer) =>
     log.debug("Rest request to get event")
 
-    val q = event.filter(x => x.id === id.bind && x.creatorId === request.identity.id).delete
+    val q = event.filter(x => x.id === id.bind && x.creatorId === organizer.id).delete
 
     db.run(q).map {
       case 0 => NotFound
@@ -78,10 +78,10 @@ class EventController @Inject()(cc: ControllerComponents,
     inserted.map(x => Ok(Json.toJson(x)))
   }
 
-  def updateEvent(id: Int) = silhouette.SecuredAction(parse.json(eventReads)).async { implicit request =>
+  def updateEvent(id: Int) = organizerRequest(parse.json(eventReads)) { (request,organizer) =>
     log.debug("Rest request to update event")
 
-    val q = event.filter(x => x.id === id.bind && x.creatorId === request.identity.id).update(request.body)
+    val q = event.filter(x => x.id === id.bind && x.creatorId === organizer.id).update(request.body)
 
     db.run(q).map {
       case 0 => NotFound

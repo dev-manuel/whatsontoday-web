@@ -2,7 +2,6 @@ package whatson.db
 
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape.proveShapeOf
-import whatson.db.ParticipantTable._
 import whatson.model._
 
 class LoginTable(tag: Tag) extends Table[Login](tag, "login") with HasID[Login] {

@@ -4,36 +4,27 @@ import {Switch, Route} from 'react-router-dom';
 
 // Import resources
 import Header from '../components/header';
-
 import HomeView from './Home';
 import SERPView from './SERP';
 import EventView from './Event';
 import Organizer from './Organizer';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-
 import _404 from './404';
 import Footer from '../components/footer';
+
+import global from '../common/Global';
 
 class BaseView extends React.Component {
     
     constructor(props){
         super(props);
-        this.state = {
-            loggedIn: false,
-        }
-    }
-
-    setLogInState( state){
-        this.setState({
-            loggedIn: state
-        });
     }
 
     render() {
         return (
             <div>
-                <Header loggedIn={this.state.loggedIn}/>
+                <Header loggedIn={global.loggedIn}/>
 
                 <Switch>
                     <Route exact path='/' component={HomeView}/>
@@ -41,7 +32,7 @@ class BaseView extends React.Component {
                     <Route path='/event' component={EventView}/>
                     <Route path='/organizer' component={Organizer}/>
                     <Route path='/signin' component={SignIn}/>
-                    <Route path='/signup' render={() => (<SignUp setLoginState={this.setLogInState.bind(this)} />)}/>
+                    <Route path='/signup' render={() => (<SignUp global={global} />)}/>
 
                     <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
                 </Switch>

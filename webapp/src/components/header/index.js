@@ -6,9 +6,9 @@ import {Menu, Search, Icon, Button, Dropdown} from 'semantic-ui-react';
 import logo from '../../img/logo1.jpg';
 import './menu.less'
 
-const Header = ({loggedIn}) => {
+const Header = ({global}) => {
 
-    const conditionalButtons = loggedIn ? [(
+    const conditionalButtons = global.loggedIn ? [(
         <Button 
             className='headerButtonStyle'
             basic

@@ -62,7 +62,7 @@ class SignUpState extends AbstractViewState{
                     verticalAlign='middle'
                 >
                     <Grid.Column style={{ maxWidth: 450 }}>
-                        <SignUpPanel setLoginState={()=>{}}/> {/*Todo*/}
+                        <SignUpPanel global={this.context.props.global}/> {/*Todo*/}
                     </Grid.Column>
                 </Grid>
             </div>

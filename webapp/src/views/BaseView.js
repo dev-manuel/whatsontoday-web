@@ -1,6 +1,7 @@
 // Import modules
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
+import Axios from 'axios';
 
 // Import resources
 import Header from '../components/header';
@@ -13,18 +14,27 @@ import SignUp from './SignUp';
 import _404 from './404';
 import Footer from '../components/footer';
 
-import global from '../common/Global';
+import Global from '../common/Global';
 
 class BaseView extends React.Component {
     
     constructor(props){
         super(props);
+        this.global = new Global({
+            axios: Axios.create({
+                baseURL: 'http://localhost:9000/api/', // Just for dev!
+                timeout: 10000
+            }),
+            onUpdate: () => {
+                this.forceUpdate(); // Rerender component
+            }
+        });
     }
 
     render() {
         return (
             <div>
-                <Header loggedIn={global.loggedIn}/>
+                <Header global={this.global}/>
 
                 <Switch>
                     <Route exact path='/' component={HomeView}/>
@@ -32,7 +42,7 @@ class BaseView extends React.Component {
                     <Route path='/event' component={EventView}/>
                     <Route path='/organizer' component={Organizer}/>
                     <Route path='/signin' component={SignIn}/>
-                    <Route path='/signup' render={() => (<SignUp global={global} />)}/>
+                    <Route path='/signup' render={() => (<SignUp global={this.global} />)}/>
 
                     <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
                 </Switch>

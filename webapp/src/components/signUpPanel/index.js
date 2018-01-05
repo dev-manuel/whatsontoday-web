@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
-import {GLOBAL} from '../../index';
 import ModalError from './modal';
 
 
@@ -86,16 +85,17 @@ class SignUpPanel extends React.Component {
 
         this.setState(errors);
         if(success){
-            GLOBAL.axios.post('/user/signUp', {
+            this.props.global.axios.post('/user/signUp', {
                     "firstName": "",
                     "lastName": "",
                     "email": this.state.emailValue,
                     "password": this.state.passwordValue
             }).then( res => {
                 this.setState({showSuccess: true});
-                GLOBAL.token = res.data.token;
-                console.log(GLOBAL);
-                this.props.setLoginState(true);
+                this.props.global.update({
+                    loggedIn: true,
+                    token: res.data.token,
+                });
             }).catch( err => {
                 //console.log(err);
                 this.setState({showModalError: true});

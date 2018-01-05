@@ -1,6 +1,19 @@
 
-const global = {
-    loggedIn: true,
-}
+export default class Global{
+    constructor(config){
+        const defaultConfig = {
+            loggedIn: false,
+            axios: null,
+            token: null,
+            onUpdate: () => {},
+        }
 
-export default global;
+        Object.assign(this, defaultConfig, config);
+    }
+
+    update(data){
+        Object.assign(this, data);
+        this.onUpdate();
+    }
+
+}

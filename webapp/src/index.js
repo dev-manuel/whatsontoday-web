@@ -13,15 +13,6 @@ import 'slick-carousel/slick/slick-theme.less';
 import { error } from 'util';
 
 
-export const GLOBAL = {
-    axios: axios.create({
-        baseURL: 'http://localhost:9000/api/', // Just for dev!
-        timeout: 10000
-    }),
-    token: ''
-}
-
-
 // Setup of local page routing
 const routing = (
     <HashRouter>

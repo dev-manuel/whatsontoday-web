@@ -8,6 +8,9 @@ ALTER TABLE event
 ALTER TABLE event
       ALTER COLUMN name SET NOT NULL;
 
+UPDATE login l SET (provider_id,provider_key) = ('credentials','admin@whats-on.co')
+       WHERE l.id=1;
+
 ALTER TABLE login
       ALTER COLUMN provider_id SET NOT NULL;
 
@@ -54,6 +57,9 @@ ALTER TABLE login
 
 ALTER TABLE login
       ALTER COLUMN provider_key DROP NOT NULL;
+
+UPDATE login l SET (provider_id,provider_key) = (NULL,NULL)
+       WHERE l.id=1;
 
 ALTER TABLE category
       ALTER COLUMN name DROP NOT NULL;

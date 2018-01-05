@@ -2,6 +2,8 @@
 
 ->     /login                          login.Routes
 
+->     /user                           user.Routes
+
 ###
 #  summary: Query all categories
 #  responses:

@@ -7,7 +7,7 @@ import play.api.libs.json.Json
 /**
   * The form which handles the sign up process.
   */
-object SignUpForm {
+object UserSignUpForm {
 
   /**
     * A play framework form.

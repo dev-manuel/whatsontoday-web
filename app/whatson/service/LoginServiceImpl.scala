@@ -1,19 +1,17 @@
 package whatson.service
 
-import com.mohiva.play.silhouette.api.{ Identity, LoginInfo }
-import scala.concurrent.Future
-import whatson.model._
-import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
-import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import javax.inject._
-import slick.jdbc.JdbcProfile
-import whatson.db.LoginTable._
-import slick.jdbc.PostgresProfile.api._
-import com.mohiva.play.silhouette.api.util.PasswordInfo
-import scala.concurrent.ExecutionContext
-import whatson.db._
-import whatson.db.Util._
+import scala.concurrent.{ExecutionContext, Future}
 
+import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
+import javax.inject._
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import slick.jdbc.JdbcProfile
+import slick.jdbc.PostgresProfile.api._
+import whatson.db._
+import whatson.db.LoginTable._
+import whatson.db.Util._
+import whatson.model._
 
 class LoginServiceImpl @Inject()(
   protected val dbConfigProvider: DatabaseConfigProvider)(implicit context: ExecutionContext)

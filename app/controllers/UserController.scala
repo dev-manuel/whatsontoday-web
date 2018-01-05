@@ -4,30 +4,25 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.{Clock, Credentials}
-import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
+import com.mohiva.play.silhouette.api.util.{Clock, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers._
-import javax.inject.Inject
+import javax.inject._
 import play.api.{Configuration, Logger}
+import play.api.cache.AsyncCacheApi
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
-import play.api.cache.AsyncCacheApi
-import whatson.auth._
-import whatson.service._
-import com.mohiva.play.silhouette.api.util.PasswordHasher
-import whatson.model._
-import whatson.model.SignInForm._
-import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import javax.inject._
 import slick.jdbc.JdbcProfile
-import whatson.db.LoginTable
 import slick.jdbc.PostgresProfile.api._
+import whatson.auth._
+import whatson.db.LoginTable
+import whatson.model._
+import whatson.service._
 
-class Authentication@Inject() (
+class UserController@Inject() (
   silhouette: Silhouette[AuthEnv],
   loginService: LoginService,
   authInfoRepository: AuthInfoRepository,
@@ -38,62 +33,43 @@ class Authentication@Inject() (
   cc: ControllerComponents,
   cache: AsyncCacheApi,
   passwordHasher: PasswordHasher,
-  protected val dbConfigProvider: DatabaseConfigProvider)
+  protected val dbConfigProvider: DatabaseConfigProvider,
+  userService: UserService)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
-  
-  
 
-  val log = Logger("api.authentication")
-  
-  /**
-    * Handles the submitted JSON data.
-    *
-    * @return The result to display.
-    */
-  def login = Action.async(parse.json) { implicit request =>
-    request.body.validate[SignInForm].map { data =>
-      credentialsProvider.authenticate(Credentials(data.email, data.password)).flatMap { loginInfo =>
-        loginService.retrieve(loginInfo).flatMap {
-          case Some(login) => silhouette.env.authenticatorService.create(loginInfo).map {
-            case authenticator if data.rememberMe =>
-              val c = configuration.underlying
-              authenticator.copy(
-                expirationDateTime = clock.now + FiniteDuration(c.getLong("silhouette.authenticator.rememberMe.authenticatorExpiry"),"ms"),
-                idleTimeout = Some(FiniteDuration(c.getLong("silhouette.authenticator.rememberMe.authenticatorIdleTimeout"),"ms"))
-              )
-            case authenticator => authenticator
-          }.flatMap { authenticator =>
-            silhouette.env.eventBus.publish(LoginEvent(login, request))
-            silhouette.env.authenticatorService.init(authenticator).map { token =>
-              Ok(Json.obj("token" -> token))
-            }
-          }
-          case None => Future.failed(new IdentityNotFoundException("Couldn't find user"))
-        }
-      }.recover {
-        case e: ProviderException =>
-          Unauthorized(Json.obj("message" -> "unauthorized"))
-      }
-    }.recoverTotal {
-      case error =>
-        Future.successful(Unauthorized(Json.obj("message" -> "invalid credentials")))
-    }
-  }
+  val log = Logger("api.user")
 
   /**
    * Handles the submitted JSON data.
    *
    * @return The result to display.
-    */
-  
-  /**
-    * Manages the sign out action.
-    */
-  def signOut = silhouette.SecuredAction.async { implicit request =>
-    silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
-    silhouette.env.authenticatorService.discard(request.authenticator, Ok)
+   */
+  def signUp = Action.async(parse.json) { implicit request =>
+    request.body.validate[UserSignUpForm.Data].map { data =>
+      val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
+      loginService.retrieve(loginInfo).flatMap {
+        case Some(login) =>
+          Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
+        case None =>
+          val authInfo = passwordHasher.hash(data.password)
+          val login = Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey)
+          for {
+            login <- loginService.save(login)
+            authInfo <- authInfoRepository.add(loginInfo, authInfo)
+            authenticator <- silhouette.env.authenticatorService.create(loginInfo)
+            token <- silhouette.env.authenticatorService.init(authenticator)
+          } yield {
+            silhouette.env.eventBus.publish(SignUpEvent(login, request))
+            silhouette.env.eventBus.publish(LoginEvent(login, request))
+            userService.save(login)
+            Ok(Json.obj("token" -> token))
+          }
+      }
+    }.recoverTotal {
+      case error =>
+        Future.successful(Unauthorized(Json.obj("message" -> "invalid.data")))
+    }
   }
-
 
   /**
     * Authenticates a user against a social provider.
@@ -114,6 +90,7 @@ class Authentication@Inject() (
                authenticator <- silhouette.env.authenticatorService.create(profile.loginInfo)
                token <- silhouette.env.authenticatorService.init(authenticator)
              } yield {
+               userService.save(login)
                silhouette.env.eventBus.publish(LoginEvent(login, request))
                //Ok(Json.obj("token" -> token))
                Redirect("http://" + request.host + "?token=" + token)

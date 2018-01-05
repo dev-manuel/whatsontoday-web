@@ -6,14 +6,14 @@ import whatson.model._
 
 import scala.concurrent.Future
 
-trait UserService extends IdentityService[User] {
+trait LoginService extends IdentityService[Login] {
    /**
    * Saves a user.
    *
    * @param user The user to save.
    * @return The saved user.
    */
-  def save(user: User): Future[User]
+  def save(user: Login): Future[Login]
 
   /**
    * Saves the social profile for a user.
@@ -23,5 +23,5 @@ trait UserService extends IdentityService[User] {
    * @param profile The social profile to save.
    * @return The user for whom the profile was saved.
    */
-def save(profile: CommonSocialProfile): Future[User]
+def save(profile: CommonSocialProfile): Future[Login]
 }

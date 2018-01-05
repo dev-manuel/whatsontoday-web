@@ -7,7 +7,7 @@ import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import javax.inject._
 import slick.jdbc.JdbcProfile
-import whatson.db.UserTable._
+import whatson.db.LoginTable._
 import slick.jdbc.PostgresProfile.api._
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import scala.concurrent.ExecutionContext
@@ -15,17 +15,17 @@ import whatson.db._
 import whatson.db.Util._
 
 
-class UserServiceImpl @Inject()(
+class LoginServiceImpl @Inject()(
   protected val dbConfigProvider: DatabaseConfigProvider)(implicit context: ExecutionContext)
-    extends UserService with HasDatabaseConfigProvider[JdbcProfile] {
+    extends LoginService with HasDatabaseConfigProvider[JdbcProfile] {
   /**
    * Retrieves a user that matches the specified login info.
    *
    * @param loginInfo The login info to retrieve a user.
    * @return The retrieved user or None if no user could be retrieved for the given login info.
    */
-  def retrieve(loginInfo: LoginInfo): Future[Option[User]] =
-    db.run(user.filter(x => x.providerId === loginInfo.providerID && x.providerKey === loginInfo.providerKey).result).map(_.headOption)
+  def retrieve(loginInfo: LoginInfo): Future[Option[Login]] =
+    db.run(login.filter(x => x.providerId === loginInfo.providerID && x.providerKey === loginInfo.providerKey).result).map(_.headOption)
 
 
   /**
@@ -34,7 +34,7 @@ class UserServiceImpl @Inject()(
    * @param user The user to save.
    * @return The saved user.
    */
-  def save(u: User) = db.run(insertAndReturn[User,UserTable](UserTable.user,u))
+  def save(l: Login) = db.run(insertAndReturn[Login,LoginTable](LoginTable.login,l))
 
   /**
    * Saves the social profile for a user.
@@ -46,18 +46,16 @@ class UserServiceImpl @Inject()(
    */
   def save(profile: CommonSocialProfile) = {
     val q = for {
-      u <- user if u.providerId === profile.loginInfo.providerID && u.providerKey === profile.loginInfo.providerKey
-    } yield u
-    val qa = q.map(x => (x.name,x.email))
+      l <- login if l.providerId === profile.loginInfo.providerID && l.providerKey === profile.loginInfo.providerKey
+    } yield l
+    val qa = q.map(x => x.email)
 
-    val u = (profile.firstName.getOrElse("") + " " + profile.lastName.getOrElse(""),
-             profile.email.getOrElse(""))
-    val userInsert = User(None,profile.firstName.getOrElse("") + " " + profile.lastName.getOrElse(""),
-                 profile.email.getOrElse(""),None,None,None,
+    val l = profile.email.getOrElse("")
+    val loginInsert = Login(None,profile.email.getOrElse(""),None,None,None,
                  profile.loginInfo.providerID,profile.loginInfo.providerKey)
 
-    db.run(qa.update(u)).flatMap {
-      case 0 => db.run(user += userInsert)
+    db.run(qa.update(l)).flatMap {
+      case 0 => db.run(login += loginInsert)
       case i => Future(i)
     }.flatMap(_ => db.run(q.result)).map(_.head)
   }

@@ -1,6 +1,6 @@
 ->     /events                         events.Routes
 
-->     /user                           user.Routes
+->     /login                          login.Routes
 
 ###
 #  summary: Query all categories

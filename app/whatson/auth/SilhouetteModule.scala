@@ -34,7 +34,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[Clock].toInstance(Clock())
     bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
     bind[AuthInfoRepository].to[AuthInfoService]
-    bind[UserService].to[UserServiceImpl]
+    bind[LoginService].to[LoginServiceImpl]
   }
 
   @Provides
@@ -44,9 +44,9 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   def provideEnvironment(
     authenticatorService: AuthenticatorService[JWTAuthenticator],
     eventBus: EventBus,
-    userService: UserService
+    loginService: LoginService
   ): Environment[AuthEnv] = {
-    Environment[AuthEnv](userService, authenticatorService, Seq.empty, eventBus)
+    Environment[AuthEnv](loginService, authenticatorService, Seq.empty, eventBus)
   }
 
   @Provides

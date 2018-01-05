@@ -11,7 +11,7 @@
 #    401:
 #      description: Access forbidden
 ###
-DELETE   /   controllers.UserController.deleteUser
+DELETE   /   controllers.LoginController.deleteUser
 
 ###
 #  summary: Update the currently logged in user
@@ -24,16 +24,16 @@ DELETE   /   controllers.UserController.deleteUser
 #      type: string
 #  - name: body
 #    schema:
-#      $ref: '#/definitions/whatson.model.User'
+#      $ref: '#/definitions/whatson.model.Login'
 #  responses:
 #    200:
 #      description: User updated
 #      schema:
-#        $ref: '#/definitions/whatson.model.User'
+#        $ref: '#/definitions/whatson.model.Login'
 #    401:
 #      description: Access forbidden
 ###
-PUT      /     controllers.UserController.updateUser
+PUT      /     controllers.LoginController.updateUser
 
 ###
 #  summary: Sign out of account
@@ -80,11 +80,11 @@ POST   /signIn                   controllers.Authentication.login
 #    200:
 #      description: Success
 #      schema:
-#        $ref: '#/definitions/whatson.model.User'
+#        $ref: '#/definitions/whatson.model.Login'
 #    401:
 #      description: Access forbidden
 ###
-GET   /                          controllers.UserController.getUser
+GET   /                          controllers.LoginController.getUser
 
 ###
 #  summary: Create a new account

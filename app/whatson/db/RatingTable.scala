@@ -16,7 +16,7 @@ class RatingTable(tag: Tag) extends Table[Rating](tag, "rating") with HasID[Rati
 
   def * = (id.?,rating,userId,entityId,entityType) <> (Rating.tupled, Rating.unapply)
 
-  def user = foreignKey("user",userId,UserTable.user)(_.id)
+  def user = foreignKey("user",userId,LoginTable.login)(_.id)
 }
 
 object RatingTable {

@@ -24,12 +24,12 @@ import whatson.model.SignInForm._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import javax.inject._
 import slick.jdbc.JdbcProfile
-import whatson.db.UserTable
+import whatson.db.LoginTable
 import slick.jdbc.PostgresProfile.api._
 
 class Authentication@Inject() (
   silhouette: Silhouette[AuthEnv],
-  userService: UserService,
+  loginService: LoginService,
   authInfoRepository: AuthInfoRepository,
   credentialsProvider: CredentialsProvider,
   socialProviderRegistry: SocialProviderRegistry,
@@ -43,7 +43,7 @@ class Authentication@Inject() (
   
   
 
-  val log = Logger("api.events")
+  val log = Logger("api.authentication")
   
   /**
     * Handles the submitted JSON data.
@@ -53,8 +53,8 @@ class Authentication@Inject() (
   def login = Action.async(parse.json) { implicit request =>
     request.body.validate[SignInForm].map { data =>
       credentialsProvider.authenticate(Credentials(data.email, data.password)).flatMap { loginInfo =>
-        userService.retrieve(loginInfo).flatMap {
-          case Some(user) => silhouette.env.authenticatorService.create(loginInfo).map {
+        loginService.retrieve(loginInfo).flatMap {
+          case Some(login) => silhouette.env.authenticatorService.create(loginInfo).map {
             case authenticator if data.rememberMe =>
               val c = configuration.underlying
               authenticator.copy(
@@ -63,7 +63,7 @@ class Authentication@Inject() (
               )
             case authenticator => authenticator
           }.flatMap { authenticator =>
-            silhouette.env.eventBus.publish(LoginEvent(user, request))
+            silhouette.env.eventBus.publish(LoginEvent(login, request))
             silhouette.env.authenticatorService.init(authenticator).map { token =>
               Ok(Json.obj("token" -> token))
             }
@@ -88,20 +88,20 @@ class Authentication@Inject() (
   def signUp = Action.async(parse.json) { implicit request =>
     request.body.validate[SignUpForm.Data].map { data =>
       val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
-      userService.retrieve(loginInfo).flatMap {
-        case Some(user) =>
+      loginService.retrieve(loginInfo).flatMap {
+        case Some(login) =>
           Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
         case None =>
           val authInfo = passwordHasher.hash(data.password)
-          val user = User(None, data.firstName + " " + data.lastName, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey)
+          val login = Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey)
           for {
-            i <- db.run(UserTable.user += user)
+            i <- db.run(LoginTable.login += login)
             authInfo <- authInfoRepository.add(loginInfo, authInfo)
             authenticator <- silhouette.env.authenticatorService.create(loginInfo)
             token <- silhouette.env.authenticatorService.init(authenticator)
           } yield {
-            silhouette.env.eventBus.publish(SignUpEvent(user, request))
-            silhouette.env.eventBus.publish(LoginEvent(user, request))
+            silhouette.env.eventBus.publish(SignUpEvent(login, request))
+            silhouette.env.eventBus.publish(LoginEvent(login, request))
             Ok(Json.obj("token" -> token))
           }
       }
@@ -134,12 +134,12 @@ class Authentication@Inject() (
              case Left(result) => Future.successful(result)
              case Right(authInfo) => for {
                profile <- p.retrieveProfile(authInfo)
-               user <- userService.save(profile)
+               login <- loginService.save(profile)
                authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
                authenticator <- silhouette.env.authenticatorService.create(profile.loginInfo)
                token <- silhouette.env.authenticatorService.init(authenticator)
              } yield {
-               silhouette.env.eventBus.publish(LoginEvent(user, request))
+               silhouette.env.eventBus.publish(LoginEvent(login, request))
                //Ok(Json.obj("token" -> token))
                Redirect("http://" + request.host + "?token=" + token)
              }

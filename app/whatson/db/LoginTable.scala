@@ -5,9 +5,8 @@ import slick.lifted.ProvenShape.proveShapeOf
 import whatson.db.ParticipantTable._
 import whatson.model._
 
-class UserTable(tag: Tag) extends Table[User](tag, "users") with HasID[User] with HasImages[User] {
+class LoginTable(tag: Tag) extends Table[Login](tag, "login") with HasID[Login] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
-  def name = column[String]("name",O.Unique)
 
   def pwSalt = column[String]("pwsalt")
   def pwHash = column[String]("pwhash")
@@ -18,13 +17,11 @@ class UserTable(tag: Tag) extends Table[User](tag, "users") with HasID[User] wit
 
   def email = column[String]("email")
 
-  def events = participant.filter(_.userID === id).flatMap(_.eventFK)
+  //def events = participant.filter(_.userID === id).flatMap(_.eventFK)
 
-  def * = (id.?,name,email,pwHash.?, pwSalt.?, pwHasher.? ,providerId, providerKey) <> (User.tupled, User.unapply)
-
-  val entityType = EntityType.User
+  def * = (id.?,email,pwHash.?, pwSalt.?, pwHasher.? ,providerId, providerKey) <> (Login.tupled, Login.unapply)
 }
 
-object UserTable {
-  val user = TableQuery[UserTable]
+object LoginTable {
+  val login = TableQuery[LoginTable]
 }

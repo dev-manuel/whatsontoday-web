@@ -1,5 +1,5 @@
 import React from 'react'
-import {Grid} from 'semantic-ui-react'
+import {Message, Grid} from 'semantic-ui-react'
 
 import SignUpPanel from '../components/signUpPanel';
 import AbstractViewState from '../common/AbstractViewState';
@@ -32,6 +32,12 @@ class SignUpState extends AbstractViewState{
         super(context);
     }
 
+    onSuccess(){
+        this.context.setState({
+            viewState: new SuccessfulSignUpState(this.context),
+        })
+    }
+
     /**
      * @override
      */
@@ -62,7 +68,7 @@ class SignUpState extends AbstractViewState{
                     verticalAlign='middle'
                 >
                     <Grid.Column style={{ maxWidth: 450 }}>
-                        <SignUpPanel global={this.context.props.global}/> {/*Todo*/}
+                        <SignUpPanel onSuccess={this.onSuccess.bind(this)} global={this.context.props.global}/>
                     </Grid.Column>
                 </Grid>
             </div>
@@ -74,6 +80,35 @@ class SuccessfulSignUpState extends AbstractViewState{
 
     constructor(context){
         super(context);
+    }
+
+    /**
+     * @override
+     */
+    render(){
+        return (
+            <div className='login-form'>
+                <style>{`
+                    body > div,
+                    body > div > div,
+                    body > div > div > div.login-form {
+                        height: 100%;
+                    }
+                `}</style>
+
+                <Grid
+                    textAlign='center'
+                    style={{ height: '100%' }}
+                    verticalAlign='middle'
+                >
+                    <Grid.Column style={{ maxWidth: 450 }}>
+                        <Message>
+                            Registration successful. Welcome to WhatsOn!
+                        </Message>
+                    </Grid.Column>
+                </Grid>
+            </div>
+        )
     }
 }
 
@@ -87,6 +122,28 @@ class AlreadyLoggedInState extends AbstractViewState{
      * @override
      */
     render(){
-        return <h1>You already logged in!</h1>
+        return (
+            <div className='login-form'>
+                <style>{`
+                    body > div,
+                    body > div > div,
+                    body > div > div > div.login-form {
+                        height: 100%;
+                    }
+                `}</style>
+
+                <Grid
+                    textAlign='center'
+                    style={{ height: '100%' }}
+                    verticalAlign='middle'
+                >
+                    <Grid.Column style={{ maxWidth: 450 }}>
+                        <Message>
+                            You are already logged in!
+                        </Message>
+                    </Grid.Column>
+                </Grid>
+            </div>
+        )
     }
 }

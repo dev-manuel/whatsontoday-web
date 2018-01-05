@@ -10,8 +10,6 @@ class SignUpPanel extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            showSuccess: false,
-
             emailValue: '',
             emailError: false,
             passwordValue: '',
@@ -91,11 +89,11 @@ class SignUpPanel extends React.Component {
                     "email": this.state.emailValue,
                     "password": this.state.passwordValue
             }).then( res => {
-                this.setState({showSuccess: true});
                 this.props.global.update({
                     loggedIn: true,
                     token: res.data.token,
                 });
+                this.props.onSuccess();
             }).catch( err => {
                 //console.log(err);
                 this.setState({showModalError: true});
@@ -107,63 +105,56 @@ class SignUpPanel extends React.Component {
     
     
     render(){
-        if(this.state.showSuccess){
-            return (
-                <Header color='grey' as='h1' textAlign='center'>
-                    Registration successful
-                </Header>
-            )
-        } else {
-            return (
-                <div>
-                    <ModalError show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
+        return (
+            <div>
+                <ModalError show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
 
-                    <Header color='grey' as='h2' textAlign='center'>
-                        SignUp to WhatsOn
-                    </Header>
-                    <Form size='large' onSubmit={this.handleSubmit.bind(this)}>
-                        <Segment>
-                        <Form.Input
-                            error={this.state.emailError}
-                            value={this.state.emailValue}
-                            fluid
-                            icon='user'
-                            iconPosition='left'
-                            placeholder='E-mail address'
-                            onChange={ event => { this.setState({emailValue: event.target.value}) }}
-                        />
-                        <Form.Input
-                            error={this.state.passwordError}
-                            value={this.state.passwordValue}                        
-                            fluid
-                            icon='lock'
-                            iconPosition='left'
-                            placeholder='Password'
-                            type='password'
-                            onChange={ event => { this.setState({passwordValue: event.target.value}) }}
-                        />
-                        <Form.Input
-                            error={this.state.repeatPasswordError}
-                            value={this.state.repeatPasswordValue}                        
-                            fluid
-                            icon='lock'
-                            iconPosition='left'
-                            placeholder='Repeat password'
-                            type='password'
-                            onChange={ event => { this.setState({repeatPasswordValue: event.target.value}) }}
-                        />
-                        <Form.Checkbox
-                            checked={this.state.acceptValue}
-                            error={this.state.acceptError}
-                            onChange={ () => {this.setState((prevState, props)=>({acceptValue: !prevState.acceptValue}))} }
-                            label='I agree to the Terms and Conditions'
-                        />
-                        <Button color='olive' fluid size='large'>Let's go!</Button>
-                        </Segment>
-                    </Form>
-                </div>
-            )
-        }
+                <Header color='grey' as='h2' textAlign='center'>
+                    SignUp to WhatsOn
+                </Header>
+                <Form size='large' onSubmit={this.handleSubmit.bind(this)}>
+                    <Segment>
+                    <Form.Input
+                        error={this.state.emailError}
+                        value={this.state.emailValue}
+                        fluid
+                        icon='user'
+                        iconPosition='left'
+                        placeholder='E-mail address'
+                        onChange={ event => { this.setState({emailValue: event.target.value}) }}
+                    />
+                    <Form.Input
+                        error={this.state.passwordError}
+                        value={this.state.passwordValue}                        
+                        fluid
+                        icon='lock'
+                        iconPosition='left'
+                        placeholder='Password'
+                        type='password'
+                        onChange={ event => { this.setState({passwordValue: event.target.value}) }}
+                    />
+                    <Form.Input
+                        error={this.state.repeatPasswordError}
+                        value={this.state.repeatPasswordValue}                        
+                        fluid
+                        icon='lock'
+                        iconPosition='left'
+                        placeholder='Repeat password'
+                        type='password'
+                        onChange={ event => { this.setState({repeatPasswordValue: event.target.value}) }}
+                    />
+                    <Form.Checkbox
+                        checked={this.state.acceptValue}
+                        error={this.state.acceptError}
+                        onChange={ () => {this.setState((prevState, props)=>({acceptValue: !prevState.acceptValue}))} }
+                        label='I agree to the Terms and Conditions'
+                    />
+                    <Button color='olive' fluid size='large'>Let's go!</Button>
+                    </Segment>
+                </Form>
+            </div>
+        )
+        
     }
 
 }

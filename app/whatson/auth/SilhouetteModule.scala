@@ -1,16 +1,22 @@
 package whatson.auth
 
+import scala.collection.immutable._
+
 import com.google.inject.{AbstractModule, Provides}
 import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
-import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder}
+import com.mohiva.play.silhouette.api.crypto._
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services._
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.crypto._
 import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.impl.providers._
+import com.mohiva.play.silhouette.impl.providers.oauth2._
+import com.mohiva.play.silhouette.impl.providers.state._
 import com.mohiva.play.silhouette.impl.util._
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
+import net.ceedubs.ficus.Ficus._
+import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import play.api.libs.concurrent.Execution.Implicits._
@@ -18,12 +24,6 @@ import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
 import whatson.auth._
 import whatson.service._
-import com.mohiva.play.silhouette.impl.providers.oauth2._
-import com.mohiva.play.silhouette.impl.providers.state._
-import com.mohiva.play.silhouette.api.crypto._
-import net.ceedubs.ficus.readers.ArbitraryTypeReader._
-import net.ceedubs.ficus.Ficus._
-import scala.collection.immutable._
 
 class SilhouetteModule extends AbstractModule with ScalaModule {
   override def configure() = {
@@ -36,6 +36,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[AuthInfoRepository].to[AuthInfoService]
     bind[LoginService].to[LoginServiceImpl]
     bind[UserService].to[UserServiceImpl]
+    bind[OrganizerService].to[OrganizerServiceImpl]
   }
 
   @Provides

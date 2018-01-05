@@ -16,9 +16,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
 import slick.jdbc.JdbcProfile
-import slick.jdbc.PostgresProfile.api._
 import whatson.auth._
-import whatson.db.LoginTable
 import whatson.model._
 import whatson.service._
 

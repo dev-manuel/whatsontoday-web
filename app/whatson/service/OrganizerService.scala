@@ -12,4 +12,6 @@ trait OrganizerService {
     * @return The saved user.
     */
   def save(user: Organizer): Future[Organizer]
+
+  def save(login: Login, name: String): Future[Organizer] = login.id.map(x => save(Organizer(None,name,x))).getOrElse(Future.never)
 }

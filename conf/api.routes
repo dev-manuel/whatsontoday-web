@@ -4,6 +4,9 @@
 
 ->     /user                           user.Routes
 
+->     /organizer                      organizer.Routes
+
+
 ###
 #  summary: Query all categories
 #  responses:

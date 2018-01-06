@@ -41,7 +41,7 @@ class BaseView extends React.Component {
                     <Route path='/SERP' component={SERPView}/> {/* Todo: render specific SERP according to URL parameters */}
                     <Route path='/event' component={EventView}/>
                     <Route path='/organizer' component={Organizer}/>
-                    <Route path='/signin' component={SignIn}/>
+                    <Route path='/signin' render={() => (<SignIn global={this.global} />)}/>
                     <Route path='/signup' render={() => (<SignUp global={this.global} />)}/>
 
                     <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}

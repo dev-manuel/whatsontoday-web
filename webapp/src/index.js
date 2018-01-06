@@ -1,8 +1,7 @@
 // Import modules
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router, Route} from 'react-router';
-import {HashRouter, IndexRoute} from 'react-router-dom'
+import {HashRouter, IndexRoute} from 'react-router-dom';
 
 // Import resources
 import BaseView from './views/BaseView';

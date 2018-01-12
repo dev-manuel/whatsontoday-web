@@ -85,3 +85,16 @@ POST   /signIn                   controllers.Authentication.login
 #      description: Access forbidden
 ###
 GET   /                          controllers.LoginController.getUser
+
+
+###
+#  summary: Confirms the account of the user
+#  parameters:
+#    name: token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: Success
+###
+GET   /confirm                          controllers.LoginController.confirm(token: String)

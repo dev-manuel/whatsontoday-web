@@ -59,14 +59,30 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  def provideAuthenticatorService(
-    crypter: Crypter, encoding: DefaultCookieHeaderEncoding,
-    fpg: FingerprintGenerator, idg: IDGenerator, config: Configuration, clock: Clock
-  ): AuthenticatorService[JWTAuthenticator] = {
-    val authenticatorEncoder = new CrypterAuthenticatorEncoder(crypter)
-    val e = JWTAuthenticatorSettings(sharedSecret = "changeme")
-    new JWTAuthenticatorService(e,None,authenticatorEncoder,idg,clock)
+  def provideCrypterAuthenticatorEncoder(crypter: Crypter): CrypterAuthenticatorEncoder = {
+    new CrypterAuthenticatorEncoder(crypter)
   }
+
+  @Provides
+  def provideCrypterAuthenticatorEncoder(encoder: CrypterAuthenticatorEncoder): AuthenticatorEncoder = encoder
+
+  @Provides
+  def provideJWTAuthenticatorSettings(): JWTAuthenticatorSettings = {
+    JWTAuthenticatorSettings(sharedSecret = "changeme")
+  }
+
+  @Provides
+  def provideJWTAuthenticatorService(
+    encoder: CrypterAuthenticatorEncoder, encoding: DefaultCookieHeaderEncoding,
+    fpg: FingerprintGenerator, idg: IDGenerator, config: Configuration,
+    clock: Clock, settings: JWTAuthenticatorSettings
+  ): JWTAuthenticatorService = {
+    new JWTAuthenticatorService(settings,None,encoder,idg,clock)
+  }
+
+  @Provides
+  def provideAuthenticatorService(
+    jwt: JWTAuthenticatorService): AuthenticatorService[JWTAuthenticator] = jwt
 
   @Provides
   def provideCredentialsProvider(authInfoRepository: AuthInfoRepository, passwordHasher: PasswordHasher): CredentialsProvider = {

@@ -5,7 +5,7 @@ version := "1.0-SNAPSHOT"
 
 scalaVersion in ThisBuild := "2.12.2"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, SwaggerPlugin)
+lazy val root = (project in file(".")).enablePlugins(PlayScala, SwaggerPlugin, SbtTwirl)
 
 swaggerDomainNameSpaces := Seq("whatson.model")
 
@@ -38,3 +38,5 @@ libraryDependencies ++= Seq(
 // play.sbt.routes.RoutesKeys.routesImport += "com.whatson.binders._"
 
 javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
+
+sourceDirectories in (Compile, TwirlKeys.compileTemplates) := (unmanagedSourceDirectories in Compile).value

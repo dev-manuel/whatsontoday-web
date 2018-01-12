@@ -32,7 +32,8 @@ class UserController@Inject() (
   cache: AsyncCacheApi,
   passwordHasher: PasswordHasher,
   protected val dbConfigProvider: DatabaseConfigProvider,
-  userService: UserService)
+  userService: UserService,
+  mailService: MailService)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
 
   val log = Logger("api.user")
@@ -60,6 +61,7 @@ class UserController@Inject() (
             silhouette.env.eventBus.publish(SignUpEvent(login, request))
             silhouette.env.eventBus.publish(LoginEvent(login, request))
             userService.save(login)
+            mailService.testMail()
             Ok(Json.obj("token" -> token))
           }
       }

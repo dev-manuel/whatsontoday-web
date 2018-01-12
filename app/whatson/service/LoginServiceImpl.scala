@@ -50,7 +50,7 @@ class LoginServiceImpl @Inject()(
 
     val l = profile.email.getOrElse("")
     val loginInsert = Login(None,profile.email.getOrElse(""),None,None,None,
-                 profile.loginInfo.providerID,profile.loginInfo.providerKey)
+                 profile.loginInfo.providerID,profile.loginInfo.providerKey,true)
 
     db.run(qa.update(l)).flatMap {
       case 0 => db.run(login += loginInsert)

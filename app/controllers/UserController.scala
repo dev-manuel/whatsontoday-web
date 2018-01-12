@@ -51,7 +51,7 @@ class UserController@Inject() (
           Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
         case None =>
           val authInfo = passwordHasher.hash(data.password)
-          val login = Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey)
+          val login = Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false)
           for {
             login <- loginService.save(login)
             authInfo <- authInfoRepository.add(loginInfo, authInfo)

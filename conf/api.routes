@@ -82,7 +82,7 @@ POST   /location                       controllers.LocationController.createLoca
 #    schema:
 #      type: string
 #  - name: entityType
-#    enum: ["Event","Location","User"]
+#    enum: ["Event","Location","Organizer"]
 #  responses:
 #    200:
 #      description: success

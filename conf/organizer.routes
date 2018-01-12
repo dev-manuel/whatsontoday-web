@@ -1,4 +1,14 @@
 ###
+#  summary: Get the public account of an organizer
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.detail.OrganizerPublic'
+###
+GET   /:id                   controllers.OrganizerController.get(id: Int)
+
+###
 #  summary: Create a new account
 #  description: >
 #      A new account gets created. The access token to this account is returned.

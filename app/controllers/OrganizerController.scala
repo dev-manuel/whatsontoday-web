@@ -1,10 +1,8 @@
 package controllers
 
 import scala.concurrent.Future
-import scala.concurrent.duration._
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Clock, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers._
@@ -17,8 +15,12 @@ import play.api.libs.json._
 import play.api.mvc._
 import slick.jdbc.JdbcProfile
 import whatson.auth._
+import whatson.db._
+import whatson.model.detail.OrganizerPublic._
 import whatson.model._
 import whatson.service._
+import slick.jdbc.PostgresProfile.api._
+
 
 class OrganizerController@Inject() (
   silhouette: Silhouette[AuthEnv],
@@ -36,6 +38,17 @@ class OrganizerController@Inject() (
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
 
   val log = Logger("api.organizer")
+
+  def get(id: Int) = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get organizer")
+
+    val q = for(o <- OrganizerTable.organizer  if o.id === id.bind) yield o;
+
+    db.run(q.public).map(x => x.headOption match {
+                             case Some(r) => Ok(Json.toJson(r))
+                             case _ => NotFound
+                           })
+  }
 
   /**
    * Handles the submitted JSON data.

@@ -61,7 +61,7 @@ class UserController@Inject() (
             silhouette.env.eventBus.publish(SignUpEvent(login, request))
             silhouette.env.eventBus.publish(LoginEvent(login, request))
             userService.save(login)
-            mailService.testMail()
+            mailService.sendUserConfirmation(data.email,token)
             Ok(Json.obj("token" -> token))
           }
       }

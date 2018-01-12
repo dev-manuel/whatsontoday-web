@@ -10,18 +10,33 @@ import slick.jdbc.PostgresProfile.api._
 import scala.concurrent.{ ExecutionContext, Future }
 import play.api.libs.mailer._
 import views.html._
+import play.api._
 
-class MailServiceImpl @Inject()(mailerClient: MailerClient)(implicit context: ExecutionContext)
+class MailServiceImpl @Inject()(mailerClient: MailerClient,
+                                config: Configuration)(implicit context: ExecutionContext)
     extends MailService {
 
-  def testMail() = {
+  val url = config.underlying.getString("application.url")
+
+  def sendUserConfirmation(userMail: String,
+                           confirmationToken: String) = {
     val email = Email(
-      "Simple email",
+      "Confirm your email address",
       "Whats On <no-reply@whats-on.today>",
-      Seq(""),
-      // sends text, HTML or both...
-      bodyText = Some("A text message"),
-      bodyHtml = Some(new UserAccountConfirmation("yay")().toString())
+      Seq(userMail),
+      bodyHtml = Some(new UserAccountConfirmation(userMail,url,confirmationToken)().toString())
+    )
+    mailerClient.send(email)
+  }
+
+  def sendOrganizerConfirmation(userMail: String,
+                               name: String,
+                               confirmationToken: String) = {
+    val email = Email(
+      "Confirm your email address",
+      "Whats On <no-reply@whats-on.today>",
+      Seq(userMail),
+      bodyHtml = Some(new OrganizerAccountConfirmation(userMail,name,url,confirmationToken)().toString())
     )
     mailerClient.send(email)
   }

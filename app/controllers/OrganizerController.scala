@@ -34,7 +34,8 @@ class OrganizerController@Inject() (
   cache: AsyncCacheApi,
   passwordHasher: PasswordHasher,
   protected val dbConfigProvider: DatabaseConfigProvider,
-  organizerService: OrganizerService)
+  organizerService: OrganizerService,
+  mailService: MailService)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
 
   val log = Logger("api.organizer")
@@ -73,6 +74,7 @@ class OrganizerController@Inject() (
             silhouette.env.eventBus.publish(SignUpEvent(login, request))
             silhouette.env.eventBus.publish(LoginEvent(login, request))
             organizerService.save(login,data.name)
+            mailService.sendOrganizerConfirmation(data.email,data.name,token)
             Ok(Json.obj("token" -> token))
           }
       }

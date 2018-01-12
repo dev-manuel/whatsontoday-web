@@ -17,16 +17,20 @@ import whatson.model.Event._
 import whatson.model.detail.EventDetail._
 import com.mohiva.play.silhouette.api._
 import whatson.auth._
+import whatson.service._
 
 /**
  * This Controller handles API Requests concerning events
  */
 class EventController @Inject()(cc: ControllerComponents,
                                 protected val dbConfigProvider: DatabaseConfigProvider,
-                                silhouette: Silhouette[AuthEnv])
+                                val silhouette: Silhouette[AuthEnv],
+                                val organizerService: OrganizerService,
+                                val userService: UserService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
-    with HasDatabaseConfigProvider[JdbcProfile] {
+    with HasDatabaseConfigProvider[JdbcProfile]
+    with Util {
 
   val log = Logger("api.events")
 
@@ -54,10 +58,10 @@ class EventController @Inject()(cc: ControllerComponents,
     returnPaged(s,q,db)
   }
 
-  def deleteEvent(id: Int) = silhouette.SecuredAction.async { implicit request =>
+  def deleteEvent(id: Int) = organizerRequest(parse.default) { (request,organizer) =>
     log.debug("Rest request to get event")
 
-    val q = event.filter(x => x.id === id.bind && x.creatorId === request.identity.id).delete
+    val q = event.filter(x => x.id === id.bind && x.creatorId === organizer.id).delete
 
     db.run(q).map {
       case 0 => NotFound
@@ -65,20 +69,20 @@ class EventController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def createEvent() = silhouette.SecuredAction.async(parse.json(eventReads)) { implicit request =>
+  def createEvent() = organizerRequest(parse.json(eventReads)) { case (request,organizer) =>
     log.debug("Rest request to create event")
 
-    val e = request.body.copy(creatorId = request.identity.id)
+    val e = request.body.copy(creatorId = organizer.id)
 
     val inserted = db.run(insertAndReturn[Event,EventTable](event,e))
 
     inserted.map(x => Ok(Json.toJson(x)))
   }
 
-  def updateEvent(id: Int) = silhouette.SecuredAction(parse.json(eventReads)).async { implicit request =>
+  def updateEvent(id: Int) = organizerRequest(parse.json(eventReads)) { (request,organizer) =>
     log.debug("Rest request to update event")
 
-    val q = event.filter(x => x.id === id.bind && x.creatorId === request.identity.id).update(request.body)
+    val q = event.filter(x => x.id === id.bind && x.creatorId === organizer.id).update(request.body)
 
     db.run(q).map {
       case 0 => NotFound

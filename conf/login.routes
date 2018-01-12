@@ -1,0 +1,87 @@
+###
+#  summary: Delete the currently logged in user
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: User deleted
+#    401:
+#      description: Access forbidden
+###
+DELETE   /   controllers.LoginController.deleteUser
+
+###
+#  summary: Update the currently logged in user
+#  description: >
+#      The request body will get updated soon.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.Login'
+#  responses:
+#    200:
+#      description: User updated
+#      schema:
+#        $ref: '#/definitions/whatson.model.Login'
+#    401:
+#      description: Access forbidden
+###
+PUT      /     controllers.LoginController.updateUser
+
+###
+#  summary: Sign out of account
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: success
+###
+GET    /signOut                  controllers.Authentication.signOut
+
+###
+#  summary: Sign into an existing account
+#  description: >
+#      The access token to this account is returned.
+#      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.SignInForm'
+#      description: >
+#        The user data. If rememberMe is true, the authentication token will be valid for several days.
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.AccessToken'
+#    401:
+#      description: Access forbidden
+###
+POST   /signIn                   controllers.Authentication.login
+
+###
+#  summary: Returns the currently logged in user
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: Success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Login'
+#    401:
+#      description: Access forbidden
+###
+GET   /                          controllers.LoginController.getUser

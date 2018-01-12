@@ -6,7 +6,6 @@ import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape.proveShapeOf
 import whatson.db.EventCategoryTable._
 import whatson.db.ParticipantTable._
-import whatson.db.UserTable._
 import whatson.db.Util._
 import whatson.model._
 
@@ -23,7 +22,7 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Ev
 
   def * = (id.?,name,from,to,creatorId,locationId) <> (Event.tupled, Event.unapply)
 
-  def creator = foreignKey("creator",creatorId,user)(_.id.?)
+  def creator = foreignKey("creator",creatorId,OrganizerTable.organizer)(_.id.?)
   def location = foreignKey("location",locationId,LocationTable.location)(_.id)
   def participants = participant.filter(_.eventID === id).flatMap(_.participant)
   def categories = eventCategory.filter(_.eventID === id).flatMap(_.categoryFK)

@@ -1,0 +1,42 @@
+# --- !Ups
+
+ALTER TABLE users RENAME TO login;
+
+ALTER TABLE login DROP COLUMN name;
+
+CREATE TABLE organizer (
+id BIGSERIAL PRIMARY KEY,
+login_fk BIGSERIAL UNIQUE,
+name VARCHAR
+);
+
+ALTER TABLE organizer
+ADD CONSTRAINT organizer_login_fk
+FOREIGN KEY (login_fk)
+REFERENCES login
+ON DELETE CASCADE;
+
+CREATE TABLE users (
+id BIGSERIAL PRIMARY KEY,
+login_fk BIGSERIAL UNIQUE
+);
+
+ALTER TABLE users
+ADD CONSTRAINT user_login_fk
+FOREIGN KEY (login_fk)
+REFERENCES login
+ON DELETE CASCADE;
+
+INSERT INTO users (login_fk)
+SELECT id
+FROM login;
+
+# --- !Downs
+
+DROP TABLE IF EXISTS organizer;
+
+DROP TABLE IF EXISTS users;
+
+ALTER TABLE login RENAME TO users;
+
+ALTER TABLE users ADD COLUMN name varchar;

@@ -2,7 +2,7 @@ package whatson.db
 
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.ProvenShape.proveShapeOf
-import whatson.db.UserTable._
+import whatson.db.LoginTable._
 import whatson.db.EventTable._
 
 class ParticipantTable(tag: Tag) extends Table[(Int,Int)](tag, "participant") {
@@ -12,7 +12,7 @@ class ParticipantTable(tag: Tag) extends Table[(Int,Int)](tag, "participant") {
   def * = (userID,eventID)
     
   def eventFK = foreignKey("event", eventID,event)(_.id)
-  def participant = foreignKey("participant", userID,user)(_.id)
+  def participant = foreignKey("participant", userID,login)(_.id) //TODO: Update
 }
 
 object ParticipantTable {

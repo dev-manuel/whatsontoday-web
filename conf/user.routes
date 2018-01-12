@@ -1,92 +1,4 @@
 ###
-#  summary: Delete the currently logged in user
-#  parameters:
-#  - in: header
-#    name: x-auth-token
-#    schema:
-#      type: string
-#  responses:
-#    200:
-#      description: User deleted
-#    401:
-#      description: Access forbidden
-###
-DELETE   /   controllers.UserController.deleteUser
-
-###
-#  summary: Update the currently logged in user
-#  description: >
-#      The request body will get updated soon.
-#  parameters:
-#  - in: header
-#    name: x-auth-token
-#    schema:
-#      type: string
-#  - name: body
-#    schema:
-#      $ref: '#/definitions/whatson.model.User'
-#  responses:
-#    200:
-#      description: User updated
-#      schema:
-#        $ref: '#/definitions/whatson.model.User'
-#    401:
-#      description: Access forbidden
-###
-PUT      /     controllers.UserController.updateUser
-
-###
-#  summary: Sign out of account
-#  parameters:
-#  - in: header
-#    name: x-auth-token
-#    schema:
-#      type: string
-#  responses:
-#    200:
-#      description: success
-###
-GET    /signOut                  controllers.Authentication.signOut
-
-###
-#  summary: Sign into an existing account
-#  description: >
-#      The access token to this account is returned.
-#      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
-#  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/definitions/whatson.model.SignInForm'
-#      description: >
-#        The user data. If rememberMe is true, the authentication token will be valid for several days.
-#  responses:
-#    200:
-#      description: success
-#      schema:
-#        $ref: '#/definitions/whatson.model.AccessToken'
-#    401:
-#      description: Access forbidden
-###
-POST   /signIn                   controllers.Authentication.login
-
-###
-#  summary: Returns the currently logged in user
-#  parameters:
-#  - in: header
-#    name: x-auth-token
-#    schema:
-#      type: string
-#  responses:
-#    200:
-#      description: Success
-#      schema:
-#        $ref: '#/definitions/whatson.model.User'
-#    401:
-#      description: Access forbidden
-###
-GET   /                          controllers.UserController.getUser
-
-###
 #  summary: Create a new account
 #  description: >
 #      A new account gets created. The access token to this account is returned.
@@ -94,7 +6,7 @@ GET   /                          controllers.UserController.getUser
 #  parameters:
 #    - name: body
 #      schema:
-#        $ref: '#/definitions/whatson.model.SignUpForm.Data'
+#        $ref: '#/definitions/whatson.model.UserSignUpForm.Data'
 #      description: The user data. The password must not be hashed.
 #  responses:
 #    200:
@@ -104,7 +16,7 @@ GET   /                          controllers.UserController.getUser
 #    400:
 #      description: User already exists
 ###
-POST   /signUp                   controllers.Authentication.signUp
+POST   /signUp                   controllers.UserController.signUp
 
 ###
 #  summary: Authenticate user via a social provider
@@ -120,7 +32,7 @@ POST   /signUp                   controllers.Authentication.signUp
 #    200:
 #      description: success
 ###
-GET    /authenticate/:provider   controllers.Authentication.authenticate(provider)
+GET    /authenticate/:provider   controllers.UserController.authenticate(provider)
 
 ### NoDocs ###
-POST   /authenticate/:provider   controllers.Authentication.authenticate(provider)
+POST   /authenticate/:provider   controllers.UserController.authenticate(provider)

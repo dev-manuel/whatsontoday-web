@@ -1,0 +1,19 @@
+###
+#  summary: Create a new account
+#  description: >
+#      A new account gets created. The access token to this account is returned.
+#      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.OrganizerSignUpForm.Data'
+#      description: The user data. The password must not be hashed.
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.AccessToken'
+#    400:
+#      description: Organizer already exists
+###
+POST   /signUp                   controllers.OrganizerController.signUp

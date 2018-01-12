@@ -1,14 +1,20 @@
 # --- !Ups
 
-INSERT INTO users (id,name,pwhash,email)
-    VALUES (1,'admin','c','admin@whats-on.co');
+INSERT INTO users (name,pwhash,email)
+    VALUES ('admin','c','admin@whats-on.co');
 
-INSERT INTO category (id,name,parent_fk) VALUES
-	(1,'all',1),
-	(2,'sport',1),
-	(3,'tech',1);
+INSERT INTO category (name,parent_fk) VALUES
+	('all',0);
+
+UPDATE category set parent_fk = (SELECT id FROM category WHERE name = 'all');
+
+INSERT INTO category (name,parent_fk)
+	SELECT 'sport',c.id FROM category c WHERE name = 'all';
+
+INSERT INTO category (name,parent_fk)
+       SELECT 'tech',c.id FROM category c WHERE name = 'all';
 
 # --- !Downs
 
-DELETE FROM users WHERE id = 1;
-DELETE FROM category WHERE id = 1 OR id = 2 OR id = 3;
+DELETE FROM users WHERE email = 'admin@whats-on.co';
+DELETE FROM category WHERE name = 'all' OR name = 'sport' OR name = 'tech';

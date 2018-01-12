@@ -10,7 +10,7 @@ import whatson.db._
 import scala.concurrent.ExecutionContext
 
 case class EventDetail(id: Option[Int], name: String, from: Timestamp,
-                       to: Timestamp, creator: User, categories: List[Category],
+                       to: Timestamp, creator: Organizer, categories: List[Category],
                        avgRating: Option[Float], location: Location,
                        images: List[Int]) extends Rateable with WithImages
 
@@ -22,7 +22,7 @@ object EventDetail {
 
   implicit class EventDetailQuery(q: Query[EventTable, Event, Seq]) {
     def detailed(implicit ec: ExecutionContext) = {
-      val s = q.join(UserTable.user).on(_.creatorId === _.id).join(LocationTable.location).on(_._1.locationId === _.id)
+      val s = q.join(OrganizerTable.organizer).on(_.creatorId === _.id).join(LocationTable.location).on(_._1.locationId === _.id)
       val t = s.result.flatMap(y => {
         DBIO.sequence(y.map {
           case ((event, creator), location) => {

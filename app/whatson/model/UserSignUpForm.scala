@@ -15,7 +15,7 @@ object UserSignUpForm {
   val form = Form(
     mapping(
       "email" -> email,
-      "password" -> nonEmptyText
+      "password" -> nonEmptyText.verifying("too short", x => x.length>7)
     )(Data.apply)(Data.unapply)
   )
 

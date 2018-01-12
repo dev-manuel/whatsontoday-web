@@ -15,8 +15,8 @@ object OrganizerSignUpForm {
   val form = Form(
     mapping(
       "email" -> email,
-      "password" -> nonEmptyText,
-      "name" -> nonEmptyText
+      "password" -> nonEmptyText.verifying("too short", x => x.length>7),
+      "name" -> nonEmptyText.verifying("too short", x => x.length>3)
     )(Data.apply)(Data.unapply)
   )
 

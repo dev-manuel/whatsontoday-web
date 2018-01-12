@@ -20,7 +20,7 @@ import whatson.model.detail.OrganizerPublic._
 import whatson.model._
 import whatson.service._
 import slick.jdbc.PostgresProfile.api._
-
+import whatson.util.FormErrorJson._
 
 class OrganizerController@Inject() (
   silhouette: Silhouette[AuthEnv],
@@ -57,7 +57,10 @@ class OrganizerController@Inject() (
    * @return The result to display.
    */
   def signUp = Action.async(parse.json) { implicit request =>
-    request.body.validate[OrganizerSignUpForm.Data].map { data =>
+    OrganizerSignUpForm.form.bindFromRequest.fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      }, { data =>
       val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
       loginService.retrieve(loginInfo).flatMap {
         case Some(login) =>
@@ -78,9 +81,6 @@ class OrganizerController@Inject() (
             Ok(Json.obj("message" -> "mail.sent"))
           }
       }
-    }.recoverTotal {
-      case error =>
-        Future.successful(Unauthorized(Json.obj("message" -> "invalid.data")))
-    }
+    })
   }
 }

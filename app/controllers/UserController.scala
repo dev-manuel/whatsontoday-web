@@ -19,6 +19,7 @@ import slick.jdbc.JdbcProfile
 import whatson.auth._
 import whatson.model._
 import whatson.service._
+import whatson.util.FormErrorJson._
 
 class UserController@Inject() (
   silhouette: Silhouette[AuthEnv],
@@ -44,31 +45,32 @@ class UserController@Inject() (
    * @return The result to display.
    */
   def signUp = Action.async(parse.json) { implicit request =>
-    request.body.validate[UserSignUpForm.Data].map { data =>
-      val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
-      loginService.retrieve(loginInfo).flatMap {
-        case Some(login) =>
-          Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
-        case None =>
-          val authInfo = passwordHasher.hash(data.password)
-          val login = Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false)
-          for {
-            login <- loginService.save(login)
-            authInfo <- authInfoRepository.add(loginInfo, authInfo)
-            authenticator <- silhouette.env.authenticatorService.create(loginInfo)
-            token <- silhouette.env.authenticatorService.init(authenticator)
-          } yield {
-            silhouette.env.eventBus.publish(SignUpEvent(login, request))
-            silhouette.env.eventBus.publish(LoginEvent(login, request))
-            userService.save(login)
-            mailService.sendUserConfirmation(data.email,token)
-            Ok(Json.obj("message" -> "mail.sent"))
-          }
-      }
-    }.recoverTotal {
-      case error =>
-        Future.successful(Unauthorized(Json.obj("message" -> "invalid.data")))
-    }
+    UserSignUpForm.form.bindFromRequest.fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      },
+      data => {
+        val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
+        loginService.retrieve(loginInfo).flatMap {
+          case Some(login) =>
+            Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
+          case None =>
+            val authInfo = passwordHasher.hash(data.password)
+            val login = Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false)
+            for {
+              login <- loginService.save(login)
+              authInfo <- authInfoRepository.add(loginInfo, authInfo)
+              authenticator <- silhouette.env.authenticatorService.create(loginInfo)
+              token <- silhouette.env.authenticatorService.init(authenticator)
+            } yield {
+              silhouette.env.eventBus.publish(SignUpEvent(login, request))
+              silhouette.env.eventBus.publish(LoginEvent(login, request))
+              userService.save(login)
+              mailService.sendUserConfirmation(data.email,token)
+              Ok(Json.obj("message" -> "mail.sent"))
+            }
+        }
+      })
   }
 
   /**

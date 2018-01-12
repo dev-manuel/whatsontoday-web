@@ -16,14 +16,32 @@ import whatson.model._
 class LoginServiceImpl @Inject()(
   protected val dbConfigProvider: DatabaseConfigProvider)(implicit context: ExecutionContext)
     extends LoginService with HasDatabaseConfigProvider[JdbcProfile] {
+
   /**
    * Retrieves a user that matches the specified login info.
    *
    * @param loginInfo The login info to retrieve a user.
    * @return The retrieved user or None if no user could be retrieved for the given login info.
    */
-  def retrieve(loginInfo: LoginInfo): Future[Option[Login]] =
-    db.run(login.filter(x => x.providerId === loginInfo.providerID && x.providerKey === loginInfo.providerKey).result).map(_.headOption)
+  def retrieve(loginInfo: LoginInfo): Future[Option[Login]] = {
+    val q = login.filter(x => x.providerId === loginInfo.providerID
+                           && x.providerKey === loginInfo.providerKey
+                           && x.confirmed)
+    db.run(q.result).map(_.headOption)
+  }
+
+
+  def confirm(loginInfo: LoginInfo): Future[Option[Login]] = {
+    val q = for {
+      l <- login if l.providerId === loginInfo.providerID && l.providerKey === loginInfo.providerKey
+    } yield l
+    val qa = q.map(x => x.confirmed)
+
+    db.run(qa.update(true)).flatMap {
+      case 0 => Future(None)
+      case i => db.run(q.result).map(x => Some(x.head))
+    }
+  }
 
 
   /**

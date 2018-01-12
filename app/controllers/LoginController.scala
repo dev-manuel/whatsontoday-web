@@ -17,13 +17,15 @@ import com.mohiva.play.silhouette.api.services._
 import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.api.crypto._
 import scala.util._
+import whatson.service._
 
 
 class LoginController @Inject()(cc: ControllerComponents,
                                protected val dbConfigProvider: DatabaseConfigProvider,
                                 silhouette: Silhouette[AuthEnv],
                                 encoder: AuthenticatorEncoder,
-                                settings: JWTAuthenticatorSettings)
+                                settings: JWTAuthenticatorSettings,
+                                loginService: LoginService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile]{
@@ -65,7 +67,12 @@ class LoginController @Inject()(cc: ControllerComponents,
     log.debug("Rest request to confirm account")
 
     JWTAuthenticator.unserialize(token, encoder, settings) match {
-      case Success(loginInfo) => Future(Ok("yay"))
+      case Success(auth) => {
+        loginService.confirm(auth.loginInfo).map {
+          case Some(l) => Redirect("http://" + request.host + "/#/mailConfirmed")
+          case None => NotFound
+        }
+      }
       case _ => Future(Unauthorized)
     }
   }

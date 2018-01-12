@@ -3,7 +3,7 @@ package whatson.service
 import com.mohiva.play.silhouette.api.services.IdentityService
 import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 import whatson.model._
-
+import com.mohiva.play.silhouette.api.LoginInfo
 import scala.concurrent.Future
 
 trait LoginService extends IdentityService[Login] {
@@ -23,5 +23,7 @@ trait LoginService extends IdentityService[Login] {
    * @param profile The social profile to save.
    * @return The user for whom the profile was saved.
    */
-def save(profile: CommonSocialProfile): Future[Login]
+  def save(profile: CommonSocialProfile): Future[Login]
+
+  def confirm(loginInfo: LoginInfo): Future[Option[Login]]
 }

@@ -75,7 +75,7 @@ class OrganizerController@Inject() (
             silhouette.env.eventBus.publish(LoginEvent(login, request))
             organizerService.save(login,data.name)
             mailService.sendOrganizerConfirmation(data.email,data.name,token)
-            Ok(Json.obj("token" -> token))
+            Ok(Json.obj("message" -> "mail.sent"))
           }
       }
     }.recoverTotal {

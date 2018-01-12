@@ -62,7 +62,7 @@ class UserController@Inject() (
             silhouette.env.eventBus.publish(LoginEvent(login, request))
             userService.save(login)
             mailService.sendUserConfirmation(data.email,token)
-            Ok(Json.obj("token" -> token))
+            Ok(Json.obj("message" -> "mail.sent"))
           }
       }
     }.recoverTotal {

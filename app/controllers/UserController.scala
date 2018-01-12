@@ -90,7 +90,6 @@ class UserController@Inject() (
              } yield {
                userService.save(login)
                silhouette.env.eventBus.publish(LoginEvent(login, request))
-               //Ok(Json.obj("token" -> token))
                Redirect("http://" + request.host + "?token=" + token)
              }
            }

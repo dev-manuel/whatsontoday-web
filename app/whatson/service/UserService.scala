@@ -14,4 +14,6 @@ trait UserService {
   def save(user: User): Future[User]
 
   def save(login: Login): Future[User] = login.id.map(x => save(User(None,x))).getOrElse(Future.never)
+
+  def getByLogin(login: Login): Future[Option[User]]
 }

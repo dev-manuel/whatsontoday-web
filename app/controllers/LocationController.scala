@@ -60,7 +60,7 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
   }
   
   def createLocation() = Action.async(parse.json(locationReads)) { implicit request: Request[Location] =>
-    log.debug("Rest request to create user")
+    log.debug("Rest request to create location")
     
     val inserted = db.run(insertAndReturn[Location,LocationTable](location,request.body))
     

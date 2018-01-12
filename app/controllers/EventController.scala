@@ -25,7 +25,8 @@ import whatson.service._
 class EventController @Inject()(cc: ControllerComponents,
                                 protected val dbConfigProvider: DatabaseConfigProvider,
                                 val silhouette: Silhouette[AuthEnv],
-                                val organizerService: OrganizerService)
+                                val organizerService: OrganizerService,
+                                val userService: UserService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile]

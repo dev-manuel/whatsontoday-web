@@ -12,14 +12,23 @@ import whatson.service._
 trait Util {
   val silhouette: Silhouette[AuthEnv]
   val organizerService: OrganizerService
+  val userService: UserService
 
-  val NotFound: Result
+  val Unauthorized: Result
 
   def organizerRequest[A](pars: BodyParser[A])(r: (SecuredRequest[AuthEnv,A],Organizer) => Future[Result])(implicit executionContext: ExecutionContext): Action[A] =
     silhouette.SecuredAction.async(pars) { request =>
       organizerService.getByLogin(request.identity).flatMap {
         case Some(x) => r(request,x)
-        case _ => Future(NotFound)
+        case _ => Future(Unauthorized)
+      }
+    }
+
+  def userRequest[A](pars: BodyParser[A])(r: (SecuredRequest[AuthEnv,A],User) => Future[Result])(implicit executionContext: ExecutionContext): Action[A] =
+    silhouette.SecuredAction.async(pars) { request =>
+      userService.getByLogin(request.identity).flatMap {
+        case Some(x) => r(request,x)
+        case _ => Future(Unauthorized)
       }
     }
 }

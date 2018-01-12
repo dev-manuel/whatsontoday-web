@@ -26,7 +26,9 @@ libraryDependencies ++= Seq(
   "com.mohiva" %% "play-silhouette-testkit" % "5.0.0" % "test",
   "net.codingwell" %% "scala-guice" % "4.1.1",
   ehcache,
-  "com.iheart" %% "ficus" % "1.4.3"
+  "com.iheart" %% "ficus" % "1.4.3",
+  "com.typesafe.play" %% "play-mailer" % "6.0.1",
+  "com.typesafe.play" %% "play-mailer-guice" % "6.0.1"
 )
 
 // Adds additional packages into Twirl

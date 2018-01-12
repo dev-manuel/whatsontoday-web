@@ -1,4 +1,4 @@
-package whatson.auth
+package whatson.modules
 
 import scala.collection.immutable._
 
@@ -22,8 +22,8 @@ import play.api.Configuration
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
-import whatson.auth._
 import whatson.service._
+import whatson.auth._
 
 class SilhouetteModule extends AbstractModule with ScalaModule {
   override def configure() = {
@@ -37,6 +37,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[LoginService].to[LoginServiceImpl]
     bind[UserService].to[UserServiceImpl]
     bind[OrganizerService].to[OrganizerServiceImpl]
+    bind[MailService].to[MailServiceImpl]
   }
 
   @Provides

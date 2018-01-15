@@ -3,6 +3,7 @@ import React from 'react';
 import {Grid, Rating} from 'semantic-ui-react';
 
 // Import resources
+import AbstractViewState from '../common/AbstractViewState';
 import EventOverview from '../components/eventOverview';
 import EventDetails from '../components/eventDetails';
 import LocationDetails from '../components/locationDetails';
@@ -53,16 +54,72 @@ const recommenderData = [
         
     ]
 
+export default class Event extends React.Component{
+    
+    constructor(props){
+        super(props);
 
-const Event = () => (
-        <div style={{marginLeft: '11%', marginRight: '11%'}}>
-            <EventOverview {...eventData}/>
-            <EventDetails {...eventData}/>
-            <LocationDetails {...locationData}/>
-            <OrganizerDetails {...organizerData}/>
-            <EventRecommender eventList={recommenderData}/>
-            
-        </div>
-)
+        this.state = {
+            viewState: new ShowingState(this),
+        }
+    }
+    
+    render(){
+        return this.state.viewState.render();
+    }
+}
 
-export default Event;
+//
+// ─── VIEW-STATES ────────────────────────────────────────────────────────────────
+//
+
+// Todo
+class LoadingState extends AbstractViewState{
+
+    constructor(context){
+        super(context);
+    }
+
+    render() {
+        return (
+            <div style={{marginLeft: '11%', marginRight: '11%'}}>
+                This View is loading!
+            </div>
+        )
+    }
+}
+
+class ShowingState extends AbstractViewState{
+    
+    constructor(context){
+        super(context);
+    }
+
+    render() {
+        return (
+            <div style={{marginLeft: '11%', marginRight: '11%'}}>
+                <EventOverview {...eventData}/>
+                <EventDetails {...eventData}/>
+                <LocationDetails {...locationData}/>
+                <OrganizerDetails {...organizerData}/>
+                <EventRecommender eventList={recommenderData}/>
+            </div>
+        )
+    }
+}
+
+// Todo
+class ErrorState extends AbstractViewState{
+    constructor(context){
+        super(context);
+    }
+
+    render() {
+        return (
+            <div style={{marginLeft: '11%', marginRight: '11%'}}>
+                An error occurred!
+            </div>
+        )
+    }
+}
+    

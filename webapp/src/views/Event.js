@@ -1,8 +1,9 @@
 // Import modules
-import React from 'react';
+import React from 'react'
 import {Grid, Rating} from 'semantic-ui-react';
 
 // Import resources
+import StatefulView from '../common/StatefulView';
 import AbstractViewState from '../common/AbstractViewState';
 import EventOverview from '../components/eventOverview';
 import EventDetails from '../components/eventDetails';
@@ -54,7 +55,7 @@ const recommenderData = [
         
     ]
 
-export default class Event extends React.Component{
+export default class Event extends StatefulView{
     
     constructor(props){
         super(props);
@@ -63,10 +64,6 @@ export default class Event extends React.Component{
             viewState: new ShowingState(this),
         }
     }
-    
-    render(){
-        return this.state.viewState.render();
-    }
 }
 
 //
@@ -74,6 +71,9 @@ export default class Event extends React.Component{
 //
 
 // Todo
+/**
+ * @override
+ */
 class LoadingState extends AbstractViewState{
 
     constructor(context){
@@ -89,6 +89,9 @@ class LoadingState extends AbstractViewState{
     }
 }
 
+/**
+ * @override
+ */
 class ShowingState extends AbstractViewState{
     
     constructor(context){
@@ -109,6 +112,9 @@ class ShowingState extends AbstractViewState{
 }
 
 // Todo
+/**
+ * @override
+ */
 class ErrorState extends AbstractViewState{
     constructor(context){
         super(context);

@@ -3,11 +3,12 @@ import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui
 
 import SignInPanel from '../components/SignInPanel';
 import AbstractViewState from '../common/AbstractViewState';
+import StatefulView from '../common/StatefulView';
 
 
 // Inspired by https://react.semantic-ui.com/layouts/login
 
-export default class SignInView extends React.Component {
+export default class SignInView extends StatefulView {
 
     constructor(props){
         super(props);
@@ -15,10 +16,6 @@ export default class SignInView extends React.Component {
         this.state = {
             viewState: props.global.loggedIn ? new AlreadyLoggedInState(this) : new SignInState(this),
         }
-    }
-
-    render(){
-        return this.state.viewState.render();
     }
 }
 

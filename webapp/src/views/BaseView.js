@@ -12,7 +12,7 @@ import Organizer from './Organizer';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import _404 from './404';
-import Footer from '../components/footer';
+import Footer from './Footer';
 
 import Global from '../common/Global';
 import GER from '../common/dictionary/GER';
@@ -49,7 +49,7 @@ class BaseView extends React.Component {
                     <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
                 </Switch>
 
-                <Footer/>
+                <Footer global={this.global}/>
             </div>
         )
     }

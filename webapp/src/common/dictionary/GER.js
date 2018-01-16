@@ -1,11 +1,12 @@
 
-export default GER = {
+export default {
 
     header: {
         blog: 'Blog',
         addEvent : 'Event hinzufügen',
         signIn: 'Anmelden',
         signUp: 'Registrieren',
+        signOut: 'Ausloggen',
         // dropdown...
     },
     home: {

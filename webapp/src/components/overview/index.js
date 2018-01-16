@@ -11,7 +11,7 @@ const Overview = ({name, date, rating, description, categories}) => (
             <Grid>
                 <Grid.Row>
                     <Grid.Column width="8">
-                        <ImageSlider />
+                        {/* <ImageSlider /> */}
                     </Grid.Column>
                     <Grid.Column width="8">
                         <h2>{name}</h2>

@@ -4,7 +4,7 @@ import {Switch, Route} from 'react-router-dom';
 import Axios from 'axios';
 
 // Import resources
-import Header from '../components/header';
+import Header from './Header';
 import HomeView from './Home';
 import SERPView from './SERP';
 import EventView from './Event';

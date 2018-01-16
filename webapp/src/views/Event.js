@@ -1,8 +1,10 @@
 // Import modules
-import React from 'react';
+import React from 'react'
 import {Grid, Rating} from 'semantic-ui-react';
 
 // Import resources
+import StatefulView from '../common/StatefulView';
+import AbstractViewState from '../common/AbstractViewState';
 import EventOverview from '../components/eventOverview';
 import EventDetails from '../components/eventDetails';
 import LocationDetails from '../components/locationDetails';
@@ -53,16 +55,66 @@ const recommenderData = [
         
     ]
 
+export default class Event extends StatefulView{
+    
+    constructor(props){
+        super(props);
 
-const Event = () => (
-        <div style={{marginLeft: '11%', marginRight: '11%'}}>
-            <EventOverview {...eventData}/>
-            <EventDetails {...eventData}/>
-            <LocationDetails {...locationData}/>
-            <OrganizerDetails {...organizerData}/>
-            <EventRecommender eventList={recommenderData}/>
-            
-        </div>
-)
+        this.state = {
+            viewState: new ShowingState(this),
+        }
+    }
+}
 
-export default Event;
+//
+// ─── VIEW-STATES ────────────────────────────────────────────────────────────────
+//
+
+// Todo
+class LoadingState extends AbstractViewState{
+    
+    /**
+     * @override
+     */
+    render() {
+        return (
+            <div style={{marginLeft: '11%', marginRight: '11%'}}>
+                This View is loading!
+            </div>
+        )
+    }
+}
+
+class ShowingState extends AbstractViewState{
+    
+    /**
+     * @override
+     */
+    render() {
+        return (
+            <div style={{marginLeft: '11%', marginRight: '11%'}}>
+                <EventOverview {...eventData}/>
+                <EventDetails {...eventData}/>
+                <LocationDetails {...locationData}/>
+                <OrganizerDetails {...organizerData}/>
+                <EventRecommender eventList={recommenderData}/>
+            </div>
+        )
+    }
+}
+
+// Todo
+class ErrorState extends AbstractViewState{
+    
+    /**
+     * @override
+     */
+    render() {
+        return (
+            <div style={{marginLeft: '11%', marginRight: '11%'}}>
+                An error occurred!
+            </div>
+        )
+    }
+}
+    

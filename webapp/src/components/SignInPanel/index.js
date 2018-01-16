@@ -32,7 +32,7 @@ class SignInPanel extends React.Component {
                 loggedIn: true,
                 token: res.data.token,
             });
-            this.props.history.push('/#');
+            this.props.onSuccess();
         }).catch(err => {
             //Todo
             console.log(err);

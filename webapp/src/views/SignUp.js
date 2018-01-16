@@ -3,10 +3,11 @@ import {Message, Grid} from 'semantic-ui-react'
 
 import SignUpPanel from '../components/signUpPanel';
 import AbstractViewState from '../common/AbstractViewState';
+import StatefulView from '../common/StatefulView';
 
 // Inspired by https://react.semantic-ui.com/layouts/login
 
-export default class SignUpView extends React.Component {
+export default class SignUpView extends StatefulView {
 
     constructor(props){
         super(props);
@@ -14,10 +15,6 @@ export default class SignUpView extends React.Component {
         this.state = {
             viewState: props.global.loggedIn ? new AlreadyLoggedInState(this) : new SignUpState(this),
         }
-    }
-
-    render(){
-        return this.state.viewState.render();
     }
 }
 
@@ -28,10 +25,9 @@ export default class SignUpView extends React.Component {
 
 class SignUpState extends AbstractViewState{
 
-    constructor(context){
-        super(context);
-    }
-
+    /**
+     * switches the current view state to the SuccessfulSignUpState
+     */
     onSuccess(){
         this.context.setState({
             viewState: new SuccessfulSignUpState(this.context),
@@ -78,10 +74,6 @@ class SignUpState extends AbstractViewState{
 
 class SuccessfulSignUpState extends AbstractViewState{
 
-    constructor(context){
-        super(context);
-    }
-
     /**
      * @override
      */
@@ -113,10 +105,6 @@ class SuccessfulSignUpState extends AbstractViewState{
 }
 
 class AlreadyLoggedInState extends AbstractViewState{
-
-    constructor(context){
-        super(context);
-    }
 
     /**
      * @override

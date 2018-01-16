@@ -25,14 +25,11 @@ export default class SignInView extends StatefulView {
 
 class SignInState extends AbstractViewState{
 
-    constructor(context){
-        super(context);
-    }
-
+    /**
+     * Switches the current view state to SuccessfulSignInState
+     */
     onSuccess(){
-        this.context.setState({
-            viewState: new SuccessfulSignUpState(this.context),
-        })
+        this.context.props.history.push('/#');
     }
 
     /**
@@ -54,7 +51,10 @@ class SignInState extends AbstractViewState{
                     verticalAlign='middle'
                 >
                 <Grid.Column style={{ maxWidth: 450 }}>
-                    <SignInPanel global={this.context.props.global}/>
+                    <SignInPanel
+                        global={this.context.props.global}
+                        onSuccess={this.onSuccess.bind(this)}
+                    />
                 </Grid.Column>
                 </Grid>
             </div>

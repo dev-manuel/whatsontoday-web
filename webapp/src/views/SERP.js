@@ -42,10 +42,6 @@ export default class SERP extends StatefulView{
 
 class LoadingState extends AbstractViewState{
 
-    constructor(context){
-        super(context);
-    }
-
     /**
      * @override
      */
@@ -76,9 +72,6 @@ class ShowingState extends AbstractViewState{
 
 // Todo
 class ErrorState extends AbstractViewState{
-    constructor(context){
-        super(context);
-    }
     
     /**
      * @override

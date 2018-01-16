@@ -25,10 +25,9 @@ export default class SignUpView extends StatefulView {
 
 class SignUpState extends AbstractViewState{
 
-    constructor(context){
-        super(context);
-    }
-
+    /**
+     * switches the current view state to the SuccessfulSignUpState
+     */
     onSuccess(){
         this.context.setState({
             viewState: new SuccessfulSignUpState(this.context),
@@ -75,10 +74,6 @@ class SignUpState extends AbstractViewState{
 
 class SuccessfulSignUpState extends AbstractViewState{
 
-    constructor(context){
-        super(context);
-    }
-
     /**
      * @override
      */
@@ -110,10 +105,6 @@ class SuccessfulSignUpState extends AbstractViewState{
 }
 
 class AlreadyLoggedInState extends AbstractViewState{
-
-    constructor(context){
-        super(context);
-    }
 
     /**
      * @override

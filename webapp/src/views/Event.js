@@ -73,10 +73,6 @@ export default class Event extends StatefulView{
 // Todo
 class LoadingState extends AbstractViewState{
     
-    constructor(context){
-        super(context);
-    }
-    
     /**
      * @override
      */
@@ -90,10 +86,6 @@ class LoadingState extends AbstractViewState{
 }
 
 class ShowingState extends AbstractViewState{
-    
-    constructor(context){
-        super(context);
-    }
     
     /**
      * @override
@@ -113,9 +105,6 @@ class ShowingState extends AbstractViewState{
 
 // Todo
 class ErrorState extends AbstractViewState{
-    constructor(context){
-        super(context);
-    }
     
     /**
      * @override

@@ -71,15 +71,15 @@ export default class Event extends StatefulView{
 //
 
 // Todo
-/**
- * @override
- */
 class LoadingState extends AbstractViewState{
-
+    
     constructor(context){
         super(context);
     }
-
+    
+    /**
+     * @override
+     */
     render() {
         return (
             <div style={{marginLeft: '11%', marginRight: '11%'}}>
@@ -89,15 +89,15 @@ class LoadingState extends AbstractViewState{
     }
 }
 
-/**
- * @override
- */
 class ShowingState extends AbstractViewState{
     
     constructor(context){
         super(context);
     }
-
+    
+    /**
+     * @override
+     */
     render() {
         return (
             <div style={{marginLeft: '11%', marginRight: '11%'}}>
@@ -112,14 +112,14 @@ class ShowingState extends AbstractViewState{
 }
 
 // Todo
-/**
- * @override
- */
 class ErrorState extends AbstractViewState{
     constructor(context){
         super(context);
     }
-
+    
+    /**
+     * @override
+     */
     render() {
         return (
             <div style={{marginLeft: '11%', marginRight: '11%'}}>

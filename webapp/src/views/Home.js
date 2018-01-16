@@ -32,11 +32,12 @@ const eventList = [
     {name: 'StartUpWeekend', date: '17. Nov. 2017', catagories: ['#Business'], imageURI: '#', target: '#'},    
 ]
 
-const Home = () => (
+const Home = ({global}) => (
+        // Todo: Use dictionary!
         <div>
-            <Slider title='Education'/>
-            <CategoryTileTable categoryList={categoryList}/>
-            <EvenTileTable eventList={eventList}/>
+            <Slider title='Education' global={global}/>
+            <CategoryTileTable categoryList={categoryList} global={global}/>
+            <EvenTileTable eventList={eventList} global={global}/>
         </div>
 )
 

@@ -9,7 +9,7 @@ import EventTile from './eventTile';
  * JSX component to render multiple event tiles in a tabular shape
  * @param {{eventList: [{name: string, date: string, categories: [string], imageURI: string, target: string}] }} props 
  */
-const EventTileTable = ({eventList}) => {
+const EventTileTable = ({eventList, global}) => {
 
     /**
      * Returns an array with arrays of the given size.
@@ -33,7 +33,7 @@ const EventTileTable = ({eventList}) => {
 
     const eventTiles = eventList.map( (entryListEntry, index) => (
         <Grid.Column key={index % 3} width="2">
-            <EventTile {...entryListEntry} />
+            <EventTile {...entryListEntry} global={global}/>
         </Grid.Column>
     ))
     

@@ -1,5 +1,5 @@
 
-export const GER = {
+export default GER = {
 
     header: {
         blog: 'Blog',

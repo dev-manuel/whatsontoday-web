@@ -15,6 +15,7 @@ import _404 from './404';
 import Footer from '../components/footer';
 
 import Global from '../common/Global';
+import GER from '../common/dictionary/GER';
 
 class BaseView extends React.Component {
     
@@ -27,7 +28,8 @@ class BaseView extends React.Component {
             }),
             onUpdate: () => {
                 this.forceUpdate(); // Rerender component
-            }
+            },
+            LANG: GER,
         });
     }
 

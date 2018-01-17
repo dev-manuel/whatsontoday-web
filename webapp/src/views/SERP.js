@@ -59,11 +59,12 @@ class ShowingState extends AbstractViewState{
      * @override
      */
     render(){
+        const global = this.context.props.global;
         return (
             <div className="pageContent">
-                <FilterPanel/>
+                <FilterPanel global={global}/>
                 <div className="tileTable">
-                    <EventTileTableBig eventList={eventList}/>
+                    <EventTileTableBig eventList={eventList} global={global}/>
                 </div>
             </div>
         )

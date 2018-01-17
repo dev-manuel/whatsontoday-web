@@ -45,7 +45,11 @@ class ImageSlider extends React.Component{
                         {sliderEntries}
                     </Slick>
                 </div>
-                <ThumbnailList imageURIList={this.props.imageURIList} goTo={this.goTo}/>  
+                <ThumbnailList
+                    imageURIList={this.props.imageURIList}
+                    goTo={this.goTo}
+                    global={this.props.global}
+                />  
             </div>
         )
     }

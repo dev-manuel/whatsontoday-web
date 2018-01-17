@@ -6,6 +6,7 @@ export default class Global{
             axios: null,
             token: null,
             onUpdate: () => {},
+            LANG: null
         }
 
         Object.assign(this, defaultConfig, config);

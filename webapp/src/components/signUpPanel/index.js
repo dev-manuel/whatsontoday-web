@@ -105,51 +105,52 @@ class SignUpPanel extends React.Component {
     
     
     render(){
+        const LANG = this.props.global.LANG.signUp;
         return (
             <div>
                 <ModalError show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
 
                 <Header color='grey' as='h2' textAlign='center'>
-                    SignUp to WhatsOn
+                    {LANG.message}
                 </Header>
                 <Form size='large' onSubmit={this.handleSubmit.bind(this)}>
                     <Segment>
-                    <Form.Input
-                        error={this.state.emailError}
-                        value={this.state.emailValue}
-                        fluid
-                        icon='user'
-                        iconPosition='left'
-                        placeholder='E-mail address'
-                        onChange={ event => { this.setState({emailValue: event.target.value}) }}
-                    />
-                    <Form.Input
-                        error={this.state.passwordError}
-                        value={this.state.passwordValue}                        
-                        fluid
-                        icon='lock'
-                        iconPosition='left'
-                        placeholder='Password'
-                        type='password'
-                        onChange={ event => { this.setState({passwordValue: event.target.value}) }}
-                    />
-                    <Form.Input
-                        error={this.state.repeatPasswordError}
-                        value={this.state.repeatPasswordValue}                        
-                        fluid
-                        icon='lock'
-                        iconPosition='left'
-                        placeholder='Repeat password'
-                        type='password'
-                        onChange={ event => { this.setState({repeatPasswordValue: event.target.value}) }}
-                    />
-                    <Form.Checkbox
-                        checked={this.state.acceptValue}
-                        error={this.state.acceptError}
-                        onChange={ () => {this.setState((prevState, props)=>({acceptValue: !prevState.acceptValue}))} }
-                        label='I agree to the Terms and Conditions'
-                    />
-                    <Button color='olive' fluid size='large'>Let's go!</Button>
+                        <Form.Input
+                            error={this.state.emailError}
+                            value={this.state.emailValue}
+                            fluid
+                            icon='user'
+                            iconPosition='left'
+                            placeholder={LANG.email}
+                            onChange={ event => { this.setState({emailValue: event.target.value}) }}
+                        />
+                        <Form.Input
+                            error={this.state.passwordError}
+                            value={this.state.passwordValue}                        
+                            fluid
+                            icon='lock'
+                            iconPosition='left'
+                            placeholder={LANG.password}
+                            type='password'
+                            onChange={ event => { this.setState({passwordValue: event.target.value}) }}
+                        />
+                        <Form.Input
+                            error={this.state.repeatPasswordError}
+                            value={this.state.repeatPasswordValue}                        
+                            fluid
+                            icon='lock'
+                            iconPosition='left'
+                            placeholder={LANG.passwordRepeat}
+                            type='password'
+                            onChange={ event => { this.setState({repeatPasswordValue: event.target.value}) }}
+                        />
+                        <Form.Checkbox
+                            checked={this.state.acceptValue}
+                            error={this.state.acceptError}
+                            onChange={ () => {this.setState((prevState, props)=>({acceptValue: !prevState.acceptValue}))} }
+                            label={LANG.agree}
+                        />
+                        <Button color='olive' fluid size='large'>{LANG.submit}</Button>
                     </Segment>
                 </Form>
             </div>

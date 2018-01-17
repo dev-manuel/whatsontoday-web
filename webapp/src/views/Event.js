@@ -91,13 +91,14 @@ class ShowingState extends AbstractViewState{
      * @override
      */
     render() {
+        const global = this.context.props.global;
         return (
             <div style={{marginLeft: '11%', marginRight: '11%'}}>
-                <EventOverview {...eventData}/>
-                <EventDetails {...eventData}/>
-                <LocationDetails {...locationData}/>
-                <OrganizerDetails {...organizerData}/>
-                <EventRecommender eventList={recommenderData}/>
+                <EventOverview {...eventData} global={global}/>
+                <EventDetails {...eventData} global={global}/>
+                <LocationDetails {...locationData} global={global}/>
+                <OrganizerDetails {...organizerData} global={global}/>
+                <EventRecommender eventList={recommenderData} global={global}/>
             </div>
         )
     }

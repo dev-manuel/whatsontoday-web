@@ -12,9 +12,10 @@ import Organizer from './Organizer';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import _404 from './404';
-import Footer from '../components/footer';
+import Footer from './Footer';
 
 import Global from '../common/Global';
+import GER from '../common/dictionary/GER';
 
 class BaseView extends React.Component {
     
@@ -27,7 +28,8 @@ class BaseView extends React.Component {
             }),
             onUpdate: () => {
                 this.forceUpdate(); // Rerender component
-            }
+            },
+            LANG: GER,
         });
     }
 
@@ -37,9 +39,9 @@ class BaseView extends React.Component {
                 <Header global={this.global}/>
 
                 <Switch>
-                    <Route exact path='/' component={HomeView}/>
-                    <Route path='/SERP' component={SERPView}/> {/* Todo: render specific SERP according to URL parameters */}
-                    <Route path='/event' component={EventView}/>
+                    <Route exact path='/' render={() => <HomeView global={this.global}/>}/>
+                    <Route path='/SERP' render={() => <SERPView global={this.global}/>}/> {/* Todo: render specific SERP according to URL parameters */}
+                    <Route path='/event' render={() => <EventView global={this.global}/>}/>
                     <Route path='/organizer' component={Organizer}/>
                     <Route path='/signin' render={() => (<SignIn global={this.global} />)}/>
                     <Route path='/signup' render={() => (<SignUp global={this.global} />)}/>
@@ -47,7 +49,7 @@ class BaseView extends React.Component {
                     <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
                 </Switch>
 
-                <Footer/>
+                <Footer global={this.global}/>
             </div>
         )
     }

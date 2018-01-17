@@ -68,7 +68,7 @@ class BaseHeader extends React.Component{
                             basic
                             color='teal'                    
                         >
-                            <Icon name='newspaper' /> Blog
+                            <Icon name='newspaper' /> {this.props.LANG.blog}
                         </Button>
 
                         <Button 
@@ -76,13 +76,14 @@ class BaseHeader extends React.Component{
                             basic
                             color='teal'
                         >
-                            <Icon name='plus' /> Add Event
+                            <Icon name='plus' /> {this.props.LANG.addEvent}
                         </Button>
 
                         {this.props.conditionalButtons}
                         
                         <Dropdown icon='sidebar' pointing className='item headerDropdownButton'>
                             <Dropdown.Menu>
+                                {/* Todo */}
                                 <Dropdown.Item>Lorem</Dropdown.Item>
                                 <Dropdown.Item>Ipsum</Dropdown.Item>
                                 <Dropdown.Item>Dolor</Dropdown.Item>
@@ -103,6 +104,7 @@ class LoggedOutState extends AbstractViewState{
      * @override
      */
     render(){
+        const LANG = this.context.props.global.LANG.header;        
         const buttons = [(
             <Button 
                 className='headerButtonStyle'
@@ -111,7 +113,7 @@ class LoggedOutState extends AbstractViewState{
                 href='#signin'
                 key={1}
             >
-                <Icon name='sign in' /> Sign In
+                <Icon name='sign in' /> {LANG.signIn}
             </Button>
         ),
         (
@@ -122,11 +124,11 @@ class LoggedOutState extends AbstractViewState{
                 href='#signup'
                 key={2}
             >
-                <Icon name='signup' /> Sign Up
+                <Icon name='signup' /> {LANG.signUp}
             </Button>
         )]
 
-        return <BaseHeader conditionalButtons={buttons}/>
+        return <BaseHeader conditionalButtons={buttons} LANG={LANG}/>
     }
 }
 
@@ -136,6 +138,7 @@ class LoggedInState extends AbstractViewState{
      * @override
      */
     render(){
+        const LANG = this.context.props.global.LANG.header;                
         const logoutButton = (
             <Button 
                 className='headerButtonStyle'
@@ -144,10 +147,10 @@ class LoggedInState extends AbstractViewState{
                 href='#'
                 onClick={this.context.onSignOut.bind(this.context)}
             >
-                <Icon name='sign out' /> Sign Out
+                <Icon name='sign out' /> {LANG.signOut}
             </Button>
         )
 
-        return <BaseHeader conditionalButtons={logoutButton} />;
+        return <BaseHeader conditionalButtons={logoutButton} LANG={LANG}/>;
     }
 }

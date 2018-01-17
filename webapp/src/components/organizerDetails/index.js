@@ -10,14 +10,16 @@ let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed d
 const floatRight = {style: {float: 'right'}};
 
 
-const OrganizerDetails = ({name, description, rating, contactLink, moreAboutLink, imageURI}) => (
+const OrganizerDetails = ({name, description, rating, contactLink, moreAboutLink, imageURI, global}) => {
+    const LANG = global.LANG.event;
+    return (
         <div>
             <Grid>
                 <Grid.Row>
                     <Grid.Column width="10">
                         <h2>{name}<span {...floatRight}><Rating defaultRating={rating} maxRating={5} disabled /></span></h2>
                         <p>{description}</p>
-                        <a href={contactLink}>{name} kontaktieren</a> <a {...floatRight} href={moreAboutLink}>Mehr zu {name}</a>
+                        <a href={contactLink}>{LANG.contact(name)}</a> <a {...floatRight} href={moreAboutLink}>{LANG.moreAbout(name)}</a>
                     </Grid.Column>
                     <Grid.Column width="6">
                         <p>Im a image too!</p>
@@ -25,6 +27,7 @@ const OrganizerDetails = ({name, description, rating, contactLink, moreAboutLink
                 </Grid.Row>
             </Grid>
         </div>
-)
+    )
+}
 
 export default OrganizerDetails;

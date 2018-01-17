@@ -12,7 +12,7 @@ const floatRight = {style: {float: 'right'}};
  * 
  * @param {{name: string, rating: string, description: string, target: string, address: object}} props 
  */
-const LocationDetails = ({name, rating, description, target, address}) => (
+const LocationDetails = ({name, rating, description, target, address, global}) => (
         <div>
             <Grid>
                 <Grid.Row>

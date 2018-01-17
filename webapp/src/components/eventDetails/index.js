@@ -9,7 +9,7 @@ let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed d
 for(let i = 0; i < 3; i++) loremIpsum = loremIpsum + loremIpsum;
 
 
-const EventDetails = ({date, locationName, price, extraInformation, descriptionLong}) => (
+const EventDetails = ({date, locationName, price, extraInformation, descriptionLong, global}) => (
         <div>
             <Grid>
                 <Grid.Row>

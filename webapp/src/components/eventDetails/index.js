@@ -9,7 +9,9 @@ let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed d
 for(let i = 0; i < 3; i++) loremIpsum = loremIpsum + loremIpsum;
 
 
-const EventDetails = ({date, locationName, price, extraInformation, descriptionLong, global}) => (
+const EventDetails = ({date, locationName, price, extraInformation, descriptionLong, global}) => {
+    const LANG = global.LANG.event;
+    return (
         <div>
             <Grid>
                 <Grid.Row>
@@ -17,18 +19,18 @@ const EventDetails = ({date, locationName, price, extraInformation, descriptionL
                         <p>{loremIpsum}</p>
                     </Grid.Column>
                     <Grid.Column width="6">
-                        <h2>Wann?</h2>
+                        <h2>{LANG.when}</h2>
                         <p>{date}</p>
-                        <h2>Wo?</h2>
+                        <h2>{LANG.where}</h2>
                         <p>{locationName}</p>
-                        <h2>Kosten</h2>
+                        <h2>{LANG.cost}</h2>
                         <p>{price}</p>
-                        <h2>Weitere Infos</h2>    
+                        <h2>{LANG.moreInformation}</h2>    
                         <p>{extraInformation}</p>                    
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
         </div>
-)
-
+    )
+}
 export default EventDetails;

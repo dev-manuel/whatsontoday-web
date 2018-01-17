@@ -40,7 +40,7 @@ class BaseView extends React.Component {
 
                 <Switch>
                     <Route exact path='/' render={() => <HomeView global={this.global}/>}/>
-                    <Route path='/SERP' component={SERPView}/> {/* Todo: render specific SERP according to URL parameters */}
+                    <Route path='/SERP' render={() => <SERPView global={this.global}/>}/> {/* Todo: render specific SERP according to URL parameters */}
                     <Route path='/event' render={() => <EventView global={this.global}/>}/>
                     <Route path='/organizer' component={Organizer}/>
                     <Route path='/signin' render={() => (<SignIn global={this.global} />)}/>

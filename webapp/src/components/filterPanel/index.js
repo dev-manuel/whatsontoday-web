@@ -11,26 +11,29 @@ const exampleOptions = [{key: 0, value: 0, text: 'Lorem'},
                         {key: 3, value: 3, text: 'Foo'},]
 
 
-const FilterPanel = ({title}) => (
-    <Segment>
-        <Grid centered>
-            <Grid.Row>
-                <Grid.Column width="4">
-                    <h4>Was?</h4>
-                    <Dropdown placeholder='Categories' fluid multiple search selection options={exampleOptions} />
-                </Grid.Column>
+const FilterPanel = ({title, global}) => {
+    const LANG = global.LANG.serp;
+    return (
+        <Segment>
+            <Grid centered>
+                <Grid.Row>
+                    <Grid.Column width="4">
+                        <h4>{LANG.what}</h4>
+                        <Dropdown placeholder='Categories' fluid multiple search selection options={exampleOptions} />
+                    </Grid.Column>
 
-                <Grid.Column width="4">
-                    <h4>Wo?</h4>
-                </Grid.Column>
+                    <Grid.Column width="4">
+                        <h4>{LANG.where}</h4>
+                    </Grid.Column>
 
-                <Grid.Column width="4">
-                    <h4>Wann?</h4>
-                </Grid.Column>
-            </Grid.Row>
-        </Grid>
-    </Segment>
-)
+                    <Grid.Column width="4">
+                        <h4>{LANG.when}</h4>
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
+        </Segment>
+    )
+}
   
 export default FilterPanel;
   

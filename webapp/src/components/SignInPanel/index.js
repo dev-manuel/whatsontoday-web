@@ -40,10 +40,11 @@ class SignInPanel extends React.Component {
     }
 
     render() {
+        const LANG = this.props.global.LANG.signIn;
         return (
             <div>
                 <Header color='grey' as='h2' textAlign='center'>
-                    Log-in to your account
+                    {LANG.message}
                 </Header>
                 <Form size='large'>
                     <Segment>
@@ -53,7 +54,7 @@ class SignInPanel extends React.Component {
                             fluid
                             icon='user'
                             iconPosition='left'
-                            placeholder='E-mail address'
+                            placeholder={LANG.email}
                             onChange={ event => { this.setState({emailValue: event.target.value}) }}
                         />
                         <Form.Input
@@ -62,7 +63,7 @@ class SignInPanel extends React.Component {
                             fluid
                             icon='lock'
                             iconPosition='left'
-                            placeholder='Password'
+                            placeholder={LANG.password}
                             type='password'
                             onChange={ event => { this.setState({passwordValue: event.target.value}) }}
                         />
@@ -70,14 +71,14 @@ class SignInPanel extends React.Component {
                             checked={this.state.rememberValue}
                             error={this.state.rememberError}
                             onChange={ () => {this.setState((prevState, props)=>({rememberValue: !prevState.rememberValue}))} }
-                            label='Remember me'
+                            label={LANG.rememberMe}
                         />
 
-                        <Button color='olive' fluid size='large' onClick={this.handleSubmit.bind(this)}>Login</Button>
+                        <Button color='olive' fluid size='large' onClick={this.handleSubmit.bind(this)}>{LANG.submit}</Button>
                     </Segment>
                 </Form>
                 <Message>
-                    New to us? <a href='#signup'>Sign Up</a>
+                    {LANG.newToUs} <a href='#signup'>{LANG.signUp}</a>
                 </Message>
             </div>
         )

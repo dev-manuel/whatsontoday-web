@@ -56,9 +56,10 @@ export default {
         submit: 'Los Geht\'s'
     },
     signIn: {
+        message: 'Anmelden',        
         email: 'E-Mail Adresse',
         password: 'Passwort',
-        remember: 'Eingeloggt bleiben',
+        rememberMe: 'Eingeloggt bleiben',
         submit: 'Los Geht\'s',
         newToUs: 'Neu bei uns?',
         signUp: 'Registriere dich!'

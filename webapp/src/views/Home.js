@@ -2,7 +2,6 @@
 import React from 'react';
 
 // Import resources
-import Header from '../components/header';
 import Slider from '../components/slider';
 import CategoryTileTable from '../components/categoryTileTable';
 import EvenTileTable from '../components/eventTileTable';

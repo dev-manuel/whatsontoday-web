@@ -33,9 +33,9 @@ module.exports = {
                 test: /\.jsx?$/, // Include all files which are ending with ".js" or ".jsx"
                 loader: 'babel-loader',
                 exclude: /node_modules/,
-                query: { 
-                    presets: ['es2015', 'react'] 
-                },
+                // query: { 
+                //     presets: ['es2015', 'react'] 
+                // },
             },
         ]
     },

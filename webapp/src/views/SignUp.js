@@ -23,7 +23,7 @@ export default class SignUpView extends StatefulView {
 // ─── VIEW-STATES ─────────────────────────────────────────────────────────────────
 //
 
-class SignUpState extends AbstractViewState{
+export class SignUpState extends AbstractViewState{
 
     /**
      * switches the current view state to the SuccessfulSignUpState
@@ -72,7 +72,7 @@ class SignUpState extends AbstractViewState{
     }
 }
 
-class SuccessfulSignUpState extends AbstractViewState{
+export class SuccessfulSignUpState extends AbstractViewState{
 
     /**
      * @override
@@ -104,7 +104,7 @@ class SuccessfulSignUpState extends AbstractViewState{
     }
 }
 
-class AlreadyLoggedInState extends AbstractViewState{
+export class AlreadyLoggedInState extends AbstractViewState{
 
     /**
      * @override

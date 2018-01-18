@@ -23,7 +23,7 @@ export default class SignInView extends StatefulView {
 // ─── VIEW-STATES ─────────────────────────────────────────────────────────────────
 //
 
-class SignInState extends AbstractViewState{
+export class SignInState extends AbstractViewState{
 
     /**
      * Switches the current view state to SuccessfulSignInState
@@ -62,7 +62,7 @@ class SignInState extends AbstractViewState{
     }
 }
 
-class AlreadyLoggedInState extends AbstractViewState{
+export class AlreadyLoggedInState extends AbstractViewState{
 
     constructor(context){
         super(context);

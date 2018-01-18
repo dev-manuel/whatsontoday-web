@@ -4,9 +4,9 @@
   "description": "This is the frontend part of the whatsontoday project. It will mainly use react to render the pages (clientside).",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config webpack/dev.config.js",
+    "dev": "webpack-dev-server --config webpack/dev.config.js --progress",
     "test": "jest",
-    "build": "webpack --config webpack/prod.config.js"
+    "build": "webpack --config webpack/prod.config.js --bail"
   },
   "author": "WhatsOnToday",
   "license": "ISC",

@@ -13,9 +13,9 @@ trait OrganizerService {
     */
   def save(user: Organizer): Future[Organizer]
 
-  def save(login: Login, name: String): Future[Organizer] = login.id.map(x => save(Organizer(None,name,x))).getOrElse(Future.never)
+  def save(login: Login, name: String): Future[Organizer] = login.id.map(x => save(Organizer(None,name,x,None))).getOrElse(Future.never)
 
-  def save(login: Login, name: String, avatar: Option[String]): Future[Organizer] = login.id.map(x => save(Organizer(None,name,x))).getOrElse(Future.never)
+  def save(login: Login, name: String, avatar: Option[String]): Future[Organizer] = login.id.map(x => save(Organizer(None,name,x,avatar))).getOrElse(Future.never)
 
   def getByLogin(login: Login): Future[Option[Organizer]]
 }

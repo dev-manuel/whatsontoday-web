@@ -11,7 +11,9 @@ class OrganizerTable(tag: Tag) extends Table[Organizer](tag, "organizer") with H
 
   def name = column[String]("name")
 
-  def * = (id.?,name,loginFk) <> (Organizer.tupled, Organizer.unapply)
+  def avatar = column[Option[String]]("avatar")
+
+  def * = (id.?,name,loginFk,avatar) <> (Organizer.tupled, Organizer.unapply)
 
   def login = foreignKey("login", loginFk,LoginTable.login)(_.id)
 

@@ -10,7 +10,7 @@ import whatson.db._
 import scala.concurrent.ExecutionContext
 
 case class OrganizerPublic(id: Option[Int], name: String,
-                           avgRating: Option[Float], images: List[Int]) extends Rateable with WithImages
+                           avgRating: Option[Float], images: List[Int], avatar: Option[String]) extends Rateable with WithImages
 
 object OrganizerPublic {
   implicit val organizerPublicReads = Json.reads[OrganizerPublic]
@@ -27,7 +27,7 @@ object OrganizerPublic {
             val imgs = OrganizerTable.organizer.filter(_.id === organizer.id).flatMap(_.images).map(_.id)
 
             s.result.zip(imgs.result).map(o => {
-              OrganizerPublic(organizer.id, organizer.name, o._1.headOption.flatten, o._2.toList)
+              OrganizerPublic(organizer.id, organizer.name, o._1.headOption.flatten, o._2.toList, organizer.avatar)
             })
           }
         })

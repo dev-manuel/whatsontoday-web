@@ -2,7 +2,7 @@ package whatson.model
 
 import play.api.libs.json._
 
-case class User(id: Option[Int], loginFk: Int) extends HasCopy[User] {
+case class User(id: Option[Int], loginFk: Int, avatar: Option[String]) extends HasCopy[User] {
   def cpy(i: Option[Int]) = this.copy(id = i)
 }
 

@@ -9,7 +9,9 @@ class UserTable(tag: Tag) extends Table[User](tag, "users") with HasID[User] {
 
   def loginFk = column[Int]("login_fk")
 
-  def * = (id.?,loginFk) <> (User.tupled, User.unapply)
+  def avatar = column[Option[String]]("avatar")
+
+  def * = (id.?,loginFk,avatar) <> (User.tupled, User.unapply)
 
   def login = foreignKey("login", loginFk,LoginTable.login)(_.id)
 }

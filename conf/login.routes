@@ -109,7 +109,7 @@ GET   /confirm                          controllers.LoginController.confirm(toke
 #      Note: This method is not supposed to be called in an ajax request. Provide a link to this url instead.
 #  parameters:
 #    - name: provider
-#      enum: ["facebook"]
+#      enum: ["facebook", "google"]
 #    - name: userType
 #      required: true
 #      default: user

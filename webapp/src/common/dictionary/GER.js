@@ -1,3 +1,5 @@
+import modal from "../../components/SignInPanel/modal";
+
 
 export default {
 
@@ -54,7 +56,7 @@ export default {
         passwordRepeat: 'Wiederhole das Passwort',
         agree: 'Ich akzieptiere die Nutzungsbedingungen',
         submit: 'Los Geht\'s',
-        success: 'Fast geschafft! Bitte bestätige noch deine E-Mail Adresse.'
+        success: 'Fast geschafft! Bitte bestätige noch deine E-Mail Adresse.',
     },
     signIn: {
         message: 'Anmelden',        
@@ -65,6 +67,11 @@ export default {
         newToUs: 'Neu bei uns?',
         signUp: 'Registriere dich!',
         errorHeading: 'Anmeldung fehlgeschlagen!',
-        errorDescription: 'Nutzername oder Passwort ist falsch'
+        errorDescription: 'Nutzername oder Passwort ist falsch', 
+    },
+    modal:{
+        heading: 'Oooops',
+        description: 'Es ist ein Fehler aufgetreten. Versuche es später noch einmal!',
+        button: 'Ok',
     }
 }

@@ -53,7 +53,7 @@ class SignInPanel extends React.Component {
         const LANG = this.props.global.LANG.signIn;
         return (
             <div>
-                <ModalError show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
+                <ModalError global={this.props.global} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
 
                 <Header color='grey' as='h2' textAlign='center'>
                     {LANG.message}

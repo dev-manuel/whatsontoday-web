@@ -78,6 +78,7 @@ export class SuccessfulSignUpState extends AbstractViewState{
      * @override
      */
     render(){
+        const LANG = this.context.props.global.LANG.signUp;
         return (
             <div className='login-form'>
                 <style>{`
@@ -95,7 +96,7 @@ export class SuccessfulSignUpState extends AbstractViewState{
                 >
                     <Grid.Column style={{ maxWidth: 450 }}>
                         <Message>
-                            Registration successful. Welcome to WhatsOn!
+                            {LANG.success}
                         </Message>
                     </Grid.Column>
                 </Grid>

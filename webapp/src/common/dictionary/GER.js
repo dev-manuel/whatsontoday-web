@@ -53,7 +53,8 @@ export default {
         password: 'Passwort',
         passwordRepeat: 'Wiederhole das Passwort',
         agree: 'Ich akzieptiere die Nutzungsbedingungen',
-        submit: 'Los Geht\'s'
+        submit: 'Los Geht\'s',
+        success: 'Fast geschafft! Bitte bestätige noch deine E-Mail Adresse.'
     },
     signIn: {
         message: 'Anmelden',        

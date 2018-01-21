@@ -45,14 +45,9 @@ class SignUpPanel extends React.Component {
     }
 
     handleSubmit(){
-        let success = true;
-        let errors = {
-            emailError: false,
-            passwordError: false,
-            repeatPasswordError: false,
-            acceptError: false,
-        };
-
+    
+        
+        /*
         // Check if email is valid
         const email = this.state.emailValue;
         if(!this.validateEmail(email)){
@@ -80,25 +75,39 @@ class SignUpPanel extends React.Component {
             errors.acceptError = true;
             success = false;
         }
+        */
 
-        this.setState(errors);
-        if(success){
-            this.props.global.axios.post('/user/signUp', {
-                    "firstName": "",
-                    "lastName": "",
-                    "email": this.state.emailValue,
-                    "password": this.state.passwordValue
-            }).then( res => {
-                this.props.global.update({
-                    loggedIn: true,
-                    token: res.data.token,
-                });
-                this.props.onSuccess();
-            }).catch( err => {
-                //console.log(err);
-                this.setState({showModalError: true});
-            })
-        }
+
+        this.props.global.axios.post('/user/signUp', {
+                "firstName": "",
+                "lastName": "",
+                "email": this.state.emailValue,
+                "password": this.state.passwordValue
+        }).then( res => {
+            this.props.onSuccess();
+        }).catch( err => {
+            console.log(err);
+            switch(err.response.status){
+                case 400: // if form inputs are not valid
+                    const errors = {
+                        emailError: false,
+                        passwordError: false,
+                        repeatPasswordError: false,
+                        acceptError: false,
+                    };
+                    const reqBody = err.response.data
+                    if(reqBody.email)
+                        errors.emailError = true;
+                    if(reqBody.password)
+                        errors.passwordError = true;
+                    
+                    this.setState(errors);
+                break;
+                default:
+                    this.setState({showModalError: true});
+                break;
+            }
+        })
     }
     
     

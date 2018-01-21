@@ -86,27 +86,32 @@ class SignUpPanel extends React.Component {
         }).then( res => {
             this.props.onSuccess();
         }).catch( err => {
+
             console.log(err);
-            switch(err.response.status){
-                case 400: // if form inputs are not valid
-                    const errors = {
-                        emailError: false,
-                        passwordError: false,
-                        repeatPasswordError: false,
-                        acceptError: false,
-                    };
-                    const reqBody = err.response.data
-                    if(reqBody.email)
-                        errors.emailError = true;
-                    if(reqBody.password)
-                        errors.passwordError = true;
-                    
-                    this.setState(errors);
-                break;
-                default:
-                    this.setState({showModalError: true});
-                break;
-            }
+
+            if(!err.response)
+                this.setState({showModalError: true});
+            else
+                switch(err.response.status){
+                    case 400: // if form inputs are not valid
+                        const errors = {
+                            emailError: false,
+                            passwordError: false,
+                            repeatPasswordError: false,
+                            acceptError: false,
+                        };
+                        const reqBody = err.response.data
+                        if(reqBody.email)
+                            errors.emailError = true;
+                        if(reqBody.password)
+                            errors.passwordError = true;
+                        
+                        this.setState(errors);
+                    break;
+                    default:
+                        this.setState({showModalError: true});
+                    break;
+                }
         })
     }
     

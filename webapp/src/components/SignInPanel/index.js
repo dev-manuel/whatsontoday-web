@@ -38,14 +38,17 @@ class SignInPanel extends React.Component {
         }).catch(err => {
             console.log(err);
             
-            switch(err.response.status){
-                case 404:
-                    this.setState({showSignError: true})
-                break;
-                default:
-                    this.setState({showModalError: true});
-                break;
-            }
+            if(!err.response)
+                this.setState({showModalError: true});
+            else
+                switch(err.response.status){
+                    case 404:
+                        this.setState({showSignError: true})
+                    break;
+                    default:
+                        this.setState({showModalError: true});
+                    break;
+                }
         })
     }
 

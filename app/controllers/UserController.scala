@@ -4,6 +4,7 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 
 import com.mohiva.play.silhouette.api._
+import com.mohiva.play.silhouette.api.services._
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.{Clock, PasswordHasher}
@@ -34,7 +35,8 @@ class UserController@Inject() (
   passwordHasher: PasswordHasher,
   protected val dbConfigProvider: DatabaseConfigProvider,
   userService: UserService,
-  mailService: MailService)
+  mailService: MailService,
+  avatarService: AvatarService)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
 
   val log = Logger("api.user")
@@ -62,10 +64,11 @@ class UserController@Inject() (
               authInfo <- authInfoRepository.add(loginInfo, authInfo)
               authenticator <- silhouette.env.authenticatorService.create(loginInfo)
               token <- silhouette.env.authenticatorService.init(authenticator)
+              avatar <- avatarService.retrieveURL(data.email)
             } yield {
               silhouette.env.eventBus.publish(SignUpEvent(login, request))
               silhouette.env.eventBus.publish(LoginEvent(login, request))
-              userService.save(login)
+              userService.save(login,avatar)
               mailService.sendUserConfirmation(data.email,token)
               Ok(Json.obj("message" -> "mail.sent"))
             }

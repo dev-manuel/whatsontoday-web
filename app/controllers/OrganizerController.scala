@@ -1,31 +1,12 @@
 package controllers
 
 import scala.concurrent.Future
-
-import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.{Clock, PasswordHasher}
-import com.mohiva.play.silhouette.impl.providers._
-import javax.inject._
-import play.api.{Configuration, Logger}
-import play.api.cache.AsyncCacheApi
-import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.json._
-import play.api.mvc._
-import slick.jdbc.JdbcProfile
-import whatson.auth._
-import whatson.db._
-import whatson.model.detail.OrganizerPublic._
-import whatson.model._
-import whatson.service._
-import slick.jdbc.PostgresProfile.api._
-import whatson.util.FormErrorJson._
-import scala.concurrent.Future
 import scala.concurrent.duration._
+
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
+import com.mohiva.play.silhouette.api.services._
 import com.mohiva.play.silhouette.api.util.{Clock, PasswordHasher}
 import com.mohiva.play.silhouette.impl.providers._
 import javax.inject._
@@ -36,8 +17,11 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.json._
 import play.api.mvc._
 import slick.jdbc.JdbcProfile
+import slick.jdbc.PostgresProfile.api._
 import whatson.auth._
+import whatson.db._
 import whatson.model._
+import whatson.model.detail.OrganizerPublic._
 import whatson.service._
 import whatson.util.FormErrorJson._
 
@@ -54,7 +38,8 @@ class OrganizerController@Inject() (
   passwordHasher: PasswordHasher,
   protected val dbConfigProvider: DatabaseConfigProvider,
   organizerService: OrganizerService,
-  mailService: MailService)
+  mailService: MailService,
+  avatarService: AvatarService)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
 
   val log = Logger("api.organizer")
@@ -92,10 +77,11 @@ class OrganizerController@Inject() (
             authInfo <- authInfoRepository.add(loginInfo, authInfo)
             authenticator <- silhouette.env.authenticatorService.create(loginInfo)
             token <- silhouette.env.authenticatorService.init(authenticator)
+            avatar <- avatarService.retrieveURL(data.email)
           } yield {
             silhouette.env.eventBus.publish(SignUpEvent(login, request))
             silhouette.env.eventBus.publish(LoginEvent(login, request))
-            organizerService.save(login,data.name)
+            organizerService.save(login,data.name,avatar)
             mailService.sendOrganizerConfirmation(data.email,data.name,token)
             Ok(Json.obj("message" -> "mail.sent"))
           }

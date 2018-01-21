@@ -14,6 +14,7 @@ import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth2._
 import com.mohiva.play.silhouette.impl.providers.state._
 import com.mohiva.play.silhouette.impl.util._
+import com.mohiva.play.silhouette.impl.services._
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
@@ -89,6 +90,9 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     val passwordHasherRegisty = PasswordHasherRegistry(passwordHasher)
     new CredentialsProvider(authInfoRepository, passwordHasherRegisty)
   }
+
+  @Provides
+  def provideAvatarService(httpLayer: HTTPLayer): AvatarService = new GravatarService(httpLayer)
 
   /**
    * Provides the social provider registry.

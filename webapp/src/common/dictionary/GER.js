@@ -63,6 +63,8 @@ export default {
         rememberMe: 'Eingeloggt bleiben',
         submit: 'Los Geht\'s',
         newToUs: 'Neu bei uns?',
-        signUp: 'Registriere dich!'
+        signUp: 'Registriere dich!',
+        errorHeading: 'Anmeldung fehlgeschlagen!',
+        errorDescription: 'Nutzername oder Passwort ist falsch'
     }
 }

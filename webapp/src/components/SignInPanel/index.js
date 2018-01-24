@@ -18,8 +18,6 @@ class SignInPanel extends React.Component {
             emailError: false,
             passwordError: false,
             rememberError: false,
-
-            showSignError: false, // If user entered wrong user data
             showModalError: false,
         }
     }
@@ -43,7 +41,7 @@ class SignInPanel extends React.Component {
             else
                 switch(err.response.status){
                     case 404:
-                        this.setState({showSignError: true})
+                        this.props.onCredentialError();
                     break;
                     default:
                         this.setState({showModalError: true});
@@ -63,7 +61,7 @@ class SignInPanel extends React.Component {
                 </Header>
                 <Form size='large'>
                     <Segment>
-                        <Message negative hidden={!this.state.showSignError}>
+                        <Message negative hidden={!this.props.showCredentialError}>
                             <Message.Header>{LANG.errorHeading}</Message.Header>
                             <p>{LANG.errorDescription}</p>
                         </Message>

@@ -19,15 +19,15 @@ import java.time.LocalDateTime
 import play.api._
 import play.api.db.evolutions._
 
-class HomeControllerSpec extends PlaySpec
+class CategoryControllerSpec extends PlaySpec
     with GuiceOneAppPerTest with Injecting {
 
-  "HomeController GET" should {
+  "CategoryController GET" should {
 
-    "render the index page" in {
-      val index = route(app, FakeRequest(GET, "/")).get
+    "return a list of categories" in {
+      val categories = route(app, FakeRequest(GET, "/api/categories")).get
 
-      status(index) mustBe OK
+      status(categories) mustBe OK
     }
   }
 }

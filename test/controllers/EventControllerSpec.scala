@@ -19,15 +19,15 @@ import java.time.LocalDateTime
 import play.api._
 import play.api.db.evolutions._
 
-class HomeControllerSpec extends PlaySpec
+class EventControllerSpec extends PlaySpec
     with GuiceOneAppPerTest with Injecting {
 
-  "HomeController GET" should {
+  "EventController GET" should {
 
-    "render the index page" in {
-      val index = route(app, FakeRequest(GET, "/")).get
+    "return a list of events" in {
+      val events = route(app, FakeRequest(GET, "/api/events?sortDir=true")).get
 
-      status(index) mustBe OK
+      status(events) mustBe OK
     }
   }
 }

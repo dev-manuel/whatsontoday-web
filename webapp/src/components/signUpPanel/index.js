@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
-import ModalError from './modal';
+import ModalError from '../modal';
 
 
 

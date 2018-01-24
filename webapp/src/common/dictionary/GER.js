@@ -1,6 +1,3 @@
-import modal from "../../components/SignInPanel/modal";
-
-
 export default {
 
     header: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react';
 import {withRouter} from "react-router-dom";
 
-import ModalError from './modal';
+import ModalError from '../modal';
 
 class SignInPanel extends React.Component {
 

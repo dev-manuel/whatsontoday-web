@@ -11,14 +11,10 @@ class SignUpPanel extends React.Component {
         super(props);
         this.state = {
             emailValue: '',
-            emailError: false,
             passwordValue: '',
-            passwordError: false,
             repeatPasswordValue: '',
-            repeatPasswordError: false,
             acceptValue: false,
-            acceptError: false,
-
+            
             showModalError: false
         }
     }
@@ -94,19 +90,14 @@ class SignUpPanel extends React.Component {
             else
                 switch(err.response.status){
                     case 400: // if form inputs are not valid
-                        const errors = {
-                            emailError: false,
-                            passwordError: false,
-                            repeatPasswordError: false,
-                            acceptError: false,
-                        };
-                        const reqBody = err.response.data
+                        const errors = {};
+                        const reqBody = err.response.data;
                         if(reqBody.email)
                             errors.emailError = true;
                         if(reqBody.password)
                             errors.passwordError = true;
                         
-                        this.setState(errors);
+                        this.props.onCredentialErrors(errors);
                     break;
                     default:
                         this.setState({showModalError: true});
@@ -130,7 +121,7 @@ class SignUpPanel extends React.Component {
                 <Form size='large' onSubmit={this.handleSubmit.bind(this)}>
                     <Segment>
                         <Form.Input
-                            error={this.state.emailError}
+                            error={this.props.credentialErrors.emailError}
                             value={this.state.emailValue}
                             fluid
                             icon='user'
@@ -139,7 +130,7 @@ class SignUpPanel extends React.Component {
                             onChange={ event => { this.setState({emailValue: event.target.value}) }}
                         />
                         <Form.Input
-                            error={this.state.passwordError}
+                            error={this.props.credentialErrors.passwordError}
                             value={this.state.passwordValue}                        
                             fluid
                             icon='lock'
@@ -149,7 +140,7 @@ class SignUpPanel extends React.Component {
                             onChange={ event => { this.setState({passwordValue: event.target.value}) }}
                         />
                         <Form.Input
-                            error={this.state.repeatPasswordError}
+                            error={this.props.credentialErrors.repeatPasswordError}
                             value={this.state.repeatPasswordValue}                        
                             fluid
                             icon='lock'
@@ -160,7 +151,7 @@ class SignUpPanel extends React.Component {
                         />
                         <Form.Checkbox
                             checked={this.state.acceptValue}
-                            error={this.state.acceptError}
+                            error={this.props.credentialErrors.acceptError}
                             onChange={ () => {this.setState((prevState, props)=>({acceptValue: !prevState.acceptValue}))} }
                             label={LANG.agree}
                         />

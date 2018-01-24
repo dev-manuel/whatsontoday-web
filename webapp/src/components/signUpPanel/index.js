@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
-import ModalError from './modal';
+import ModalError from '../modal';
 
 
 
@@ -11,14 +11,10 @@ class SignUpPanel extends React.Component {
         super(props);
         this.state = {
             emailValue: '',
-            emailError: false,
             passwordValue: '',
-            passwordError: false,
             repeatPasswordValue: '',
-            repeatPasswordError: false,
             acceptValue: false,
-            acceptError: false,
-
+            
             showModalError: false
         }
     }
@@ -45,14 +41,9 @@ class SignUpPanel extends React.Component {
     }
 
     handleSubmit(){
-        let success = true;
-        let errors = {
-            emailError: false,
-            passwordError: false,
-            repeatPasswordError: false,
-            acceptError: false,
-        };
-
+    
+        
+        /*
         // Check if email is valid
         const email = this.state.emailValue;
         if(!this.validateEmail(email)){
@@ -80,25 +71,39 @@ class SignUpPanel extends React.Component {
             errors.acceptError = true;
             success = false;
         }
+        */
 
-        this.setState(errors);
-        if(success){
-            this.props.global.axios.post('/user/signUp', {
-                    "firstName": "",
-                    "lastName": "",
-                    "email": this.state.emailValue,
-                    "password": this.state.passwordValue
-            }).then( res => {
-                this.props.global.update({
-                    loggedIn: true,
-                    token: res.data.token,
-                });
-                this.props.onSuccess();
-            }).catch( err => {
-                //console.log(err);
+
+        this.props.global.axios.post('/user/signUp', {
+                "firstName": "",
+                "lastName": "",
+                "email": this.state.emailValue,
+                "password": this.state.passwordValue
+        }).then( res => {
+            this.props.onSuccess();
+        }).catch( err => {
+
+            console.log(err);
+
+            if(!err.response)
                 this.setState({showModalError: true});
-            })
-        }
+            else
+                switch(err.response.status){
+                    case 400: // if form inputs are not valid
+                        const errors = {};
+                        const reqBody = err.response.data;
+                        if(reqBody.email)
+                            errors.emailError = true;
+                        if(reqBody.password)
+                            errors.passwordError = true;
+                        
+                        this.props.onCredentialErrors(errors);
+                    break;
+                    default:
+                        this.setState({showModalError: true});
+                    break;
+                }
+        })
     }
     
     
@@ -108,7 +113,7 @@ class SignUpPanel extends React.Component {
         const LANG = this.props.global.LANG.signUp;
         return (
             <div>
-                <ModalError show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
+                <ModalError global={this.props.global} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
 
                 <Header color='grey' as='h2' textAlign='center'>
                     {LANG.message}
@@ -116,7 +121,7 @@ class SignUpPanel extends React.Component {
                 <Form size='large' onSubmit={this.handleSubmit.bind(this)}>
                     <Segment>
                         <Form.Input
-                            error={this.state.emailError}
+                            error={this.props.credentialErrors.emailError}
                             value={this.state.emailValue}
                             fluid
                             icon='user'
@@ -125,7 +130,7 @@ class SignUpPanel extends React.Component {
                             onChange={ event => { this.setState({emailValue: event.target.value}) }}
                         />
                         <Form.Input
-                            error={this.state.passwordError}
+                            error={this.props.credentialErrors.passwordError}
                             value={this.state.passwordValue}                        
                             fluid
                             icon='lock'
@@ -135,7 +140,7 @@ class SignUpPanel extends React.Component {
                             onChange={ event => { this.setState({passwordValue: event.target.value}) }}
                         />
                         <Form.Input
-                            error={this.state.repeatPasswordError}
+                            error={this.props.credentialErrors.repeatPasswordError}
                             value={this.state.repeatPasswordValue}                        
                             fluid
                             icon='lock'
@@ -146,7 +151,7 @@ class SignUpPanel extends React.Component {
                         />
                         <Form.Checkbox
                             checked={this.state.acceptValue}
-                            error={this.state.acceptError}
+                            error={this.props.credentialErrors.acceptError}
                             onChange={ () => {this.setState((prevState, props)=>({acceptValue: !prevState.acceptValue}))} }
                             label={LANG.agree}
                         />

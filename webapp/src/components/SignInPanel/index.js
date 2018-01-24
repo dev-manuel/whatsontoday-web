@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react';
 import {withRouter} from "react-router-dom";
 
+import ModalError from '../modal';
+
 class SignInPanel extends React.Component {
 
     constructor(props){
@@ -16,13 +18,11 @@ class SignInPanel extends React.Component {
             emailError: false,
             passwordError: false,
             rememberError: false,
+            showModalError: false,
         }
     }
 
     handleSubmit(){
-
-        // handle validation
-
         this.props.global.axios.post('/user/signIn', {
             "email": this.state.emailValue,
             "password": this.state.passwordValue,
@@ -34,8 +34,19 @@ class SignInPanel extends React.Component {
             });
             this.props.onSuccess();
         }).catch(err => {
-            //Todo
             console.log(err);
+            
+            if(!err.response)
+                this.setState({showModalError: true});
+            else
+                switch(err.response.status){
+                    case 404:
+                        this.props.onCredentialError();
+                    break;
+                    default:
+                        this.setState({showModalError: true});
+                    break;
+                }
         })
     }
 
@@ -43,11 +54,17 @@ class SignInPanel extends React.Component {
         const LANG = this.props.global.LANG.signIn;
         return (
             <div>
+                <ModalError global={this.props.global} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
+
                 <Header color='grey' as='h2' textAlign='center'>
                     {LANG.message}
                 </Header>
                 <Form size='large'>
                     <Segment>
+                        <Message negative hidden={!this.props.showCredentialError}>
+                            <Message.Header>{LANG.errorHeading}</Message.Header>
+                            <p>{LANG.errorDescription}</p>
+                        </Message>
                         <Form.Input
                             error={this.state.emailError}
                             value={this.state.emailValue}

@@ -1,4 +1,3 @@
-
 export default {
 
     header: {
@@ -53,7 +52,8 @@ export default {
         password: 'Passwort',
         passwordRepeat: 'Wiederhole das Passwort',
         agree: 'Ich akzieptiere die Nutzungsbedingungen',
-        submit: 'Los Geht\'s'
+        submit: 'Los Geht\'s',
+        success: 'Fast geschafft! Bitte bestätige noch deine E-Mail Adresse.',
     },
     signIn: {
         message: 'Anmelden',        
@@ -62,6 +62,13 @@ export default {
         rememberMe: 'Eingeloggt bleiben',
         submit: 'Los Geht\'s',
         newToUs: 'Neu bei uns?',
-        signUp: 'Registriere dich!'
+        signUp: 'Registriere dich!',
+        errorHeading: 'Anmeldung fehlgeschlagen!',
+        errorDescription: 'Nutzername oder Passwort ist falsch', 
+    },
+    modal:{
+        heading: 'Oooops',
+        description: 'Es ist ein Fehler aufgetreten. Versuche es später noch einmal!',
+        button: 'Ok',
     }
 }

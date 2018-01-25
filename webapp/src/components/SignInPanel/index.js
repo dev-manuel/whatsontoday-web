@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react';
-import {withRouter} from "react-router-dom";
 
 import ModalError from '../modal';
 
-class SignInPanel extends React.Component {
+export default class SignInPanel extends React.Component {
 
     constructor(props){
         super(props);
@@ -23,7 +22,7 @@ class SignInPanel extends React.Component {
     }
 
     handleSubmit(){
-        this.props.global.axios.post('/user/signIn', {
+        this.props.global.axios.post('/login/signIn', {
             "email": this.state.emailValue,
             "password": this.state.passwordValue,
             "rememberMe": this.state.rememberValue,
@@ -101,5 +100,3 @@ class SignInPanel extends React.Component {
         )
     }
 }
-
-export default withRouter( SignInPanel);

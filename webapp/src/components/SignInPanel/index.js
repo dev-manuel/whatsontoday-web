@@ -33,7 +33,7 @@ export default class SignInPanel extends React.Component {
             });
             this.props.onSuccess();
         }).catch(err => {
-            console.log(err);
+            console.log('Response error:', err.response);
             
             if(!err.response)
                 this.setState({showModalError: true});

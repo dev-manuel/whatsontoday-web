@@ -26,18 +26,20 @@ describe('SignInView viewState', () => {
     })
 
     it('should be WrongCredentialsState if REST responded that credentials are wrong ', ()=>{
+        // Setup axios mocking adapter
         const mock = new MockAdapter(Axios);
         mock.onPost('/user/signUp').reply(404, {
-            "email": "string",
-            "password": "string",
-            "rememberMe": true
-        })
+            "email": "error.email",
+            "password": "too short",
+            "name": "too short"
+          })
 
         const global = new Global({loggedIn: false, axios: Axios, LANG: GER});
         const signIn = <SignInView global={global}/>
         const wrapper = mount(signIn);
+
         console.log('Found submit button:', wrapper.find('button').debug());
-        wrapper.find('button').simulate('click');
+        wrapper.find('button').simulate('click'); // Invoke (submit-)button onClick
         
         setTimeout(() => {
             expect(wrapper.state().viewState instanceof WrongCredentialsState ).toBe(true);

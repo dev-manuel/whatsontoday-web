@@ -28,13 +28,17 @@ import whatson.model.UserSignUpForm._
 import whatson.model.UserSignUpForm.Data._
 import play.api.libs.json._
 import scala.concurrent.ExecutionContext.Implicits.global
+import com.google.inject.{AbstractModule, Provides}
+import whatson.util.TestModule
 
 class UserControllerSpec extends PlaySpec
     with GuiceOneAppPerTest with Injecting with MockitoSugar {
 
-  //TODO Inject stub mail service
+  val mailService = mock[MailService]
+
   implicit override def newAppForTest(testData: TestData): Application =
     new GuiceApplicationBuilder()
+      .overrides(TestModule(mailService))
       .build()
 
 
@@ -44,12 +48,12 @@ class UserControllerSpec extends PlaySpec
   "UserController POST" should {
 
     "send a confirmation email" in {
-      val mockDataService = mock[MailService]
+      val mockDataService = mock[MailServiceImpl]
 
-      /*val events = route(app, FakeRequest(POST, "/api/user/signUp", new Headers(List(("Content-Type","application/json"))),
+      val signUp = route(app, FakeRequest(POST, "/api/user/signUp", new Headers(List(("Content-Type","application/json"))),
                                           Json.toJson(Data("testuser@test.de","testpass")))).get
 
-      status(events) mustBe OK*/
+      status(signUp) mustBe OK
     }
   }
 }

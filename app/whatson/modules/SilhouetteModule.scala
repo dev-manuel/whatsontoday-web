@@ -25,6 +25,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
 import whatson.service._
 import whatson.auth._
+import whatson.util._
 
 class SilhouetteModule extends AbstractModule with ScalaModule {
   override def configure() = {
@@ -156,5 +157,14 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   def provideCsrfStateSettings(
     configuration: Configuration): CsrfStateSettings = {
     configuration.underlying.as[CsrfStateSettings]("silhouette.csrfState")
+  }
+
+  /**
+    * Provides the ApplicationConfig.
+    */
+  @Provides
+  def provideApplicationConfig(
+    configuration: Configuration): ApplicationConfig = {
+    configuration.underlying.as[ApplicationConfig]("application")
   }
 }

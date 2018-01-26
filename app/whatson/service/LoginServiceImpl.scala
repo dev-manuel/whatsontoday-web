@@ -12,9 +12,11 @@ import whatson.db._
 import whatson.db.LoginTable._
 import whatson.db.Util._
 import whatson.model._
+import whatson.util._
 
 class LoginServiceImpl @Inject()(
-  protected val dbConfigProvider: DatabaseConfigProvider)(implicit context: ExecutionContext)
+  protected val dbConfigProvider: DatabaseConfigProvider,
+  applicationConfig: ApplicationConfig)(implicit context: ExecutionContext)
     extends LoginService with HasDatabaseConfigProvider[JdbcProfile] {
 
   /**
@@ -50,7 +52,7 @@ class LoginServiceImpl @Inject()(
    * @param user The user to save.
    * @return The saved user.
    */
-  def save(l: Login) = db.run(insertAndReturn[Login,LoginTable](LoginTable.login,l))
+  def save(l: Login) = db.run(insertAndReturn[Login,LoginTable](LoginTable.login,l.copy(confirmed = l.confirmed || !applicationConfig.confirmationMails)))
 
   /**
    * Saves the social profile for a user.

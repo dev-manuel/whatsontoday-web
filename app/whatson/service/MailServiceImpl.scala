@@ -11,12 +11,12 @@ import scala.concurrent.{ ExecutionContext, Future }
 import play.api.libs.mailer._
 import views.html._
 import play.api._
+import whatson.util._
 
 class MailServiceImpl @Inject()(mailerClient: MailerClient,
-                                config: Configuration)(implicit context: ExecutionContext)
+                                config: Configuration,
+                                applicationConfig: ApplicationConfig)(implicit context: ExecutionContext)
     extends MailService {
-
-  val url = config.underlying.getString("application.url")
 
   def sendUserConfirmation(userMail: String,
                            confirmationToken: String) = {
@@ -24,9 +24,11 @@ class MailServiceImpl @Inject()(mailerClient: MailerClient,
       "Confirm your email address",
       "Whats On <no-reply@whats-on.today>",
       Seq(userMail),
-      bodyHtml = Some(new UserAccountConfirmation(userMail,url,confirmationToken)().toString())
+      bodyHtml = Some(new UserAccountConfirmation(userMail,applicationConfig.url,confirmationToken)().toString())
     )
-    mailerClient.send(email)
+
+    if(applicationConfig.confirmationMails)
+      mailerClient.send(email)
   }
 
   def sendOrganizerConfirmation(userMail: String,
@@ -36,8 +38,10 @@ class MailServiceImpl @Inject()(mailerClient: MailerClient,
       "Confirm your email address",
       "Whats On <no-reply@whats-on.today>",
       Seq(userMail),
-      bodyHtml = Some(new OrganizerAccountConfirmation(userMail,name,url,confirmationToken)().toString())
+      bodyHtml = Some(new OrganizerAccountConfirmation(userMail,name,applicationConfig.url,confirmationToken)().toString())
     )
-    mailerClient.send(email)
+
+    if(applicationConfig.confirmationMails)
+      mailerClient.send(email)
   }
 }

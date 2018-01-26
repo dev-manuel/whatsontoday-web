@@ -6,7 +6,7 @@
 ### NoDocs ###
 GET    /                         controllers.HomeController.index
 
-->     /api                      api.Routes
+->     /api/v1                   api.Routes
 
 # This is needed for the swagger-ui
 ### NoDocs ###

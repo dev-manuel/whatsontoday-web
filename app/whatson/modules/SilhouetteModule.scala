@@ -106,9 +106,9 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
    * @return The Silhouette environment.
    */
   @Provides
-  def provideSocialProviderRegistry(
+  def provideSocialProviderRegistry(googleProvider: GoogleProvider,
     facebookProvider: FacebookProvider): SocialProviderRegistry = {
-    SocialProviderRegistry(Seq(facebookProvider))
+    SocialProviderRegistry(Seq(facebookProvider,googleProvider))
   }
 
    /**
@@ -127,6 +127,24 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
 
     new FacebookProvider(httpLayer, stateProvider,
                          configuration.underlying.as[OAuth2Settings]("silhouette.facebook"))
+  }
+
+  /**
+    * Provides the Facebook provider.
+    *
+    * @param httpLayer The HTTP layer implementation.
+    * @param stateProvider The OAuth2 state provider implementation.
+    * @param configuration The Play configuration.
+    * @return The Facebook provider.
+    */
+  @Provides
+  def provideGoogleProvider(
+    httpLayer: HTTPLayer,
+    stateProvider: SocialStateHandler,
+    configuration: Configuration): GoogleProvider = {
+
+    new GoogleProvider(httpLayer, stateProvider,
+                         configuration.underlying.as[OAuth2Settings]("silhouette.google"))
   }
 
   /**

@@ -16,8 +16,6 @@ class UserControllerSpec extends RestTestSuite {
   "UserController POST" should {
 
     "send a confirmation email" in {
-      val mockDataService = mock[MailServiceImpl]
-
       val signUp = route(app, FakeRequest(POST, "/api/user/signUp", new Headers(List(("Content-Type","application/json"))),
                                           Json.toJson(Data("testuser@test.de","testpass")))).get
 

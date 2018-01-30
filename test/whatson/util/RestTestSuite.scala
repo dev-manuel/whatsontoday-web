@@ -9,9 +9,11 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test._
 import whatson.service._
 import scala.language.implicitConversions
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 
 class RestTestSuite extends PlaySpec
-    with GuiceOneAppPerTest with Injecting with MockitoSugar {
+    with GuiceOneAppPerTest with Injecting
+    with MockitoSugar {
 
   val mailService = mock[MailService]
 
@@ -20,6 +22,7 @@ class RestTestSuite extends PlaySpec
       .overrides(TestModule(mailService))
       .build()
 
+  def dbConfig(implicit app: Application) = Application.instanceCache[DatabaseConfigProvider].apply(app)
 
-  val log = Logger("api.events")
+  def db(implicit app: Application) = dbConfig(app).get.db
 }

@@ -10,10 +10,13 @@ import play.api.test._
 import whatson.service._
 import scala.language.implicitConversions
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import play.api.db.evolutions._
+import play.api.db._
+import org.scalatest._
 
 class RestTestSuite extends PlaySpec
     with GuiceOneAppPerTest with Injecting
-    with MockitoSugar {
+    with MockitoSugar with BeforeAndAfterEachTestData {
 
   val mailService = mock[MailService]
 
@@ -25,4 +28,14 @@ class RestTestSuite extends PlaySpec
   def dbConfig(implicit app: Application) = Application.instanceCache[DatabaseConfigProvider].apply(app)
 
   def db(implicit app: Application) = dbConfig(app).get.db
+
+  def config(implicit app: Application) = Application.instanceCache[Configuration].apply(app)
+
+  def environment(implicit app: Application) = Application.instanceCache[Environment].apply(app)
+
+  def database(implicit app: Application) = Application.instanceCache[DBApi].apply(app).databases()(0)
+
+  def cleanUpDb() {
+    Evolutions.cleanupEvolutions(database(app))
+  }
 }

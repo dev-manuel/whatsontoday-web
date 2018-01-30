@@ -26,4 +26,6 @@ trait LoginService extends IdentityService[Login] {
   def save(profile: CommonSocialProfile): Future[Login]
 
   def confirm(loginInfo: LoginInfo): Future[Option[Login]]
+
+  def retrieveAll(loginInfo: LoginInfo): Future[Option[Login]]
 }

@@ -32,6 +32,18 @@ class LoginServiceImpl @Inject()(
     db.run(q.result).map(_.headOption)
   }
 
+  /**
+    * Retrieves a user that matches the specified login info.
+    *
+    * @param loginInfo The login info to retrieve a user.
+    * @return The retrieved user or None if no user could be retrieved for the given login info.
+    */
+  def retrieveAll(loginInfo: LoginInfo): Future[Option[Login]] = {
+    val q = login.filter(x => x.providerId === loginInfo.providerID
+                           && x.providerKey === loginInfo.providerKey)
+    db.run(q.result).map(_.headOption)
+  }
+
 
   def confirm(loginInfo: LoginInfo): Future[Option[Login]] = {
     val q = for {

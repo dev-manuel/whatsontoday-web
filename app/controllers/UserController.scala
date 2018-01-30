@@ -54,7 +54,7 @@ class UserController@Inject() (
       },
       data => {
         val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
-        loginService.retrieve(loginInfo).flatMap {
+        loginService.retrieveAll(loginInfo).flatMap {
           case Some(login) =>
             Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
           case None =>

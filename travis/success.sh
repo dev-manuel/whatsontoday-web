@@ -5,7 +5,7 @@ then
     sbt swagger
     git clone git://${GH_REPO} $HOME/$REPO
     cp $TRAVIS_BUILD_DIR/target/swagger/swagger.json $HOME/$REPO/rest_doc
-    cp -a $TRAVIS_BUILD_DIR/target/scala-2.12/scoverage-report/ $HOME/$REPO/coverage/
+    cp -a $TRAVIS_BUILD_DIR/target/scala-2.12/scoverage-report/ $HOME/$REPO/
     cd $HOME/$REPO
     git remote
     git config user.email ${EMAIL}

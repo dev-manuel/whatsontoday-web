@@ -3,4 +3,4 @@ npm install
 npm test
 npm run build
 cd ../
-sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport
+sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport swagger

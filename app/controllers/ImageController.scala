@@ -14,6 +14,11 @@ import whatson.db.ImageTable._
 import whatson.db.Util._
 import whatson.model._
 import whatson.model.Image._
+import akka.util._
+import java.io._
+import org.apache.commons.io._
+import scala.util._
+import scala.concurrent.Future
 
 
 class ImageController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)
@@ -45,12 +50,18 @@ class ImageController @Inject()(cc: ControllerComponents, protected val dbConfig
     })
   }
 
-  def createImage() = Action.async(parse.json(imageReads)) { implicit request: Request[Image] =>
-    log.debug("Rest request to create image") //TODO: Test
+  def createImage(name: String) = Action(parse.multipartFormData).async { request =>
+    log.debug("Rest request to scan image for spending data")
 
-    val inserted = db.run(insertAndReturn[Image,ImageTable](image,request.body))
+    request.body.file("image").map { x =>
+      val file = x.ref.path.toFile()
+      val str = new FileInputStream(file)
+      val bytes = IOUtils.toByteArray(str)
 
-    inserted.map(x => Ok(Json.toJson(x)))
+      val img = Image(None,name,bytes)
+
+      db.run(insertAndReturn[Image,ImageTable](image,img))
+    }.map(_.map(x => Ok(Json.toJson(x)))).getOrElse(Future.successful(BadRequest))
   }
 
   def attachImage(id: Int, entityType: String, entityId: Int) = Action.async { implicit request =>

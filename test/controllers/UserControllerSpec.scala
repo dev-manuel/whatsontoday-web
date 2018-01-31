@@ -10,6 +10,9 @@ import whatson.model.UserSignUpForm._
 import whatson.model.UserSignUpForm.Data._
 import whatson.service._
 import whatson.util._
+import org.mockito._
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 
 class UserControllerSpec extends RestTestSuite {
 
@@ -21,7 +24,10 @@ class UserControllerSpec extends RestTestSuite {
 
       status(signUp) mustBe OK
 
-      //TODO Test sending of confirmation mail
+      val captorMail = ArgumentCaptor.forClass(classOf[String])
+      val captorToken = ArgumentCaptor.forClass(classOf[String])
+
+      verify(mailService, atLeastOnce()).sendUserConfirmation(captorMail.capture(),captorToken.capture())
 
       cleanUpDb()
     }

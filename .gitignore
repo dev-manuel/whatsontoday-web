@@ -1,7 +1,7 @@
 logs
 .vscode
 public/
- 
+secrets.sh
  
 ### Node ###
 # Logs

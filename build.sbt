@@ -41,3 +41,5 @@ libraryDependencies ++= Seq(
 javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
 
 sourceDirectories in (Compile, TwirlKeys.compileTemplates) := (unmanagedSourceDirectories in Compile).value
+
+coverageExcludedPackages := """controllers\..*Reverse.*;..*Routes.*;views.html\..*template.*"""

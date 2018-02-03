@@ -29,6 +29,14 @@ class OrganizerControllerSpec extends RestTestSuite {
 
       cleanUpDb()
     }
+
+    "return NotFound on non existing organizer" in {
+      val organizer = route(app, FakeRequest(GET, "/api/v1/organizer/5")).get
+
+      status(organizer) mustBe NOT_FOUND
+
+      cleanUpDb()
+    }
   }
 
   "OrganizerController POST" should {

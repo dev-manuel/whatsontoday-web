@@ -39,6 +39,7 @@ class BaseSignUpPanelViewState extends AbstractViewState{
             acceptError: false,
             passwordError: false,
             repeatPasswordError: false,
+            userAlreadyExistsError: false,
         }
     }
 
@@ -56,7 +57,7 @@ class BaseSignUpPanelViewState extends AbstractViewState{
      */
     onCredentialErrors(errors){
         const allErrors = Object.assign({}, this.baseCredentialErrors, errors)
-
+        console.log(errors);
         this.context.setState({
             viewState: new WrongCredentialsState(this.context, allErrors)
         })
@@ -120,6 +121,7 @@ export class WrongCredentialsState extends BaseSignUpPanelViewState{
      * @override
      */
     render(){
+        console.log(this.errors);
         return (
             <div className='login-form'>
                 {/*

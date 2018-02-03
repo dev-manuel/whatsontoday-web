@@ -96,6 +96,8 @@ class SignUpPanel extends React.Component {
                             errors.emailError = true;
                         if(reqBody.password)
                             errors.passwordError = true;
+                        if(reqBody.message = 'user.exists')
+                            errors.userAlreadyExistsError = true;
                         
                         this.props.onCredentialErrors(errors);
                     break;
@@ -120,6 +122,10 @@ class SignUpPanel extends React.Component {
                 </Header>
                 <Form size='large' onSubmit={this.handleSubmit.bind(this)}>
                     <Segment>
+                        <Message negative hidden={!this.props.credentialErrors.userAlreadyExistsError}>
+                            <Message.Header>{LANG.errorHeading}</Message.Header>
+                            <p>{LANG.userAlreadyExistsError}</p>
+                        </Message>
                         <Form.Input
                             error={this.props.credentialErrors.emailError}
                             value={this.state.emailValue}

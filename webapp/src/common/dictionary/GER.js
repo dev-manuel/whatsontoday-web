@@ -55,6 +55,8 @@ export default {
         submit: 'Los Geht\'s',
         success: 'Fast geschafft! Bitte bestätige noch deine E-Mail Adresse.',
         alreadyLoggedIn: 'Du bist bereits angemeldet!',
+        errorHeading: 'Registrierung Fehlgeschlagen',
+        userAlreadyExistsError: 'Es existiert bereits ein nutzer mit dieser E-Mail Adresse',
     },
     signIn: {
         message: 'Anmelden',        

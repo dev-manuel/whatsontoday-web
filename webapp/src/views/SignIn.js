@@ -136,6 +136,7 @@ export class AlreadyLoggedInState extends AbstractViewState{
      * @override
      */
     render(){
+        const LANG = this.context.props.global.LANG.signIn;
         return (
             <div className='login-form'>
                 <style>{`
@@ -153,7 +154,7 @@ export class AlreadyLoggedInState extends AbstractViewState{
                 >
                     <Grid.Column style={{ maxWidth: 450 }}>
                         <Message>
-                            You are already logged in!
+                            {LANG.alreadyLoggedIn}
                         </Message>
                     </Grid.Column>
                 </Grid>

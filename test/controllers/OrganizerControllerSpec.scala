@@ -13,8 +13,23 @@ import whatson.util._
 import org.mockito._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
+import scala.concurrent._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 
 class OrganizerControllerSpec extends RestTestSuite {
+
+  "OrganizerController GET" should {
+    "return OK on existing organizer" in {
+      val org = Await.result(createOrganizer("testorganizer", "testuser@test.de"), Duration.Inf)
+
+      val organizer = route(app, FakeRequest(GET, "/api/v1/organizer/" ++ org.id.getOrElse(-1).toString)).get
+
+      status(organizer) mustBe OK
+
+      cleanUpDb()
+    }
+  }
 
   "OrganizerController POST" should {
 

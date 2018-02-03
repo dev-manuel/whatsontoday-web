@@ -1,5 +1,6 @@
 package whatson.util
 
+import slick.jdbc.JdbcProfile
 import org.scalatest._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play._
@@ -9,10 +10,16 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test._
 import whatson.service._
 import scala.language.implicitConversions
-import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import play.api.db.slick.{DatabaseConfigProvider}
 import play.api.db.evolutions._
 import play.api.db._
 import org.scalatest._
+import whatson.model._
+import whatson.db._
+import whatson.db.Util._
+import scala.concurrent._
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class RestTestSuite extends PlaySpec
     with GuiceOneAppPerTest with Injecting
@@ -27,7 +34,7 @@ class RestTestSuite extends PlaySpec
 
   def dbConfig(implicit app: Application) = Application.instanceCache[DatabaseConfigProvider].apply(app)
 
-  def db(implicit app: Application) = dbConfig(app).get.db
+  def db = dbConfig(app).get[JdbcProfile].db
 
   def config(implicit app: Application) = Application.instanceCache[Configuration].apply(app)
 
@@ -37,5 +44,15 @@ class RestTestSuite extends PlaySpec
 
   def cleanUpDb() {
     Evolutions.cleanupEvolutions(database(app))
+  }
+
+  def createLogin(mail: String): Future[Login] = {
+    db.run(insertAndReturn[Login,LoginTable](LoginTable.login,Login(None, mail, None, None, None, "", mail, true)))
+  }
+
+  def createOrganizer(name: String, mail: String): Future[Organizer] = {
+    createLogin(mail).flatMap { case login =>
+      db.run(insertAndReturn[Organizer,OrganizerTable](OrganizerTable.organizer,Organizer(None, name, login.id.getOrElse(-1), None)))
+    }
   }
 }

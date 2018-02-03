@@ -5,6 +5,7 @@ import play.api._
 import play.api.test._
 import play.api.test.Helpers._
 import whatson.util._
+import scala.concurrent._
 
 class EventControllerSpec extends RestTestSuite {
 

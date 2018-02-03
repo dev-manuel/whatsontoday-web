@@ -13,6 +13,7 @@ import whatson.util._
 import org.mockito._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
+import scala.concurrent._
 
 class UserControllerSpec extends RestTestSuite {
 

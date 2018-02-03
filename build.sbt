@@ -14,6 +14,7 @@ scalaVersion := "2.12.2"
 libraryDependencies ++= Seq(
   "org.webjars" % "swagger-ui" % "2.2.0",
   "org.postgresql" % "postgresql" % "9.4-1206-jdbc42",
+  "com.typesafe.slick" %% "slick" % "3.2.0",
   "com.typesafe.play" %% "play-slick" % "3.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "3.0.0",
   "org.mindrot" % "jbcrypt" % "0.3m",

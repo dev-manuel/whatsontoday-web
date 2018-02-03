@@ -30,16 +30,25 @@ import com.mohiva.play.silhouette.impl.providers._
 import play.api.test._
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import whatson.modules._
+import play.api.inject._
 
 class RestTestSuite extends PlaySpec with TestSuiteMixin
     with GuiceOneAppPerTest with Injecting
     with MockitoSugar {
   val mailService = mock[MailService]
 
-  implicit override def newAppForTest(testData: TestData): Application =
-    new GuiceApplicationBuilder()
+  implicit override def newAppForTest(testData: TestData): Application = {
+    val app = new GuiceApplicationBuilder()
       .overrides(TestModule(mailService))
       .build()
+
+    Application.instanceCache[ApplicationLifecycle].apply(app).addStopHook { () =>
+      cleanUpDb()
+      Future.successful(())
+    }
+
+    app
+  }
 
   def dbConfig(implicit app: Application) = Application.instanceCache[DatabaseConfigProvider].apply(app)
 

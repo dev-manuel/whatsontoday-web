@@ -20,16 +20,12 @@ class EventControllerSpec extends RestTestSuite {
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true")).get
 
       status(events) mustBe OK
-
-      cleanUpDb()
     }
 
     "return NOT_FOUND on non existing event" in {
       val events = route(app, FakeRequest(GET, "/api/v1/events/5")).get
 
       status(events) mustBe NOT_FOUND
-
-      cleanUpDb()
     }
 
     "return OK on existing event" in {
@@ -37,8 +33,6 @@ class EventControllerSpec extends RestTestSuite {
       val events = route(app, FakeRequest(GET, "/api/v1/events/" ++ event.id.getOrElse(-1).toString)).get
 
       status(events) mustBe OK
-
-      cleanUpDb()
     }
   }
 
@@ -52,8 +46,6 @@ class EventControllerSpec extends RestTestSuite {
                                           Json.toJson(event))).get
 
       status(events) mustBe OK
-
-      cleanUpDb()
     }
 
     "return BadRequest for users" in {
@@ -65,8 +57,6 @@ class EventControllerSpec extends RestTestSuite {
                                           Json.toJson(event))).get
 
       status(events) mustBe UNAUTHORIZED
-
-      cleanUpDb()
     }
   }
 
@@ -79,8 +69,6 @@ class EventControllerSpec extends RestTestSuite {
                                           new Headers(List(("x-auth-token",organizer._3))),"")).get
 
       status(delete) mustBe OK
-
-      cleanUpDb()
     }
 
     "return NotFound on non existing event" in {
@@ -89,8 +77,6 @@ class EventControllerSpec extends RestTestSuite {
                                           new Headers(List(("x-auth-token",organizer._3))),"")).get
 
       status(delete) mustBe NOT_FOUND
-
-      cleanUpDb()
     }
 
     "return BadRequest for users" in {
@@ -101,8 +87,6 @@ class EventControllerSpec extends RestTestSuite {
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),"")).get
 
       status(delete) mustBe BAD_REQUEST
-
-      cleanUpDb()
     }
   }
 
@@ -117,8 +101,6 @@ class EventControllerSpec extends RestTestSuite {
                                           Json.toJson(eventUp))).get
 
       status(events) mustBe OK
-
-      cleanUpDb()
     }
 
     "return NotFound on non existing event" in {
@@ -130,8 +112,6 @@ class EventControllerSpec extends RestTestSuite {
                                           Json.toJson(eventUp))).get
 
       status(events) mustBe NOT_FOUND
-
-      cleanUpDb()
     }
 
     "return Unauthorized for users" in {
@@ -144,8 +124,6 @@ class EventControllerSpec extends RestTestSuite {
                                           Json.toJson(eventUp))).get
 
       status(events) mustBe UNAUTHORIZED
-
-      cleanUpDb()
     }
   }
 }

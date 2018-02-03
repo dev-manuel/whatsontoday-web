@@ -26,16 +26,12 @@ class OrganizerControllerSpec extends RestTestSuite {
       val organizer = route(app, FakeRequest(GET, "/api/v1/organizer/" ++ org._2.id.getOrElse(-1).toString)).get
 
       status(organizer) mustBe OK
-
-      cleanUpDb()
     }
 
     "return NotFound on non existing organizer" in {
       val organizer = route(app, FakeRequest(GET, "/api/v1/organizer/5")).get
 
       status(organizer) mustBe NOT_FOUND
-
-      cleanUpDb()
     }
   }
 
@@ -52,8 +48,6 @@ class OrganizerControllerSpec extends RestTestSuite {
       val captorName = ArgumentCaptor.forClass(classOf[String])
 
       verify(mailService, atLeastOnce()).sendOrganizerConfirmation(captorMail.capture(),captorName.capture(),captorToken.capture())
-
-      cleanUpDb()
     }
 
     "return OK on correct sign up" in {
@@ -61,8 +55,6 @@ class OrganizerControllerSpec extends RestTestSuite {
                                           Json.toJson(Data("testuser@test.de","testpass", "testorganizer")))).get
 
       status(signUp) mustBe OK
-
-      cleanUpDb()
     }
 
 
@@ -76,8 +68,6 @@ class OrganizerControllerSpec extends RestTestSuite {
                                            Json.toJson(Data("testuser@test.de","testpass", "testorganizer")))).get
 
       status(signUp2) mustBe BAD_REQUEST
-
-      cleanUpDb()
     }
 
     "not allow short passwords" in {
@@ -85,8 +75,6 @@ class OrganizerControllerSpec extends RestTestSuite {
                                            Json.toJson(Data("testuser@test.de","t","testorganizer")))).get
 
       status(signUp) mustBe BAD_REQUEST
-
-      cleanUpDb()
     }
 
     "not allow wrong emails" in {
@@ -94,8 +82,6 @@ class OrganizerControllerSpec extends RestTestSuite {
                                           Json.toJson(Data("testuser","testpass","testorganizer")))).get
 
       status(signUp) mustBe BAD_REQUEST
-
-      cleanUpDb()
     }
   }
 }

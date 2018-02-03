@@ -13,8 +13,6 @@ class HomeControllerSpec extends RestTestSuite {
       val index = route(app, FakeRequest(GET, "/")).get
 
       status(index) mustBe OK
-
-      cleanUpDb()
     }
   }
 }

@@ -29,8 +29,6 @@ class UserControllerSpec extends RestTestSuite {
       val captorToken = ArgumentCaptor.forClass(classOf[String])
 
       verify(mailService, atLeastOnce()).sendUserConfirmation(captorMail.capture(),captorToken.capture())
-
-      cleanUpDb()
     }
 
     "return OK on correct sign up" in {
@@ -38,8 +36,6 @@ class UserControllerSpec extends RestTestSuite {
                                           Json.toJson(Data("testuser@test.de","testpass")))).get
 
       status(signUp) mustBe OK
-
-      cleanUpDb()
     }
 
 
@@ -53,8 +49,6 @@ class UserControllerSpec extends RestTestSuite {
                                           Json.toJson(Data("testuser@test.de","testpass")))).get
 
       status(signUp2) mustBe BAD_REQUEST
-
-      cleanUpDb()
     }
 
     "not allow short passwords" in {
@@ -62,8 +56,6 @@ class UserControllerSpec extends RestTestSuite {
                                            Json.toJson(Data("testuser@test.de","t")))).get
 
       status(signUp) mustBe BAD_REQUEST
-
-      cleanUpDb()
     }
 
     "not allow wrong emails" in {
@@ -71,8 +63,6 @@ class UserControllerSpec extends RestTestSuite {
                                           Json.toJson(Data("testuser","testpass")))).get
 
       status(signUp) mustBe BAD_REQUEST
-
-      cleanUpDb()
     }
   }
 }

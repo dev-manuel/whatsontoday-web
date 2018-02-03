@@ -23,7 +23,7 @@ class BaseView extends React.Component {
         super(props);
         this.global = new Global({
             axios: Axios.create({
-                baseURL: 'http://localhost:9000/api/', // Just for dev!
+                baseURL: 'http://localhost:9000/api/v1/', // Just for dev!
                 timeout: 10000
             }),
             onUpdate: () => {

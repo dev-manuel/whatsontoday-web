@@ -54,6 +54,7 @@ export default {
         agree: 'Ich akzieptiere die Nutzungsbedingungen',
         submit: 'Los Geht\'s',
         success: 'Fast geschafft! Bitte bestätige noch deine E-Mail Adresse.',
+        alreadyLoggedIn: 'Du bist bereits angemeldet!',
     },
     signIn: {
         message: 'Anmelden',        
@@ -65,6 +66,7 @@ export default {
         signUp: 'Registriere dich!',
         errorHeading: 'Anmeldung fehlgeschlagen!',
         errorDescription: 'Nutzername oder Passwort ist falsch', 
+        alreadyLoggedIn: 'Du bist bereits angemeldet!',
     },
     modal:{
         heading: 'Oooops',

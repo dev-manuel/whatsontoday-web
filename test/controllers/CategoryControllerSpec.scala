@@ -15,6 +15,8 @@ class CategoryControllerSpec extends RestTestSuite {
       val categories = route(app, FakeRequest(GET, "/api/v1/categories")).get
 
       status(categories) mustBe OK
+
+      cleanUpDb()
     }
   }
 }

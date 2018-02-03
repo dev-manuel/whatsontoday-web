@@ -31,10 +31,9 @@ import play.api.test._
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import whatson.modules._
 
-class RestTestSuite extends PlaySpec
+class RestTestSuite extends PlaySpec with TestSuiteMixin
     with GuiceOneAppPerTest with Injecting
-    with MockitoSugar with BeforeAndAfterEachTestData {
-
+    with MockitoSugar {
   val mailService = mock[MailService]
 
   implicit override def newAppForTest(testData: TestData): Application =
@@ -82,7 +81,18 @@ class RestTestSuite extends PlaySpec
     }
   }
 
-  def createOrganizer(): Future[(Login,Organizer,String)] = createOrganizer("testorganizer", "testuser@test.de")
+  def createOrganizer(): Future[(Login,Organizer,String)] = createOrganizer("testorganizer", "testorganizer@test.de")
+
+  def createUser(mail: String): Future[(Login,User,String)] = {
+    createLogin(mail).flatMap { case login =>
+      db.run(insertAndReturn[User,UserTable](UserTable.user,User(None, login.id.getOrElse(-1), None)))
+        .map(o => (login,o))
+    }.flatMap { case (l,o) =>
+        getToken(l).map(t => (l,o,t))
+    }
+  }
+
+  def createUser(): Future[(Login,User,String)] = createUser("testuser@test.de")
 
   def createLocation(name: String, lat: Float, long: Float): Future[Location] = {
     db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long)))
@@ -98,6 +108,12 @@ class RestTestSuite extends PlaySpec
   def createEvent(): Future[Event] = {
     createOrganizer().zip(createLocation()).flatMap { case (org,loc) =>
       createEvent("testevent", new Timestamp(0), new Timestamp(0), org._2.id, loc.id.getOrElse(-1))
+    }
+  }
+
+  def createEvent(org: Organizer): Future[Event] = {
+    createLocation().flatMap { case loc =>
+      createEvent("testevent", new Timestamp(0), new Timestamp(0), org.id, loc.id.getOrElse(-1))
     }
   }
 }

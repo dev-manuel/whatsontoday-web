@@ -14,4 +14,6 @@ object SignInForm {
       (__ \ 'password).read[String] and
       (__ \ 'rememberMe).read[Boolean]
   )(SignInForm.apply _)
+
+  implicit val signInWrites = Json.writes[SignInForm]
 }

@@ -26,10 +26,14 @@ import play.api.mvc.DefaultCookieHeaderEncoding
 import whatson.service._
 import whatson.auth._
 import whatson.util._
+import com.google.inject._
+import com.mohiva.play.silhouette.api.Env
+
 
 class SilhouetteModule extends AbstractModule with ScalaModule {
   override def configure() = {
     bind[Silhouette[AuthEnv]].to[SilhouetteProvider[AuthEnv]]
+
     bind[PasswordHasher].toInstance(new BCryptPasswordHasher())
     bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator(false))
     bind[EventBus].toInstance(EventBus())

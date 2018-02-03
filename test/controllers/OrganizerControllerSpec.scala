@@ -23,7 +23,7 @@ class OrganizerControllerSpec extends RestTestSuite {
     "return OK on existing organizer" in {
       val org = Await.result(createOrganizer("testorganizer", "testuser@test.de"), Duration.Inf)
 
-      val organizer = route(app, FakeRequest(GET, "/api/v1/organizer/" ++ org.id.getOrElse(-1).toString)).get
+      val organizer = route(app, FakeRequest(GET, "/api/v1/organizer/" ++ org._2.id.getOrElse(-1).toString)).get
 
       status(organizer) mustBe OK
 

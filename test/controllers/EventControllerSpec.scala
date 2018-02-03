@@ -17,6 +17,8 @@ class EventControllerSpec extends RestTestSuite {
   "EventController GET" should {
 
     "return a list of events" in {
+      Await.result(createEvent(), Duration.Inf)
+
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true")).get
 
       status(events) mustBe OK

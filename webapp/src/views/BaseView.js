@@ -11,6 +11,7 @@ import EventView from './Event';
 import Organizer from './Organizer';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
+import Confirm from './Confirm';
 import _404 from './404';
 import Footer from './Footer';
 
@@ -45,7 +46,7 @@ class BaseView extends React.Component {
                     <Route path='/organizer' component={Organizer}/>
                     <Route path='/signin' render={() => (<SignIn global={this.global} />)}/>
                     <Route path='/signup' render={() => (<SignUp global={this.global} />)}/>
-
+                    <Route path='/mailConfirmed' render={()=> (<Confirm global={this.global} />)} />
                     <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
                 </Switch>
 

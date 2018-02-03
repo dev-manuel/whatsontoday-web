@@ -74,5 +74,8 @@ export default {
         heading: 'Oooops',
         description: 'Es ist ein Fehler aufgetreten. Versuche es später noch einmal!',
         button: 'Ok',
+    },
+    confirm:{
+        confirmed: 'Deine E-Mail Adresse wurde erfolgreich bestätigt. Du kannst dich nun Anmelden.'
     }
 }

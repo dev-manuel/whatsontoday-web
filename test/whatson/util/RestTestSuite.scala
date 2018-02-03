@@ -21,7 +21,9 @@ import scala.concurrent._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import java.sql.Timestamp
+import com.mohiva.play.silhouette.impl.authenticators._
 import com.mohiva.play.silhouette.api._
+import com.mohiva.play.silhouette.api.services._
 import whatson.auth._
 import com.mohiva.play.silhouette.api.util.{Clock, Credentials}
 import com.mohiva.play.silhouette.impl.providers._
@@ -54,15 +56,16 @@ class RestTestSuite extends PlaySpec
 
   def passwordHasher = Application.instanceCache[PasswordHasher].apply(app)
 
+  def authenticatorService = Application.instanceCache[JWTAuthenticatorService].apply(app)
+
   def cleanUpDb() {
     Evolutions.cleanupEvolutions(database(app))
   }
 
   implicit val emptyRequest = FakeRequest("GET", "/")
 
-  //TODO: Somehow fix this...
-  def getToken(login: Login): Future[String] = silhouette.env.authenticatorService.create(LoginInfo("credentials", login.email))
-    .flatMap(x => silhouette.env.authenticatorService.init(x))
+  def getToken(login: Login): Future[String] = authenticatorService.create(LoginInfo("credentials", login.email))
+    .flatMap(x => authenticatorService.init(x))
 
 
   def createLogin(mail: String): Future[Login] = {
@@ -70,14 +73,16 @@ class RestTestSuite extends PlaySpec
     db.run(insertAndReturn[Login,LoginTable](LoginTable.login,Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, true)))
   }
 
-  def createOrganizer(name: String, mail: String): Future[(Login,Organizer)] = {
+  def createOrganizer(name: String, mail: String): Future[(Login,Organizer,String)] = {
     createLogin(mail).flatMap { case login =>
       db.run(insertAndReturn[Organizer,OrganizerTable](OrganizerTable.organizer,Organizer(None, name, login.id.getOrElse(-1), None)))
         .map(o => (login,o))
+    }.flatMap { case (l,o) =>
+        getToken(l).map(t => (l,o,t))
     }
   }
 
-  def createOrganizer(): Future[(Login,Organizer)] = createOrganizer("testorganizer", "testuser@test.de")
+  def createOrganizer(): Future[(Login,Organizer,String)] = createOrganizer("testorganizer", "testuser@test.de")
 
   def createLocation(name: String, lat: Float, long: Float): Future[Location] = {
     db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long)))

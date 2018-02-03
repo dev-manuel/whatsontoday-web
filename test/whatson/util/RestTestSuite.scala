@@ -76,21 +76,21 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
     .flatMap(x => authenticatorService.init(x))
 
 
-  def createLogin(mail: String): Future[Login] = {
+  def createLogin(mail: String): Future[Login] = createLogin(mail,true)
+
+  def createLogin(mail: String, confirmed: Boolean): Future[Login] = {
     val pwInfo = passwordHasher.hash("")
-    db.run(insertAndReturn[Login,LoginTable](LoginTable.login,Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, true)))
+    db.run(insertAndReturn[Login,LoginTable](LoginTable.login,Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, confirmed)))
   }
 
-  def createOrganizer(name: String, mail: String): Future[(Login,Organizer,String)] = {
-    createLogin(mail).flatMap { case login =>
+  def createOrganizer(name: String = "testorganizer", mail: String = "testorganizer@test.de", confirmed: Boolean = true): Future[(Login,Organizer,String)] = {
+    createLogin(mail, confirmed).flatMap { case login =>
       db.run(insertAndReturn[Organizer,OrganizerTable](OrganizerTable.organizer,Organizer(None, name, login.id.getOrElse(-1), None)))
         .map(o => (login,o))
     }.flatMap { case (l,o) =>
         getToken(l).map(t => (l,o,t))
     }
   }
-
-  def createOrganizer(): Future[(Login,Organizer,String)] = createOrganizer("testorganizer", "testorganizer@test.de")
 
   def createUser(mail: String): Future[(Login,User,String)] = {
     createLogin(mail).flatMap { case login =>

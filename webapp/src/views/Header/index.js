@@ -4,25 +4,61 @@ import {Menu, Search, Icon, Button, Dropdown} from 'semantic-ui-react';
 
 // Import resources
 import logo from '../../img/logo1.jpg';
-import './menu.less'
-import StatefulView from '../../common/StatefulView';
-import AbstractViewState from '../../common/AbstractViewState';
+import './menu.less';
+import ModalError from '../../components/modal';
 
-export default class Header extends StatefulView {
 
+const LoggedOutButtons = ({LANG}) => {
+    return [(
+        <Button 
+            className='headerButtonStyle'
+            basic
+            color='teal'
+            href='#signin'
+            key={1}
+        >
+            <Icon name='sign in' /> {LANG.signIn}
+        </Button>
+    ),
+    (
+        <Button 
+            className='headerButtonStyle'
+            basic
+            color='teal'
+            href='#signup'
+            key={2}
+        >
+            <Icon name='signup' /> {LANG.signUp}
+        </Button>
+    )]
+}
+
+const LoggedInButtons = ({LANG, onSignOut}) => {
+
+    return (
+        <Button 
+            className='headerButtonStyle'
+            basic
+            color='teal'
+            href='#'
+            onClick={onSignOut}
+        >
+            <Icon name='sign out' /> {LANG.signOut}
+        </Button>
+    )
+}
+
+export default class Header extends React.Component{
     constructor(props){
         super(props);
-
         this.state = {
-            viewState: this.props.global.loggedIn ?
-                new LoggedInState(this):
-                new LoggedOutState(this),
+            showModalError: false,
         }
     }
 
     onSignOut(){
         if(this.props.global.loggedIn){
-            this.props.global.axios.get('/user/signOut',{
+            this.props.global.axios.get('/login/signOut',{
                 headers: {
                     'x-auth-token': this.props.global.token,
                 }
@@ -32,125 +68,70 @@ export default class Header extends StatefulView {
                     token: null,
                 });
             }).catch( err => {
-                //console.log(err);
-                // Todo...
+                this.setState({showModalError:true})
             })
         }
     }
-}
 
-//
-// ─── VIEW-STATES ────────────────────────────────────────────────────────────────
-//
+    render() {
+        const LANG = this.props.global.LANG.header;
 
-/**
- * A base template for the header/navbar
- */
-class BaseHeader extends React.Component{
-    render(){
+        const conditionalButtons = this.props.global.loggedIn ?
+            <LoggedInButtons LANG={LANG} onSignOut={this.onSignOut.bind(this)}/> :
+            <LoggedOutButtons LANG={LANG}/>;
+
         return (
-            <Menu borderless className='headerMenu' size='large'>
-                <Menu.Item className='headerSpacer'/>
+            <div>
+                <ModalError
+                    global={this.props.global}
+                    show={this.state.showModalError}
+                    onClose={()=>{this.setState({showModalError:false})}}
+                />
+                <Menu borderless className='headerMenu' size='large'>
+                    <Menu.Item className='headerSpacer'/>
 
-                <Menu.Item className='headerLogo'>
-                    <img src={logo} />
-                </Menu.Item>
+                    <Menu.Item className='headerLogo'>
+                        <img src={logo} />
+                    </Menu.Item>
 
-                <Menu.Item className='headerSearch'>
-                    {/* About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846 */}
-                    <Search className='headerSearchBar' input={{ fluid: true }} showNoResults={false}/>
-                </Menu.Item>
+                    <Menu.Item className='headerSearch'>
+                        {/* About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846 */}
+                        <Search className='headerSearchBar' input={{ fluid: true }} showNoResults={false}/>
+                    </Menu.Item>
 
-                <Menu.Item className='headerButtons'>
+                    <Menu.Item className='headerButtons'>
 
-                        <Button 
-                            className='headerButtonStyle'
-                            basic
-                            color='teal'                    
-                        >
-                            <Icon name='newspaper' /> {this.props.LANG.blog}
-                        </Button>
+                            <Button 
+                                className='headerButtonStyle'
+                                basic
+                                color='teal'                    
+                            >
+                                <Icon name='newspaper' /> {LANG.blog}
+                            </Button>
 
-                        <Button 
-                            className='headerButtonStyle'
-                            basic
-                            color='teal'
-                        >
-                            <Icon name='plus' /> {this.props.LANG.addEvent}
-                        </Button>
+                            <Button 
+                                className='headerButtonStyle'
+                                basic
+                                color='teal'
+                            >
+                                <Icon name='plus' /> {LANG.addEvent}
+                            </Button>
 
-                        {this.props.conditionalButtons}
-                        
-                        <Dropdown icon='sidebar' pointing className='item headerDropdownButton'>
-                            <Dropdown.Menu>
-                                {/* Todo */}
-                                <Dropdown.Item>Lorem</Dropdown.Item>
-                                <Dropdown.Item>Ipsum</Dropdown.Item>
-                                <Dropdown.Item>Dolor</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                </Menu.Item>  
+                            {conditionalButtons}
+                            
+                            <Dropdown icon='sidebar' pointing className='item headerDropdownButton'>
+                                <Dropdown.Menu>
+                                    {/* Todo */}
+                                    <Dropdown.Item>Lorem</Dropdown.Item>
+                                    <Dropdown.Item>Ipsum</Dropdown.Item>
+                                    <Dropdown.Item>Dolor</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                    </Menu.Item>  
 
-                <Menu.Item className='headerSpacer'/>
-            </Menu>
+                    <Menu.Item className='headerSpacer'/>
+                </Menu>
+            </div>
         )
-    }
-}
-
-
-class LoggedOutState extends AbstractViewState{
-
-    /**
-     * @override
-     */
-    render(){
-        const LANG = this.context.props.global.LANG.header;        
-        const buttons = [(
-            <Button 
-                className='headerButtonStyle'
-                basic
-                color='teal'
-                href='#signin'
-                key={1}
-            >
-                <Icon name='sign in' /> {LANG.signIn}
-            </Button>
-        ),
-        (
-            <Button 
-                className='headerButtonStyle'
-                basic
-                color='teal'
-                href='#signup'
-                key={2}
-            >
-                <Icon name='signup' /> {LANG.signUp}
-            </Button>
-        )]
-
-        return <BaseHeader conditionalButtons={buttons} LANG={LANG}/>
-    }
-}
-
-class LoggedInState extends AbstractViewState{
-
-    /**
-     * @override
-     */
-    render(){
-        const LANG = this.context.props.global.LANG.header;                
-        const logoutButton = (
-            <Button 
-                className='headerButtonStyle'
-                basic
-                color='teal'
-                href='#'
-                onClick={this.context.onSignOut.bind(this.context)}
-            >
-                <Icon name='sign out' /> {LANG.signOut}
-            </Button>
-        )
-
-        return <BaseHeader conditionalButtons={logoutButton} LANG={LANG}/>;
     }
 }

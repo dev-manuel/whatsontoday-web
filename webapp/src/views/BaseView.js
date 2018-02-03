@@ -2,6 +2,7 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import Axios from 'axios';
+import {createHashHistory} from 'history'
 
 // Import resources
 import Header from './Header';
@@ -22,15 +23,19 @@ class BaseView extends React.Component {
     
     constructor(props){
         super(props);
+
+        const forceUpdate = this.forceUpdate.bind(this);
+
         this.global = new Global({
             axios: Axios.create({
                 baseURL: 'http://localhost:9000/api/v1/', // Just for dev!
                 timeout: 10000
             }),
             onUpdate: () => {
-                this.forceUpdate(); // Rerender component
+                forceUpdate(); // Rerender component
             },
             LANG: GER,
+            history: createHashHistory(),
         });
     }
 

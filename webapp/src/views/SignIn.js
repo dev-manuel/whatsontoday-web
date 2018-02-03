@@ -39,7 +39,7 @@ class BaseSignInPanelViewState extends AbstractViewState{
      * redirects the user to the main page
      */
     onSuccess(){
-        this.context.props.history.push('/#');
+        this.context.props.global.history.push('/#');
     }
 
     /**

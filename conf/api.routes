@@ -109,20 +109,31 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 
 ###
 #  summary: Create an image
+#  consumes:
+#  - multipart/form-data
 #  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/definitions/whatson.model.Image'
+#  - in: formData
+#    name: image
+#    type: file
+#    description: The file to upload.
 #  responses:
 #    200:
 #      description: success
 #      schema:
 #        $ref: '#/definitions/whatson.model.Image'
 ###
-POST   /images                       controllers.ImageController.createImage()
+POST   /images/:name                 controllers.ImageController.createImage(name: String)
 
 ###
 #  summary: Attach an image
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#    required: true
+#  - name: entityType
+#    enum: ["Event","Location","Organizer"]
 #  responses:
 #    200:
 #      description: success

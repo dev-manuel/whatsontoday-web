@@ -140,4 +140,4 @@ POST   /images/:name                 controllers.ImageController.createImage(nam
 #      schema:
 #        $ref: '#/definitions/whatson.model.ImageEntity'
 ###
-GET   /images/attach                       controllers.ImageController.attachImage(id: Int, entityType: String, entityId: Int)
+GET   /images/attach/:id             controllers.ImageController.attachImage(id: Int, entityType: String, entityId: Int)

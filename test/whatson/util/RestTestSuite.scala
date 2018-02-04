@@ -30,6 +30,7 @@ import com.mohiva.play.silhouette.impl.providers._
 import play.api.test._
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import whatson.modules._
+import play.api.libs.Files._
 import play.api.inject._
 
 class RestTestSuite extends PlaySpec with TestSuiteMixin
@@ -65,6 +66,8 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   def passwordHasher = Application.instanceCache[PasswordHasher].apply(app)
 
   def authenticatorService = Application.instanceCache[JWTAuthenticatorService].apply(app)
+
+  def temporaryFileCreator = Application.instanceCache[TemporaryFileCreator].apply(app)
 
   def cleanUpDb() {
     Evolutions.cleanupEvolutions(database(app))
@@ -114,15 +117,13 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
                                                                     name, from, to, creatorId, locationId)))
   }
 
-  def createEvent(): Future[Event] = {
-    createOrganizer().zip(createLocation()).flatMap { case (org,loc) =>
-      createEvent("testevent", new Timestamp(0), new Timestamp(0), org._2.id, loc.id.getOrElse(-1))
+  def createEvent(org: Option[Organizer] = None): Future[Event] = {
+    org.map(Future.successful(_)).getOrElse(createOrganizer().map(_._2)).zip(createLocation()).flatMap { case (org,loc) =>
+      createEvent("testevent", new Timestamp(0), new Timestamp(0), org.id, loc.id.getOrElse(-1))
     }
   }
 
-  def createEvent(org: Organizer): Future[Event] = {
-    createLocation().flatMap { case loc =>
-      createEvent("testevent", new Timestamp(0), new Timestamp(0), org.id, loc.id.getOrElse(-1))
-    }
+  def createImage(name: String = "testimage", contents: Array[Byte] = Array(1,2,3,4)): Future[Image] = {
+    db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, name, contents)))
   }
 }

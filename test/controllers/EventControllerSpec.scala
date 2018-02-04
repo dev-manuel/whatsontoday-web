@@ -65,7 +65,7 @@ class EventControllerSpec extends RestTestSuite {
   "EventController DELETE" should {
     "return OK on proper request" in {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
-      val event = Await.result(createEvent(organizer._2), Duration.Inf)
+      val event = Await.result(createEvent(Some(organizer._2)), Duration.Inf)
 
       val delete = route(app, FakeRequest(DELETE, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
                                           new Headers(List(("x-auth-token",organizer._3))),"")).get
@@ -95,7 +95,7 @@ class EventControllerSpec extends RestTestSuite {
   "EventController PUT" should {
     "return OK on proper request" in {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
-      val event = Await.result(createEvent(organizer._2), Duration.Inf)
+      val event = Await.result(createEvent(Some(organizer._2)), Duration.Inf)
 
       val eventUp = event.copy(name = "updated")
       val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ eventUp.id.getOrElse(-1).toString,

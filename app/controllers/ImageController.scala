@@ -75,14 +75,14 @@ class ImageController @Inject()(cc: ControllerComponents,
     log.debug("Rest request to attach image")
 
     val authorized = (EntityType.withName(entityType), login) match {
-      case (EntityType.Event,Right(Organizer(id,_,_,_))) => {
-        val q = for(e <- EventTable.event if e.id === id.bind && e.creatorId === id) yield e;
+      case (EntityType.Event,Right(Organizer(idOrg,_,_,_))) => {
+        val q = for(e <- EventTable.event if e.id === id.bind && e.creatorId === idOrg) yield e;
         db.run(q.result).map(_.headOption).map {
           case Some(e) => true
           case None => false
         }
       }
-      case (EntityType.Organizer,Right(Organizer(idOrg,_,_,_))) => Future.successful(Some(id) == idOrg)
+      case (EntityType.Organizer,Right(Organizer(idOrg,_,_,_))) => Future.successful(entityId == idOrg.getOrElse(-1))
       case (EntityType.Location,_) => Future.successful(true)
       case _ => Future.successful(false)
     }

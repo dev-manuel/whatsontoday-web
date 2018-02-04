@@ -53,6 +53,7 @@ export default class Header extends React.Component{
         super(props);
         this.state = {
             showModalError: false,
+            searchValue: '',
         }
     }
 
@@ -71,6 +72,16 @@ export default class Header extends React.Component{
                 this.setState({showModalError:true})
             })
         }
+    }
+
+    // This method will be invoked if the user presses enter while focusing the search bar
+    onEnter(){
+        alert(this.state.searchValue)
+    }
+
+    // Simply updating the `value``of the search bar
+    handleSearchChange(e, {value}){
+        this.setState({searchValue: value})
     }
 
     render() {
@@ -95,8 +106,15 @@ export default class Header extends React.Component{
                     </Menu.Item>
 
                     <Menu.Item className='headerSearch'>
-                        {/* About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846 */}
-                        <Search className='headerSearchBar' input={{ fluid: true }} showNoResults={false}/>
+                        {/*  */}
+                        <Search
+                            className='headerSearchBar'
+                            value={this.state.searchValue} 
+                            input={{ fluid: true}} // About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846
+                            showNoResults={false}
+                            onKeyPress={(e)=>{if(e.key === 'Enter') this.onEnter()}} // when enter key is pressed
+                            onSearchChange={this.handleSearchChange.bind(this)}
+                        />
                     </Menu.Item>
 
                     <Menu.Item className='headerButtons'>

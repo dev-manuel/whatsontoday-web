@@ -1,5 +1,6 @@
 // Import modules
 import React from 'react';
+import {parse} from 'query-string'
 
 // Import resources
 import './SERP.less'
@@ -27,9 +28,8 @@ const eventList = [
 export default class SERP extends StatefulView{
     constructor(props){
         super(props);
-
         this.state = {
-            viewState: new ShowingState(this),
+            viewState: new LoadingState(this),
         }
     }
 }
@@ -48,7 +48,7 @@ class LoadingState extends AbstractViewState{
     render() {
         return (
             <div style={{marginLeft: '11%', marginRight: '11%'}}>
-                This View is loading!
+                {parse(this.context.props.query).search}
             </div>
         )
     }

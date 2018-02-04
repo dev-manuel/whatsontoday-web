@@ -19,14 +19,21 @@ import java.io._
 import org.apache.commons.io._
 import scala.util._
 import scala.concurrent.Future
+import whatson.service._
+import com.mohiva.play.silhouette.api._
+import whatson.auth._
 
 
-class ImageController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)
+class ImageController @Inject()(cc: ControllerComponents,
+                                protected val dbConfigProvider: DatabaseConfigProvider,
+                                val silhouette: Silhouette[AuthEnv],
+                                val organizerService: OrganizerService,
+                                val userService: UserService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
-    with HasDatabaseConfigProvider[JdbcProfile] {
+    with HasDatabaseConfigProvider[JdbcProfile] with Util {
 
-  val log = Logger("api.location")
+  val log = Logger("api.image")
 
   def get(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get image")
@@ -64,15 +71,33 @@ class ImageController @Inject()(cc: ControllerComponents, protected val dbConfig
     }.map(_.map(x => Ok(Json.toJson(x)))).getOrElse(Future.successful(BadRequest))
   }
 
-  def attachImage(id: Int, entityType: String, entityId: Int) = Action.async { implicit request =>
+  def attachImage(id: Int, entityType: String, entityId: Int) = userOrganizerRequest(parse.default) { case (request,login) =>
     log.debug("Rest request to attach image")
 
-    val imgEnt = ImageEntity(id, entityId, EntityType.withName(entityType))
-    val inserted = db.run(ImageEntityTable.imageEntity += imgEnt)
+    val authorized = (EntityType.withName(entityType), login) match {
+      case (EntityType.Event,Right(Organizer(id,_,_,_))) => {
+        val q = for(e <- EventTable.event if e.id === id.bind && e.creatorId === id) yield e;
+        db.run(q.result).map(_.headOption).map {
+          case Some(e) => true
+          case None => false
+        }
+      }
+      case (EntityType.Organizer,Right(Organizer(idOrg,_,_,_))) => Future.successful(Some(id) == idOrg)
+      case (EntityType.Location,_) => Future.successful(true)
+      case _ => Future.successful(false)
+    }
 
-    inserted.map {
-      case 0 => NotFound
-      case _ => Ok(Json.toJson(imgEnt))
+    authorized.flatMap {
+      case true => {
+        val imgEnt = ImageEntity(id, entityId, EntityType.withName(entityType))
+        val inserted = db.run(ImageEntityTable.imageEntity += imgEnt)
+
+        inserted.map {
+          case 0 => NotFound
+          case _ => Ok(Json.toJson(imgEnt))
+        }
+      }
+      case false => Future.successful(Unauthorized)
     }
   }
 }

@@ -126,6 +126,14 @@ POST   /images/:name                 controllers.ImageController.createImage(nam
 
 ###
 #  summary: Attach an image
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#    required: true
+#  - name: entityType
+#    enum: ["Event","Location","Organizer"]
 #  responses:
 #    200:
 #      description: success

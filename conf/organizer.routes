@@ -16,7 +16,7 @@ GET   /:id                   controllers.OrganizerController.get(id: Int)
 #  parameters:
 #    - name: body
 #      schema:
-#        $ref: '#/definitions/whatson.model.OrganizerSignUpForm.Data'
+#        $ref: '#/definitions/whatson.model.forms.OrganizerSignUpForm.Data'
 #      description: The user data. The password must not be hashed.
 #  responses:
 #    200:

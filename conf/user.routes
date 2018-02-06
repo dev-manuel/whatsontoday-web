@@ -6,7 +6,7 @@
 #  parameters:
 #    - name: body
 #      schema:
-#        $ref: '#/definitions/whatson.model.UserSignUpForm.Data'
+#        $ref: '#/definitions/whatson.model.forms.UserSignUpForm.Data'
 #      description: The user data. The password must not be hashed.
 #  responses:
 #    200:

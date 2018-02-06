@@ -20,6 +20,7 @@ import play.api.mvc._
 import slick.jdbc.JdbcProfile
 import whatson.auth._
 import whatson.model._
+import whatson.model.forms._
 import whatson.service._
 import whatson.util.FormErrorJson._
 

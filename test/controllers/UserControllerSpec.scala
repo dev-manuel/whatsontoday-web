@@ -6,8 +6,8 @@ import play.api.libs.json._
 import play.api.mvc._
 import play.api.test._
 import play.api.test.Helpers._
-import whatson.model.UserSignUpForm._
-import whatson.model.UserSignUpForm.Data._
+import whatson.model.forms.UserSignUpForm._
+import whatson.model.forms.UserSignUpForm.Data._
 import whatson.service._
 import whatson.util._
 import org.mockito._

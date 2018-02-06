@@ -21,6 +21,7 @@ import slick.jdbc.PostgresProfile.api._
 import whatson.auth._
 import whatson.db._
 import whatson.model._
+import whatson.model.forms._
 import whatson.model.detail.OrganizerPublic._
 import whatson.service._
 import whatson.util.FormErrorJson._

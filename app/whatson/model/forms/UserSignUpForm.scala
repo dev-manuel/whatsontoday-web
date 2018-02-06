@@ -1,4 +1,4 @@
-package whatson.model
+package whatson.model.forms
 
 import play.api.data.Form
 import play.api.data.Forms._
@@ -7,7 +7,7 @@ import play.api.libs.json.Json
 /**
   * The form which handles the sign up process.
   */
-object OrganizerSignUpForm {
+object UserSignUpForm {
 
   /**
     * A play framework form.
@@ -15,8 +15,7 @@ object OrganizerSignUpForm {
   val form = Form(
     mapping(
       "email" -> email,
-      "password" -> nonEmptyText.verifying("too short", x => x.length>7),
-      "name" -> nonEmptyText.verifying("too short", x => x.length>3)
+      "password" -> nonEmptyText.verifying("too short", x => x.length>7)
     )(Data.apply)(Data.unapply)
   )
 
@@ -30,8 +29,7 @@ object OrganizerSignUpForm {
     */
   case class Data(
     email: String,
-    password: String,
-    name: String)
+    password: String)
 
   /**
     * The companion object.

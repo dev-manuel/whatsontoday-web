@@ -66,7 +66,10 @@ class LocationControllerSpec extends RestTestSuite {
   "LocationController POST" should {
     "return OK on proper request from user" in {
       val location = Location(None, "testlocation", 0, 0)
-      val create = route(app, FakeRequest(POST, "/api/v1/location", new Headers(List(("Content-Type","application/json"))),
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val create = route(app, FakeRequest(POST, "/api/v1/location",
+                                          new Headers(List(("Content-Type","application/json"),("x-auth-token",user._3))),
                                           Json.toJson(location))).get
 
       status(create) mustBe OK

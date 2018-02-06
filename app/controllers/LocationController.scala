@@ -15,8 +15,13 @@ import whatson.db.LocationTable._
 import whatson.db.Util._
 import whatson.model._
 import whatson.model.Location._
+import com.mohiva.play.silhouette.api._
+import whatson.auth._
 
-class LocationController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)
+
+class LocationController @Inject()(cc: ControllerComponents,
+                                   protected val dbConfigProvider: DatabaseConfigProvider,
+                                   silhouette: Silhouette[AuthEnv])
     (implicit context: ExecutionContext)
     extends AbstractController(cc) 
     with HasDatabaseConfigProvider[JdbcProfile] {
@@ -59,7 +64,7 @@ class LocationController @Inject()(cc: ControllerComponents, protected val dbCon
     }
   }
   
-  def createLocation() = Action.async(parse.json(locationReads)) { implicit request: Request[Location] =>
+  def createLocation() = silhouette.SecuredAction.async(parse.json(locationReads)) { implicit request: Request[Location] =>
     log.debug("Rest request to create location")
     
     val inserted = db.run(insertAndReturn[Location,LocationTable](location,request.body))

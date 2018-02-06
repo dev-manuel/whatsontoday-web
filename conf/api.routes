@@ -15,7 +15,7 @@
 #      schema:
 #        $ref: '#/definitions/whatson.model.detail.CategoryDetail'
 ###
-GET    /categories                     controllers.CategoryController.categories
+GET    /category                     controllers.CategoryController.categories
 
 ###
 #  summary: Search locations by name
@@ -141,3 +141,22 @@ POST   /images/:name                 controllers.ImageController.createImage(nam
 #        $ref: '#/definitions/whatson.model.ImageEntity'
 ###
 GET   /images/attach/:id             controllers.ImageController.attachImage(id: Int, entityType: String, entityId: Int)
+
+
+###
+#  summary: Create a category
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.Category'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Category'
+###
+POST   /category                       controllers.CategoryController.createCategory()

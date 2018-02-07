@@ -43,7 +43,7 @@ class EventControllerSpec extends RestTestSuite {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
       val location = Await.result(createLocation(), Duration.Inf)
 
-      val event = Event(None, "testevent", new Timestamp(0), new Timestamp(0), organizer._2.id, location.id.getOrElse(-1))
+      val event = Event(None, "testevent", new Timestamp(0), new Timestamp(0), "testdescription", organizer._2.id, location.id.getOrElse(-1))
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(event))).get
 
@@ -54,7 +54,7 @@ class EventControllerSpec extends RestTestSuite {
       val user = Await.result(createUser(), Duration.Inf)
       val location = Await.result(createLocation(), Duration.Inf)
 
-      val event = Event(None, "testevent", new Timestamp(0), new Timestamp(0), user._2.id, location.id.getOrElse(-1))
+      val event = Event(None, "testevent", new Timestamp(0), new Timestamp(0), "testdescription", user._2.id, location.id.getOrElse(-1))
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),
                                           Json.toJson(event))).get
 
@@ -108,7 +108,7 @@ class EventControllerSpec extends RestTestSuite {
     "return NotFound on non existing event" in {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
 
-      val eventUp = Event(Some(20000),"testevent", new Timestamp(0), new Timestamp(0), organizer._2.id, 1)
+      val eventUp = Event(Some(20000),"testevent", new Timestamp(0), new Timestamp(0), "testdescription", organizer._2.id, 1)
       val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ eventUp.id.getOrElse(-1).toString,
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventUp))).get

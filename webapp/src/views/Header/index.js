@@ -76,7 +76,7 @@ export default class Header extends React.Component{
 
     // This method will be invoked if the user presses enter while focusing the search bar
     onEnter(){
-        alert(this.state.searchValue)
+        this.props.global.history.push(`search?search=${this.state.searchValue}`);
     }
 
     // Simply updating the `value``of the search bar

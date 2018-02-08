@@ -15,13 +15,58 @@ import whatson.model._
 class EventControllerSpec extends RestTestSuite {
 
   "EventController GET" should {
-
     "return a list of events" in {
       Await.result(createEvent(), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true")).get
 
       status(events) mustBe OK
+    }
+
+    "sort by name if sort=name" in {
+      Await.result(createEvent(), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=name")).get
+
+      status(events) mustBe OK
+      //TODO
+    }
+
+    "sort by beginning date if sort=from" in {
+      Await.result(createEvent(), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=from")).get
+
+      status(events) mustBe OK
+      //TODO
+    }
+
+    "sort by end date if sort=to" in {
+      Await.result(createEvent(), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=to")).get
+
+      status(events) mustBe OK
+      //TODO
+    }
+
+    "sort by rating if sort=rating" in {
+      Await.result(createEvent(), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=rating")).get
+
+      status(events) mustBe OK
+      //TODO
+    }
+
+    "sort by distance to location if sort=location and a locationId is specified" in {
+      Await.result(createEvent(), Duration.Inf)
+      val location = Await.result(createLocation(), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=location&location=" ++ location.id.getOrElse(-1).toString)).get
+
+      status(events) mustBe OK
+      //TODO
     }
 
     "return NOT_FOUND on non existing event" in {

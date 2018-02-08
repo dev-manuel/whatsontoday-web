@@ -44,6 +44,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
             title: 'WhatsOn',
+            favicon: 'src/img/favicon.ico',
             template: `${shared.SRC_DIR}/template.html`,
             
         }),

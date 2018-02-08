@@ -1,9 +1,9 @@
 // Import modules
 import React from 'react';
-import {Menu, Search, Icon, Button, Dropdown} from 'semantic-ui-react';
+import {Menu, Search, Icon, Button, Dropdown, Image} from 'semantic-ui-react';
 
 // Import resources
-import logo from '../../img/logo1.jpg';
+import logo from '../../img/logo.png';
 import './menu.less';
 import ModalError from '../../components/modal';
 
@@ -91,7 +91,7 @@ export default class Header extends React.Component{
                     <Menu.Item className='headerSpacer'/>
 
                     <Menu.Item className='headerLogo'>
-                        <img src={logo} />
+                        <Image src={logo} href='#'/>
                     </Menu.Item>
 
                     <Menu.Item className='headerSearch'>

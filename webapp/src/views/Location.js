@@ -9,10 +9,11 @@ import StatefulView from '../common/StatefulView';
 import SelectorMatrix from '../components/selectorMatrix';
 
 
+
 let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ';
 
-const organizerData = {
-    name: 'AwesomeOrganizer',
+const locationData = {
+    name: 'AwesomeLocation',
     description: loremIpsum,
     rating: 4,
     contactLink: '#',
@@ -68,7 +69,7 @@ class ShowingState extends AbstractViewState{
     render(){
         return (
             <div style={{marginLeft: '11%', marginRight: '11%'}}>
-                <Overview {...organizerData}/>
+                <Overview {...locationData}/>
                 <SelectorMatrix eventList={eventList} />
             </div>
         )

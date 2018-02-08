@@ -38,6 +38,7 @@ class ImageController @Inject()(cc: ControllerComponents,
   def get(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get image")
 
+    //TODO Only return name+id
     val q = for(l <- image if l.id === id.bind) yield l;
 
     db.run(q.result).map(x => x.headOption match {

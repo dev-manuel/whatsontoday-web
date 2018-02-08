@@ -40,15 +40,15 @@ class Authentication@Inject() (
   passwordHasher: PasswordHasher,
   protected val dbConfigProvider: DatabaseConfigProvider)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
-  
-  
+
+
 
   val log = Logger("api.authentication")
-  
+
   /**
-    * Handles the submitted JSON data.
+    * Handles a login request with the login data in the request body.
     *
-    * @return The result to display.
+    * @return The answer: 200 on success, 401 on wrong credentials
     */
   def login = Action.async(parse.json) { implicit request =>
     request.body.validate[SignInForm].map { data =>
@@ -81,13 +81,8 @@ class Authentication@Inject() (
   }
 
   /**
-   * Handles the submitted JSON data.
-   *
-   * @return The result to display.
-    */
-  
-  /**
     * Manages the sign out action.
+    * Since we are using JWT wich are stateless this has no effect.
     */
   def signOut = silhouette.SecuredAction.async { implicit request =>
     silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))

@@ -9,6 +9,9 @@
 
 ###
 #  summary: Query all categories
+#  description: >
+#      Returns a list of all categories. A category consists of an id, name, and a parentId wich references
+#      The parent category. If the parentId is equal to the category id, the category has no parent.
 #  responses:
 #    200:
 #      description: success
@@ -19,6 +22,8 @@ GET    /category                     controllers.CategoryController.categories
 
 ###
 #  summary: Search locations by name
+#  description: >
+#      Searches for locations wich contain the search string in their name.
 #  parameters:
 #  - in: header
 #    name: X-Page
@@ -43,21 +48,30 @@ GET    /location                       controllers.LocationController.searchLoca
 #      description: success
 #      schema:
 #        $ref: '#/definitions/whatson.model.detail.LocationDetail'
+#    404:
+#      description: The location with the given id does not exist
 ###
 GET    /location/:id                   controllers.LocationController.getLocation(id: Int)
 
 ###
 #  summary: Get locations nearby a specific location
+#  description: >
+#      Returns a list of locations sorted by the distance to the given location.
 #  responses:
 #    200:
 #      description: success
 #      schema:
 #        $ref: '#/definitions/whatson.model.detail.LocationDetail'
+#    404:
+#      description: The location with the given id could not be found
 ###
 GET    /location/nearby/:id            controllers.LocationController.getNearby(id: Int)
 
 ###
 #  summary: Create a location
+#  description: >
+#      Create a location. Returns the created location with its id.
+#      This request is callable for all logged in users and organizers.
 #  parameters:
 #  - in: header
 #    name: x-auth-token
@@ -76,6 +90,9 @@ POST   /location                       controllers.LocationController.createLoca
 
 ###
 #  summary: Rate a specific entity
+#  description: >
+#      Rate a given entity. This action is only callable for logged in users. If a user has already rated the same entity
+#      the rating gets updated. The rating must be a float in between 1 and 5(inclusivly).
 #  parameters:
 #  - in: header
 #    name: x-auth-token
@@ -93,14 +110,20 @@ GET    /rating/:id/:entityType/:rate   controllers.RatingController.rateEntity(i
 
 ###
 #  summary: Get a specific image
+#  description: >
+#      Returns name and id of an image. The content is not returned.
 #  responses:
 #    200:
 #      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.detail.ImageDetail'
 ###
 GET    /images/:id            controllers.ImageController.get(id: Int)
 
 ###
 #  summary: Get bytes of a specific image
+#  description: >
+#      Returns the content of the image as a byte array.
 #  responses:
 #    200:
 #      description: success
@@ -109,6 +132,9 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 
 ###
 #  summary: Create an image
+#  description: >
+#      Creates an image. The imagedata is expected as a multipart file in the request body. Returns id and name of the
+#      created image.
 #  consumes:
 #  - multipart/form-data
 #  parameters:
@@ -126,6 +152,10 @@ POST   /images/:name                 controllers.ImageController.createImage(nam
 
 ###
 #  summary: Attach an image
+#  description: >
+#      Attach an image to a given entity. This is callable for logged in users and organizers.
+#      Organizers can attach images to their own account, events created by them and locations, while users
+#      can only attach images to locations.
 #  parameters:
 #  - in: header
 #    name: x-auth-token
@@ -145,6 +175,9 @@ GET   /images/attach/:id             controllers.ImageController.attachImage(id:
 
 ###
 #  summary: Create a category
+#  description: >
+#      Creates a category. The parentId must reference an existing category. If the category should have no parent
+#      the id of the category named 'All' must be used. That id can be obtained using the GET /category Request.
 #  parameters:
 #  - in: header
 #    name: x-auth-token

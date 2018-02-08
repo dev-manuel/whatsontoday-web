@@ -32,7 +32,7 @@ export default ({eventList, global}) => {
 
 
     const eventTiles = eventList.map( (entryListEntry, index) => (
-        <Grid.Column key={index % 3} width="2">
+        <Grid.Column key={index % 3} width="4">
              <Tile {...entryListEntry} global={global}/>
         </Grid.Column>
     ))

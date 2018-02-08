@@ -12,7 +12,7 @@ class ParticipantTable(tag: Tag) extends Table[(Int,Int)](tag, "participant") {
   def * = (userID,eventID)
     
   def eventFK = foreignKey("event", eventID,event)(_.id)
-  def participant = foreignKey("participant", userID,login)(_.id) //TODO: Update
+  def participant = foreignKey("participant", userID,UserTable.user)(_.id)
 }
 
 object ParticipantTable {

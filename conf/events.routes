@@ -90,3 +90,37 @@ POST     /                            controllers.EventController.createEvent
 #        $ref: '#/definitions/whatson.model.Event'
 ###
 PUT      /:id                         controllers.EventController.updateEvent(id: Int)
+
+###
+#  summary: Participate in an event
+#  description: Adds the user as a participant to the event
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: success
+#    400:
+#      description: The given event does not exist.
+#    409:
+#      description: The user is already participating.
+###
+GET     /participate/:id                          controllers.EventController.participate(id: Int)
+
+###
+#  summary: Remove participation in an event
+#  description: Removes the user as a participant to the event
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: success
+#    400:
+#      description: The user is not one of the participants
+###
+GET     /unparticipate/:id                          controllers.EventController.unparticipate(id: Int)

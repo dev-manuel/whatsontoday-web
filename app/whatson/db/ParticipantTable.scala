@@ -8,9 +8,9 @@ import whatson.db.EventTable._
 class ParticipantTable(tag: Tag) extends Table[(Int,Int)](tag, "participant") {
   def userID = column[Int]("user_fk")
   def eventID = column[Int]("event_fk")
-    
+
   def * = (userID,eventID)
-    
+
   def eventFK = foreignKey("event", eventID,event)(_.id)
   def participant = foreignKey("participant", userID,login)(_.id) //TODO: Update
 }

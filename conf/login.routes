@@ -1,5 +1,7 @@
 ###
 #  summary: Delete the currently logged in user
+#  description: >
+#      The JWT will be invalid after calling this token.
 #  parameters:
 #  - in: header
 #    name: x-auth-token
@@ -37,6 +39,8 @@ PUT      /     controllers.LoginController.updateUser
 
 ###
 #  summary: Sign out of account
+#  description: >
+#      Since we are using JWT wich are stateless this action has no result.
 #  parameters:
 #  - in: header
 #    name: x-auth-token
@@ -89,6 +93,9 @@ GET   /                          controllers.LoginController.getUser
 
 ###
 #  summary: Confirms the account of the user
+#  description: >
+#      This confirms an account. After calling this action users can log in an use all secured enpoints normally.
+#      This normally gets called by following the link in confirmation mails.
 #  parameters:
 #    name: token
 #    schema:

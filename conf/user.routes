@@ -3,6 +3,8 @@
 #  description: >
 #      A new account gets created. The access token to this account is returned.
 #      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
+#      In production an confirmation mail gets send to the provided email. For development accounts are
+#      automatically unlocked for convenience.
 #  parameters:
 #    - name: body
 #      schema:
@@ -10,9 +12,7 @@
 #      description: The user data. The password must not be hashed.
 #  responses:
 #    200:
-#      description: success
-#      schema:
-#        $ref: '#/definitions/whatson.model.AccessToken'
+#      description: Success. A login/confirmation is required after this.
 #    400:
 #      description: User already exists
 ###

@@ -25,7 +25,9 @@
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Event'
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.Event'
 ###
 GET      /   controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort:Option[String], sortDir: Boolean)
 

@@ -16,7 +16,9 @@
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.detail.CategoryDetail'
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.CategoryDetail'
 ###
 GET    /category                     controllers.CategoryController.categories
 
@@ -37,7 +39,9 @@ GET    /category                     controllers.CategoryController.categories
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.detail.LocationDetail'
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.LocationDetail'
 ###
 GET    /location                       controllers.LocationController.searchLocations(search: Option[String])
 
@@ -61,7 +65,9 @@ GET    /location/:id                   controllers.LocationController.getLocatio
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.detail.LocationDetail'
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.LocationDetail'
 #    404:
 #      description: The location with the given id could not be found
 ###

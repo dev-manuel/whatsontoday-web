@@ -49,7 +49,7 @@ class EventController @Inject()(cc: ControllerComponents,
     log.debug("Rest request to search events")
 
     val q = for {
-      e <- event if e.name like search.map(y => "%"++y++"%").getOrElse("%%").bind
+      e <- event if similar(e.name,search.getOrElse("").bind) || search.getOrElse("").bind === ""
                  if e.categories.filter(_.id === category.getOrElse(-1)).exists || category.getOrElse(-1).bind === -1
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
     } yield e

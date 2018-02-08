@@ -23,38 +23,38 @@ class LocationController @Inject()(cc: ControllerComponents,
                                    protected val dbConfigProvider: DatabaseConfigProvider,
                                    silhouette: Silhouette[AuthEnv])
     (implicit context: ExecutionContext)
-    extends AbstractController(cc) 
+    extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] {
-  
+
   val log = Logger("api.location")
-  
+
   def searchLocations(search: Option[String]) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to search locations")
-    
+
     val q = for {
-      l <- location if l.name like ("%"++search.getOrElse("")++"%").bind
+      l <- location if similar(l.name,search.getOrElse("").bind) || search.getOrElse("").bind === ""
     } yield l
 
     val s = q.queryPaged.detailed
     returnPaged(s,q,db)
   }
-  
+
   def getLocation(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get location")
-    
+
     val q = for(l <- location if l.id === id.bind) yield l;
-    
+
     db.run(q.detailed).map(x => x.headOption match {
       case Some(r) => Ok(Json.toJson(r))
       case _ => NotFound
     })
   }
-  
+
   def getNearby(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get location close to another location")
-    
+
     val q = for(l <- location if l.id === id.bind) yield l;
-    
+
     db.run(q.detailed).map(_.headOption).flatMap {
       case Some(r) => {
         val s = location.sortBy(y => geoDistance(r.latitude, r.longitude, y.latitude, y.longitude))
@@ -63,12 +63,12 @@ class LocationController @Inject()(cc: ControllerComponents,
       case None => Future(NotFound)
     }
   }
-  
+
   def createLocation() = silhouette.SecuredAction.async(parse.json(locationReads)) { implicit request: Request[Location] =>
     log.debug("Rest request to create location")
-    
+
     val inserted = db.run(insertAndReturn[Location,LocationTable](location,request.body))
-    
+
     inserted.map(x => Ok(Json.toJson(x)))
   }
 }

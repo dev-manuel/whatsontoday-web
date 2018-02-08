@@ -16,6 +16,11 @@ object Util extends Results {
   def geoDistance(a: Rep[Float], b:Rep[Float], c:Rep[Float], d:Rep[Float]) =
     SimpleFunction[Float]("geodistance").apply(Seq(a,b,c,d))
 
+  def similarity(a: Rep[String], b:Rep[String], c:Rep[Float]) =
+    SimpleFunction[Float]("similarity").apply(Seq(a,b,c))
+
+  def similar(a: Rep[String], b:Rep[String]) =
+    SimpleBinaryOperator[Boolean]("%").apply(a,b)
 
   def insertAndReturn[T, U <: HasID[T]](a: TableQuery[U], b: U#TableElementType) = {
     (a returning a.map(x => x.id) into ((event,i) => event.cpy(Some(i))) += b)

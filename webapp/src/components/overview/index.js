@@ -4,6 +4,8 @@ import {Grid, Rating} from 'semantic-ui-react';
 
 // Import resources
 import ImageSlider from '../imageSlider';
+import exampleImage from '../../img/example_image.jpg';
+
 
 
 const Overview = ({name, date, rating, description, categories}) => (
@@ -11,7 +13,7 @@ const Overview = ({name, date, rating, description, categories}) => (
             <Grid>
                 <Grid.Row>
                     <Grid.Column width="8">
-                        {/* <ImageSlider /> */}
+                        <ImageSlider imageURIList={[exampleImage, exampleImage, exampleImage, exampleImage]} />
                     </Grid.Column>
                     <Grid.Column width="8">
                         <h2>{name}</h2>

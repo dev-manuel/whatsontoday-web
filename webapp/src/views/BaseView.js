@@ -9,7 +9,8 @@ import Header from './Header';
 import HomeView from './Home';
 import SERPView from './SERP';
 import EventView from './Event';
-import Organizer from './Organizer';
+import OrganizerView from './Organizer';
+import LocationView from './Location';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import Confirm from './Confirm';
@@ -48,7 +49,8 @@ class BaseView extends React.Component {
                     <Route exact path='/' render={() => <HomeView global={this.global}/>}/>
                     <Route path='/search' render={() => <SERPView global={this.global}/>}/> {/* Todo: render specific SERP according to URL parameters */}
                     <Route path='/event' render={() => <EventView global={this.global}/>}/>
-                    <Route path='/organizer' component={Organizer}/>
+                    <Route path='/organizer' component={OrganizerView}/>
+                    <Route path='/location' component={LocationView}/>
                     <Route path='/signin' render={() => (<SignIn global={this.global} />)}/>
                     <Route path='/signup' render={() => (<SignUp global={this.global} />)}/>
                     <Route path='/mailConfirmed' render={()=> (<Confirm global={this.global} />)} />

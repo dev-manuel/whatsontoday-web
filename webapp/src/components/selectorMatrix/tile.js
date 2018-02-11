@@ -12,7 +12,7 @@ import exampleTileImage from '../../img/example_tile.png';
  */
 export default ({name, date, categories, imageURI, target, global}) => (
 
-    <div className="tile">
+    <div className="selectorMatrixTile">
         <div>
             <h3> {name} </h3>
             <p> {date} </p>

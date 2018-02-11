@@ -17,6 +17,8 @@ import whatson.model._
 import whatson.model.Location._
 import com.mohiva.play.silhouette.api._
 import whatson.auth._
+import whatson.model.forms._
+import whatson.util.FormErrorJson._
 
 
 class LocationController @Inject()(cc: ControllerComponents,
@@ -64,11 +66,17 @@ class LocationController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def createLocation() = silhouette.SecuredAction.async(parse.json(locationReads)) { implicit request: Request[Location] =>
-    log.debug("Rest request to create location")
+  def createLocation() = silhouette.SecuredAction.async(parse.json) { implicit request =>
+    LocationForm.form.bindFromRequest()(request).fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      },
+      data => {
+        log.debug("Rest request to create location")
 
-    val inserted = db.run(insertAndReturn[Location,LocationTable](location,request.body))
+        val inserted = db.run(insertAndReturn[Location,LocationTable](location,data))
 
-    inserted.map(x => Ok(Json.toJson(x)))
+        inserted.map(x => Ok(Json.toJson(x)))
+      })
   }
 }

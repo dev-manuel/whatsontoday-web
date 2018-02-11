@@ -6,9 +6,9 @@ import whatson.model._
 
 object CategoryForm {
   val map = mapping(
-    "id" -> ignored(None: Option[Int]),
-    "name" -> nonEmptyText,
-    "parentId" -> number,
+    "id" -> optional(number(min=1)),
+    "name" -> nonEmptyText(minLength=3),
+    "parentId" -> number(min=1),
     )(Category.apply)(Category.unapply)
   val form = Form(map)
 }

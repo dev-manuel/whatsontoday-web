@@ -1,6 +1,6 @@
 package controllers
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent._
 
 import javax.inject._
 import play.api._
@@ -15,6 +15,9 @@ import whatson.model._
 import com.mohiva.play.silhouette.api._
 import whatson.auth._
 import whatson.db.Util._
+import whatson.model.forms._
+import whatson.util.FormErrorJson._
+
 
 /**
  * This Controller handles API Requests concerning categories
@@ -38,11 +41,17 @@ class CategoryController @Inject()(cc: ControllerComponents,
     db.run(q.detailed).map(x => Ok(Json.toJson(x)))
   }
 
-  def createCategory() = organizerRequest(parse.json(Category.categoryReads)) { case (request,organizer) =>
-    log.debug("Rest request to create category")
+  def createCategory() = organizerRequest(parse.json) { case (request,organizer) =>
+    CategoryForm.form.bindFromRequest()(request).fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      },
+      data => {
+        log.debug("Rest request to create category")
 
-    val inserted = db.run(insertAndReturn[Category,CategoryTable](CategoryTable.category,request.body))
+        val inserted = db.run(insertAndReturn[Category,CategoryTable](CategoryTable.category,data))
 
-    inserted.map(x => Ok(Json.toJson(x)))
+        inserted.map(x => Ok(Json.toJson(x)))
+      })
   }
 }

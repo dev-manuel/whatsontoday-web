@@ -10,20 +10,22 @@ import whatson.model._
 /**
   * The form which handles creating/updating Events.
   */
-object EventsForm {
+object EventForm {
   val map = mapping(
       "name" -> nonEmptyText,
       "from" -> sqlTimestamp("yyyy-MM-dd HH:mm:ss"),
       "to" -> sqlTimestamp("yyyy-MM-dd HH:mm:ss"),
       "categories" -> list(CategoryForm.map),
       "location" -> LocationForm.map,
-      "images" -> list(number)
+      "images" -> list(number),
+      "description" -> nonEmptyText
     )(Data.apply)(Data.unapply)
   val form = Form(map)
 
   case class Data(name: String, from: Timestamp,
                   to: Timestamp, categories: List[Category],
-                  location: Location, imageIds: List[Int])
+                  location: Location, imageIds: List[Int],
+                  description: String)
 
   object Data {
     implicit val jsonFormat = Json.format[Data]

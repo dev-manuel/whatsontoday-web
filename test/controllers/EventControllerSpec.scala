@@ -11,6 +11,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import java.sql.Timestamp
 import whatson.model._
+import whatson.model.forms._
 
 class EventControllerSpec extends RestTestSuite {
 
@@ -88,20 +89,51 @@ class EventControllerSpec extends RestTestSuite {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
       val location = Await.result(createLocation(), Duration.Inf)
 
-      val event = Event(None, "testevent", new Timestamp(0), new Timestamp(0), "testdescription", organizer._2.id, location.id.getOrElse(-1))
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocation", 0.0f, 0.0f),
+                                     List(), "testdescription")
+
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
-                                          Json.toJson(event))).get
+                                          Json.toJson(eventForm))).get
 
       status(events) mustBe OK
+    }
+
+    "return BadRequest for empty event name" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val location = Await.result(createLocation(), Duration.Inf)
+
+      val eventForm = EventForm.Data("", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocation", 0.0f, 0.0f),
+                                     List(), "testdescription")
+
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe BAD_REQUEST
+    }
+
+
+    "return BadRequest for empty event description" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val location = Await.result(createLocation(), Duration.Inf)
+
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocation", 0.0f, 0.0f),
+                                     List(), "")
+
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe BAD_REQUEST
     }
 
     "return BadRequest for users" in {
       val user = Await.result(createUser(), Duration.Inf)
       val location = Await.result(createLocation(), Duration.Inf)
 
-      val event = Event(None, "testevent", new Timestamp(0), new Timestamp(0), "testdescription", user._2.id, location.id.getOrElse(-1))
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocation", 0.0f, 0.0f),
+                                     List(), "testdescription")
+
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),
-                                          Json.toJson(event))).get
+                                          Json.toJson(eventForm))).get
 
       status(events) mustBe UNAUTHORIZED
     }

@@ -11,12 +11,15 @@ import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import whatson.db.EventTable._
 import whatson.db.Util._
-import whatson.model.Event
+import whatson.model._
 import whatson.model.Event._
 import whatson.model.detail.EventDetail._
 import com.mohiva.play.silhouette.api._
 import whatson.auth._
 import whatson.service._
+import whatson.model.forms._
+import whatson.util.FormErrorJson._
+
 
 /**
  * This Controller handles API Requests concerning events
@@ -68,14 +71,40 @@ class EventController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def createEvent() = organizerRequest(parse.json(eventReads)) { case (request,organizer) =>
-    log.debug("Rest request to create event")
+  def createEvent() = organizerRequest(parse.json) { case (request,organizer) =>
+    EventForm.form.bindFromRequest()(request).fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      },
+      data => {
+        log.debug("Rest request to create event")
 
-    val e = request.body.copy(creatorId = organizer.id)
+        val locationQuery = (data.location.id match {
+          case None => insertAndReturn[Location,LocationTable](LocationTable.location,data.location)
+          case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
+        })
 
-    val inserted = db.run(insertAndReturn[Event,EventTable](event,e))
+        val imagesQuery = DBIO.sequence(data.imageIds.map(x => ImageTable.image.filter(_.id === x.bind).result)).map(_.flatten)
 
-    inserted.map(x => Ok(Json.toJson(x)))
+        val categoriesQuery = DBIO.sequence(
+          data.categories.map {
+            case cat =>
+              cat.id match {
+                case None => insertAndReturn[Category,CategoryTable](CategoryTable.category,cat).map(x => List(x).seq)
+                case Some(id) => CategoryTable.category.filter(_.id === id.bind).result
+              }
+          }).map(_.flatten)
+
+        db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery)).flatMap { case ((location,images),categories) =>
+          val event = Event(None, data.name, data.from, data.to, data.description, organizer.id, location.id.getOrElse(-1))
+          db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,images,categories))
+        }.flatMap { case (event,images,categories) =>
+          val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event))
+          val categoriesAdd = EventCategoryTable.eventCategory ++= categories.map(cat => (cat.id.getOrElse(-1),event.id.getOrElse(-1)))
+          val eventDetailed = EventTable.event.filter(_.id === event.id.getOrElse(-1)).detailed
+          db.run(imagesAdd.zip(categoriesAdd) >> eventDetailed)
+        }.map(x => Ok(Json.toJson(x)))
+      })
   }
 
   def updateEvent(id: Int) = organizerRequest(parse.json(eventReads)) { (request,organizer) =>

@@ -1,7 +1,6 @@
 package controllers
 
-import scala.concurrent.ExecutionContext
-
+import scala.concurrent._
 import javax.inject._
 import play.api._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
@@ -87,6 +86,34 @@ class EventController @Inject()(cc: ControllerComponents,
     db.run(q).map {
       case 0 => NotFound
       case x => Ok(Json.toJson(x))
+    }
+  }
+
+  def participate(id: Int) = userRequest(parse.default) { case (request,user) =>
+    log.debug("Rest request to participate in event")
+
+    val q = (event.filter(x => x.id === id.bind).result)
+      .zip(ParticipantTable.participant.filter(x => x.eventID === id.bind && x.userID === user.id.getOrElse(-1).bind).result)
+
+    db.run(q).map(x => (x._1.headOption,x._2.headOption)).flatMap {
+      case (Some(e),None) => {
+        db.run(ParticipantTable.participant += ((user.id.getOrElse(-1),id)))
+        Future.successful(Ok)
+      }
+      case (Some(e),Some(p)) => Future.successful(Conflict)
+      case (None,_) => Future.successful(BadRequest)
+    }
+  }
+
+  def unparticipate(id: Int) = userRequest(parse.default) { case (request,user) =>
+    log.debug("Rest request to unparticipate in event")
+
+    db.run(ParticipantTable.participant.filter(x => x.eventID === id.bind && x.userID === user.id.getOrElse(-1).bind).delete)
+      .flatMap {
+      case 1 => {
+        Future.successful(Ok)
+      }
+      case _ => Future.successful(BadRequest)
     }
   }
 }

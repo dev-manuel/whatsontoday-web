@@ -173,4 +173,101 @@ class EventControllerSpec extends RestTestSuite {
       status(events) mustBe UNAUTHORIZED
     }
   }
+
+  "EventController GET participate" should {
+    "return OK on first participation" in {
+      val event = Await.result(createEvent(), Duration.Inf)
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val participate = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event.id.getOrElse(-1).toString,
+                         new Headers(List(("x-auth-token",user._3))),"")).get
+
+      status(participate) mustBe OK
+    }
+
+    "return Unauthorized for Organizers" in {
+      val event = Await.result(createEvent(), Duration.Inf)
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+
+      val participate = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",organizer._3))),"")).get
+
+      status(participate) mustBe UNAUTHORIZED
+    }
+
+    "return BadRequest for non existent event" in {
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val participate = route(app, FakeRequest(GET, "/api/v1/events/participate/20000",
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+
+      status(participate) mustBe BAD_REQUEST
+    }
+
+    "return CONFLICT on second participation" in {
+      val event = Await.result(createEvent(), Duration.Inf)
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val participate1 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user._3))),"")).get
+      Thread.sleep(1000)
+      val participate2 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user._3))),"")).get
+
+      status(participate2) mustBe CONFLICT
+    }
+  }
+
+  "EventController GET unparticipate" should {
+    "return OK on first unparticipation" in {
+      val event = Await.result(createEvent(), Duration.Inf)
+      val user = Await.result(createUser(), Duration.Inf)
+
+      route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+
+      Thread.sleep(1000)
+      val unparticipate = route(app, FakeRequest(GET, "/api/v1/events/unparticipate/" ++ event.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+
+      status(unparticipate) mustBe OK
+    }
+
+    "return Unauthorized for Organizers" in {
+      val event = Await.result(createEvent(), Duration.Inf)
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+
+      val unparticipate = route(app, FakeRequest(GET, "/api/v1/events/unparticipate/" ++ event.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",organizer._3))),"")).get
+
+      status(unparticipate) mustBe UNAUTHORIZED
+    }
+
+    "return BadRequest for non existent event" in {
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val unparticipate = route(app, FakeRequest(GET, "/api/v1/events/unparticipate/20000",
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+
+      status(unparticipate) mustBe BAD_REQUEST
+    }
+
+    "return BadRequest on second unparticipation" in {
+      val event = Await.result(createEvent(), Duration.Inf)
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val participate = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user._3))),"")).get
+
+      val req = FakeRequest(GET, "/api/v1/events/unparticipate/" ++ event.id.getOrElse(-1).toString,
+                            new Headers(List(("x-auth-token",user._3))),"")
+
+      Thread.sleep(1000)
+      val unparticipate1 = route(app,req).get
+      Thread.sleep(1000)
+      val unparticipate2 = route(app,req).get
+
+      status(unparticipate2) mustBe BAD_REQUEST
+    }
+  }
 }

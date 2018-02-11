@@ -13,7 +13,7 @@ case class EventDetail(id: Option[Int], name: String, from: Timestamp,
                        to: Timestamp, description: String,
                        creator: Organizer, categories: List[Category],
                        avgRating: Option[Float], location: Location,
-                       images: List[Int]) extends Rateable with WithImages
+                       images: List[Int], participantCount: Int) extends Rateable with WithImages
 
 object EventDetail {
   implicit val eventDetailReads = Json.reads[EventDetail]
@@ -23,12 +23,15 @@ object EventDetail {
 
   implicit class EventDetailQuery(q: Query[EventTable, Event, Seq]) {
     def detailed(implicit ec: ExecutionContext) = {
-      val s = q.join(OrganizerTable.organizer).on(_.creatorId === _.id).join(LocationTable.location).on(_._1.locationId === _.id)
+      val s = q.map(x => (x,x.participants.length))
+        .join(OrganizerTable.organizer).on(_._1.creatorId === _.id)
+        .join(LocationTable.location).on(_._1._1.locationId === _.id)
       val t = s.result.flatMap(y => {
         DBIO.sequence(y.map {
-          case ((event, creator), location) => {
+          case (((event,pCount), creator), location) => {
             val s = EventTable.event.filter(_.id === event.id).map(_.avgRating)
             val imgs = EventTable.event.filter(_.id === event.id).flatMap(_.images).map(_.id)
+
             val c = for (
               j <- EventCategoryTable.eventCategory if j.eventID === event.id;
               c <- CategoryTable.category if c.id === j.categoryID
@@ -37,7 +40,7 @@ object EventDetail {
             s.result.zip(c.result).zip(imgs.result).map(o => {
               EventDetail(event.id, event.name, event.from, event.to, event.description,
                           creator, o._1._2.toList, o._1._1.headOption.flatten,
-                          location, o._2.toList)
+                          location, o._2.toList, pCount)
             })
           }
         })
@@ -46,4 +49,3 @@ object EventDetail {
     }
   }
 }
-

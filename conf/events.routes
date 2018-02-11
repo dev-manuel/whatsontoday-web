@@ -27,7 +27,7 @@
 #      schema:
 #        type: array
 #        items:
-#          $ref: '#/definitions/whatson.model.Event'
+#          $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
 GET      /   controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort:Option[String], sortDir: Boolean)
 
@@ -37,7 +37,7 @@ GET      /   controllers.EventController.searchEvents(search: Option[String], lo
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Event'
+#        $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
 GET      /:id                         controllers.EventController.getEvent(id: Int)
 

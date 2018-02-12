@@ -60,7 +60,7 @@ GET    /signOut                  controllers.Authentication.signOut
 #  parameters:
 #    - name: body
 #      schema:
-#        $ref: '#/definitions/whatson.model.SignInForm'
+#        $ref: '#/definitions/whatson.model.forms.SignInForm'
 #      description: >
 #        The user data. If rememberMe is true, the authentication token will be valid for several days.
 #  responses:

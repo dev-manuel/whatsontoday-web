@@ -19,8 +19,8 @@ import play.api.cache.AsyncCacheApi
 import whatson.auth._
 import whatson.service._
 import com.mohiva.play.silhouette.api.util.PasswordHasher
-import whatson.model._
-import whatson.model.SignInForm._
+import whatson.model.forms._
+import whatson.model.forms.SignInForm._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import javax.inject._
 import slick.jdbc.JdbcProfile

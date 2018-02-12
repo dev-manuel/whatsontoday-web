@@ -10,8 +10,8 @@ import scala.concurrent.duration._
 import play.api.libs.json._
 import play.api.mvc._
 import java.sql.Timestamp
-import whatson.model._
-import whatson.model._
+import whatson.model.forms._
+import whatson.model.forms.SignInForm._
 
 class AuthenticationSpec extends RestTestSuite {
 

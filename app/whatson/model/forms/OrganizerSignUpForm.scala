@@ -8,7 +8,6 @@ import play.api.libs.json.Json
   * The form which handles the sign up process.
   */
 object OrganizerSignUpForm {
-
   /**
     * A play framework form.
     */

@@ -79,6 +79,11 @@ POST     /                            controllers.EventController.createEvent
 
 ###
 #  summary: Update an event with a specific id
+#  description: >
+#    Updates an event. The location and category can either be specified by their id or only by name
+#    and their other attributes. In that case they will be created before creating the event.
+#    Images must be uploaded before creating the event, so they can only be referenced by id.
+#    Categories and Images not specified in the request that where attached to the event before will be removed.
 #  parameters:
 #  - in: header
 #    name: x-auth-token
@@ -86,12 +91,12 @@ POST     /                            controllers.EventController.createEvent
 #      type: string
 #  - name: body
 #    schema:
-#      $ref: '#/definitions/whatson.model.Event'
+#      $ref: '#/definitions/whatson.model.forms.EventForm.Data'
 #  responses:
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.Event'
+#        $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
 PUT      /:id                         controllers.EventController.updateEvent(id: Int)
 

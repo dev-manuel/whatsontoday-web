@@ -107,7 +107,62 @@ class EventController @Inject()(cc: ControllerComponents,
       })
   }
 
-  def updateEvent(id: Int) = organizerRequest(parse.json(eventReads)) { (request,organizer) =>
+  def updateEvent(id: Int) = organizerRequest(parse.json) { case (request,organizer) =>
+    EventForm.form.bindFromRequest()(request).fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      },
+      data => {
+        log.debug("Rest request to update event")
+
+        val locationQuery = (data.location.id match {
+          case None => insertAndReturn[Location,LocationTable](LocationTable.location,data.location)
+          case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
+        })
+
+        val imagesQuery = DBIO.sequence(data.imageIds.map(x => ImageTable.image.filter(_.id === x.bind).result)).map(_.flatten)
+
+        val categoriesQuery = DBIO.sequence(
+          data.categories.map {
+            case cat =>
+              cat.id match {
+                case None => insertAndReturn[Category,CategoryTable](CategoryTable.category,cat).map(x => List(x).seq)
+                case Some(id) => CategoryTable.category.filter(_.id === id.bind).result
+              }
+          }).map(_.flatten)
+
+        val eventQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === organizer.id).result.map(_.headOption)
+
+        db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery).zip(eventQuery)).flatMap {
+          case (((location,images),categories),Some(event)) => {
+            val event = Event(Some(id), data.name, data.from, data.to, data.description, organizer.id, location.id.getOrElse(-1))
+
+            val getQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === organizer.id)
+
+            db.run(getQuery.update(event) >> getQuery.result.map(_.head))
+              .map(r => Some((r,images,categories)))
+          }
+          case (((_,_),_),None) => Future.successful(None)
+        }.flatMap {
+          case Some((event,images,categories)) => {
+            val dropImages = ImageEntityTable.imageEntity.filter(x => x.entityId === id && x.entityType === EntityType.Event).delete
+            val dropCategories = EventCategoryTable.eventCategory.filter(x => x.eventID === id).delete
+            val dropQuery = dropImages.zip(dropCategories)
+
+            val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event))
+            val categoriesAdd = EventCategoryTable.eventCategory ++= categories.map(cat => (cat.id.getOrElse(-1),event.id.getOrElse(-1)))
+            val eventDetailed = EventTable.event.filter(_.id === event.id.getOrElse(-1)).detailed
+            db.run(dropQuery >> imagesAdd.zip(categoriesAdd) >> eventDetailed).map(x => Some(x))
+          }
+          case None => Future.successful(None)
+        }.map {
+          case Some(e) => Ok(Json.toJson(e))
+          case None => {log.debug("noo");BadRequest}
+        }
+      })
+  }
+
+  /*organizerRequest(parse.json(eventReads)) { (request,organizer) =>
     log.debug("Rest request to update event")
 
     val q = event.filter(x => x.id === id.bind && x.creatorId === organizer.id).update(request.body)
@@ -116,7 +171,7 @@ class EventController @Inject()(cc: ControllerComponents,
       case 0 => NotFound
       case x => Ok(Json.toJson(x))
     }
-  }
+  }*/
 
   def participate(id: Int) = userRequest(parse.default) { case (request,user) =>
     log.debug("Rest request to participate in event")

@@ -17,7 +17,7 @@ object EventForm {
       "to" -> sqlTimestamp("yyyy-MM-dd HH:mm:ss"),
       "categories" -> list(CategoryForm.map),
       "location" -> LocationForm.map,
-      "images" -> list(number),
+      "imageIds" -> list(number),
       "description" -> nonEmptyText
     )(Data.apply)(Data.unapply)
   val form = Form(map)

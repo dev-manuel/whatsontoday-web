@@ -174,33 +174,50 @@ class EventControllerSpec extends RestTestSuite {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
       val event = Await.result(createEvent(Some(organizer._2)), Duration.Inf)
 
-      val eventUp = event.copy(name = "updated")
-      val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ eventUp.id.getOrElse(-1).toString,
+      val eventForm = EventForm.Data("testeventupdated", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocationupdated", 0.0f, 0.0f),
+                                     List(), "testdescriptionupdated")
+      val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
-                                          Json.toJson(eventUp))).get
+                                          Json.toJson(eventForm))).get
 
       status(events) mustBe OK
     }
 
-    "return NotFound on non existing event" in {
+    "return BadRequest on non existing event" in {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
 
-      val eventUp = Event(Some(20000),"testevent", new Timestamp(0), new Timestamp(0), "testdescription", organizer._2.id, 1)
-      val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ eventUp.id.getOrElse(-1).toString,
+      val eventForm = EventForm.Data("testeventupdated", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocationupdated", 0.0f, 0.0f),
+                                     List(), "testdescriptionupdated")
+      val events = route(app, FakeRequest(PUT, "/api/v1/events/20000",
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
-                                          Json.toJson(eventUp))).get
+                                          Json.toJson(eventForm))).get
 
-      status(events) mustBe NOT_FOUND
+      status(events) mustBe BAD_REQUEST
+    }
+
+    "return BadRequest for event not belonging to organizer" in {
+      val organizer1 = Await.result(createOrganizer(), Duration.Inf)
+      val organizer2 = Await.result(createOrganizer(name = "testorganizer2", mail = "testorganizer2@test.de"), Duration.Inf)
+      val event = Await.result(createEvent(Some(organizer1._2)), Duration.Inf)
+
+      val eventForm = EventForm.Data("testeventupdated", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocationupdated", 0.0f, 0.0f),
+                                     List(), "testdescriptionupdated")
+      val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
+                                          new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer2._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe BAD_REQUEST
     }
 
     "return Unauthorized for users" in {
       val user = Await.result(createUser(), Duration.Inf)
       val event = Await.result(createEvent(), Duration.Inf)
 
-      val eventUp = event.copy(name = "updated")
-      val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ eventUp.id.getOrElse(-1).toString,
+      val eventForm = EventForm.Data("testeventupdated", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocationupdated", 0.0f, 0.0f),
+                                     List(), "testdescriptionupdated")
+      val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),
-                                          Json.toJson(eventUp))).get
+                                          Json.toJson(eventForm))).get
 
       status(events) mustBe UNAUTHORIZED
     }

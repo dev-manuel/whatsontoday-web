@@ -101,7 +101,10 @@ class LoginController @Inject()(cc: ControllerComponents,
               authInfo <- authInfoRepository.update(login.loginInfo,authInfo)
               authenticator <- silhouette.env.authenticatorService.create(login.loginInfo)
               token <- silhouette.env.authenticatorService.init(authenticator)
-            } yield Ok(Json.obj("token" -> token))
+            } yield {
+              mailService.sendPasswordChangeNotification(login.email,token)
+              Ok(Json.obj("token" -> token))
+            }
           }
         }
       })

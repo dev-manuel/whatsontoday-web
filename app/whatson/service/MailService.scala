@@ -10,5 +10,8 @@ trait MailService {
 
   def sendOrganizerConfirmation(userMail: String,
                                name: String,
-                               confirmationToken: String): Unit
+                                confirmationToken: String): Unit
+
+  def sendPasswordChangeNotification(userMail: String,
+                                     changeToken: String): Unit
 }

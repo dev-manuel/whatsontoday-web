@@ -44,4 +44,16 @@ class MailServiceImpl @Inject()(mailerClient: MailerClient,
     if(applicationConfig.confirmationMails)
       mailerClient.send(email)
   }
+
+  def sendPasswordChangeNotification(userMail: String,
+                           changeToken: String) = {
+    val email = Email(
+      "Your password has been changed",
+      "Whats On <no-reply@whats-on.today>",
+      Seq(userMail),
+      bodyHtml = Some(new PasswordChangeNotification(userMail,applicationConfig.url,changeToken)().toString())
+    )
+
+    mailerClient.send(email)
+  }
 }

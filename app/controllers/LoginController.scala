@@ -36,6 +36,7 @@ import play.api.mvc._
 import slick.jdbc.JdbcProfile
 import whatson.auth._
 import whatson.model._
+import whatson.model.forms._
 import whatson.service._
 import whatson.util.FormErrorJson._
 
@@ -82,15 +83,28 @@ class LoginController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def updateUser = silhouette.SecuredAction.async(parse.json(loginReads)) { implicit request =>
-    log.debug("Rest request to update user")
+  def updateUser = silhouette.SecuredAction.async(parse.json) { implicit request =>
+    LoginUpdateForm.form.bindFromRequest().fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      },
+      data => {
+        log.debug("Rest request to update users password")
 
-    val q = login.filter(_.id === request.identity.id).update(request.body)
+        val authInfo = passwordHasher.hash(data.password)
+        val q = login.filter(_.id === request.identity.id).result.map(_.headOption)
 
-    db.run(q).map {
-      case 0 => NotFound
-      case x => Ok(Json.toJson(x))
-    }
+        db.run(q).flatMap {
+          case None => Future.successful(NotFound)
+          case Some(login) => {
+            for {
+              authInfo <- authInfoRepository.update(login.loginInfo,authInfo)
+              authenticator <- silhouette.env.authenticatorService.create(login.loginInfo)
+              token <- silhouette.env.authenticatorService.init(authenticator)
+            } yield Ok(Json.obj("token" -> token))
+          }
+        }
+      })
   }
 
   def confirm(token: String) = Action.async { implicit request =>

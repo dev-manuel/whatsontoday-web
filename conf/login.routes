@@ -16,9 +16,10 @@
 DELETE   /   controllers.LoginController.deleteUser
 
 ###
-#  summary: Update the currently logged in user
+#  summary: Update the currently logged in users password
 #  description: >
-#      The request body will get updated soon.
+#      Updates the password of the currently logged in user. This invalidates the old authentication token,
+#      so a new one has to be supplied.
 #  parameters:
 #  - in: header
 #    name: x-auth-token
@@ -26,12 +27,12 @@ DELETE   /   controllers.LoginController.deleteUser
 #      type: string
 #  - name: body
 #    schema:
-#      $ref: '#/definitions/whatson.model.Login'
+#      $ref: '#/definitions/whatson.model.forms.LoginUpdateForm.Data'
 #  responses:
 #    200:
-#      description: User updated
+#      description: Users password updated
 #      schema:
-#        $ref: '#/definitions/whatson.model.Login'
+#        $ref: '#/definitions/whatson.model.AccessToken'
 #    401:
 #      description: Access forbidden
 ###

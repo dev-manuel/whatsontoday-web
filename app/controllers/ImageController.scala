@@ -38,7 +38,6 @@ class ImageController @Inject()(cc: ControllerComponents,
   def get(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get image")
 
-    //TODO Only return name+id
     val q = for(l <- image if l.id === id.bind) yield l;
 
     db.run(q.result).map(x => x.headOption match {
@@ -53,20 +52,20 @@ class ImageController @Inject()(cc: ControllerComponents,
     val q = for(l <- image if l.id === id.bind) yield l;
 
     db.run(q.result).map(x => x.headOption match {
-      case Some(r) => Ok(r.data)
+      case Some(r) => Ok(r.data).as(r.contentType.getOrElse("image/jpg"))
       case _ => NotFound
     })
   }
 
   def createImage(name: String) = Action(parse.multipartFormData).async { request =>
-    log.debug("Rest request to scan image for spending data")
+    log.debug("Rest request to create image")
 
     request.body.file("image").map { x =>
       val file = x.ref.path.toFile()
       val str = new FileInputStream(file)
       val bytes = IOUtils.toByteArray(str)
 
-      val img = Image(None,name,bytes)
+      val img = Image(None,name,bytes,x.contentType)
 
       db.run(insertAndReturn[Image,ImageTable](image,img))
     }.map(_.map(x => Ok(Json.toJson(x)))).getOrElse(Future.successful(BadRequest))

@@ -12,7 +12,9 @@ class ImageTable(tag: Tag) extends Table[Image](tag, "images") with HasID[Image]
 
   def data = column[Array[Byte]]("data")
 
-  def * = (id.?,name,data) <> (Image.tupled, Image.unapply)
+  def contentType = column[Option[String]]("content_type")
+
+  def * = (id.?,name,data,contentType) <> (Image.tupled, Image.unapply)
 }
 
 object ImageTable {

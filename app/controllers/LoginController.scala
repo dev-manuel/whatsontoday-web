@@ -124,6 +124,29 @@ class LoginController @Inject()(cc: ControllerComponents,
     }
   }
 
+  def requestPasswordReset = Action.async(parse.json) { implicit request =>
+    PasswordResetForm.form.bindFromRequest().fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      },
+      data => {
+        log.debug("Rest request to send password reset mail")
+
+        loginService.retrieve(LoginInfo("credentials", data.email)).flatMap {
+          case Some(login) => {
+            for {
+              authenticator <- silhouette.env.authenticatorService.create(login.loginInfo)
+              token <- silhouette.env.authenticatorService.init(authenticator)
+            } yield {
+              mailService.sendPasswordResetMail(login.email,token)
+              Ok(Json.obj("message" -> "mail.sent"))
+            }
+          }
+          case None => Future.successful(BadRequest)
+        }
+      })
+  }
+
 
   /**
     * Authenticates a user against a social provider.

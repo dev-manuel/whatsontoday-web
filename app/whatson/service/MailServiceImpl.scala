@@ -56,4 +56,16 @@ class MailServiceImpl @Inject()(mailerClient: MailerClient,
 
     mailerClient.send(email)
   }
+
+  def sendPasswordResetMail(userMail: String,
+                            changeToken: String) = {
+    val email = Email(
+      "You requested a password change",
+      "Whats On <no-reply@whats-on.today>",
+      Seq(userMail),
+      bodyHtml = Some(new PasswordResetMail(userMail,applicationConfig.url,changeToken)().toString())
+    )
+
+    mailerClient.send(email)
+  }
 }

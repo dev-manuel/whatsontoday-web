@@ -14,4 +14,7 @@ trait MailService {
 
   def sendPasswordChangeNotification(userMail: String,
                                      changeToken: String): Unit
+
+  def sendPasswordResetMail(userMail: String,
+                            changeToken: String): Unit
 }

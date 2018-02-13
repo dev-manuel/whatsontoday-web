@@ -7,13 +7,13 @@ import java.sql.Timestamp
 import whatson.util.DateTime._
 import whatson.model._
 
-object LoginUpdateForm {
+object PasswordResetForm {
   val map = mapping(
-    "password" -> nonEmptyText.verifying("too short", x => x.length>7)
-    )(Data.apply)(Data.unapply)
+    "email" -> email
+  )(Data.apply)(Data.unapply)
   val form = Form(map)
 
-  case class Data(password: String)
+  case class Data(email: String)
 
   object Data {
     implicit val jsonFormat = Json.format[Data]

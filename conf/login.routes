@@ -39,6 +39,22 @@ DELETE   /   controllers.LoginController.deleteUser
 PUT      /     controllers.LoginController.updateUser
 
 ###
+#  summary: Send a password reset mail
+#  description: >
+#      Sends a mail for resetting a users password containing a link to a password reset form.
+#  parameters:
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.forms.PasswordResetForm.Data'
+#  responses:
+#    200:
+#      description: Password reset mail sent
+#    400:
+#      description: User not found
+###
+PUT      /resetPassword     controllers.LoginController.requestPasswordReset
+
+###
 #  summary: Sign out of account
 #  description: >
 #      Since we are using JWT wich are stateless this action has no result.

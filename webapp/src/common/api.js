@@ -72,15 +72,27 @@ export const api = {
                 }
         })
     },
+
+    /**
+     * @param {number} id
+     */
     getEvent: id => {
         return axios.get(`events/${id}`)
             .then(response => {
                 const data = response.data;
+
                 const event = {
                     id: data.id,
                     name: data.name,
-                    from: new Date()
+                    from: sqlTimestampToDate( data.from),
+                    to: sqlTimestampToDate( data.to),
+                    description: data.description,
+                    creator: data.creator,
+                    categories: data.categories,
+                    location: data.location,
+                    images: data.images,
                 }
+                return event;
             })
     },
 

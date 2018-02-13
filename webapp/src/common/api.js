@@ -1,4 +1,6 @@
 import Axios from 'axios'
+import {sqlTimestampToDate, DateToSqlTimestamp} from './sqlTimeParsing'
+
 
 const axios = Axios.create({
     baseURL: 'http://localhost:9000/api/v1/', // Just for dev!
@@ -38,7 +40,6 @@ export const api = {
      * @param {sort} sort sort criteria
      */
     searchEvents: (search = '', sortDirection=apiEnums.sortDirection.ASCENDING, category, sort=apiEnums.sort.ID, xPage=0, xPageSize=20) => {
-        
         // Query parameters for the AJAX request
         const queryParams = {
             search,
@@ -50,7 +51,6 @@ export const api = {
         if(category) // Appending a `category` parameter according if is set
             queryParams.category = category;
         
-
         return axios.get('events', {params: queryParams})
             .then((result)=>{
                 switch(result.status){
@@ -71,6 +71,17 @@ export const api = {
                     break;
                 }
         })
+    },
+    getEvent: id => {
+        return axios.get(`events/${id}`)
+            .then(response => {
+                const data = response.data;
+                const event = {
+                    id: data.id,
+                    name: data.name,
+                    from: new Date()
+                }
+            })
     },
 
     /**

@@ -60,7 +60,7 @@ export const api = {
                             name: event.name,
                             date: event.from,
                             categories: [], //Todo
-                            description: 'LoremIpsum', //Todo
+                            description: event.description,
                             imageURI: '#', //Todo
                             target: '#' //Todo
                         }))

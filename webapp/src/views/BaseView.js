@@ -47,7 +47,7 @@ class BaseView extends React.Component {
 
                 <Switch>
                     <Route exact path='/' render={() => <HomeView global={this.global}/>}/>
-                    <Route path='/search' render={() => <SERPView global={this.global}/>}/> {/* Todo: render specific SERP according to URL parameters */}
+                    <Route path='/search' render={({location}) => <SERPView query={location.search} global={this.global}/>}/> {/* Todo: render specific SERP according to URL parameters */}
                     <Route path='/event' render={() => <EventView global={this.global}/>}/>
                     <Route path='/organizer' component={OrganizerView}/>
                     <Route path='/location' component={LocationView}/>

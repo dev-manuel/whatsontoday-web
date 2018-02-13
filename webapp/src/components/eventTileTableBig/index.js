@@ -1,9 +1,8 @@
-// Import modules
-import React from 'react';
-import {Grid, Segment, Container, Card} from 'semantic-ui-react';
+import React from 'react'
+import {Grid, Segment, Container, Card} from 'semantic-ui-react'
 
-// Import resources
-import EventTileBig from './eventTileBig';
+import EventTileBig from './eventTileBig'
+import './index.less'
 
 /**
  * 
@@ -15,7 +14,7 @@ const EventTileTable = ({eventList}) => {
     ))
 
     return (
-        <div>
+        <div className='eventTileBig'>
             {bigEventTiles}
         </div>
     )

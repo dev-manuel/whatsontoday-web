@@ -97,5 +97,18 @@ export const api = {
             email,
             password,
         })
-    }
+    },
+
+    /**
+     * @param {string} email
+     * @param {string} password
+     * @param {string} name
+     */
+    organizerSignUp: (email, password, name) => {
+        return axios.post('/user/signUp', {
+            email,
+            password,
+            name,
+        })
+    },
 }

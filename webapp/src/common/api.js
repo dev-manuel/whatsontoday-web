@@ -86,5 +86,16 @@ export const api = {
         }).then(response => {
                 return response.data.token;
         })
+    },
+
+    /**
+     * @param {string} email
+     * @param {string} password
+     */
+    userSignUp: (email, password) => {
+        return axios.post('/user/signUp', {
+            email,
+            password,
+        })
     }
 }

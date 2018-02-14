@@ -12,14 +12,14 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('SignInView viewState', () => {
     it('should be AlreadyLoggedInState if the user is already logged in', () => {
-        const global = new Global({loggedIn: true});
+        const global = new Global({loggedIn: true, LANG: GER});
         const signIn = <SignInView global={global}/>
         const wrapper = shallow(signIn);
         expect(wrapper.state().viewState instanceof AlreadyLoggedInState).toBe(true);
     })
 
     it('should be SignInState if the user is not logged in', () => {
-        const global = new Global({loggedIn: false});
+        const global = new Global({loggedIn: false,  LANG: GER});
         const signIn = <SignInView global={global}/>
         const wrapper = shallow(signIn);
         expect(wrapper.state().viewState instanceof SignInState).toBe(true);

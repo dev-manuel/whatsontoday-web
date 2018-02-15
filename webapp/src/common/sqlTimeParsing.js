@@ -7,7 +7,10 @@
  */
 export const sqlTimestampToDate = timestamp => {
     
-    //    /[1-9][0-9]{3}(-[0-9]{2}){2} [0-9]{2}(:[0-9]{2}){2}/
+    //
+    if( !/[1-9][0-9]{3}(-[0-9]{2}){2} [0-9]{2}(:[0-9]{2}){2}(?![^])/y.test(timestamp))
+        throw new Error('Invalid timestamp formatting')
+
     const digits = timestamp.split(/[-: ]/); // Splits the string on every dash colon or space
     const times = digits.map(digit => { // Converts the several string-coded time information to numbers
         return Number(digit);

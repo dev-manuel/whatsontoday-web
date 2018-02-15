@@ -112,14 +112,14 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
 
   def createLocation(): Future[Location] = createLocation("testlocation", 0, 0)
 
-  def createEvent(name: String, from: Timestamp, to: Timestamp, description: String, creatorId: Option[Int], locationId: Int): Future[Event] = {
-    db.run(insertAndReturn[Event,EventTable](EventTable.event,
-                                             Event(None, name, from, to, description, creatorId, locationId)))
-  }
+  def createEvent(org: Option[Organizer] = None, name: String = "testevent",
+                  from: Timestamp = new Timestamp(0), to: Timestamp = new Timestamp(0),
+                  description: String = "testdescription", locationId: Option[Int] = None): Future[Event] = {
 
-  def createEvent(org: Option[Organizer] = None): Future[Event] = {
-    org.map(Future.successful(_)).getOrElse(createOrganizer().map(_._2)).zip(createLocation()).flatMap { case (org,loc) =>
-      createEvent("testevent", new Timestamp(0), new Timestamp(0), "testdescription", org.id, loc.id.getOrElse(-1))
+    org.map(Future.successful(_)).getOrElse(createOrganizer().map(_._2))
+      .zip(locationId.map(Future.successful(_)).getOrElse(createLocation().map(_.id.getOrElse(-1)))).flatMap { case (org,loc) =>
+        db.run(insertAndReturn[Event,EventTable](EventTable.event,
+                                                 Event(None, name, from, to, description, org.id, loc)))
     }
   }
 

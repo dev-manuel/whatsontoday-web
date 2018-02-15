@@ -103,7 +103,7 @@ class EventController @Inject()(cc: ControllerComponents,
           val categoriesAdd = EventCategoryTable.eventCategory ++= categories.map(cat => (cat.id.getOrElse(-1),event.id.getOrElse(-1)))
           val eventDetailed = EventTable.event.filter(_.id === event.id.getOrElse(-1)).detailed
           db.run(imagesAdd.zip(categoriesAdd) >> eventDetailed)
-        }.map(x => Ok(Json.toJson(x)))
+        }.map(x => Ok(Json.toJson(x.head)))
       })
   }
 

@@ -12,25 +12,32 @@ import play.api.mvc._
 import java.sql.Timestamp
 import whatson.model._
 import whatson.model.forms._
+import whatson.model.detail._
 
 class EventControllerSpec extends RestTestSuite {
 
   "EventController GET" should {
     "return a list of events" in {
-      Await.result(createEvent(), Duration.Inf)
+      val event = Await.result(createEvent(), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true")).get
 
       status(events) mustBe OK
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.map(x => x.id) must contain (event.id)
     }
 
     "sort by name if sort=name" in {
       Await.result(createEvent(), Duration.Inf)
+      Await.result(createEvent(name = "name2"), Duration.Inf)
+      Await.result(createEvent(name = "name3"), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=name")).get
 
       status(events) mustBe OK
-      //TODO
+
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.sortBy(x => x.name) mustEqual content
     }
 
     "sort by beginning date if sort=from" in {
@@ -70,6 +77,22 @@ class EventControllerSpec extends RestTestSuite {
       //TODO
     }
 
+    "reverse the sort direction if sortDir=false" in {
+      Await.result(createEvent(), Duration.Inf)
+      Await.result(createEvent(name = "name2"), Duration.Inf)
+      Await.result(createEvent(name = "name3"), Duration.Inf)
+
+      val events1 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=name")).get
+      val events2 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=false&sort=name")).get
+
+      status(events1) mustBe OK
+      status(events2) mustBe OK
+
+      val content1 = contentAsJson(events1).as[List[EventDetail]]
+      val content2 = contentAsJson(events2).as[List[EventDetail]]
+      content1.reverse mustEqual content2
+    }
+
     "return NOT_FOUND on non existing event" in {
       val events = route(app, FakeRequest(GET, "/api/v1/events/5")).get
 
@@ -96,6 +119,27 @@ class EventControllerSpec extends RestTestSuite {
                                           Json.toJson(eventForm))).get
 
       status(events) mustBe OK
+
+      val content = contentAsJson(events).as[EventDetail]
+      content.description mustEqual (eventForm.description)
+      content.name mustEqual (eventForm.name)
+    }
+
+    "attach a existing location if specified" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val location = Await.result(createLocation(), Duration.Inf)
+
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(), Location(location.id, "testlocation", 0.0f, 0.0f),
+                                     List(), "testdescription")
+
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[EventDetail]
+      content.description mustEqual (eventForm.description)
+      content.name mustEqual (eventForm.name)
+      content.location mustEqual location
     }
 
     "return BadRequest for empty event name" in {

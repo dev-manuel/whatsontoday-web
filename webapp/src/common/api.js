@@ -2,7 +2,7 @@ import Axios from 'axios'
 import {sqlTimestampToDate, DateToSqlTimestamp} from './sqlTimeParsing'
 
 
-const axios = Axios.create({
+export const axios = Axios.create({
     baseURL: 'http://localhost:9000/api/v1/', // Just for dev!
     timeout: 10000
 })

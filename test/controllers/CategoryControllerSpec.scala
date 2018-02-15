@@ -14,8 +14,8 @@ import scala.concurrent.duration._
 class CategoryControllerSpec extends RestTestSuite {
 
   "CategoryController GET" should {
-
     "return a list of categories" in {
+      createCategory()
       val categories = route(app, FakeRequest(GET, "/api/v1/category")).get
 
       status(categories) mustBe OK

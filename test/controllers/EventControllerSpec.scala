@@ -142,6 +142,52 @@ class EventControllerSpec extends RestTestSuite {
       content.location mustEqual location
     }
 
+    "attach an existing category if specified" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val category = Await.result(createCategory(), Duration.Inf)
+
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(category), Location(None, "testlocation", 0.0f, 0.0f),
+                                     List(), "testdescription")
+
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[EventDetail]
+      //content.categories must contain category
+    }
+
+
+    "attach a new category if specified" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val parentCategory = Await.result(createCategory(), Duration.Inf)
+      val category = Category(None,"testcategory2",parentCategory.id.getOrElse(-1))
+
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(category), Location(None, "testlocation", 0.0f, 0.0f),
+                                     List(), "testdescription")
+
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[EventDetail]
+      content.categories.map(_.name) must contain (category.name)
+    }
+
+    "attach an image if specified" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val image = Await.result(createImage(), Duration.Inf)
+
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocation", 0.0f, 0.0f),
+                                     List(image.id.getOrElse(-1)), "testdescription")
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[EventDetail]
+      content.images must contain (image.id.getOrElse(-1))
+    }
+
     "return BadRequest for empty event name" in {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
       val location = Await.result(createLocation(), Duration.Inf)
@@ -248,6 +294,19 @@ class EventControllerSpec extends RestTestSuite {
                                      List(), "testdescriptionupdated")
       val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer2._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe BAD_REQUEST
+    }
+
+    "return BadRequest on empty event name request" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val event = Await.result(createEvent(Some(organizer._2)), Duration.Inf)
+
+      val eventForm = EventForm.Data("", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocationupdated", 0.0f, 0.0f),
+                                     List(), "testdescriptionupdated")
+      val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
+                                          new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
 
       status(events) mustBe BAD_REQUEST

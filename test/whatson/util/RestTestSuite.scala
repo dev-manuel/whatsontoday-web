@@ -1,5 +1,6 @@
 package whatson.util
 
+import slick.jdbc.PostgresProfile.api._
 import slick.jdbc.JdbcProfile
 import org.scalatest._
 import org.scalatest.mockito.MockitoSugar
@@ -32,6 +33,7 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
 import whatson.modules._
 import play.api.libs.Files._
 import play.api.inject._
+
 
 class RestTestSuite extends PlaySpec with TestSuiteMixin
     with GuiceOneAppPerTest with Injecting
@@ -108,6 +110,12 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
 
   def createLocation(name: String, lat: Float, long: Float): Future[Location] = {
     db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long)))
+  }
+
+  def createCategory(name: String = "testcategory", parentId: Option[Int] = None): Future[Category] = {
+    parentId.map(Future.successful(_)).getOrElse(db.run(CategoryTable.category.result).map(x => x.head.id.getOrElse(-1))).flatMap { parent =>
+      db.run(insertAndReturn[Category,CategoryTable](CategoryTable.category,Category(None, name, parent)))
+    }
   }
 
   def createLocation(): Future[Location] = createLocation("testlocation", 0, 0)

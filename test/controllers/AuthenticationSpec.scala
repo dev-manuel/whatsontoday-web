@@ -26,6 +26,16 @@ class AuthenticationSpec extends RestTestSuite {
       status(events) mustBe OK
     }
 
+    "be case insensitive" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+
+      val form = SignInForm(organizer._1.email.toUpperCase, "", true)
+      val events = route(app, FakeRequest(POST, "/api/v1/login/signIn", new Headers(List(("Content-Type","application/json"))),
+                                          Json.toJson(form))).get
+
+      status(events) mustBe OK
+    }
+
     "return OK on log in request without rememberMe" in {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
 

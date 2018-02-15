@@ -20,14 +20,14 @@ class LoginServiceImpl @Inject()(
     extends LoginService with HasDatabaseConfigProvider[JdbcProfile] {
 
   /**
-   * Retrieves a user that matches the specified login info.
-   *
-   * @param loginInfo The login info to retrieve a user.
-   * @return The retrieved user or None if no user could be retrieved for the given login info.
-   */
+    * Retrieves a user that matches the specified login info.
+    *
+    * @param loginInfo The login info to retrieve a user.
+    * @return The retrieved user or None if no user could be retrieved for the given login info.
+    */
   def retrieve(loginInfo: LoginInfo): Future[Option[Login]] = {
     val q = login.filter(x => x.providerId === loginInfo.providerID
-                           && x.providerKey === loginInfo.providerKey
+                           && lower(x.providerKey) === lower(loginInfo.providerKey)
                            && x.confirmed)
     db.run(q.result).map(_.headOption)
   }
@@ -40,14 +40,14 @@ class LoginServiceImpl @Inject()(
     */
   def retrieveAll(loginInfo: LoginInfo): Future[Option[Login]] = {
     val q = login.filter(x => x.providerId === loginInfo.providerID
-                           && x.providerKey === loginInfo.providerKey)
+                           && lower(x.providerKey) === lower(loginInfo.providerKey))
     db.run(q.result).map(_.headOption)
   }
 
 
   def confirm(loginInfo: LoginInfo): Future[Option[Login]] = {
     val q = for {
-      l <- login if l.providerId === loginInfo.providerID && l.providerKey === loginInfo.providerKey
+      l <- login if l.providerId === loginInfo.providerID && lower(l.providerKey) === lower(loginInfo.providerKey)
     } yield l
     val qa = q.map(x => x.confirmed)
 
@@ -76,7 +76,7 @@ class LoginServiceImpl @Inject()(
    */
   def save(profile: CommonSocialProfile) = {
     val q = for {
-      l <- login if l.providerId === profile.loginInfo.providerID && l.providerKey === profile.loginInfo.providerKey
+      l <- login if l.providerId === profile.loginInfo.providerID && lower(l.providerKey) === lower(profile.loginInfo.providerKey)
     } yield l
     val qa = q.map(x => x.email)
 

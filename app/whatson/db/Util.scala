@@ -22,6 +22,9 @@ object Util extends Results {
   def similar(a: Rep[String], b:Rep[String]) =
     SimpleBinaryOperator[Boolean]("%").apply(a,b)
 
+  def lower(a: Rep[String]) =
+    SimpleFunction[String]("lower").apply(Seq(a))
+
   def insertAndReturn[T, U <: HasID[T]](a: TableQuery[U], b: U#TableElementType) = {
     (a returning a.map(x => x.id) into ((event,i) => event.cpy(Some(i))) += b)
   }

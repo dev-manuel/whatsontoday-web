@@ -13,6 +13,7 @@ import whatson.db.LoginTable._
 import slick.jdbc.PostgresProfile.api._
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import play.api.{Configuration, Logger}
+import whatson.db.Util._
 
 class AuthInfoService @Inject()(
   protected val dbConfigProvider: DatabaseConfigProvider)(implicit context: ExecutionContext)
@@ -29,7 +30,7 @@ class AuthInfoService @Inject()(
    * @return The found auth info or None if no auth info could be found for the given login info.
    */
   def find[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Option[T]] = {
-    val q = for(u <- login if u.providerId === loginInfo.providerID && u.providerKey === loginInfo.providerKey) yield (u.pwHash,u.pwSalt,u.pwHasher)
+    val q = for(u <- login if u.providerId === loginInfo.providerID && lower(u.providerKey) === lower(loginInfo.providerKey)) yield (u.pwHash,u.pwSalt,u.pwHasher)
 
     db.run(q.result).map(f => f.headOption.map(x => PasswordInfo(x._3, x._1, Some(x._2)).asInstanceOf[T]))
   }
@@ -46,7 +47,7 @@ class AuthInfoService @Inject()(
     authInfo match {
       case PasswordInfo (a,b,c) => {
         val q = for {
-          u <- login if u.providerId === loginInfo.providerID && u.providerKey === loginInfo.providerKey
+          u <- login if u.providerId === loginInfo.providerID && lower(u.providerKey) === lower(loginInfo.providerKey)
         } yield (u.pwHash,u.pwSalt,u.pwHasher)
 
         db.run(q.update((b,c.getOrElse(""),a))).map ( x => PasswordInfo(a,b,c).asInstanceOf[T] )
@@ -67,7 +68,7 @@ class AuthInfoService @Inject()(
     authInfo match {
       case PasswordInfo (a,b,c) => {
         val q = for {
-          u <- login if u.providerId === loginInfo.providerID && u.providerKey === loginInfo.providerKey
+          u <- login if u.providerId === loginInfo.providerID && lower(u.providerKey) === lower(loginInfo.providerKey)
         } yield (u.pwHash,u.pwSalt,u.pwHasher)
 
         db.run(q.update((b,c.getOrElse(""),a)))
@@ -93,7 +94,7 @@ class AuthInfoService @Inject()(
     authInfo match {
       case PasswordInfo (a,b,c) => {
         val q = for {
-          u <- login if u.providerId === loginInfo.providerID && u.providerKey === loginInfo.providerKey
+          u <- login if u.providerId === loginInfo.providerID && lower(u.providerKey) === lower(loginInfo.providerKey)
         } yield (u.pwHash,u.pwSalt,u.pwHasher)
 
         db.run(q.update((b,c.getOrElse(""),a)))
@@ -114,7 +115,7 @@ class AuthInfoService @Inject()(
     */
   def remove[T <: AuthInfo](loginInfo: LoginInfo)(implicit tag: ClassTag[T]): Future[Unit] = {
     val q = for {
-      u <- login if u.providerId === loginInfo.providerID && u.providerKey === loginInfo.providerKey
+      u <- login if u.providerId === loginInfo.providerID && lower(u.providerKey) === lower(loginInfo.providerKey)
     } yield (u.pwHash,u.pwSalt,u.pwHasher)
 
     db.run(q.update(("","",""))).map(f => Unit)

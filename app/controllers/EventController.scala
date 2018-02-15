@@ -34,7 +34,7 @@ class EventController @Inject()(cc: ControllerComponents,
     with HasDatabaseConfigProvider[JdbcProfile]
     with Util {
 
-  val log = Logger("api.events")
+  val log = Logger("api.event")
 
   def getEvent(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get event")

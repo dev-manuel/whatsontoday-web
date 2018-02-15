@@ -42,7 +42,6 @@ class Authentication@Inject() (
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
 
 
-
   val log = Logger("api.authentication")
 
   /**

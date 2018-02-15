@@ -15,9 +15,9 @@ import slick.jdbc.JdbcProfile
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents, protected val dbConfigProvider: DatabaseConfigProvider)(implicit context: ExecutionContext) extends AbstractController(cc) 
   with HasDatabaseConfigProvider[JdbcProfile] {
-  
-  val log = Logger("rest")
-  
+
+  val log = Logger("api.home")
+
   /**
    * Create an Action to render an HTML page.
    *

@@ -26,7 +26,7 @@ class RatingController @Inject()(cc: ControllerComponents,
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] with Util {
 
-  val log = Logger("api.categories")
+  val log = Logger("api.rating")
 
   def rateEntity(id: Int, entityType: String, rate: Float) = userRequest(parse.default) { case (request,user) =>
     log.debug("Rest request to rate entity")

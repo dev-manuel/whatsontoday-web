@@ -31,7 +31,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] with Util {
 
-  val log = Logger("api.categories")
+  val log = Logger("api.category")
 
   def categories() = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request for categories")

@@ -26,11 +26,16 @@
 
   <logger name="play" level="DEBUG" />
   <logger name="application" level="DEBUG" />
-  <logger name="rest" level="DEBUG" />
-  <logger name="api.events" level="DEBUG" />
-  <logger name="api.categories" level="DEBUG" />
+  <logger name="api.home" level="DEBUG" />
+  <logger name="api.event" level="DEBUG" />
+  <logger name="api.category" level="DEBUG" />
   <logger name="api.location" level="DEBUG" />
   <logger name="api.image" level="DEBUG" />
+  <logger name="api.authentication" level="DEBUG" />
+  <logger name="api.login" level="DEBUG" />
+  <logger name="api.organizer" level="DEBUG" />
+  <logger name="api.rating" level="DEBUG" />
+  <logger name="api.user" level="DEBUG" />
 
   <!-- Off these ones as they are annoying, and anyway we manage configuration ourselves -->
   <logger name="com.avaje.ebean.config.PropertyMapLoader" level="OFF" />

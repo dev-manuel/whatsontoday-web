@@ -14,7 +14,6 @@ import whatson.model.forms._
 import whatson.model.forms.SignInForm._
 
 class AuthenticationSpec extends RestTestSuite {
-
   "Authenticatiom POST" should {
     "return OK on proper log in request" in {
       val organizer = Await.result(createOrganizer(), Duration.Inf)

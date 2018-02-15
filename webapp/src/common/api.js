@@ -134,4 +134,18 @@ export const api = {
             name,
         })
     },
+
+    /**
+     * @param {File} file
+     * @param {string} name
+     */
+    uploadImage: ( file, name) => {
+        const data = new FormData();
+        data.set('image', file);
+
+        return axios.post(`images/${name}`, data)
+            .then( response => {
+                return response.data;
+            })
+    }
 }

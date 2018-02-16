@@ -61,6 +61,15 @@ GET    /location/:id                   controllers.LocationController.getLocatio
 #  summary: Get locations nearby a specific location
 #  description: >
 #      Returns a list of locations sorted by the distance to the given location.
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
 #  responses:
 #    200:
 #      description: success

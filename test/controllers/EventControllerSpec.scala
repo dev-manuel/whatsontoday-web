@@ -31,31 +31,45 @@ class EventControllerSpec extends RestTestSuite {
       Await.result(createEvent(), Duration.Inf)
       Await.result(createEvent(name = "name2"), Duration.Inf)
       Await.result(createEvent(name = "name3"), Duration.Inf)
+      Await.result(createEvent(name = "anametoo"), Duration.Inf)
+      Await.result(createEvent(name = "bnametoo"), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=name")).get
 
       status(events) mustBe OK
 
       val content = contentAsJson(events).as[List[EventDetail]]
-      //content.sortBy(x => x.name) mustEqual content
     }
 
     "sort by beginning date if sort=from" in {
-      Await.result(createEvent(), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(0)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(1)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(44)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(20)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(23)), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=from")).get
 
       status(events) mustBe OK
-      //TODO
+
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.sortBy(x => x.from.getTime()) mustEqual content
     }
 
     "sort by end date if sort=to" in {
-      Await.result(createEvent(), Duration.Inf)
+      Await.result(createEvent(to = new Timestamp(0)), Duration.Inf)
+      Await.result(createEvent(to = new Timestamp(1)), Duration.Inf)
+      Await.result(createEvent(to = new Timestamp(44)), Duration.Inf)
+      Await.result(createEvent(to = new Timestamp(20)), Duration.Inf)
+      Await.result(createEvent(to = new Timestamp(23)), Duration.Inf)
+
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=to")).get
 
       status(events) mustBe OK
-      //TODO
+
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.sortBy(x => x.to.getTime()) mustEqual content
     }
 
     "sort by rating if sort=rating" in {
@@ -69,28 +83,32 @@ class EventControllerSpec extends RestTestSuite {
 
     "sort by distance to location if sort=location and a locationId is specified" in {
       Await.result(createEvent(), Duration.Inf)
-      val location = Await.result(createLocation(), Duration.Inf)
+      val location1 = Await.result(createLocation(lat = 0.1f, long = 0.3f), Duration.Inf)
+      Await.result(createEvent(locationId = location1.id), Duration.Inf)
+      val location2 = Await.result(createLocation(lat = 0.1f, long = 0.1f), Duration.Inf)
+      Await.result(createEvent(locationId = location2.id), Duration.Inf)
 
-      val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=location&location=" ++ location.id.getOrElse(-1).toString)).get
+      val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=location&location=" ++ location1.id.getOrElse(-1).toString)).get
 
       status(events) mustBe OK
-      //TODO
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.sortBy(x => x.location.distance(location1)) mustEqual content
     }
 
     "reverse the sort direction if sortDir=false" in {
-      Await.result(createEvent(), Duration.Inf)
-      Await.result(createEvent(name = "name2"), Duration.Inf)
-      Await.result(createEvent(name = "name3"), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(0)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(34)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(20)), Duration.Inf)
 
-      val events1 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=name")).get
-      val events2 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=false&sort=name")).get
+      val events1 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=from")).get
+      val events2 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=false&sort=from")).get
 
       status(events1) mustBe OK
       status(events2) mustBe OK
 
       val content1 = contentAsJson(events1).as[List[EventDetail]]
       val content2 = contentAsJson(events2).as[List[EventDetail]]
-      //content1.reverse mustEqual content2
+      content1.reverse mustEqual content2
     }
 
     "return NOT_FOUND on non existing event" in {

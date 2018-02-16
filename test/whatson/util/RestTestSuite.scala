@@ -108,7 +108,7 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
 
   def createUser(): Future[(Login,User,String)] = createUser("testuser@test.de")
 
-  def createLocation(name: String, lat: Float, long: Float): Future[Location] = {
+  def createLocation(name: String = "testlocation", lat: Float = 0.0f, long: Float = 0.0f): Future[Location] = {
     db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long)))
   }
 
@@ -117,8 +117,6 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
       db.run(insertAndReturn[Category,CategoryTable](CategoryTable.category,Category(None, name, parent)))
     }
   }
-
-  def createLocation(): Future[Location] = createLocation("testlocation", 0, 0)
 
   def createEvent(org: Option[Organizer] = None, name: String = "testevent",
                   from: Timestamp = new Timestamp(0), to: Timestamp = new Timestamp(0),

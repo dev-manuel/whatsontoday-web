@@ -157,21 +157,10 @@ class EventController @Inject()(cc: ControllerComponents,
           case None => Future.successful(None)
         }.map {
           case Some(e) => Ok(Json.toJson(e))
-          case None => {log.debug("noo");BadRequest}
+          case None => BadRequest
         }
       })
   }
-
-  /*organizerRequest(parse.json(eventReads)) { (request,organizer) =>
-    log.debug("Rest request to update event")
-
-    val q = event.filter(x => x.id === id.bind && x.creatorId === organizer.id).update(request.body)
-
-    db.run(q).map {
-      case 0 => NotFound
-      case x => Ok(Json.toJson(x))
-    }
-  }*/
 
   def participate(id: Int) = userRequest(parse.default) { case (request,user) =>
     log.debug("Rest request to participate in event")

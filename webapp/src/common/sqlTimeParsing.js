@@ -24,7 +24,7 @@ export const sqlTimestampToDate = timestamp => {
  * @param {Date} date 
  * @returns {string} sql timestamp string of the format "yyyy-mm-dd hh:mm:ss" (represents a UTC+0 date)
  */
-export const UTCDateToSqlTimestamp = date => {
+export const dateToSqlTimestamp = date => {
     
     const pad = number => {
         if (number < 10) {
@@ -35,7 +35,7 @@ export const UTCDateToSqlTimestamp = date => {
 
     return date.getUTCFullYear()  + '-' +
         pad(date.getUTCMonth()+1) + '-' +
-        pad(date.getUTCDay())     + ' ' +
+        pad(date.getUTCDate())     + ' ' +
         pad(date.getUTCHours())   + ':' +
         pad(date.getUTCMinutes()) + ':' +
         pad(date.getUTCSeconds());

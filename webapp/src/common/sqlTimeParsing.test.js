@@ -1,4 +1,4 @@
-import {sqlTimestampToDate, DateToSqlTimestamp} from './sqlTimeParsing'
+import {sqlTimestampToDate, dateToSqlTimestamp} from './sqlTimeParsing'
 
 
 
@@ -25,6 +25,20 @@ describe('sqlTimeToDate', () => {
             expect(()=>{
                 let date = sqlTimestampToDate(data);
             }).toThrow();
+        })
+    })
+})
+
+describe('dateToSqlTimestamp', () => {
+    it('should return the correct values', () => {
+        const examples = [
+            [new Date('11 Nov 2008 13:23:44 GMT'), '2008-11-11 13:23:44'],
+            [new Date('01 Jan 1970 00:00:00 GMT'), '1970-01-01 00:00:00'],
+            [new Date('29 Feb 2016 10:20:30 GMT'), '2016-02-29 10:20:30'],    
+        ]
+
+        examples.forEach(data => {
+            expect(dateToSqlTimestamp(data[0])).toEqual(data[1]);
         })
     })
 })

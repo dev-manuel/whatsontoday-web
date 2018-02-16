@@ -52,7 +52,7 @@ class ImageController @Inject()(cc: ControllerComponents,
     val q = for(l <- image if l.id === id.bind) yield l;
 
     db.run(q.result).map(x => x.headOption match {
-      case Some(r) => Ok(r.data).as(r.contentType.getOrElse("image/jpg"))
+      case Some(r) => Ok(r.data).as(r.contentType)
       case _ => NotFound
     })
   }
@@ -60,14 +60,16 @@ class ImageController @Inject()(cc: ControllerComponents,
   def createImage(name: String) = Action(parse.multipartFormData).async { request =>
     log.debug("Rest request to create image")
 
-    request.body.file("image").map { x =>
-      val file = x.ref.path.toFile()
-      val str = new FileInputStream(file)
-      val bytes = IOUtils.toByteArray(str)
+    request.body.file("image").flatMap { x =>
+      x.contentType.map { contentType =>
+        val file = x.ref.path.toFile()
+        val str = new FileInputStream(file)
+        val bytes = IOUtils.toByteArray(str)
 
-      val img = Image(None,name,bytes,x.contentType)
+        val img = Image(None,name,bytes,contentType)
 
-      db.run(insertAndReturn[Image,ImageTable](image,img))
+        db.run(insertAndReturn[Image,ImageTable](image,img))
+      }
     }.map(_.map(x => Ok(Json.toJson(x)))).getOrElse(Future.successful(BadRequest))
   }
 

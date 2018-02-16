@@ -132,6 +132,6 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   }
 
   def createImage(name: String = "testimage", contents: Array[Byte] = Array(1,2,3,4)): Future[Image] = {
-    db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, name, contents,Some("image/jpeg"))))
+    db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, name, contents,"image/jpeg")))
   }
 }

@@ -23,9 +23,15 @@ import whatson.model._
 import whatson.model.forms._
 import whatson.service._
 import whatson.util.FormErrorJson._
+import whatson.db._
+import slick.jdbc.JdbcProfile
+import slick.jdbc.PostgresProfile.api._
+import whatson.db.Util._
+import whatson.model.detail.EventDetail._
+
 
 class UserController@Inject() (
-  silhouette: Silhouette[AuthEnv],
+  val silhouette: Silhouette[AuthEnv],
   loginService: LoginService,
   authInfoRepository: AuthInfoRepository,
   credentialsProvider: CredentialsProvider,
@@ -36,10 +42,12 @@ class UserController@Inject() (
   cache: AsyncCacheApi,
   passwordHasher: PasswordHasher,
   protected val dbConfigProvider: DatabaseConfigProvider,
-  userService: UserService,
+  val userService: UserService,
   mailService: MailService,
-  avatarService: AvatarService)
-    extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
+  avatarService: AvatarService,
+  val organizerService: OrganizerService)
+    extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile]
+    with Util{
 
   val log = Logger("api.user")
 
@@ -76,5 +84,15 @@ class UserController@Inject() (
             }
         }
       })
+  }
+
+  def getParticipatingEvents = userRequest(parse.default) { case (request,user) =>
+    log.debug("Rest request to get events participating in")
+
+    implicit val r = request
+    val q = UserTable.user.filter(_.id === user.id.getOrElse(-1)).flatMap(_.events)
+    val s = q.queryPaged(request).detailed
+
+    returnPaged(s,q,db)
   }
 }

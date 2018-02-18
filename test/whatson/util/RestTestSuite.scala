@@ -97,7 +97,7 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
     }
   }
 
-  def createUser(mail: String): Future[(Login,User,String)] = {
+  def createUser(mail: String = "testuser@test.de"): Future[(Login,User,String)] = {
     createLogin(mail).flatMap { case login =>
       db.run(insertAndReturn[User,UserTable](UserTable.user,User(None, login.id.getOrElse(-1), None)))
         .map(o => (login,o))
@@ -105,8 +105,6 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
         getToken(l).map(t => (l,o,t))
     }
   }
-
-  def createUser(): Future[(Login,User,String)] = createUser("testuser@test.de")
 
   def createLocation(name: String = "testlocation", lat: Float = 0.0f, long: Float = 0.0f): Future[Location] = {
     db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long)))

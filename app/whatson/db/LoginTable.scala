@@ -18,8 +18,6 @@ class LoginTable(tag: Tag) extends Table[Login](tag, "login") with HasID[Login] 
 
   def confirmed = column[Boolean]("confirmed")
 
-  //def events = participant.filter(_.userID === id).flatMap(_.eventFK)
-
   def * = (id.?,email,pwHash.?, pwSalt.?, pwHasher.? ,providerId, providerKey, confirmed) <> (Login.tupled, Login.unapply)
 }
 

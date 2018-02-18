@@ -17,14 +17,14 @@ object EventForm {
       "to" -> sqlTimestamp("yyyy-MM-dd HH:mm:ss"),
       "categories" -> list(CategoryForm.map),
       "location" -> LocationForm.map,
-      "imageIds" -> list(number),
+      "images" -> list(TaggedImageForm.map),
       "description" -> nonEmptyText
     )(Data.apply)(Data.unapply)
   val form = Form(map)
 
   case class Data(name: String, from: Timestamp,
                   to: Timestamp, categories: List[Category],
-                  location: Location, imageIds: List[Int],
+                  location: Location, images: List[TaggedImageForm.Data],
                   description: String)
 
   object Data {

@@ -197,13 +197,29 @@ class EventControllerSpec extends RestTestSuite {
       val image = Await.result(createImage(), Duration.Inf)
 
       val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocation", 0.0f, 0.0f),
-                                     List(image.id.getOrElse(-1)), "testdescription")
+                                     List(TaggedImageForm.Data(image.id.getOrElse(-1),None)), "testdescription")
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
 
       status(events) mustBe OK
       val content = contentAsJson(events).as[EventDetail]
-      content.images must contain (image.id.getOrElse(-1))
+      content.images.map(_.id) must contain (image.id)
+    }
+
+    "attach an image with a tag if specified" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val image = Await.result(createImage(), Duration.Inf)
+
+      val tag = Some("testtag")
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(), Location(None, "testlocation", 0.0f, 0.0f),
+                                     List(TaggedImageForm.Data(image.id.getOrElse(-1),tag)), "testdescription")
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[EventDetail]
+      content.images.map(_.id) must contain (image.id)
+      content.images.map(_.tag) must contain (tag)
     }
 
     "return BadRequest for empty event name" in {

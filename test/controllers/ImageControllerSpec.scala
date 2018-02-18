@@ -123,6 +123,18 @@ class ImageControllerSpec extends RestTestSuite {
       status(attach) mustBe OK
     }
 
+    "attach a tag if specified" in {
+      val image = Await.result(createImage(), Duration.Inf)
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val event = Await.result(createEvent(Some(organizer._2)), Duration.Inf)
+
+      val attach = route(app, FakeRequest(GET, "/api/v1/images/attach/" ++ image.id.getOrElse(-1).toString ++
+                                            "?entityType=Event&entityId=" ++ event.id.getOrElse(-1).toString ++ "&tag=testtag",
+                                          new Headers(List(("x-auth-token",organizer._3))),"")).get
+
+      status(attach) mustBe OK
+    }
+
     "return Unauthorized for users on organizers" in {
       val image = Await.result(createImage(), Duration.Inf)
       val user = Await.result(createUser(), Duration.Inf)

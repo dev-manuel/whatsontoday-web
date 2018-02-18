@@ -74,7 +74,7 @@ class ImageController @Inject()(cc: ControllerComponents,
     }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
   }
 
-  def attachImage(id: Int, entityType: String, entityId: Int) = userOrganizerRequest(parse.default) { case (request,login) =>
+  def attachImage(id: Int, entityType: String, entityId: Int, tag: Option[String]) = userOrganizerRequest(parse.default) { case (request,login) =>
     log.debug("Rest request to attach image")
 
     val authorized = (EntityType.withName(entityType), login) match {
@@ -92,7 +92,7 @@ class ImageController @Inject()(cc: ControllerComponents,
 
     authorized.flatMap {
       case true => {
-        val imgEnt = ImageEntity(id, entityId, EntityType.withName(entityType))
+        val imgEnt = ImageEntity(id, entityId, EntityType.withName(entityType), tag)
         val inserted = db.run(ImageEntityTable.imageEntity += imgEnt)
 
         inserted.map {

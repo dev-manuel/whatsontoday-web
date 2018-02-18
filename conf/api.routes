@@ -183,13 +183,15 @@ POST   /images                    controllers.ImageController.createImage
 #    required: true
 #  - name: entityType
 #    enum: ["Event","Location","Organizer"]
+#  - name: tag
+#    enum: ["logo"]
 #  responses:
 #    200:
 #      description: success
 #      schema:
 #        $ref: '#/definitions/whatson.model.ImageEntity'
 ###
-GET   /images/attach/:id             controllers.ImageController.attachImage(id: Int, entityType: String, entityId: Int)
+GET   /images/attach/:id             controllers.ImageController.attachImage(id: Int, entityType: String, entityId: Int, tag: Option[String])
 
 
 ###

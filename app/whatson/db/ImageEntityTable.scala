@@ -10,9 +10,12 @@ class ImageEntityTable(tag: Tag) extends Table[ImageEntity](tag, "imageentity") 
   def entityId = column[Int]("entity_fk")
   def entityType = column[EntityType.Value]("entity_type")
 
-  def * = (imageId,entityId,entityType) <> (ImageEntity.tupled, ImageEntity.unapply)
+  def imageTag = column[Option[String]]("tag")
+
+  def * = (imageId,entityId,entityType,imageTag) <> (ImageEntity.tupled, ImageEntity.unapply)
 
   def image = foreignKey("image",imageId,ImageTable.image)(_.id)
+  def taggedImage = foreignKey("image",imageId,ImageTable.image)(_.id).map(i => (imageTag,i))
 }
 
 object ImageEntityTable {

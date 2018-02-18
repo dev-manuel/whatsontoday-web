@@ -13,7 +13,7 @@ case class EventDetail(id: Option[Int], name: String, from: Timestamp,
                        to: Timestamp, description: String,
                        creator: Organizer, categories: List[Category],
                        avgRating: Option[Float], location: Location,
-                       images: List[Int], participantCount: Int) extends Rateable with WithImages
+                       images: List[TaggedImage], participantCount: Int) extends Rateable with WithTaggedImages
 
 object EventDetail {
   implicit val eventDetailReads = Json.reads[EventDetail]
@@ -31,13 +31,14 @@ object EventDetail {
           case (((event,pCount), creator), location) => {
             val s = EventTable.event.filter(_.id === event.id).map(_.avgRating)
             val imgs = EventTable.event.filter(_.id === event.id).flatMap(_.images).map(_.id)
+            val taggedImgs = EventTable.event.filter(_.id === event.id).flatMap(_.taggedImages).result.map(l => l.map(x => TaggedImage(x._2.id,x._2.name,x._1)))
 
             val c = for (
               j <- EventCategoryTable.eventCategory if j.eventID === event.id;
               c <- CategoryTable.category if c.id === j.categoryID
             ) yield c
 
-            s.result.zip(c.result).zip(imgs.result).map(o => {
+            s.result.zip(c.result).zip(taggedImgs).map(o => {
               EventDetail(event.id, event.name, event.from, event.to, event.description,
                           creator, o._1._2.toList, o._1._1.headOption.flatten,
                           location, o._2.toList, pCount)

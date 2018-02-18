@@ -84,7 +84,7 @@ class EventController @Inject()(cc: ControllerComponents,
           case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
         })
 
-        val imagesQuery = DBIO.sequence(data.imageIds.map(x => ImageTable.image.filter(_.id === x.bind).result)).map(_.flatten)
+        val imagesQuery = DBIO.sequence(data.images.map(x => ImageTable.image.filter(_.id === x.id.bind).result.map(l => l.map(r => (r,x.tag))))).map(_.flatten)
 
         val categoriesQuery = DBIO.sequence(
           data.categories.map {
@@ -99,7 +99,7 @@ class EventController @Inject()(cc: ControllerComponents,
           val event = Event(None, data.name, data.from, data.to, data.description, organizer.id, location.id.getOrElse(-1))
           db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,images,categories))
         }.flatMap { case (event,images,categories) =>
-          val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event))
+          val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img._1.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event,img._2))
           val categoriesAdd = EventCategoryTable.eventCategory ++= categories.map(cat => (cat.id.getOrElse(-1),event.id.getOrElse(-1)))
           val eventDetailed = EventTable.event.filter(_.id === event.id.getOrElse(-1)).detailed
           db.run(imagesAdd.zip(categoriesAdd) >> eventDetailed)
@@ -120,7 +120,7 @@ class EventController @Inject()(cc: ControllerComponents,
           case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
         })
 
-        val imagesQuery = DBIO.sequence(data.imageIds.map(x => ImageTable.image.filter(_.id === x.bind).result)).map(_.flatten)
+        val imagesQuery = DBIO.sequence(data.images.map(x => ImageTable.image.filter(_.id === x.id.bind).result.map(l => l.map(r => (r,x.tag))))).map(_.flatten)
 
         val categoriesQuery = DBIO.sequence(
           data.categories.map {
@@ -149,7 +149,7 @@ class EventController @Inject()(cc: ControllerComponents,
             val dropCategories = EventCategoryTable.eventCategory.filter(x => x.eventID === id).delete
             val dropQuery = dropImages.zip(dropCategories)
 
-            val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event))
+            val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img._1.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event, img._2))
             val categoriesAdd = EventCategoryTable.eventCategory ++= categories.map(cat => (cat.id.getOrElse(-1),event.id.getOrElse(-1)))
             val eventDetailed = EventTable.event.filter(_.id === event.id.getOrElse(-1)).detailed
             db.run(dropQuery >> imagesAdd.zip(categoriesAdd) >> eventDetailed).map(x => Some(x))

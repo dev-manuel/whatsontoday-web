@@ -157,13 +157,17 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 #    name: image
 #    type: file
 #    description: The file to upload.
+#  - in: formData
+#    name: data
+#    schema:
+#      $ref: '#/definitions/whatson.model.forms.ImageForm.Data'
 #  responses:
 #    200:
 #      description: success
 #      schema:
 #        $ref: '#/definitions/whatson.model.Image'
 ###
-POST   /images/:name                 controllers.ImageController.createImage(name: String)
+POST   /images                    controllers.ImageController.createImage
 
 ###
 #  summary: Attach an image

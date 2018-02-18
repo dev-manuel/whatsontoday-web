@@ -22,6 +22,7 @@ import scala.concurrent.Future
 import whatson.service._
 import com.mohiva.play.silhouette.api._
 import whatson.auth._
+import whatson.model.forms._
 
 
 class ImageController @Inject()(cc: ControllerComponents,
@@ -57,20 +58,20 @@ class ImageController @Inject()(cc: ControllerComponents,
     })
   }
 
-  def createImage(name: String) = Action(parse.multipartFormData).async { request =>
+  def createImage = Action(parse.multipartFormData).async { request =>
     log.debug("Rest request to create image")
 
-    request.body.file("image").flatMap { x =>
+    request.body.file("image").zip(request.body.dataParts("data")).flatMap { case (x,data) =>
       x.contentType.map { contentType =>
         val file = x.ref.path.toFile()
         val str = new FileInputStream(file)
         val bytes = IOUtils.toByteArray(str)
 
-        val img = Image(None,name,bytes,contentType)
+        val img = Image(None,Json.parse(data).as[ImageForm.Data].name,bytes,contentType)
 
         db.run(insertAndReturn[Image,ImageTable](image,img))
       }
-    }.map(_.map(x => Ok(Json.toJson(x)))).getOrElse(Future.successful(BadRequest))
+    }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
   }
 
   def attachImage(id: Int, entityType: String, entityId: Int) = userOrganizerRequest(parse.default) { case (request,login) =>

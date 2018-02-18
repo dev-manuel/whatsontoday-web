@@ -131,7 +131,7 @@ GET    /rating/:id/:entityType/:rate   controllers.RatingController.rateEntity(i
 #    200:
 #      description: success
 #      schema:
-#        $ref: '#/definitions/whatson.model.detail.ImageDetail'
+#        $ref: '#/definitions/whatson.model.Image'
 ###
 GET    /images/:id            controllers.ImageController.get(id: Int)
 

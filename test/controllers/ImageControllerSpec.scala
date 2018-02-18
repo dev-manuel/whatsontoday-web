@@ -13,6 +13,8 @@ import java.sql.Timestamp
 import whatson.model._
 import play.api.libs.Files._
 import play.api.mvc.MultipartFormData._
+import play.api.http.Writeable._
+import play.api.mvc.Codec._
 
 class ImageControllerSpec extends RestTestSuite {
 
@@ -53,13 +55,13 @@ class ImageControllerSpec extends RestTestSuite {
   /*"ImageController POST" should {
     "return OK on proper request" in {
       val tempFile = temporaryFileCreator.create(new java.io.File("./res/testImage.jpg").toPath())
-      val part = FilePart[TemporaryFile](key = "image", filename = "testImage.jpg", contentType=Some("image/jpg"), ref = tempFile)
+      val part = FilePart[TemporaryFile](key = "image", filename = "image", contentType=Some("image/jpg"), ref = tempFile)
       val formData = MultipartFormData(dataParts = Map(), files=Seq(part), badParts = Seq())
 
-      val any = AnyContentAsMultipartFormData(formData)
+      val writeable = writeableOf_MultipartFormData(utf_8, Some("image/jpg"))
 
       val post = route(app,FakeRequest(POST, "/api/v1/images/testimage", new Headers(List(("Content-Type","multipart/form-data"))),
-                                          any)).get
+                                          formData))(writeable).get
 
       status(post) mustBe OK
     }

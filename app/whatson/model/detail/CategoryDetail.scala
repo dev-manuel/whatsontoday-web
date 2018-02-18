@@ -6,8 +6,9 @@ import play.api.libs.json._
 import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import whatson.model._
+import whatson.model.detail._
 
-case class CategoryDetail(id: Option[Int], name: String, parentId: Int, images: List[Int]) extends WithImages
+case class CategoryDetail(id: Option[Int], name: String, parentId: Int, images: List[TaggedImage]) extends WithTaggedImages
 
 object CategoryDetail {
   implicit val categoryDetailReads = Json.reads[CategoryDetail]
@@ -21,8 +22,10 @@ object CategoryDetail {
         DBIO.sequence(y.map {
           case category => {
             val imgs = CategoryTable.category.filter(_.id === category.id).flatMap(_.images).map(_.id)
+            val imgTagged = CategoryTable.category.filter(_.id === category.id).flatMap(_.taggedImages)
+              .result.map(l => l.map(x => TaggedImage(x._2.id,x._2.name,x._1)))
 
-            imgs.result.map(o => {
+            imgTagged.map(o => {
               CategoryDetail(category.id, category.name, category.parentId, o.toList)
             })
           }

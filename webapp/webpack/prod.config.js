@@ -13,7 +13,7 @@ const webpack = require('webpack');
 
 module.exports = merge(baseConfig, {
     output: {
-        publicPath: 'assets/', // Define a base path. (Play server provide resource file on /assets/* route) 
+        publicPath: './assets/', // Define a base path. (Play server provide resource file on /assets/* route) 
     },
 
     module: {

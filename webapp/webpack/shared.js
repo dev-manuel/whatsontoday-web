@@ -14,11 +14,15 @@ const shared= {
     NODE_MODULES_DIR: path.resolve(__dirname, '../node_modules'),
 }
 
-shared.createLessLoader = (minimized) => (
+shared.createLessLoader = (minimized, publicPath = './') => (
     // Loading less-files
     {
         test: /\.(less|config)/, // Loading .less or .config files
         use: ExtractTextPlugin.extract({ // Instructs webpack to store the style data in a seperate css-file (see plugins!)
+            
+            // Here we need to update the public path for css files to avoid double publicPath usage (>...>/<publicPath>/<publicPath>/<...>)
+            // see https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/246#issuecomment-281253248
+            publicPath,
             use: [
                 { 
                     loader: "css-loader",

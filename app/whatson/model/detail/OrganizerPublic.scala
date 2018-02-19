@@ -20,16 +20,14 @@ object OrganizerPublic {
 
   implicit class OrganizerPublicQuery(q: Query[OrganizerTable, Organizer, Seq]) {
     def public(implicit ec: ExecutionContext) = {
-      val t = q.result.flatMap(y => {
+      val t = q.map(x => (x,x.avgRating)).result.flatMap(y => {
         DBIO.sequence(y.map {
-          case organizer => {
-            val s = OrganizerTable.organizer.filter(_.id === organizer.id).map(_.avgRating)
-            val imgs = OrganizerTable.organizer.filter(_.id === organizer.id).flatMap(_.images).map(_.id)
+          case (organizer, avg) => {
             val imgTagged = OrganizerTable.organizer.filter(_.id === organizer.id).flatMap(_.taggedImages)
               .result.map(l => l.map(x => TaggedImage(x._2.id,x._2.name,x._1)))
 
-            s.result.zip(imgTagged).map(o => {
-              OrganizerPublic(organizer.id, organizer.name, o._1.headOption.flatten, o._2.toList, organizer.avatar)
+            imgTagged.map(o => {
+              OrganizerPublic(organizer.id, organizer.name, avg, o.toList, organizer.avatar)
             })
           }
         })

@@ -23,14 +23,12 @@ object EventDetail {
 
   implicit class EventDetailQuery(q: Query[EventTable, Event, Seq]) {
     def detailed(implicit ec: ExecutionContext) = {
-      val s = q.map(x => (x,x.participants.length))
+      val s = q.map(x => (x,x.participants.length,x.avgRating))
         .join(OrganizerTable.organizer).on(_._1.creatorId === _.id)
         .join(LocationTable.location).on(_._1._1.locationId === _.id)
       val t = s.result.flatMap(y => {
         DBIO.sequence(y.map {
-          case (((event,pCount), creator), location) => {
-            val s = EventTable.event.filter(_.id === event.id).map(_.avgRating)
-            val imgs = EventTable.event.filter(_.id === event.id).flatMap(_.images).map(_.id)
+          case (((event,pCount,r), creator), location) => {
             val taggedImgs = EventTable.event.filter(_.id === event.id).flatMap(_.taggedImages).result.map(l => l.map(x => TaggedImage(x._2.id,x._2.name,x._1)))
 
             val c = for (
@@ -38,9 +36,9 @@ object EventDetail {
               c <- CategoryTable.category if c.id === j.categoryID
             ) yield c
 
-            s.result.zip(c.result).zip(taggedImgs).map(o => {
+            c.result.zip(taggedImgs).map(o => {
               EventDetail(event.id, event.name, event.from, event.to, event.description,
-                          creator, o._1._2.toList, o._1._1.headOption.flatten,
+                          creator, o._1.toList, r,
                           location, o._2.toList, pCount)
             })
           }

@@ -21,7 +21,6 @@ object CategoryDetail {
       val t = q.result.flatMap(y => {
         DBIO.sequence(y.map {
           case category => {
-            val imgs = CategoryTable.category.filter(_.id === category.id).flatMap(_.images).map(_.id)
             val imgTagged = CategoryTable.category.filter(_.id === category.id).flatMap(_.taggedImages)
               .result.map(l => l.map(x => TaggedImage(x._2.id,x._2.name,x._1)))
 

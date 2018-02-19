@@ -19,16 +19,14 @@ object LocationDetail {
 
   implicit class LocationDetailQuery(q: Query[LocationTable, Location, Seq]) {
     def detailed(implicit ec: ExecutionContext) = {
-      val t = q.result.flatMap(y => {
+      val t = q.map(x => (x,x.avgRating)).result.flatMap(y => {
         DBIO.sequence(y.map {
-          case location => {
-            val s = LocationTable.location.filter(_.id === location.id).map(_.avgRating)
-            val imgs = LocationTable.location.filter(_.id === location.id).flatMap(_.images).map(_.id)
+          case (location,avg) => {
             val imgTagged = LocationTable.location.filter(_.id === location.id).flatMap(_.taggedImages)
               .result.map(l => l.map(x => TaggedImage(x._2.id,x._2.name,x._1)))
 
-            s.result.zip(imgTagged).map(o => {
-              LocationDetail(location.id, location.name, location.latitude, location.longitude, o._1.headOption.flatten, o._2.toList)
+            imgTagged.map(o => {
+              LocationDetail(location.id, location.name, location.latitude, location.longitude, avg, o.toList)
             })
           }
         })

@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
 import ModalError from '../modal'
-import loginRequests from '../../common/api/requests/login'
+import {signIn} from '../../common/api/requests/login'
 
 export default class SignInPanel extends React.Component {
 
@@ -23,7 +23,7 @@ export default class SignInPanel extends React.Component {
     }
 
     handleSubmit(){
-        loginRequests.signIn(this.state.emailValue, this.state.passwordValue, this.state.rememberValue)
+        signIn(this.state.emailValue, this.state.passwordValue, this.state.rememberValue)
             .then(token => {
                 this.props.global.update({
                     loggedIn: true,

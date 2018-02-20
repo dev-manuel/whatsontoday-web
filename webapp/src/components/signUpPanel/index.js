@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
 import ModalError from '../modal'
-import userRequests from '../../common/api/requests/user'
+import {userSignUp} from '../../common/api/requests/user'
 
 
 class SignUpPanel extends React.Component {
@@ -73,7 +73,7 @@ class SignUpPanel extends React.Component {
         }
         */
 
-        userRequests.userSignUp(this.state.emailValue, this.state.passwordValue)
+        userSignUp(this.state.emailValue, this.state.passwordValue)
             .then( () => {
                 this.props.onSuccess();
             })

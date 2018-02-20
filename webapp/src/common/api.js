@@ -144,8 +144,11 @@ export const api = {
     uploadImage: ( file, name) => {
         const data = new FormData();
         data.set('image', file);
+        data.set('data',JSON.stringify({
+            name: name,
+        }))
 
-        return axios.post(`images/${name}`, data)
+        return axios.post(`images`, data)
             .then( response => {
                 return response.data;
             })

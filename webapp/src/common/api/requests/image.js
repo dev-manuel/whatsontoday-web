@@ -28,6 +28,17 @@ export const uploadImage = ( file, name) => {
 }
 
 /**
+ * 
+ * @param {number} id 
+ */
+export const readImageData = id => {
+    return axios.get(`/images/${id}`)
+        .then( response => {
+            return response.data;
+        })
+}
+
+/**
  * @param {entityType} entityType
  * @param {number} entityId
  * @param {string} tag

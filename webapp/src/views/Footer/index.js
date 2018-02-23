@@ -1,8 +1,8 @@
 import React from 'react';
 import { Segment, Container, Grid, Header, List, Divider } from 'semantic-ui-react';
 
-export default ({global}) => {
-    const LANG = global.LANG.footer;
+export default ({language}) => {
+    const lang = language.footer;
     return (
         <div>
             <Segment
@@ -13,25 +13,25 @@ export default ({global}) => {
                     <Grid textAlign="center" columns={3} divided inverted stackable>
                         <Grid.Row>
                             <Grid.Column width={3}>
-                                <Header inverted as='h4' content={LANG.about} />
+                                <Header inverted as='h4' content={lang.about} />
                                 <List link inverted>
-                                    <List.Item as='a'>{LANG.contactUs}</List.Item>
-                                    <List.Item as='a'>{LANG.theTeam}</List.Item>
-                                    <List.Item as='a'>{LANG.faq}</List.Item>                    
+                                    <List.Item as='a'>{lang.contactUs}</List.Item>
+                                    <List.Item as='a'>{lang.theTeam}</List.Item>
+                                    <List.Item as='a'>{lang.faq}</List.Item>                    
                                 </List>
                             </Grid.Column>
                             <Grid.Column width={3}>
-                                <Header inverted as='h4' content={LANG.socialMedia} />
+                                <Header inverted as='h4' content={lang.socialMedia} />
                                 <List link inverted>
-                                    <List.Item as='a'>{LANG.facebook}</List.Item>
-                                    <List.Item as='a'>{LANG.twitter}</List.Item>
-                                    <List.Item as='a'>{LANG.instagram}</List.Item>
+                                    <List.Item as='a'>{lang.facebook}</List.Item>
+                                    <List.Item as='a'>{lang.twitter}</List.Item>
+                                    <List.Item as='a'>{lang.instagram}</List.Item>
                                 </List>
                             </Grid.Column>
                             <Grid.Column width={7}>
                                 <Header as='h4' inverted>What's On</Header>
                                 <p>
-                                    {LANG.slogan}
+                                    {lang.slogan}
                                 </p>
                             </Grid.Column>
                         </Grid.Row>
@@ -43,7 +43,7 @@ export default ({global}) => {
                                     <List.Content>
                                         <List.Header>
                                             <a href="#Contact">
-                                                {LANG.contactUs}
+                                                {lang.contactUs}
                                             </a>
                                         </List.Header>
                                     </List.Content>
@@ -52,7 +52,7 @@ export default ({global}) => {
                                     <List.Content>
                                         <List.Header>
                                             <a href="#Terms">
-                                                {LANG.terms}
+                                                {lang.terms}
                                             </a>
                                         </List.Header>
                                     </List.Content>
@@ -61,7 +61,7 @@ export default ({global}) => {
                                     <List.Content>
                                         <List.Header>
                                             <a href="#PrivacyPolicy">
-                                                {LANG.privacyPolicy}
+                                                {lang.privacyPolicy}
                                             </a>
                                         </List.Header>
                                     </List.Content>

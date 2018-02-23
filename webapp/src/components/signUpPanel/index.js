@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
-import ModalError from '../modal';
-
+import ModalError from '../modal'
+import {userSignUp} from '../../common/api/requests/user'
 
 
 class SignUpPanel extends React.Component {
@@ -73,38 +73,33 @@ class SignUpPanel extends React.Component {
         }
         */
 
+        userSignUp(this.state.emailValue, this.state.passwordValue)
+            .then( () => {
+                this.props.onSuccess();
+            })
+            .catch( err => {
+                console.log(err);
 
-        this.props.global.axios.post('/user/signUp', {
-                "firstName": "",
-                "lastName": "",
-                "email": this.state.emailValue,
-                "password": this.state.passwordValue
-        }).then( res => {
-            this.props.onSuccess();
-        }).catch( err => {
-
-            console.log(err);
-
-            if(!err.response)
-                this.setState({showModalError: true});
-            else
-                switch(err.response.status){
-                    case 400: // if form inputs are not valid
-                        const errors = {};
-                        const reqBody = err.response.data;
-                        if(reqBody.email)
-                            errors.emailError = true;
-                        if(reqBody.password)
-                            errors.passwordError = true;
-                        if(reqBody.message = 'user.exists')
-                            errors.userAlreadyExistsError = true;
-                        
-                        this.props.onCredentialErrors(errors);
-                    break;
-                    default:
-                        this.setState({showModalError: true});
-                    break;
-                }
+                if(!err.response)
+                    this.setState({showModalError: true});
+                else
+                    switch(err.response.status){
+                        case 400: // if form inputs are not valid
+                            const errors = {};
+                            const reqBody = err.response.data;
+                            if(reqBody.email)
+                                errors.emailError = true;
+                            if(reqBody.password)
+                                errors.passwordError = true;
+                            if(reqBody.message = 'user.exists')
+                                errors.userAlreadyExistsError = true;
+                            
+                            this.props.onCredentialErrors(errors);
+                        break;
+                        default:
+                            this.setState({showModalError: true});
+                        break;
+                    }
         })
     }
     

@@ -1,7 +1,8 @@
-import React from 'react';
-import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react';
+import React from 'react'
+import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
-import ModalError from '../modal';
+import ModalError from '../modal'
+import {signIn} from '../../common/api/requests/login'
 
 export default class SignInPanel extends React.Component {
 
@@ -22,30 +23,28 @@ export default class SignInPanel extends React.Component {
     }
 
     handleSubmit(){
-        this.props.global.axios.post('/login/signIn', {
-            "email": this.state.emailValue,
-            "password": this.state.passwordValue,
-            "rememberMe": this.state.rememberValue,
-        }).then(res => {
-            this.props.global.update({
-                loggedIn: true,
-                token: res.data.token,
-            });
-            this.props.onSuccess();
-        }).catch(err => {
-            console.log('Response error:', err.response);
-            
-            if(!err.response)
-                this.setState({showModalError: true});
-            else
-                switch(err.response.status){
-                    case 404:
-                        this.props.onCredentialError();
-                    break;
-                    default:
-                        this.setState({showModalError: true});
-                    break;
-                }
+        signIn(this.state.emailValue, this.state.passwordValue, this.state.rememberValue)
+            .then(token => {
+                this.props.global.update({
+                    loggedIn: true,
+                    token,
+                });
+                this.props.onSuccess();
+            })
+            .catch(err => {
+                console.log('Response error:', err.response);
+                
+                if(!err.response)
+                    this.setState({showModalError: true});
+                else
+                    switch(err.response.status){
+                        case 404:
+                            this.props.onCredentialError();
+                        break;
+                        default:
+                            this.setState({showModalError: true});
+                        break;
+                    }
         })
     }
 

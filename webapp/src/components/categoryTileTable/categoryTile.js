@@ -10,7 +10,7 @@ import exampleTileImage from '../../img/example_tile.png';
  * JSX Component which is responsible to render a category tile (consits of an image, and an title)
  * @param {{name: string, imageURI: string, target: string}} props 
  */
-const CategoryTile = ({name, imageURI, target, global}) => (
+const CategoryTile = ({name, imageURI, target, language}) => (
     <Card className="cardDimensions" href={target}>
 		<Image src={imageURI} class="cardDimensions"/>
 		<Card.Content>

@@ -1,8 +1,7 @@
 import React from 'react'
 import { Button, Header, Icon, Modal } from 'semantic-ui-react'
 
-export default ({global, show, onClose}) => {
-    const LANG = global.LANG.modal;
+export default ({language, show, onClose}) => {
     return (
         <Modal
         open={show}
@@ -10,13 +9,13 @@ export default ({global, show, onClose}) => {
         basic
         size='small'
         >
-        <Header icon='frown' content={LANG.heading} />
+        <Header icon='frown' content={language.modal.heading} />
         <Modal.Content>
-            <h3>{LANG.description}</h3>
+            <h3>{language.modal.description}</h3>
         </Modal.Content>
         <Modal.Actions>
             <Button color='green' onClick={onClose} inverted>
-            <Icon name='checkmark' /> {LANG.button}
+            <Icon name='checkmark' /> {language.modal.button}
             </Button>
         </Modal.Actions>
         </Modal>

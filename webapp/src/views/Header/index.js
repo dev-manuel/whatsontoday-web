@@ -92,11 +92,11 @@ export default class Header extends React.Component{
         } else{
             return (
                 <div>
-                    {/* <ModalError
-                        global={this.props.global}
+                    <ModalError
+                        language={this.props.language}
                         show={this.state.showModalError}
                         onClose={()=>{this.setState({showModalError:false})}}
-                    /> */}
+                    />
                     <Menu borderless className='headerMenu' size='large'>
                         <Menu.Item className='headerSpacer'/>
 

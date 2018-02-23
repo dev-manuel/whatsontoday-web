@@ -1,5 +1,5 @@
 import {axios} from '../index'
-import {sqlTimestampToDate} from '../utils/sqlTimeParsing'
+import {sqlTimestampToDate, dateToSqlTimestamp} from '../utils/sqlTimeParsing'
 
 /**
  * @readonly
@@ -69,7 +69,7 @@ export const searchEvents = (search = '', sortDirection=apiEnums.sortDirection.A
 /**
  * @param {number} id
  */
-export const getEvent = id => {
+export const readEvent = id => {
     return axios.get(`events/${id}`)
         .then(response => {
             const data = response.data;
@@ -86,5 +86,79 @@ export const getEvent = id => {
                 images: data.images,
             }
             return event;
+        })
+}
+
+/**
+ * @param {number} id 
+ */
+export const participateToEvent = id => {
+    return axios.get(`/event/participate/${id}`)
+        .then( response => {
+            return response.data;
+        })
+}
+
+/**
+ * @param {number} id 
+ */
+export const unparticipateToEvent = id => {
+    return axios.get(`/event/unparticipate/${id}`)
+        .then( response => {
+            return response.data;
+        })
+}
+
+/**
+ * 
+ * @param {string} name 
+ * @param {string} description 
+ * @param {number} creatorId 
+ * @param {number} locationId 
+ * @param {Date} from 
+ * @param {Date} to
+ */
+export const createEvent = (name, description, creatorId, locationId, from, to) => {
+    return axios.post('/event', {
+        name,
+        description,
+        creatorId,
+        locationId,
+        from: dateToSqlTimestamp(from),
+        to: dateToSqlTimestamp(to),
+    }).then( response => {
+        return response.data;
+    })
+}
+
+/**
+ * @param {number} id
+ * @param {string} name 
+ * @param {string} description 
+ * @param {number} creatorId 
+ * @param {number} locationId 
+ * @param {Date} from 
+ * @param {Date} to
+ */
+export const updateEvent = (id, name, description, creatorId, locationId, from, to) => {
+    return axios.put('/event', {
+        name,
+        description,
+        creatorId,
+        locationId,
+        from: dateToSqlTimestamp(from),
+        to: dateToSqlTimestamp(to),
+    }).then( response => {
+        return response.data;
+    })
+}
+
+/**
+ * @param {number} id 
+ */
+export const deleteEvent = id => {
+    return axios.delete(`/event/${id}`)
+        .then( response => {
+            return response.data;
         })
 }

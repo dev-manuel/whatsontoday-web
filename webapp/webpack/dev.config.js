@@ -20,7 +20,8 @@ module.exports = merge(baseConfig, {
     devServer: {
         compress: true,
         contentBase: shared.BUILD_DIR,
-        port:8000
+        port:8000,
+        historyApiFallback: true,
     },
 
     module: {

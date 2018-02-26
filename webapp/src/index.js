@@ -1,7 +1,7 @@
 // Import modules
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {HashRouter, IndexRoute} from 'react-router-dom';
+import {BrowserRouter as Router, IndexRoute} from 'react-router-dom';
 
 // Import resources
 import BaseView from './views/BaseView';
@@ -12,9 +12,9 @@ import 'slick-carousel/slick/slick-theme.less';
 
 // Setup of local page routing
 const routing = (
-    <HashRouter>
+    <Router>
         <BaseView/>
-    </HashRouter>
+    </Router>
 );
 
 // The dom-element where react-dom renders to

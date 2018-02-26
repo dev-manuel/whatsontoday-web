@@ -1,3 +1,6 @@
+/**
+ * @readonly
+ */
 export default {
 
     header: {

@@ -1,4 +1,5 @@
 import React from 'react'
+import {withRouter} from 'react-router'
 import {parse} from 'query-string'
 
 import './SERP.less'
@@ -6,90 +7,82 @@ import FilterPanel from '../components/filterPanel'
 import EventTileTableBig from '../components/eventTileTableBig'
 import StatefulView from '../common/StatefulView'
 import AbstractViewState from '../common/AbstractViewState'
-import {api, apiEnums} from '../common/api'
+import {searchEvents} from '../common/api/requests/event'
 
 
-const LoremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
+export const LoadingView = () => (
+    <div style={{marginLeft: '11%', marginRight: '11%'}}>
+        {/* Loading... (TODO) */}
+    </div>
+)
 
+export const ShowingEvents = ({eventList, language}) => (
+    <div className="pageContent">
+        {/* <FilterPanel global={global}/> */}
+        <div className="tileTable">
+            <EventTileTableBig eventList={eventList} language={language}/>
+        </div>
+    </div>
+)
 
-export default class SERP extends StatefulView{
-    constructor(props){
-        super(props);
-        this.state = {
-            viewState: new LoadingState(this),
-            eventList: [],
-        }
+class SERP extends React.Component{
+    
+    state = {
+        isLoading: true,
+        eventList: [],
+        
     }
-}
 
-//
-// ─── VIEW-STATES ─────────────────────────────────────────────────────────────────
-//
+    componentDidMount(){
 
-class LoadingState extends AbstractViewState{
+        // "Subscribing" to determine if the url (especially the query params) have changes and 
+        // then requesting the new event data according to the query params
+        // See https://stackoverflow.com/questions/45373742/detect-route-change-with-react-router
+        this.unlisten = this.props.history.listen((location, action) => {
+            this.requestPageData(location);
+        });
 
-    constructor(context){
-        super(context);
-        this.requestPageData();
+        // Initial event data request
+        this.requestPageData(this.props.history.location);
     }
 
-    requestPageData(){
-        const {search} = parse(this.context.props.query);
+    // "Unsubscribe"
+    componentWillUnmount() {
+        this.unlisten();
+    }
 
 
-        api.searchEvents(search)
+    requestPageData(location){
+        // Getting query-parameter from url
+        const {search} = parse(location.search );
+
+        this.setState(() => ({
+            isLoading:true,
+        }))
+
+        // Sending AJAX api request to receive event data
+        searchEvents(0, search)
             .then( eventList => {
-                this.context.setState({
+                this.setState( () => ({
                     eventList,
-                    viewState: new ShowingState(this.context),
-                });
-
-            })
-            .catch( error => {
+                    isLoading: false,
+                }));
+            }).catch( error => {
                 console.log(error);
             })
     }
 
-    /**
-     * @override
-     */
     render() {
-        return (
-            <div style={{marginLeft: '11%', marginRight: '11%'}}>
-               Loading...
-            </div>
-        )
+        if(this.state.isLoading){
+            return <LoadingView/>
+        }else{
+            return <ShowingEvents
+                eventList={this.state.eventList}
+                language={this.props.language}
+            />
+        }
     }
 }
 
-class ShowingState extends AbstractViewState{
-    /**
-     * @override
-     */
-    render(){
-        const global = this.context.props.global;
-        return (
-            <div className="pageContent">
-                {/* <FilterPanel global={global}/> */}
-                <div className="tileTable">
-                    <EventTileTableBig eventList={this.context.state.eventList} global={global}/>
-                </div>
-            </div>
-        )
-    }
-}
 
-// Todo
-class ErrorState extends AbstractViewState{
-    
-    /**
-     * @override
-     */
-    render() {
-        return (
-            <div style={{marginLeft: '11%', marginRight: '11%'}}>
-                An error occurred!
-            </div>
-        )
-    }
-}
+export default withRouter(SERP);

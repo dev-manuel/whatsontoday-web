@@ -21,15 +21,17 @@ export const sort = {
     TO: 'to',
     RATING: 'rating',
     LOCATION: 'location',
-},
+}
 
 /**
- * @param {string} search
- * @param {sortDirection} sortDirection
  * @param {number} category ID of the category your adding to the filter
- * @param {sort} sort sort criteria
+ * @param {string} [search='']
+ * @param {sortDirection} [sortDirection]
+ * @param {sort} [sort] sort criteria
+ * @param {number} [xPage=0]
+ * @param {number} [xPageSize=20]
  */
-export const searchEvents = (search = '', sortDirection=apiEnums.sortDirection.ASCENDING, category, sort=apiEnums.sort.ID, xPage=0, xPageSize=20) => {
+export const searchEvents = (category, search = '', sortDirection=true, sort='id', xPage=0, xPageSize=20) => {
     // Query parameters for the AJAX request
     const queryParams = {
         search,

@@ -1,10 +1,8 @@
-// Import modules
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import Axios from 'axios';
 import {createHashHistory} from 'history'
 
-// Import resources
 import Header from './Header';
 import HomeView from './Home';
 import SERPView from './SERP';
@@ -25,29 +23,39 @@ class BaseView extends React.Component {
     constructor(props){
         super(props);
 
-        const forceUpdate = this.forceUpdate.bind(this);
+        // const forceUpdate = this.forceUpdate.bind(this);
 
-        this.global = new Global({
-            axios: Axios.create({
-                baseURL: 'http://localhost:9000/api/v1/', // Just for dev!
-                timeout: 10000
-            }),
-            onUpdate: () => {
-                forceUpdate(); // Rerender component
-            },
-            LANG: GER,
-            history: createHashHistory(),
-        });
+        // this.global = new Global({
+        //     axios: Axios.create({
+        //         baseURL: 'http://localhost:9000/api/v1/', // Just for dev!
+        //         timeout: 10000
+        //     }),
+        //     onUpdate: () => {
+        //         forceUpdate(); // Rerender component
+        //     },
+        //     LANG: GER,
+        //     history: createHashHistory(),
+        // });
+    }
+
+    state = {
+        loginData: {
+            loggedIn: false,
+            token: null,
+            userMail: null,
+        },
+
+        language: GER,
     }
 
     render() {
         return (
             <div>
-                <Header global={this.global}/>
+                <Header {...this.state}/>
 
                 <Switch>
-                    <Route exact path='/' render={() => <HomeView global={this.global}/>}/>
-                    <Route path='/search' render={({location}) => <SERPView query={location.search} global={this.global}/>}/> {/* Todo: render specific SERP according to URL parameters */}
+                    <Route exact path='/' render={() => <HomeView language={this.state.language}/>}/>
+                    <Route path='/search' render={() => <SERPView language={this.state.language}/>}/>
                     <Route path='/event' render={() => <EventView global={this.global}/>}/>
                     <Route path='/organizer' component={OrganizerView}/>
                     <Route path='/location' component={LocationView}/>
@@ -57,7 +65,7 @@ class BaseView extends React.Component {
                     <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
                 </Switch>
 
-                <Footer global={this.global}/>
+                <Footer language={this.state.language}/>
             </div>
         )
     }

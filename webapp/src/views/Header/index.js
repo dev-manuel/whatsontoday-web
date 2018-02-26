@@ -1,7 +1,7 @@
 // Import modules
 import React from 'react';
 import {Menu, Search, Icon, Button, Dropdown, Image} from 'semantic-ui-react';
-import {Redirect} from 'react-router'
+import {withRouter} from 'react-router'
 
 // Import resources
 import logo from '../../img/logo.png';
@@ -50,7 +50,7 @@ const LoggedInButtons = ({language, onSignOut}) => {
     )
 }
 
-export default class Header extends React.Component{
+class Header extends React.Component{
     
     state = {
         showModalError: false,
@@ -69,10 +69,7 @@ export default class Header extends React.Component{
 
     // This method will be invoked if the user presses enter while focusing the search bar
     onEnter(){
-        this.props.global.history.push({
-            pathname: '/search',
-            search: `?search=${this.state.searchValue}`
-        });
+        this.props.history.push(`/search?search=${this.state.searchValue}`);
     }
 
     // Simply updating the `value``of the search bar
@@ -87,69 +84,68 @@ export default class Header extends React.Component{
             <LoggedInButtons language={language} onSignOut={this.onSignOut.bind(this)}/> :
             <LoggedOutButtons language={language}/>;
 
-        if(this.state.redirect){
-            return <Redirect to={`/search?search=${this.state.searchValue}`}/>
-        } else{
-            return (
-                <div>
-                    <ModalError
-                        language={this.props.language}
-                        show={this.state.showModalError}
-                        onClose={()=>{this.setState({showModalError:false})}}
-                    />
-                    <Menu borderless className='headerMenu' size='large'>
-                        <Menu.Item className='headerSpacer'/>
+        return (
+            <div>
+                <ModalError
+                    language={this.props.language}
+                    show={this.state.showModalError}
+                    onClose={()=>{this.setState({showModalError:false})}}
+                />
+                <Menu borderless className='headerMenu' size='large'>
+                    <Menu.Item className='headerSpacer'/>
 
-                        <Menu.Item className='headerLogo'>
-                            <Image src={logo} href='#'/>
-                        </Menu.Item>
+                    <Menu.Item className='headerLogo'>
+                        <Image src={logo} href='#'/>
+                    </Menu.Item>
 
-                        <Menu.Item className='headerSearch'>
-                            {/*  */}
-                            <Search
-                                className='headerSearchBar'
-                                value={this.state.searchValue} 
-                                input={{ fluid: true}} // About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846
-                                showNoResults={false}
-                                onKeyPress={(e)=>{if(e.key === 'Enter') this.onEnter()}} // when enter key is pressed
-                                onSearchChange={this.handleSearchChange.bind(this)}
-                            />
-                        </Menu.Item>
+                    <Menu.Item className='headerSearch'>
+                        {/*  */}
+                        <Search
+                            className='headerSearchBar'
+                            value={this.state.searchValue} 
+                            input={{ fluid: true}} // About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846
+                            showNoResults={false}
+                            onKeyPress={(e)=>{if(e.key === 'Enter') this.onEnter()}} // when enter key is pressed
+                            onSearchChange={this.handleSearchChange.bind(this)}
+                        />
+                    </Menu.Item>
 
-                        <Menu.Item className='headerButtons'>
+                    <Menu.Item className='headerButtons'>
 
-                                <Button 
-                                    className='headerButtonStyle'
-                                    basic
-                                    color='teal'                    
-                                >
-                                    <Icon name='newspaper' /> {language.blog}
-                                </Button>
+                            <Button 
+                                className='headerButtonStyle'
+                                basic
+                                color='teal'                    
+                            >
+                                <Icon name='newspaper' /> {language.blog}
+                            </Button>
 
-                                <Button 
-                                    className='headerButtonStyle'
-                                    basic
-                                    color='teal'
-                                >
-                                    <Icon name='plus' /> {language.addEvent}
-                                </Button>
+                            <Button 
+                                className='headerButtonStyle'
+                                basic
+                                color='teal'
+                            >
+                                <Icon name='plus' /> {language.addEvent}
+                            </Button>
 
-                                {conditionalButtons}
-                                
-                                <Dropdown icon='sidebar' pointing className='item headerDropdownButton'>
-                                    <Dropdown.Menu>
-                                        {/* Todo */}
-                                        <Dropdown.Item>Lorem</Dropdown.Item>
-                                        <Dropdown.Item>Ipsum</Dropdown.Item>
-                                        <Dropdown.Item>Dolor</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                        </Menu.Item>  
+                            {conditionalButtons}
+                            
+                            <Dropdown icon='sidebar' pointing className='item headerDropdownButton'>
+                                <Dropdown.Menu>
+                                    {/* Todo */}
+                                    <Dropdown.Item>Lorem</Dropdown.Item>
+                                    <Dropdown.Item>Ipsum</Dropdown.Item>
+                                    <Dropdown.Item>Dolor</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                    </Menu.Item>  
 
-                        <Menu.Item className='headerSpacer'/>
-                    </Menu>
-                </div>
-            )
-        }
+                    <Menu.Item className='headerSpacer'/>
+                </Menu>
+            </div>
+        )
+        
     }
 }
+
+export default withRouter(Header);

@@ -55,67 +55,43 @@ const recommenderData = [
         
     ]
 
-export default class Event extends StatefulView{
-    
-    constructor(props){
-        super(props);
+export const LoadingView = () => (
+    <div style={{marginLeft: '11%', marginRight: '11%'}}>
+        {/* Loading... (TODO) */}
+    </div>
+)
 
-        this.state = {
-            viewState: new ShowingState(this),
+export const ShowingEventData = ({language}) => {
+    
+    const langData = {language};
+    return (
+        <div style={{marginLeft: '11%', marginRight: '11%'}}>
+            <EventOverview {...eventData} {...langData}/>
+            <EventDetails {...eventData} {...langData}/>
+            <LocationDetails {...locationData} {...langData}/>
+            <OrganizerDetails {...organizerData} {...langData}/>
+            <EventRecommender eventList={recommenderData} {...langData}/>
+        </div>
+    )
+}
+    
+
+export default class Event extends React.Component{
+    
+    state = {
+        isLoading: false,
+        eventData: undefined,
+        organizerData: undefined,
+        locationData: undefined,
+    }
+
+    render(){
+        if(this.state.isLoading){
+            return <LoadingView/>
+        }else{
+            return <ShowingEventData language={this.props.language}/>
         }
     }
-}
 
-//
-// ─── VIEW-STATES ────────────────────────────────────────────────────────────────
-//
-
-// Todo
-class LoadingState extends AbstractViewState{
-    
-    /**
-     * @override
-     */
-    render() {
-        return (
-            <div style={{marginLeft: '11%', marginRight: '11%'}}>
-                This View is loading!
-            </div>
-        )
-    }
-}
-
-class ShowingState extends AbstractViewState{
-    
-    /**
-     * @override
-     */
-    render() {
-        const global = this.context.props.global;
-        return (
-            <div style={{marginLeft: '11%', marginRight: '11%'}}>
-                <EventOverview {...eventData} global={global}/>
-                <EventDetails {...eventData} global={global}/>
-                <LocationDetails {...locationData} global={global}/>
-                <OrganizerDetails {...organizerData} global={global}/>
-                <EventRecommender eventList={recommenderData} global={global}/>
-            </div>
-        )
-    }
-}
-
-// Todo
-class ErrorState extends AbstractViewState{
-    
-    /**
-     * @override
-     */
-    render() {
-        return (
-            <div style={{marginLeft: '11%', marginRight: '11%'}}>
-                An error occurred!
-            </div>
-        )
-    }
 }
     

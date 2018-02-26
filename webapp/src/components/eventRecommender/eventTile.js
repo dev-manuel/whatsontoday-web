@@ -9,7 +9,7 @@ import {Card, Icon, Image} from 'semantic-ui-react';
  * JSX Component which is responsible to render a event  tile (consits of an image, and an title)
  * @param {{name: string, imageURI: string, target: string}} props 
  */
-const EventTile = ({name, imageURI, target, global}) => (
+const EventTile = ({name, imageURI, target, language}) => (
     <Card className="cardDimensions" href={target}>
 		<Image src={imageURI} class="cardDimensions"/>
 		<Card.Content>

@@ -49,14 +49,16 @@ class BaseView extends React.Component {
     }
 
     render() {
+
+        const language = {language: this.state.language};
         return (
             <div>
                 <Header {...this.state}/>
 
                 <Switch>
-                    <Route exact path='/' render={() => <HomeView language={this.state.language}/>}/>
-                    <Route path='/search' render={() => <SERPView language={this.state.language}/>}/>
-                    <Route path='/event' render={() => <EventView global={this.global}/>}/>
+                    <Route exact path='/' render={() => <HomeView {...language}/>}/>
+                    <Route path='/search' render={() => <SERPView {...language}/>}/>
+                    <Route path='/event/:id' render={routeProps => <EventView {...language} {...routeProps}/>}/>
                     <Route path='/organizer' component={OrganizerView}/>
                     <Route path='/location' component={LocationView}/>
                     <Route path='/signin' render={() => (<SignIn global={this.global} />)}/>

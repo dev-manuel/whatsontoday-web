@@ -7,7 +7,7 @@ import ImageSlider from '../imageSlider';
 import exampleImage from '../../img/example_image.jpg';
 
 
-const EventOverview = ({name, date, rating, description, categories, global}) => (
+const EventOverview = ({name, date, rating, description, categories, language}) => (
         <div>
             <Grid>
                 <Grid.Row>

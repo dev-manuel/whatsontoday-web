@@ -12,18 +12,18 @@ import CategoryTile from './eventTile';
 // An array of all events which should be displayed as a tile
 // the elements of this array must be objects with following fields:
 // name: the text displayed in the tile
-const EventRecommender = ({eventList, global}) => {
-    const LANG = global.LANG.event;
+const EventRecommender = ({eventList, language}) => {
+    const lang = language.event;
     return (
         <div>
-            <h3 style={{textAlign: 'center'}}>{LANG.also}</h3>
+            <h3 style={{textAlign: 'center'}}>{lang.also}</h3>
             <Grid columns="1" stackable centered style={{"marginTop": 50}} >
                 <Grid.Row>
                 {
                     // iterate over all all elements in the events array and render a EventTile according to the data
                     eventList.map( (eventListEntry, index) => (
                         <Grid.Column key={index} width="2">
-                            <CategoryTile {...eventListEntry} global={global}/>
+                            <CategoryTile {...eventListEntry} language={language}/>
                         </Grid.Column>
                     ))
                 }

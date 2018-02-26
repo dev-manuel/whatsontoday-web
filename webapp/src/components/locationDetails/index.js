@@ -12,8 +12,8 @@ const floatRight = {style: {float: 'right'}};
  * 
  * @param {{name: string, rating: string, description: string, target: string, address: object}} props 
  */
-const LocationDetails = ({name, rating, description, target, address, global}) => {
-    const LANG = global.LANG.event;
+const LocationDetails = ({name, rating, description, target, address, language}) => {
+    const lang = language.event;
     return (
         <div>
             <Grid>
@@ -24,7 +24,7 @@ const LocationDetails = ({name, rating, description, target, address, global}) =
                     <Grid.Column width="6">
                         <h2>{name} <span {...floatRight}><Rating defaultRating={rating} maxRating={5} disabled /></span></h2>
                         <p>{description}</p>
-                        <a {...floatRight} href={target}>{LANG.moreAbout(name)}</a>                      
+                        <a {...floatRight} href={target}>{lang.moreAbout(name)}</a>                      
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

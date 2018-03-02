@@ -56,13 +56,13 @@ class BaseView extends React.Component {
                 <Header {...this.state}/>
 
                 <Switch>
-                    <Route exact path='/' render={() => <HomeView {...language}/>}/>
-                    <Route path='/search' render={() => <SERPView {...language}/>}/>
-                    <Route path='/event/:id' render={routeProps => <EventView {...language} {...routeProps}/>}/>
-                    <Route path='/organizer' render={() => <OrganizerView {...language}/>}/>
-                    <Route path='/location' component={LocationView}/>
-                    <Route path='/signin' render={() => (<SignIn global={this.global} />)}/>
-                    <Route path='/signup' render={() => (<SignUp global={this.global} />)}/>
+                    <Route exact path='/'        render={() => <HomeView {...language}/>}/>
+                    <Route path='/search'        render={() => <SERPView {...language}/>}/>
+                    <Route path='/event/:id'     render={routeProps => <EventView {...language} {...routeProps}/>}/>
+                    <Route path='/organizer'     render={() => <OrganizerView {...language}/>}/>
+                    <Route path='/location'      render={() => <LocationView {...language}/>}/>
+                    <Route path='/signin'        render={() => (<SignIn global={this.global} />)}/>
+                    <Route path='/signup'        render={() => (<SignUp global={this.global} />)}/>
                     <Route path='/mailConfirmed' render={()=> (<Confirm global={this.global} />)} />
                     <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
                 </Switch>

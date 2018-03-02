@@ -3,8 +3,7 @@ import React from 'react';
 import {Grid, Rating} from 'semantic-ui-react';
 
 // Import resources
-import Overview from '../components/overview';
-import AbstractViewState from '../common/AbstractViewState';
+import Overview from '../components/overview';import AbstractViewState from '../common/AbstractViewState';
 import StatefulView from '../common/StatefulView';
 import SelectorMatrix from '../components/selectorMatrix';
 
@@ -37,51 +36,30 @@ const eventList = [
 ]
 
 
-export default class Organizer extends StatefulView{
-    constructor(props){
-        super(props);
+export const LoadingView = () => (
+    <div style={{marginLeft: '11%', marginRight: '11%'}}>
+        {/* Loading... (TODO) */}
+    </div>
+)
 
-        this.state = {
-            viewState: new ShowingState(this)
-        }
-    }
+export const ShowingLocationView = () => {
+    return (
+        <div style={{marginLeft: '11%', marginRight: '11%'}}>
+            <Overview {...locationData}/>
+            <SelectorMatrix eventList={eventList} />
+        </div>
+    )
 }
 
-//
-// ─── VIEW-STATES ─────────────────────────────────────────────────────────────────
-//
-
-class LoadingState extends AbstractViewState{
-
-    /**
-     * @override
-     */
-    render(){
-        //Todo
+export default class Location extends React.Component{
+    
+    state = {
+        isLoading: false,
     }
-}
 
-class ShowingState extends AbstractViewState{
-
-    /**
-     * @override
-     */
     render(){
-        return (
-            <div style={{marginLeft: '11%', marginRight: '11%'}}>
-                <Overview {...locationData}/>
-                <SelectorMatrix eventList={eventList} />
-            </div>
-        )
-    }
-}
-
-class ErrorState extends AbstractViewState{
-
-    /**
-     * @override
-     */
-    render(){
-        //Todo
+        return this.state.isLoading ?
+            <LoadingView /> :
+            <ShowingLocationView />
     }
 }

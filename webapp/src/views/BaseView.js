@@ -58,13 +58,15 @@ class BaseView extends React.Component {
                 <Switch>
                     <Route exact path='/'        render={() => <HomeView {...language}/>}/>
                     <Route path='/search'        render={() => <SERPView {...language}/>}/>
-                    <Route path='/event/:id'     render={routeProps => <EventView {...language} {...routeProps}/>}/>
+                    <Route path='/event/:id'     render={rP => <EventView {...language} {...rP}/>}/>
                     <Route path='/organizer'     render={() => <OrganizerView {...language}/>}/>
                     <Route path='/location'      render={() => <LocationView {...language}/>}/>
-                    <Route path='/signin'        render={() => (<SignIn global={this.global} />)}/>
-                    <Route path='/signup'        render={() => (<SignUp global={this.global} />)}/>
-                    <Route path='/mailConfirmed' render={()=> (<Confirm global={this.global} />)} />
-                    <Route path='/*' component={_404}/> {/* Error 404 page; Has to be at the last position! */}
+                    <Route path='/signin'        render={() => <SignIn {...language} />}/>
+                    <Route path='/signup'        render={() => <SignUp {...language} />}/>
+                    <Route path='/mailConfirmed' render={() => <Confirm {...language} />} />
+                    
+                    {/* Error 404 page; Has to be at the last position! */}
+                    <Route path='/*'             render={() => <_404 {...language}/>}/>
                 </Switch>
 
                 <Footer language={this.state.language}/>

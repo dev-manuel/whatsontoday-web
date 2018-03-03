@@ -1,64 +1,41 @@
 import React from 'react'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import {withRouter} from 'react-router'
 
 import SignInPanel from '../components/SignInPanel';
-import AbstractViewState from '../common/AbstractViewState';
-import StatefulView from '../common/StatefulView';
 
 
 // Inspired by https://react.semantic-ui.com/layouts/login
 
-export default class SignInView extends StatefulView {
+export const AlreadyLoggedInView = ({language}) => {
+    const lang = language.signIn;
+    return (
+        <div className='login-form'>
+            <style>{`
+                body > div,
+                body > div > div,
+                body > div > div > div.login-form {
+                    height: 100%;
+                }
+            `}</style>
 
-    constructor(props){
-        super(props);
-
-        this.state = {
-            viewState: props.global.loggedIn ? new AlreadyLoggedInState(this) : new SignInState(this),
-        }
-    }
+            <Grid
+                textAlign='center'
+                style={{ height: '100%' }}
+                verticalAlign='middle'
+            >
+                <Grid.Column style={{ maxWidth: 450 }}>
+                    <Message>
+                        {lang.alreadyLoggedIn}
+                    </Message>
+                </Grid.Column>
+            </Grid>
+        </div>
+    )
 }
 
-//
-// ─── VIEW-STATES ─────────────────────────────────────────────────────────────────
-//
+export class ShowingSignInPanel extends React.Component{
 
-/**
- * This class simply provides some methods used by multiple views displaying the sign-in panel
- */
-class BaseSignInPanelViewState extends AbstractViewState{
-    
-    constructor(props){
-        super(props);
-
-        this.onSuccess = this.onSuccess.bind(this);
-        this.onCredentialError = this.onCredentialError.bind(this);
-    }
-
-    /**
-     * redirects the user to the main page
-     */
-    onSuccess(){
-        this.context.props.global.history.push('/#');
-    }
-
-    /**
-     * shows an error message (switches to WrongCredentialsState)
-     */
-    onCredentialError(){
-        this.context.setState({
-            viewState: new WrongCredentialsState(this.context)
-        })
-    }
-}
-
-
-export class SignInState extends BaseSignInPanelViewState{
-
-
-    /**
-     * @override
-     */
     render(){
         return (
             <div className='login-form'>
@@ -76,10 +53,9 @@ export class SignInState extends BaseSignInPanelViewState{
                 >
                 <Grid.Column style={{ maxWidth: 450 }}>
                     <SignInPanel
-                        global={this.context.props.global}
+                        language={this.props.language}
                         onSuccess={this.onSuccess}
-                        showCredentialError={false}
-                        onCredentialError={this.onCredentialError}
+                        setLoginData={this.props.setLoginData}
                     />
                 </Grid.Column>
                 </Grid>
@@ -88,77 +64,13 @@ export class SignInState extends BaseSignInPanelViewState{
     }
 }
 
-export class WrongCredentialsState extends BaseSignInPanelViewState{
-    
-    constructor(context){
-        super(context);
-    }
-    
-    /**
-     * @override
-     */
+
+export default class SignInView extends React.Component {
+
     render(){
-        return (
-            <div className='login-form'>
-                <style>{`
-                    body > div,
-                    body > div > div,
-                    body > div > div > div.login-form {
-                        height: 100%;
-                    }
-                    `}</style>
-                <Grid
-                    textAlign='center'
-                    style={{ height: '100%' }}
-                    verticalAlign='middle'
-                >
-                <Grid.Column style={{ maxWidth: 450 }}>
-                    <SignInPanel
-                        global={this.context.props.global}
-                        onSuccess={this.onSuccess.bind(this)}
-                        showCredentialError={true}
-                        onCredentialError={this.onCredentialError}
-                    />
-                </Grid.Column>
-                </Grid>
-            </div>
-        )
-    }
-}
-
-export class AlreadyLoggedInState extends AbstractViewState{
-
-    constructor(context){
-        super(context);
-    }
-
-    /**
-     * @override
-     */
-    render(){
-        const LANG = this.context.props.global.LANG.signIn;
-        return (
-            <div className='login-form'>
-                <style>{`
-                    body > div,
-                    body > div > div,
-                    body > div > div > div.login-form {
-                        height: 100%;
-                    }
-                `}</style>
-
-                <Grid
-                    textAlign='center'
-                    style={{ height: '100%' }}
-                    verticalAlign='middle'
-                >
-                    <Grid.Column style={{ maxWidth: 450 }}>
-                        <Message>
-                            {LANG.alreadyLoggedIn}
-                        </Message>
-                    </Grid.Column>
-                </Grid>
-            </div>
-        )
+        const langData = {language: this.props.language}
+        return this.props.loginData.loggedIn ? 
+            <AlreadyLoggedInView {...langData}/> :
+            <ShowingSignInPanel {...langData} setLoginData={this.props.setLoginData}/>
     }
 }

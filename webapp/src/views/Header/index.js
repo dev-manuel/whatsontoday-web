@@ -16,7 +16,7 @@ const LoggedOutButtons = ({language}) => {
             className='headerButtonStyle'
             basic
             color='teal'
-            href='#signin'
+            href='signin'
             key={1}
         >
             <Icon name='sign in' /> {language.signIn}
@@ -27,7 +27,7 @@ const LoggedOutButtons = ({language}) => {
             className='headerButtonStyle'
             basic
             color='teal'
-            href='#signup'
+            href='signup'
             key={2}
         >
             <Icon name='signup' /> {language.signUp}

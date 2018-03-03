@@ -1,101 +1,103 @@
 import React from 'react'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
+import {withRouter} from 'react-router'
 
 import ModalError from '../modal'
 import {signIn} from '../../common/api/requests/login'
 
-export default class SignInPanel extends React.Component {
+class SignInPanel extends React.Component {
 
-    constructor(props){
-        super(props);
+    state = {
+        emailValue: '',
+        passwordValue: '',
+        rememberValue: false,
 
-        this.state = {
+        showModalError: false,
+        showCredentialError: false,
+    }
 
-            emailValue: '',
-            passwordValue: '',
-            rememberValue: false,
 
-            emailError: false,
-            passwordError: false,
-            rememberError: false,
-            showModalError: false,
-        }
+    onSuccess(){
+        // Redirects the user to the main page
+        this.props.history.push('/');
     }
 
     handleSubmit(){
         signIn(this.state.emailValue, this.state.passwordValue, this.state.rememberValue)
             .then(token => {
-                this.props.global.update({
+                this.props.setLoginData({
                     loggedIn: true,
                     token,
+                    userMail: this.state.emailValue,
                 });
-                this.props.onSuccess();
+                this.onSuccess();
             })
             .catch(err => {
-                console.log('Response error:', err.response);
-                
-                if(!err.response)
-                    this.setState({showModalError: true});
-                else
-                    switch(err.response.status){
-                        case 404:
-                            this.props.onCredentialError();
-                        break;
-                        default:
-                            this.setState({showModalError: true});
-                        break;
-                    }
+                console.log('Response error:', err.response); 
+                switch(err.response.status){
+                    
+                    // Wrong Credentials
+                    case 401:
+                        this.setState({
+                            showCredentialError: true,
+                        })
+                    break;
+
+                    // Other Errors
+                    default:
+                        this.setState({showModalError: true});
+                    break;
+                }
         })
     }
 
     render() {
-        const LANG = this.props.global.LANG.signIn;
+        const lang = this.props.language.signIn;
         return (
             <div>
-                <ModalError global={this.props.global} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
+                <ModalError language={this.props.language} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
 
                 <Header color='grey' as='h2' textAlign='center'>
-                    {LANG.message}
+                    {lang.message}
                 </Header>
                 <Form size='large'>
                     <Segment>
-                        <Message negative hidden={!this.props.showCredentialError}>
-                            <Message.Header>{LANG.errorHeading}</Message.Header>
-                            <p>{LANG.errorDescription}</p>
+                        <Message negative hidden={!this.state.showCredentialError}>
+                            <Message.Header>{lang.errorHeading}</Message.Header>
+                            <p>{lang.errorDescription}</p>
                         </Message>
                         <Form.Input
-                            error={this.state.emailError}
                             value={this.state.emailValue}
                             fluid
                             icon='user'
                             iconPosition='left'
-                            placeholder={LANG.email}
+                            placeholder={lang.email}
                             onChange={ event => { this.setState({emailValue: event.target.value}) }}
                         />
                         <Form.Input
-                            error={this.state.passwordError}
                             value={this.state.passwordValue}                        
                             fluid
                             icon='lock'
                             iconPosition='left'
-                            placeholder={LANG.password}
+                            placeholder={lang.password}
                             type='password'
                             onChange={ event => { this.setState({passwordValue: event.target.value}) }}
                         />
                         <Form.Checkbox
                             checked={this.state.rememberValue}
-                            error={this.state.rememberError}
                             onChange={ () => {this.setState((prevState, props)=>({rememberValue: !prevState.rememberValue}))} }
-                            label={LANG.rememberMe}
+                            label={lang.rememberMe}
                         />
 
-                        <Button color='olive' fluid size='large' onClick={this.handleSubmit.bind(this)}>{LANG.submit}</Button>
+                        <Button color='olive' fluid size='large' onClick={this.handleSubmit.bind(this)}>{lang.submit}</Button>
                     </Segment>
                 </Form>
                 <Message>
-                    {LANG.newToUs} <a href='#signup'>{LANG.signUp}</a>
+                    {lang.newToUs} <a href='signup'>{lang.signUp}</a>
                 </Message>
             </div>
         )
     }
 }
+
+export default withRouter(SignInPanel);

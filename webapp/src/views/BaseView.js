@@ -48,6 +48,14 @@ class BaseView extends React.Component {
         language: GER,
     }
 
+    /**
+     * 
+     * @param {{loggedIn: boolean, token: string, userMail: string}} loginData 
+     */
+    setLoginData(loginData){
+        this.setState({loginData});
+    }
+
     render() {
 
         const language = {language: this.state.language};
@@ -61,7 +69,7 @@ class BaseView extends React.Component {
                     <Route path='/event/:id'     render={rP => <EventView {...language} {...rP}/>}/>
                     <Route path='/organizer'     render={() => <OrganizerView {...language}/>}/>
                     <Route path='/location'      render={() => <LocationView {...language}/>}/>
-                    <Route path='/signin'        render={() => <SignIn {...language} />}/>
+                    <Route path='/signin'        render={() => <SignIn {...language} loginData={this.state.loginData} setLoginData={this.setLoginData.bind(this)}/> }/>
                     <Route path='/signup'        render={() => <SignUp {...language} />}/>
                     <Route path='/mailConfirmed' render={() => <Confirm {...language} />} />
                     

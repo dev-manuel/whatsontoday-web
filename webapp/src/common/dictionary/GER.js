@@ -80,5 +80,8 @@ export default {
     },
     confirm:{
         confirmed: 'Deine E-Mail Adresse wurde erfolgreich bestätigt. Du kannst dich nun Anmelden.'
+    },
+    notFound:{
+        message: 'Wir haben leider keine Ergebnisse für diese URL gefunden :('
     }
 }

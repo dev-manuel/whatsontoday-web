@@ -7,163 +7,146 @@ import {userSignUp} from '../../common/api/requests/user'
 
 class SignUpPanel extends React.Component {
     
-    constructor(props){
-        super(props);
-        this.state = {
-            emailValue: '',
-            passwordValue: '',
-            repeatPasswordValue: '',
-            acceptValue: false,
-            
-            showModalError: false
-        }
-    }
+    state = {
+        emailValue: '',
+        passwordValue: '',
+        repeatPasswordValue: '',
+        acceptedTermsValue: false,
+        
+        emailError: false,
+        acceptedTermsError: false,
+        passwordError: false,
+        repeatPasswordError: false,
+        userAlreadyExistsError: false,
 
-
-    /**
-     * 
-     * @param {string} mailAddress
-     * @param {boolean} if email address is valid
-     */
-    validateEmail( mailAddress){
-        // http://emailregex.com/
-        const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        return regex.test(mailAddress);
-    }
-
-    /**
-     * 
-     * @param {*} password 
-     * @returns {boolean}
-     */
-    validatePassword( password){
-        return true; // Todo
+        showModalError: false,
     }
 
     handleSubmit(){
-    
+
+        // Determines if the api request for registration is send
+        // This variable is set to false if the terms of condition are not accepted or the password was repeated wrong
+        let readyToSubmitRegistrationRequest = true;
+
+        const validationErrors = {
+            emailError: false,
+            acceptedTermsError: false,
+            passwordError: false,
+            repeatPasswordError: false,
+            userAlreadyExistsError: false,
+        }
         
-        /*
-        // Check if email is valid
-        const email = this.state.emailValue;
-        if(!this.validateEmail(email)){
-            errors.emailError = true;
-            success = false;
-        }
-
-        // Check if password is valid
-        const password = this.state.passwordValue;
-        if(!this.validatePassword(password)){
-            errors.passwordError = true;
-            success = false;
-        }
-
         // Check if repeat-password is valid
         const repeatPassword = this.state.repeatPasswordValue;
+        const password = this.state.passwordValue;
         if( repeatPassword !== password){
-            errors.repeatPasswordError = true;
-            success = false
+            validationErrors.repeatPasswordError = true;
+            readyToSubmitRegistrationRequest = false;
         }
 
         // Check if (accept) checkbox is valid        
-        const accept = this.state.acceptValue;
+        const accept = this.state.acceptedTermsValue;
         if(!accept){
-            errors.acceptError = true;
-            success = false;
+            validationErrors.acceptedTermsError = true;
+            readyToSubmitRegistrationRequest = false;
         }
-        */
+        
+        // When no error will occur during the api request no error will displayed
+        if(readyToSubmitRegistrationRequest){
+            userSignUp(this.state.emailValue, this.state.passwordValue)
+                .then( () => {
+                    this.props.onSuccess();
+                })
+                .catch( err => {
+                    console.log(err);
 
-        userSignUp(this.state.emailValue, this.state.passwordValue)
-            .then( () => {
-                this.props.onSuccess();
-            })
-            .catch( err => {
-                console.log(err);
+                    if(!err.response)
+                        this.setState({showModalError: true});
+                    else
+                        switch(err.response.status){
 
-                if(!err.response)
-                    this.setState({showModalError: true});
-                else
-                    switch(err.response.status){
-                        case 400: // if form inputs are not valid
-                            const errors = {};
-                            const reqBody = err.response.data;
-                            if(reqBody.email)
-                                errors.emailError = true;
-                            if(reqBody.password)
-                                errors.passwordError = true;
-                            if(reqBody.message = 'user.exists')
-                                errors.userAlreadyExistsError = true;
-                            
-                            this.props.onCredentialErrors(errors);
-                        break;
-                        default:
-                            this.setState({showModalError: true});
-                        break;
-                    }
-        })
+                            // If user already exits, password to short etc...
+                            case 400: 
+                                // if form inputs are not valid
+                                const reqBody = err.response.data;
+                                if(reqBody.email)
+                                    validationErrors.emailError = true;
+                                if(reqBody.password)
+                                    validationErrors.passwordError = true;
+                                if(reqBody.message = 'user.exists')
+                                    validationErrors.userAlreadyExistsError = true;
+                                
+                                this.setState(validationErrors);
+                            break;
+
+                            // On connection errors
+                            default:
+                                this.setState({showModalError: true});
+                            break;
+                        }
+                })
+        }else{
+            this.setState(validationErrors);
+        }
     }
     
-    
-    
-    
+
     render(){
-        const LANG = this.props.global.LANG.signUp;
+        const lang = this.props.language.signUp;
         return (
             <div>
-                <ModalError global={this.props.global} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
+                <ModalError language={this.props.language} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
 
                 <Header color='grey' as='h2' textAlign='center'>
-                    {LANG.message}
+                    {lang.message}
                 </Header>
                 <Form size='large' onSubmit={this.handleSubmit.bind(this)}>
                     <Segment>
-                        <Message negative hidden={!this.props.credentialErrors.userAlreadyExistsError}>
-                            <Message.Header>{LANG.errorHeading}</Message.Header>
-                            <p>{LANG.userAlreadyExistsError}</p>
+                        <Message negative hidden={!this.state.userAlreadyExistsError}>
+                            <Message.Header>{lang.errorHeading}</Message.Header>
+                            <p>{lang.userAlreadyExistsError}</p>
                         </Message>
                         <Form.Input
-                            error={this.props.credentialErrors.emailError}
+                            error={this.state.emailError}
                             value={this.state.emailValue}
                             fluid
                             icon='user'
                             iconPosition='left'
-                            placeholder={LANG.email}
+                            placeholder={lang.email}
                             onChange={ event => { this.setState({emailValue: event.target.value}) }}
                         />
                         <Form.Input
-                            error={this.props.credentialErrors.passwordError}
+                            error={this.state.passwordError}
                             value={this.state.passwordValue}                        
                             fluid
                             icon='lock'
                             iconPosition='left'
-                            placeholder={LANG.password}
+                            placeholder={lang.password}
                             type='password'
                             onChange={ event => { this.setState({passwordValue: event.target.value}) }}
                         />
                         <Form.Input
-                            error={this.props.credentialErrors.repeatPasswordError}
+                            error={this.state.repeatPasswordError}
                             value={this.state.repeatPasswordValue}                        
                             fluid
                             icon='lock'
                             iconPosition='left'
-                            placeholder={LANG.passwordRepeat}
+                            placeholder={lang.passwordRepeat}
                             type='password'
                             onChange={ event => { this.setState({repeatPasswordValue: event.target.value}) }}
                         />
                         <Form.Checkbox
-                            checked={this.state.acceptValue}
-                            error={this.props.credentialErrors.acceptError}
-                            onChange={ () => {this.setState((prevState, props)=>({acceptValue: !prevState.acceptValue}))} }
-                            label={LANG.agree}
+                            checked={this.state.acceptedTermsValue}
+                            error={this.state.acceptedTermsError}
+                            onChange={ () => {this.setState((prevState, props)=>({acceptedTermsValue: !prevState.acceptedTermsValue}))} }
+                            label={lang.agree}
                         />
-                        <Button color='olive' fluid size='large'>{LANG.submit}</Button>
+                        <Button color='olive' fluid size='large'>{lang.submit}</Button>
                     </Segment>
                 </Form>
             </div>
         )
-        
     }
-
 }
 
 export default SignUpPanel;

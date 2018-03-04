@@ -70,7 +70,7 @@ class BaseView extends React.Component {
                     <Route path='/organizer'     render={() => <OrganizerView {...language}/>}/>
                     <Route path='/location'      render={() => <LocationView {...language}/>}/>
                     <Route path='/signin'        render={() => <SignIn {...language} loginData={this.state.loginData} setLoginData={this.setLoginData.bind(this)}/> }/>
-                    <Route path='/signup'        render={() => <SignUp {...language} />}/>
+                    <Route path='/signup'        render={() => <SignUp {...language} loginData={this.state.loginData} />}/>
                     <Route path='/mailConfirmed' render={() => <Confirm {...language} />} />
                     
                     {/* Error 404 page; Has to be at the last position! */}

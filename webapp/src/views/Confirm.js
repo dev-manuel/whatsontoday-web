@@ -1,8 +1,8 @@
 import React from 'react';
 import {Grid, Message} from 'semantic-ui-react';
 
-export default ({global}) => {
-    const LANG = global.LANG.confirm;
+export default ({language}) => {
+    const lang = language.confirm;
     return (
         <div className='login-form'>
             <style>{`
@@ -20,7 +20,7 @@ export default ({global}) => {
             >
                 <Grid.Column style={{ maxWidth: 450 }}>
                     <Message>
-                        {LANG.confirmed}
+                        {lang.confirmed}
                     </Message>
                 </Grid.Column>
             </Grid>

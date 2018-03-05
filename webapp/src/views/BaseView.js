@@ -66,7 +66,7 @@ class BaseView extends React.Component {
                 <Switch>
                     <Route exact path='/'        render={() => <HomeView {...language}/>}/>
                     <Route path='/search'        render={() => <SERPView {...language}/>}/>
-                    <Route path='/event/:id'     render={rP => <EventView {...language} {...rP}/>}/>
+                    <Route path='/event/:id'     render={routeParams => <EventView {...language} {...routeParams}/>}/>
                     <Route path='/organizer'     render={() => <OrganizerView {...language}/>}/>
                     <Route path='/location'      render={() => <LocationView {...language}/>}/>
                     <Route path='/signin'        render={() => <SignIn {...language} loginData={this.state.loginData} setLoginData={this.setLoginData.bind(this)}/> }/>

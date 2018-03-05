@@ -16,6 +16,7 @@ module.exports = {
     output: {
         path: shared.BUILD_DIR,
         filename: '[name].[hash].js',
+        publicPath: '/', // See: https://github.com/jantimon/html-webpack-plugin/issues/156#issuecomment-169331745
     },
     
     module: {

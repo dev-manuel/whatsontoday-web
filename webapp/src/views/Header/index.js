@@ -95,11 +95,10 @@ class Header extends React.Component{
                     <Menu.Item className='headerSpacer'/>
 
                     <Menu.Item className='headerLogo'>
-                        <Image src={logo} href='#'/>
+                        <Image src={logo} href='/'/>
                     </Menu.Item>
 
                     <Menu.Item className='headerSearch'>
-                        {/*  */}
                         <Search
                             className='headerSearchBar'
                             value={this.state.searchValue} 

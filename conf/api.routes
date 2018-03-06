@@ -38,6 +38,10 @@ GET    /category                     controllers.CategoryController.categories
 #  responses:
 #    200:
 #      description: success
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
 #      schema:
 #        type: array
 #        items:
@@ -73,6 +77,10 @@ GET    /location/:id                   controllers.LocationController.getLocatio
 #  responses:
 #    200:
 #      description: success
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
 #      schema:
 #        type: array
 #        items:

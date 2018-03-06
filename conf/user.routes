@@ -40,5 +40,9 @@ POST   /signUp                   controllers.UserController.signUp
 #  responses:
 #    200:
 #      description: Success. A list of events will be returned
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
 ###
 GET   /participating                   controllers.UserController.getParticipatingEvents

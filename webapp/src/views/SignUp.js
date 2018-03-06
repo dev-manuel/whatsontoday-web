@@ -1,9 +1,7 @@
 import React from 'react'
 import {Message, Grid} from 'semantic-ui-react'
 
-import SignUpPanel from '../components/signUpPanel';
-import AbstractViewState from '../common/AbstractViewState';
-import StatefulView from '../common/StatefulView';
+import SignUpPanel from '../components/signUpPanel'
 
 // Inspired by https://react.semantic-ui.com/layouts/login
 
@@ -99,7 +97,7 @@ export const ShowingSignUpView = ({language, onSuccess}) => {
 }
 
 
-export default class SignUpView extends StatefulView {
+export default class SignUpView extends React.Component {
 
     state = {
         successfulSignUp: false,

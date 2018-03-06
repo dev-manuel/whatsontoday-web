@@ -5,8 +5,6 @@ import {parse} from 'query-string'
 import './SERP.less'
 import FilterPanel from '../components/filterPanel'
 import EventTileTableBig from '../components/eventTileTableBig'
-import StatefulView from '../common/StatefulView'
-import AbstractViewState from '../common/AbstractViewState'
 import {searchEvents} from '../common/api/requests/event'
 
 

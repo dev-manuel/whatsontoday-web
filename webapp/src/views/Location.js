@@ -3,8 +3,7 @@ import React from 'react';
 import {Grid, Rating} from 'semantic-ui-react';
 
 // Import resources
-import Overview from '../components/overview';import AbstractViewState from '../common/AbstractViewState';
-import StatefulView from '../common/StatefulView';
+import Overview from '../components/overview';
 import SelectorMatrix from '../components/selectorMatrix';
 
 

@@ -9,7 +9,7 @@ import exampleTileImage from '../../img/example_tile.png';
  */
 const ItemExampleExtraContent = ({name, date, categories, description, imageURI, target}) => (
     <Segment>
-        <Item.Group href='#'>
+        <Item.Group href={target}>
             <Item>
             <Item.Image size='small' src={exampleTileImage}/>
 

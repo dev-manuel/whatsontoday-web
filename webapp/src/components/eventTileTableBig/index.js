@@ -9,8 +9,8 @@ import './index.less'
  * @param {{eventList: [{name: string, date: string, categories: string, description: string, imageURI: string, target: string }]}} param0 
  */
 const EventTileTable = ({eventList}) => {
-    const bigEventTiles = eventList.map( (eventListEntriy, index) =>  (
-        <EventTileBig key= {index} {...eventListEntriy} />
+    const bigEventTiles = eventList.map( (eventListEntry, index) =>  (
+        <EventTileBig key= {index} {...eventListEntry} />
     ))
 
     return (

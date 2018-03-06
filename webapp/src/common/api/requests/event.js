@@ -1,5 +1,6 @@
 import {axios} from '../index'
 import {sqlTimestampToDate, dateToSqlTimestamp} from '../utils/sqlTimeParsing'
+import {createEventTargetLink} from '../utils/createTargetLinks'
 
 /**
  * @typedef {{name: string, rating: number, description: string, from: Date, to: Date, categories: [string]}} eventData
@@ -61,7 +62,7 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
                         categories: [], //Todo
                         description: event.description,
                         imageURI: '#', //Todo
-                        target: '#' //Todo
+                        target: createEventTargetLink(event.id),
                     }))
                 break;
 

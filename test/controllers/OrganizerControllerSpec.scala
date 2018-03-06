@@ -16,6 +16,7 @@ import org.mockito.Mockito._
 import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import whatson.model.detail._
 
 class OrganizerControllerSpec extends RestTestSuite {
 
@@ -82,6 +83,75 @@ class OrganizerControllerSpec extends RestTestSuite {
                                           Json.toJson(Data("testuser","testpass","testorganizer")))).get
 
       status(signUp) mustBe BAD_REQUEST
+    }
+  }
+
+  "OrganizerController GET events" should {
+    "return OK on existing organizer" in {
+      val org = Await.result(createOrganizer("testorganizer", "testuser@test.de"), Duration.Inf)
+
+      val organizer = route(app, FakeRequest(GET, "/api/v1/organizer/events/" ++ org._2.id.getOrElse(-1).toString + "?sortDir=true&sort=id")).get
+
+      status(organizer) mustBe OK
+    }
+
+    "return an empty list for non existing organizer" in {
+      Await.result(createEvent(), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/organizer/events/20000?sortDir=true&sort=id")).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content mustEqual List()
+    }
+
+    "return a list of events of the organizer" in {
+      val org = Await.result(createOrganizer("testorganizer", "testuser@test.de"), Duration.Inf)
+      val event1 = Await.result(createEvent(Some(org._2)), Duration.Inf)
+      val event2 = Await.result(createEvent(Some(org._2)), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/organizer/events/" ++ org._2.id.getOrElse(-1).toString + "?sortDir=true&sort=id")).get
+
+      status(events) mustBe OK
+
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.map(_.id) must contain (event1.id)
+      content.map(_.id) must contain (event2.id)
+    }
+
+    "return only events of that organizer" in {
+      val org1 = Await.result(createOrganizer("testorganizer", "testuser@test.de"), Duration.Inf)
+      val org2 = Await.result(createOrganizer("testorganizer2", "testuser2@test.de"), Duration.Inf)
+      val event1 = Await.result(createEvent(Some(org1._2)), Duration.Inf)
+      val event2 = Await.result(createEvent(Some(org1._2)), Duration.Inf)
+      val event3 = Await.result(createEvent(Some(org2._2)), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/organizer/events/" ++ org1._2.id.getOrElse(-1).toString + "?sortDir=true&sort=id")).get
+
+      status(events) mustBe OK
+
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.filter(_.creator.id == org1._2.id) mustEqual content
+    }
+
+    "be pageable" in {
+      val org = Await.result(createOrganizer("testorganizer", "testuser@test.de"), Duration.Inf)
+      val event1 = Await.result(createEvent(Some(org._2)), Duration.Inf)
+      val event2 = Await.result(createEvent(Some(org._2)), Duration.Inf)
+      val event3 = Await.result(createEvent(Some(org._2)), Duration.Inf)
+
+      val events1 = route(app, FakeRequest(GET, "/api/v1/organizer/events/" ++ org._2.id.getOrElse(-1).toString + "?sortDir=true&sort=id",
+                                           new Headers(List(("X-Page-Size","2"),("X-Page","0"))),"")).get
+      val events2 = route(app, FakeRequest(GET, "/api/v1/organizer/events/" ++ org._2.id.getOrElse(-1).toString + "?sortDir=true&sort=id",
+                                           new Headers(List(("X-Page-Size","2"),("X-Page","1"))),"")).get
+
+      status(events1) mustBe OK
+      status(events2) mustBe OK
+
+      val content1 = contentAsJson(events1).as[List[EventDetail]]
+      content1.length mustEqual 2
+      val content2 = contentAsJson(events2).as[List[EventDetail]]
+      content2.length mustEqual 1
     }
   }
 }

@@ -25,6 +25,9 @@ import whatson.model.forms._
 import whatson.model.detail.OrganizerPublic._
 import whatson.service._
 import whatson.util.FormErrorJson._
+import whatson.db.Util._
+import whatson.model.detail.EventDetail._
+
 
 class OrganizerController@Inject() (
   silhouette: Silhouette[AuthEnv],
@@ -54,6 +57,17 @@ class OrganizerController@Inject() (
                              case Some(r) => Ok(Json.toJson(r))
                              case _ => NotFound
                            })
+  }
+
+  def getEvents(id: Int, sort: Option[String], sortDir: Boolean) = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get events of organizer")
+
+    val q = for {
+      e <- EventTable.event if e.creatorId === id
+    } yield e
+
+    val s = q.sortColumn(sort,sortDir).queryPaged.detailed
+    returnPaged(s,q,db)
   }
 
   /**

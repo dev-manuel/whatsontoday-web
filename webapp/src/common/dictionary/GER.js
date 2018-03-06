@@ -1,8 +1,13 @@
+import moment from 'moment'
+
 /**
  * @readonly
  */
 export default {
-
+    time: {
+        locale: 'de',
+        to: 'bis',
+    },
     header: {
         blog: 'Blog',
         addEvent : 'Event hinzufügen',

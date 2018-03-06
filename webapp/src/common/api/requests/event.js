@@ -2,6 +2,10 @@ import {axios} from '../index'
 import {sqlTimestampToDate, dateToSqlTimestamp} from '../utils/sqlTimeParsing'
 
 /**
+ * @typedef {{name: string, rating: number, description: string, from: Date, to: Date, categories: [string]}} eventData
+ */
+
+/**
  * @readonly
  * @enum {boolean}
  */
@@ -76,16 +80,20 @@ export const readEvent = id => {
         .then(response => {
             const data = response.data;
 
+            /**
+             * @type {eventData}
+            */
             const event = {
                 id: data.id,
+                rating: data.rating,
                 name: data.name,
                 from: sqlTimestampToDate( data.from),
                 to: sqlTimestampToDate( data.to),
                 description: data.description,
-                creator: data.creator,
                 categories: data.categories,
-                location: data.location,
-                images: data.images,
+                // creator: data.creator,
+                // location: data.location,
+                // images: data.images,
             }
             return event;
         })

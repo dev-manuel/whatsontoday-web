@@ -1,13 +1,19 @@
-// Import modules
 import React from 'react';
 import {Grid, Rating} from 'semantic-ui-react';
 
-// Import resources
+import {stringifyTime} from '../../common/timeStringification'
 import ImageSlider from '../imageSlider';
 import exampleImage from '../../img/example_image.jpg';
 
+/**
+ * 
+ * @param {{name: string, rating: number, from: Date, to: Date, description: string}} props 
+ */
+const EventOverview = ({name, rating, from, to, description, categories, language}) => {
+    const hasRating = rating instanceof Number;
+    const stringifiedTime = stringifyTime(from, to, language.time);
 
-const EventOverview = ({name, date, rating, description, categories, language}) => (
+    return (
         <div>
             <Grid>
                 <Grid.Row>
@@ -15,14 +21,24 @@ const EventOverview = ({name, date, rating, description, categories, language}) 
                         <ImageSlider imageURIList={[exampleImage, exampleImage, exampleImage, exampleImage]} />
                     </Grid.Column>
                     <Grid.Column width="8">
+                        
+                        {/* Event Title */}
                         <h2>{name}</h2>
-                        <h3 style={{color: 'gray'}}>{date}</h3>
-                        <Rating defaultRating={rating} maxRating={5} disabled />
+
+                        {/* Display the dates */}
+                        <div style={{color: 'gray'}}>
+                            {stringifiedTime.firstLine}
+                            <br/>
+                            {stringifiedTime.secondLine}
+                        </div>
+
+                        {/* <Rating defaultRating={rating || 0} maxRating={5} disabled={!hasRating} /> */}
                         <p>{description}</p>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
         </div>
-)
+    )
+}
 
 export default EventOverview;

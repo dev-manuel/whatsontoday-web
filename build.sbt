@@ -37,7 +37,8 @@ libraryDependencies ++= Seq(
 //TwirlKeys.templateImports += "com.whatson.controllers._"
 
 // Adds additional packages into conf/routes
-// play.sbt.routes.RoutesKeys.routesImport += "com.whatson.binders._"
+play.sbt.routes.RoutesKeys.routesImport += "java.sql.Timestamp"
+play.sbt.routes.RoutesKeys.routesImport += "whatson.util.DateTime._"
 
 javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
 

@@ -21,6 +21,16 @@
 #    description: If sort is set to location, events will be ordered by distance to the given location
 #  - name: category
 #    description: Specifies the category of the event
+#  - name: from
+#    description: Specifies the earliest date the event should start (Format: yyyy-MM-dd HH:mm:ss)
+#    schema:
+#      type: string
+#      format: yyyy-MM-dd HH:mm:ss
+#  - name: to
+#    description: Specifies the latest date the event should start (Format: yyyy-MM-dd HH:mm:ss)
+#    schema:
+#      type: string
+#      format: yyyy-MM-dd HH:mm:ss
 #  responses:
 #    200:
 #      description: success
@@ -33,7 +43,7 @@
 #        items:
 #          $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
-GET      /   controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort:Option[String], sortDir: Boolean)
+GET      /   controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort:Option[String], sortDir: Boolean, from: Option[Timestamp], to: Option[Timestamp])
 
 ###
 #  summary: Query the event with a specific id

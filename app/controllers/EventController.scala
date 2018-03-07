@@ -19,7 +19,7 @@ import whatson.auth._
 import whatson.service._
 import whatson.model.forms._
 import whatson.util.FormErrorJson._
-
+import java.sql.Timestamp
 
 /**
  * This Controller handles API Requests concerning events
@@ -47,13 +47,15 @@ class EventController @Inject()(cc: ControllerComponents,
     })
   }
 
-  def searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort: Option[String], sortDir: Boolean) = Action.async { implicit request: Request[AnyContent] =>
+  def searchEvents(search: Option[String], location: Option[Int], category: Option[Int],
+                   sort: Option[String], sortDir: Boolean, from: Option[Timestamp], to: Option[Timestamp]) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to search events")
 
     val q = for {
       e <- event if similar(e.name,search.getOrElse("").bind) || search.getOrElse("").bind === ""
                  if e.categories.filter(_.id === category.getOrElse(-1)).exists || category.getOrElse(-1).bind === -1
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
+                 if e.from >= from.getOrElse(new Timestamp(0,0,0,0,0,0,0)) && e.from <= to.getOrElse(new Timestamp(4000,0,0,0,0,0,0))
     } yield e
 
     val s = q.sortColumn(sort,sortDir).queryPaged.detailed

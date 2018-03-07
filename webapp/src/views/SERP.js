@@ -11,7 +11,7 @@ import {searchEvents, sortDirection as SortDirectionEnum, sort as SortEnum} from
 
 export const LoadingView = () => (
     <div style={{marginLeft: '11%', marginRight: '11%'}}>
-        Loading...
+        {/* TODO: LoadingView */}
     </div>
 )
 
@@ -30,18 +30,10 @@ export const NoResultsView = ({language}) => {
                         content={lang.noResults}
                         style={{ fontSize: '42px', fontWeight: 'normal', marginBottom: 20, marginTop: '3em' }}
                     />
-                    <Link to="/">
-                        <Button basic color="teal" size='huge'>
-                            <Icon name='home' /> go to home
-                        </Button>
-                    </Link>
+                    {/* Maybe feature some events here */}
                 </Container>
             </Segment>
         </div>
-
-        // <div style={{marginLeft: '11%', marginRight: '11%'}}>
-        //     Wir haben leider keine Ergebnisse für deine Suche finden können...
-        // </div>
     )
 }
 
@@ -74,6 +66,7 @@ class SERP extends React.Component{
     
     state = {
 
+        showLoadingView: true,
         isLoading: true,
 
         // REST response data
@@ -225,6 +218,7 @@ class SERP extends React.Component{
                     pageSize: parsedPageSize,
                     page: parsedPage,
 
+                    showLoadingView: false,
                     isLoading: false,
                 }));
             }).catch( error => {
@@ -248,7 +242,7 @@ class SERP extends React.Component{
     }
 
     render() {
-        if(this.state.isLoading){
+        if(this.state.showLoadingView){
             return <LoadingView/>
         }else{
             // Check if received no results

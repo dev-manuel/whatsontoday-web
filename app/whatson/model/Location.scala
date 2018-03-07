@@ -2,7 +2,8 @@ package whatson.model
 
 import play.api.libs.json._
 
-case class Location(id: Option[Int], name: String, latitude: Float, longitude: Float) extends HasCopy[Location] {
+case class Location(id: Option[Int], name: String, latitude: Float, longitude: Float,
+                    country: String, city: String, street: String) extends HasCopy[Location] {
   def cpy(i: Option[Int]) = this.copy(id = i)
 
   def distance(b: Location) = {

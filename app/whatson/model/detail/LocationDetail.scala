@@ -9,7 +9,8 @@ import whatson.model._
 import whatson.model.detail._
 
 case class LocationDetail(id: Option[Int], name: String, latitude: Float, longitude: Float,
-                       avgRating: Option[Float], images: List[TaggedImage]) extends Rateable with WithTaggedImages
+                          country: String, city: String, street: String,
+                          avgRating: Option[Float], images: List[TaggedImage]) extends Rateable with WithTaggedImages
 
 object LocationDetail {
   implicit val locationDetailReads = Json.reads[LocationDetail]
@@ -26,7 +27,8 @@ object LocationDetail {
               .result.map(l => l.map(x => TaggedImage(x._2.id,x._2.name,x._1)))
 
             imgTagged.map(o => {
-              LocationDetail(location.id, location.name, location.latitude, location.longitude, avg, o.toList)
+                            LocationDetail(location.id, location.name, location.latitude, location.longitude,
+                                           location.country, location.city, location.street, avg, o.toList)
             })
           }
         })

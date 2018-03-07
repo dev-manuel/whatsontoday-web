@@ -6,12 +6,12 @@ import {Grid, Pagination } from 'semantic-ui-react'
 import './SERP.less'
 import FilterPanel from '../components/filterPanel'
 import EventTileTableBig from '../components/eventTileTableBig'
-import {searchEvents, sortDirection, sort} from '../common/api/requests/event'
+import {searchEvents, sortDirection as SortDirectionEnum, sort as SortEnum} from '../common/api/requests/event'
 
 
 export const LoadingView = () => (
     <div style={{marginLeft: '11%', marginRight: '11%'}}>
-        {/* Loading... (TODO) */}
+        Loading...
     </div>
 )
 
@@ -51,8 +51,8 @@ class SERP extends React.Component{
         itemNumber: null,
 
         // Request config
-        sortDirection: sortDirection.ASCENDING,
-        sort: sort.ID,
+        sortDirection: SortDirectionEnum.ASCENDING,
+        sort: SortEnum.ID,
         pageSize: 20,
         page: 1,
     }
@@ -74,37 +74,112 @@ class SERP extends React.Component{
         this.unlisten();
     }
 
-
-    requestPageData(location){
-        // Getting query-parameter from url
-
-        const {search, page} = parse(location.search);
-
-        let intPage; // The parsed (integer) version of page
-
-        // Check if page property is defined inside the query params, otherwise fallback to default=1
-        if(typeof page === 'undefined'){
-            intPage = 1;
-        }else{
-            intPage = parseInt(page);
-            // If page query-string is no valid integer (fallback to default=1)
-            if(isNaN(intPage))
-                intPage = 1;
+    parseQueryParams({search, page, page_size, sort, sort_direction}){
+        
+        let parsedSearch = '';
+        if(typeof search !== 'undefined'){ 
+            parsedSearch = search;
         }
 
+
+        let parsedPage; // The parsed (integer) version of page
+        if(typeof page === 'undefined'){ // Check if page property is defined inside the query params, otherwise fallback to default=1
+            parsedPage = 1;
+        }else{
+            parsedPage = parseInt(page);
+            // If page query-string is no valid integer (fallback to default=1)
+            if(isNaN(parsedPage))
+                parsedPage = 1;
+        }
+
+        let parsedPageSize; // The parsed (integer) version of page_size
+        if(typeof page_size === 'undefined'){ // Check if page_size property is defined inside the query params, otherwise fallback to default=20
+            parsedPageSize = 20;
+        }else{
+            parsedPageSize = parseInt(page_size);
+            // If page query-string is no valid integer (fallback to default=20)
+            if(isNaN(parsedPageSize))
+                parsedPageSize = 20;
+        }
+
+        let parsedSort = '';
+        switch(sort){
+            case 'id':
+                parsedSort = SortEnum.ID;
+            break;
+
+            case 'from':
+                parsedSort =  SortEnum.FROM;
+            break;
+
+            case 'to':
+                parsedSort =  SortEnum.TO;
+            break;
+
+            case 'name':
+                parsedSort =  SortEnum.NAME;
+            break;
+
+            case 'location':
+                parsedSort =  SortEnum.LOCATION;
+            break;
+
+            case 'rating':
+                parsedSort =  SortEnum.RATING;
+            break;
+
+            default:
+                parsedSort = SortEnum.ID;    
+            break;
+        }
+
+        let parsedSortDirection = '';
+        switch(sort_direction){
+            case 'ascending':
+                parsedSortDirection = SortDirectionEnum.ASCENDING;
+            break;
+
+            case 'descending':
+                parsedSortDirection =  SortDirectionEnum.DESCENDING;
+            break;
+
+            default:
+                parsedSortDirection = SortDirectionEnum.ASCENDING;    
+            break;
+        }
+        
+        return {
+            parsedSearch,
+            parsedPage,
+            parsedPageSize,
+            parsedSort,
+            parsedSortDirection,
+        }
+    }
+
+
+    requestPageData(location){
         this.setState(() => ({
             isLoading:true,
         }))
 
+        // Getting query-parameter from url ad parse it!
+        const queryParams = parse(location.search);
+        const {parsedSearch, parsedPage, parsedPageSize, parsedSort, parsedSortDirection} = this.parseQueryParams(queryParams);
+
         // Sending AJAX api request to receive event data
-        // Page starts to count with 0, (intPage with 1) so we have to subtract one
-        searchEvents(0, search, this.state.sortDirection, this.state.sort, intPage-1, this.state.pageSize)
+        // Page starts to count with 0, (parsedPage with 1) so we have to subtract one
+        searchEvents(0, parsedSearch, parsedSortDirection, parsedSort, parsedPage-1, parsedPageSize)
             .then( resultObject => {
                 this.setState( () => ({
                     eventList: resultObject.eventList,
                     itemNumber: resultObject.itemNumber,
                     
-                    page: intPage,
+                    // Update REST parameter inside the state (for easier access)
+                    sortDirection: parsedSortDirection,
+                    sort: parsedSort,
+                    pageSize: parsedPageSize,
+                    page: parsedPage,
 
                     isLoading: false,
                 }));
@@ -114,15 +189,14 @@ class SERP extends React.Component{
     }
 
     handlePageSelection( newPage){
-
         const pathname = this.props.location.pathname;
 
         // Getting the query params as object
         const queryParams = parse(this.props.location.search);
 
-        console.log(queryParams);
-        queryParams.page = newPage
-    
+        // Update the page property of the query parameters
+        queryParams.page = newPage;
+
         this.props.history.push({
             pathname,
             search: stringify(queryParams),

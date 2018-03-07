@@ -59,6 +59,7 @@ class SERP extends React.Component{
         itemNumber: null,
 
         // Request config
+        categories: [],
         sortDirection: SortDirectionEnum.ASCENDING,
         sort: SortEnum.ID,
         pageSize: 20,
@@ -82,8 +83,13 @@ class SERP extends React.Component{
         this.unlisten();
     }
 
-    parseQueryParams({search, page, page_size, sort, sort_direction}){
+    parseQueryParams({categories, search, page, page_size, sort, sort_direction}){
         
+        let parsedCategories = [];
+        if(typeof categories !== 'undefined'){ 
+            parsedCategories = categories;
+        }
+
         let parsedSearch = '';
         if(typeof search !== 'undefined'){ 
             parsedSearch = search;
@@ -157,6 +163,7 @@ class SERP extends React.Component{
         }
         
         return {
+            parsedCategories,
             parsedSearch,
             parsedPage,
             parsedPageSize,
@@ -173,7 +180,14 @@ class SERP extends React.Component{
 
         // Getting query-parameter from url ad parse it!
         const queryParams = parse(location.search);
-        const {parsedSearch, parsedPage, parsedPageSize, parsedSort, parsedSortDirection} = this.parseQueryParams(queryParams);
+        const {
+            parsedCategories,
+            parsedSearch,
+            parsedPage,
+            parsedPageSize,
+            parsedSort,
+            parsedSortDirection
+        } = this.parseQueryParams(queryParams);
 
         // Sending AJAX api request to receive event data
         // Page starts to count with 0, (parsedPage with 1) so we have to subtract one

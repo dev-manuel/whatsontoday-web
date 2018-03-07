@@ -52,18 +52,23 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
             'X-Page': xPage,
             'X-Page-Size': xPageSize
         },
-    }).then((result)=>{
+    }).then(result => {
             switch(result.status){
                 case 200:
-                    return result.data.map((event)=>({
-                        id: event.id,
-                        name: event.name,
-                        date: event.from,
-                        categories: [], //Todo
-                        description: event.description,
-                        imageURI: '#', //Todo
-                        target: createEventTargetLink(event.id),
-                    }))
+                    console.log(result) // TODO
+                    return {
+                        eventList: result.data.map((event)=>({
+                            id: event.id,
+                            name: event.name,
+                            date: event.from,
+                            categories: [], //Todo
+                            description: event.description,
+                            imageURI: '#', //Todo
+                            target: createEventTargetLink(event.id)
+                        })),
+                        // Total Number of all items that was found with used filter configuration
+                        itemNumber: result.headers['x-number-items'],
+                }
                 break;
 
                 default:

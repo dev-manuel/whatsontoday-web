@@ -17,7 +17,7 @@ const ItemExampleExtraContent = ({name, date, categories, description, imageURI,
                 <Item.Header as='a'>{name}</Item.Header>
                 <Item.Description>{description}</Item.Description>
                 <Item.Extra>
-                    <Icon color='gray' name='calendar' /> {date}
+                    <Icon name='calendar' /> {date}
                     <span style={{float: 'right'}}><Icon color="gray" name="tags" /> {categories}</span>
                 </Item.Extra>
             </Item.Content>

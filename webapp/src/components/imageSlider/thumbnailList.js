@@ -16,7 +16,7 @@ class ThumbnailList extends React.Component {
         const next = this.next.bind(this);
         this.state = {
             sliderIndex: 0,
-            sliderTimer: setInterval(next, 6000) // Todo: reset if user manually select a slider entry
+            //sliderTimer: setInterval(next, 6000) // Todo: reset if user manually select a slider entry
         };
 
         this.imageCount = this.props.imageURIList.length;

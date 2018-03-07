@@ -1,7 +1,7 @@
 import React from 'react'
-import {withRouter} from 'react-router'
+import {withRouter, Link} from 'react-router-dom'
 import {parse, stringify} from 'query-string'
-import {Grid, Pagination } from 'semantic-ui-react'
+import {Grid, Pagination, Segment, Container, Header, Button, Icon } from 'semantic-ui-react'
 
 import './SERP.less'
 import FilterPanel from '../components/filterPanel'
@@ -15,11 +15,33 @@ export const LoadingView = () => (
     </div>
 )
 
-export const NoResultsView = () => {
+export const NoResultsView = ({language}) => {
+    const lang = language.serp;
     return (
-        <div style={{marginLeft: '11%', marginRight: '11%'}}>
-            Wir haben leider keine Ergebnisse für deine Suche finden können...
+        <div>
+            <Segment
+                textAlign="center"
+                style={{ minHeight: 600, padding: '5em 0em' }}
+                vertical
+            >   
+                <Container text>
+                    <Header
+                        as="h2"
+                        content={lang.noResults}
+                        style={{ fontSize: '42px', fontWeight: 'normal', marginBottom: 20, marginTop: '3em' }}
+                    />
+                    <Link to="/">
+                        <Button basic color="teal" size='huge'>
+                            <Icon name='home' /> go to home
+                        </Button>
+                    </Link>
+                </Container>
+            </Segment>
         </div>
+
+        // <div style={{marginLeft: '11%', marginRight: '11%'}}>
+        //     Wir haben leider keine Ergebnisse für deine Suche finden können...
+        // </div>
     )
 }
 
@@ -231,7 +253,7 @@ class SERP extends React.Component{
         }else{
             // Check if received no results
             if(this.state.eventList.length === 0){
-                return <NoResultsView />
+                return <NoResultsView language={this.props.language}/>
             }else{
                 return <ShowingEvents
                     eventList={this.state.eventList}

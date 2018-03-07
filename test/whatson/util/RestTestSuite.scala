@@ -106,8 +106,9 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
     }
   }
 
-  def createLocation(name: String = "testlocation", lat: Float = 0.0f, long: Float = 0.0f): Future[Location] = {
-    db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long)))
+  def createLocation(name: String = "testlocation", lat: Float = 0.0f, long: Float = 0.0f,
+                     country: String = "testcountry", city: String = "testcity", street: String = "teststreet"): Future[Location] = {
+    db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long, country, city, street)))
   }
 
   def createCategory(name: String = "testcategory", parentId: Option[Int] = None): Future[Category] = {

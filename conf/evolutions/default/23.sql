@@ -6,6 +6,6 @@ ALTER TABLE location ADD COLUMN street varchar NOT NULL DEFAULT '';
 
 # --- !Downs
 
-ALTER TABLE location DROP COLUMN country varchar;
-ALTER TABLE location DROP COLUMN city varchar;
-ALTER TABLE location DROP COLUMN street varchar;
+ALTER TABLE location DROP COLUMN country;
+ALTER TABLE location DROP COLUMN city;
+ALTER TABLE location DROP COLUMN street;

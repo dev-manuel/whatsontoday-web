@@ -123,6 +123,66 @@ class EventControllerSpec extends RestTestSuite {
 
       status(events) mustBe OK
     }
+
+    "only include events starting after from parameter" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(100,0,1,0,0,0,0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(100,1,1,0,0,0,0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(100,2,1,0,0,0,0)), Duration.Inf)
+
+      val events1 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&from=2000-02-00%2000%3A00%3A00")).get
+
+      status(events1) mustBe OK
+      val content1 = contentAsJson(events1).as[List[EventDetail]]
+      content1.map(_.id) must contain (event3.id)
+      content1.map(_.id) must contain (event2.id)
+      content1.map(_.id) must not contain (event1.id)
+
+      val events2 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&from=2000-03-00%2000%3A00%3A00")).get
+
+      status(events2) mustBe OK
+      val content2 = contentAsJson(events2).as[List[EventDetail]]
+      content2.map(_.id) must contain (event3.id)
+      content2.map(_.id) must not contain (event2.id)
+      content2.map(_.id) must not contain (event1.id)
+
+      val events3 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&from=2000-04-00%2000%3A00%3A00")).get
+
+      status(events3) mustBe OK
+      val content3 = contentAsJson(events3).as[List[EventDetail]]
+      content3.map(_.id) must not contain (event3.id)
+      content3.map(_.id) must not contain (event2.id)
+      content3.map(_.id) must not contain (event1.id)
+    }
+
+    "only include events starting before to parameter" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(100,0,2,0,0,0,0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(100,1,2,0,0,0,0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(100,2,2,0,0,0,0)), Duration.Inf)
+
+      val events1 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&to=2000-02-00%2000%3A00%3A00")).get
+
+      status(events1) mustBe OK
+      val content1 = contentAsJson(events1).as[List[EventDetail]]
+      content1.map(_.id) must not contain (event3.id)
+      content1.map(_.id) must not contain (event2.id)
+      content1.map(_.id) must contain (event1.id)
+
+      val events2 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&to=2000-03-00%2000%3A00%3A00")).get
+
+      status(events2) mustBe OK
+      val content2 = contentAsJson(events2).as[List[EventDetail]]
+      content2.map(_.id) must not contain (event3.id)
+      content2.map(_.id) must contain (event2.id)
+      content2.map(_.id) must contain (event1.id)
+
+      val events3 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&to=2000-04-00%2000%3A00%3A00")).get
+
+      status(events3) mustBe OK
+      val content3 = contentAsJson(events3).as[List[EventDetail]]
+      content3.map(_.id) must contain (event3.id)
+      content3.map(_.id) must contain (event2.id)
+      content3.map(_.id) must contain (event1.id)
+    }
   }
 
   "EventController POST" should {

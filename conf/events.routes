@@ -22,12 +22,12 @@
 #  - name: category
 #    description: Specifies the category of the event
 #  - name: from
-#    description: Specifies the earliest date the event should start (Format: yyyy-MM-dd HH:mm:ss)
+#    description: Specifies the earliest date the event should start (Format yyyy-MM-dd HH:mm:ss)
 #    schema:
 #      type: string
 #      format: yyyy-MM-dd HH:mm:ss
 #  - name: to
-#    description: Specifies the latest date the event should start (Format: yyyy-MM-dd HH:mm:ss)
+#    description: Specifies the latest date the event should start (Format yyyy-MM-dd HH:mm:ss)
 #    schema:
 #      type: string
 #      format: yyyy-MM-dd HH:mm:ss

@@ -15,6 +15,14 @@ export const LoadingView = () => (
     </div>
 )
 
+export const NoResultsView = () => {
+    return (
+        <div style={{marginLeft: '11%', marginRight: '11%'}}>
+            Wir haben leider keine Ergebnisse für deine Suche finden können...
+        </div>
+    )
+}
+
 export const ShowingEvents = ({eventList, language, itemNumber, page, pageSize, onPageChange}) => {
 
     const pageNumber = Math.ceil(itemNumber / pageSize);
@@ -207,15 +215,20 @@ class SERP extends React.Component{
         if(this.state.isLoading){
             return <LoadingView/>
         }else{
+            // Check if received no results
+            if(this.state.eventList.length === 0){
+                return <NoResultsView />
+            }else{
+                return <ShowingEvents
+                    eventList={this.state.eventList}
+                    language={this.props.language}
+                    itemNumber={this.state.itemNumber}
+                    page={this.state.page}
+                    pageSize={this.state.pageSize}
+                    onPageChange={(e, {activePage}) => {this.handlePageSelection(activePage)}}
+                />
+            }
 
-            return <ShowingEvents
-                eventList={this.state.eventList}
-                language={this.props.language}
-                itemNumber={this.state.itemNumber}
-                page={this.state.page}
-                pageSize={this.state.pageSize}
-                onPageChange={(e, {activePage}) => {this.handlePageSelection(activePage)}}
-            />
         }
     }
 }

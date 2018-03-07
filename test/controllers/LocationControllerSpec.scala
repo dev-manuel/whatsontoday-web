@@ -78,5 +78,49 @@ class LocationControllerSpec extends RestTestSuite {
 
       status(create) mustBe OK
     }
+
+    "return BAD REQUEST on empty name" in {
+      val location = Location(None, "", 0, 0, "testcountry", "testcity", "teststreet")
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val create = route(app, FakeRequest(POST, "/api/v1/location",
+                                          new Headers(List(("Content-Type","application/json"),("x-auth-token",user._3))),
+                                          Json.toJson(location))).get
+
+      status(create) mustBe BAD_REQUEST
+    }
+
+    "return BAD REQUEST on empty country" in {
+      val location = Location(None, "testname", 0, 0, "", "testcity", "teststreet")
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val create = route(app, FakeRequest(POST, "/api/v1/location",
+                                          new Headers(List(("Content-Type","application/json"),("x-auth-token",user._3))),
+                                          Json.toJson(location))).get
+
+      status(create) mustBe BAD_REQUEST
+    }
+
+    "return BAD REQUEST on empty city" in {
+      val location = Location(None, "testname", 0, 0, "testcountry", "", "teststreet")
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val create = route(app, FakeRequest(POST, "/api/v1/location",
+                                          new Headers(List(("Content-Type","application/json"),("x-auth-token",user._3))),
+                                          Json.toJson(location))).get
+
+      status(create) mustBe BAD_REQUEST
+    }
+
+    "return BAD REQUEST on empty street" in {
+      val location = Location(None, "testname", 0, 0, "testcountry", "testcity", "")
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val create = route(app, FakeRequest(POST, "/api/v1/location",
+                                          new Headers(List(("Content-Type","application/json"),("x-auth-token",user._3))),
+                                          Json.toJson(location))).get
+
+      status(create) mustBe BAD_REQUEST
+    }
   }
 }

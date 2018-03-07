@@ -60,8 +60,9 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
                         eventList: result.data.map((event)=>({
                             id: event.id,
                             name: event.name,
-                            date: event.from,
-                            categories: [], //Todo
+                            from: event.from,
+                            to: event.to,
+                            categories: event.categories, 
                             description: event.description,
                             imageURI: '#', //Todo
                             target: createEventTargetLink(event.id)

@@ -1,0 +1,63 @@
+
+@thumbnailDimension: 150px;
+
+@topDistance: 16px;
+@sideDistance: 35px;
+
+.eventTileBig_main {
+    height: @thumbnailDimension;
+    border-radius: 8px;
+    background-color: red;
+    margin-top: 25px;
+    background: #F7F7F7;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+    border: 0.8px solid rgb(192, 192, 192);
+}
+
+.eventTileBig_image {
+    float: left;
+    height: 100%;
+    width: @thumbnailDimension;
+    border-radius: 8px 0px 0px 8px;
+}
+
+.eventTileBig_body {
+    height: @thumbnailDimension;
+    position:relative;
+}
+
+.eventTileBig_heading {
+    position: absolute;
+    left: @thumbnailDimension + @sideDistance;
+    top: @topDistance;
+
+    //font-family: Nobile;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 24px;
+
+    color: #575757;
+}
+
+.eventTileBig_date {
+    position: absolute;
+    right: @sideDistance;
+    top: @topDistance;
+
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 16px;
+    text-align: center;
+
+    color: #A1A1A1;
+
+    .firstLine {
+        // Insert style here
+    }
+
+    .secondLine {
+        // Insert style here
+    }
+}

@@ -235,11 +235,11 @@ class SERP extends React.Component{
             }else{
                 return <ShowingEvents
                     eventList={this.state.eventList}
-                    language={this.props.language}
                     itemNumber={this.state.itemNumber}
                     page={this.state.page}
                     pageSize={this.state.pageSize}
                     onPageChange={(e, {activePage}) => {this.handlePageSelection(activePage)}}
+                    language={this.props.language}
                 />
             }
 

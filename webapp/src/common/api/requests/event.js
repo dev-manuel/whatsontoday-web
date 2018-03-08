@@ -1,5 +1,6 @@
 import {axios} from '../index'
 import {sqlTimestampToDate, dateToSqlTimestamp} from '../utils/sqlTimeParsing'
+import {createEventTargetLink} from '../utils/createTargetLinks'
 
 /**
  * @typedef {{name: string, rating: number, description: string, from: Date, to: Date, categories: [string]}} eventData
@@ -51,18 +52,24 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
             'X-Page': xPage,
             'X-Page-Size': xPageSize
         },
-    }).then((result)=>{
+    }).then(result => {
             switch(result.status){
                 case 200:
-                    return result.data.map((event)=>({
-                        id: event.id,
-                        name: event.name,
-                        date: event.from,
-                        categories: [], //Todo
-                        description: event.description,
-                        imageURI: '#', //Todo
-                        target: '#' //Todo
-                    }))
+                    console.log(result) // TODO
+                    return {
+                        eventList: result.data.map((event)=>({
+                            id: event.id,
+                            name: event.name,
+                            from: event.from,
+                            to: event.to,
+                            categories: event.categories, 
+                            description: event.description,
+                            imageURI: '#', //Todo
+                            target: createEventTargetLink(event.id)
+                        })),
+                        // Total Number of all items that was found with used filter configuration
+                        itemNumber: result.headers['x-number-items'],
+                }
                 break;
 
                 default:

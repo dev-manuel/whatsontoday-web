@@ -42,6 +42,7 @@ export default {
         what: 'Was?',
         when: 'Wann?',
         where: 'Wo?',
+        noResults: 'Wir haben leider keine Ergebnisse für deine Suche finden können...'
     },
     event: {
         what: 'Was?',

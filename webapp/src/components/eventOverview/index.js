@@ -1,9 +1,10 @@
-import React from 'react';
-import {Grid, Rating} from 'semantic-ui-react';
+import React from 'react'
+import {Grid, Rating} from 'semantic-ui-react'
 
 import {stringifyTime} from '../../common/timeStringification'
-import ImageSlider from '../imageSlider';
-import exampleImage from '../../img/example_image.jpg';
+import ImageSlider from '../imageSlider'
+import exampleImage from '../../img/example_image.jpg'
+import './eventOverview.less'
 
 /**
  * 
@@ -23,10 +24,10 @@ const EventOverview = ({name, rating, from, to, description, categories, languag
                     <Grid.Column width="8">
                         
                         {/* Event Title */}
-                        <h2>{name}</h2>
+                        <h2 className="eventOverviewName">{name}</h2>
 
                         {/* Display the dates */}
-                        <div style={{color: 'gray'}}>
+                        <div className="eventOverviewDate">
                             {stringifiedTime.firstLine}
                             <br/>
                             {stringifiedTime.secondLine}

@@ -1,29 +1,54 @@
 import React from 'react'
-import { Icon, Image as ImageComponent, Item, Segment } from 'semantic-ui-react'
+import {Icon} from 'semantic-ui-react'
+import {Link} from 'react-router-dom'
 
-import exampleTileImage from '../../img/example_tile.png';
+import ConditionalHide from '../conditionalHide'
+import {stringifyTime} from '../../common/timeStringification'
+import {maxNameMapping} from '../../common/api/utils/categoryUtils'
+import exampleTileImage from '../../img/example_tile.png'
 
-/**
- * 
- * @param {{name: string, date: string, categories: string, description: string, imageURI: string, target: string }} props 
- */
-const ItemExampleExtraContent = ({name, date, categories, description, imageURI, target}) => (
-    <Segment>
-        <Item.Group href='#'>
-            <Item>
-            <Item.Image size='small' src={exampleTileImage}/>
+import './eventTileBig.less'
 
-            <Item.Content>
-                <Item.Header as='a'>{name}</Item.Header>
-                <Item.Description>{description}</Item.Description>
-                <Item.Extra>
-                    <Icon color='gray' name='calendar' /> {date}
-                    <span style={{float: 'right'}}><Icon color="gray" name="tags" /> {categories}</span>
-                </Item.Extra>
-            </Item.Content>
-            </Item>
-        </Item.Group>
-    </Segment>
-)
 
-export default ItemExampleExtraContent
+export default ({name, from, to, categories, description, imageURI, target, language}) => {
+    const {firstLine, secondLine} = stringifyTime(from, to, language.time);    
+    const {categoryNameList, noCategories} = maxNameMapping(categories, 3);
+
+    return (
+        <Link to={target}>
+            <div className="eventTileBig_main">
+                <img src={exampleTileImage} className="eventTileBig_image"/>
+                <div className="eventTileBig_body">
+                
+                    <div className="eventTileBig_sectionTop">
+                        <div className="eventTileBig_heading">{name}</div>
+                        <div className="eventTileBig_date">
+                            <div className="fistLine">{firstLine}</div>
+                            <div className="secondLine">{secondLine}</div>
+                        </div>
+                    </div>
+
+                    <div className="eventTileBig_sectionMiddle">
+                        <div className="eventTileBig_description">
+                            {description}
+                        </div>
+                    </div>
+
+                    <div className="eventTileBig_sectionBottom">
+                        {/* TODO! */}
+                        {/* <div className="eventTileBig_price">
+                            {'LoremIpsum'} 
+                        </div> */}
+                        <div className="eventTileBig_categories">
+                            <ConditionalHide hide={noCategories}>
+                                <Icon name="tags"/>
+                            </ConditionalHide>
+                            {categoryNameList.map(category => `#${category}`).join(' ')} 
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </Link>
+    )
+}

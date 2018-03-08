@@ -258,7 +258,6 @@ class SERP extends React.Component{
                     language={this.props.language}
                 />
             }
-
         }
     }
 }

@@ -2,7 +2,9 @@ import React from 'react'
 import {Icon} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
+import ConditionalHide from '../conditionalHide'
 import {stringifyTime} from '../../common/timeStringification'
+import {maxNameMapping} from '../../common/api/utils/categoryUtils'
 import exampleTileImage from '../../img/example_tile.png'
 
 import './eventTileBig.less'
@@ -10,6 +12,7 @@ import './eventTileBig.less'
 
 export default ({name, from, to, categories, description, imageURI, target, language}) => {
     const {firstLine, secondLine} = stringifyTime(from, to, language.time);    
+    const {categoryNameList, noCategories} = maxNameMapping(categories, 3);
 
     return (
         <Link to={target}>
@@ -37,9 +40,10 @@ export default ({name, from, to, categories, description, imageURI, target, lang
                             {'LoremIpsum'} 
                         </div> */}
                         <div className="eventTileBig_categories">
-                            {/* TODO: Use Max/Min number of categories */}
-                            <Icon name="tags" /> 
-                            {'LoremIpsum'}
+                            <ConditionalHide hide={noCategories}>
+                                <Icon name="tags"/>
+                            </ConditionalHide>
+                            {categoryNameList.map(category => `#${category}`).join(' ')} 
                         </div>
                     </div>
 

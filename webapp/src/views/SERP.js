@@ -224,6 +224,13 @@ class SERP extends React.Component{
             })
     }
 
+    /**
+     * Scrolls up to the top side of the page
+    */
+    scrollToTop(){
+        window.scrollTo(window.scrollX, 0);
+    }
+
     handlePageSelection( newPage){
         const pathname = this.props.location.pathname;
 
@@ -252,7 +259,10 @@ class SERP extends React.Component{
                     itemNumber={this.state.itemNumber}
                     page={this.state.page}
                     pageSize={this.state.pageSize}
-                    onPageChange={(e, {activePage}) => {this.handlePageSelection(activePage)}}
+                    onPageChange={(e, {activePage}) => {
+                        this.handlePageSelection(activePage);
+                        this.scrollToTop();
+                    }}
                     language={this.props.language}
                 />
             }

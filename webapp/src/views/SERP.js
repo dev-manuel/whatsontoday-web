@@ -47,16 +47,14 @@ export const ShowingEvents = ({eventList, language, itemNumber, page, pageSize, 
             <div className="tileTable">
                 <EventTileTableBig itemNumber={itemNumber} eventList={eventList} language={language}/>
 
-                <Grid centered columns={3}>
-                    <Grid.Column centered>
-                        {/* Page has offset of one */}
-                        <Pagination
-                            activePage={page}
-                            totalPages={pageNumber}
-                            onPageChange={onPageChange}
-                        />   
-                    </Grid.Column>
-                </Grid>
+                {/* Page has offset of one */}
+                <div className="SERP_pagination">
+                    <Pagination
+                        activePage={page}
+                        totalPages={pageNumber}
+                        onPageChange={onPageChange}
+                    />
+                </div>
             </div>
         </div>
     )

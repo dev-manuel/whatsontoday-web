@@ -16,12 +16,6 @@ class SignInPanel extends React.Component {
         showCredentialError: false,
     }
 
-
-    onSuccess(){
-        // Redirects the user to the main page
-        this.props.history.push('/');
-    }
-
     handleSubmit(){
         signIn(this.state.emailValue, this.state.passwordValue, this.state.rememberValue)
             .then(token => {
@@ -30,7 +24,6 @@ class SignInPanel extends React.Component {
                     token,
                     userMail: this.state.emailValue,
                 });
-                this.onSuccess();
             })
             .catch(err => {
                 console.log('Response error:', err.response); 

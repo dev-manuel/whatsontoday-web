@@ -27,9 +27,9 @@ export const PrivateRoute = ({ loggedIn, render, path}) => (
             return render(props);
         }else{
             return (
-                <Redirect to={{
+                <Redirect push to={{
                     pathname: "/signIn",
-                    state: { from: props.location }
+                    state: { from: props.match.url }
                 }}/>
             )
         }
@@ -46,15 +46,20 @@ export default class BaseView extends React.Component {
             userMail: null,
         },
         language: GER,
+
+        redirectTo: null,
     }
 
     /**
      * This method will be invoked after a SUCCESSFUL signIn 
      * @param {{loggedIn: boolean, token: string, userMail: string}} loginData 
      */
-    setLoginData(loginData){
+    setLoginData(loginData, redirectTo){
         setToken( loginData.token);
-        this.setState({loginData});
+        this.setState({
+            loginData,
+            redirectTo,
+        });
     }
 
     /**
@@ -74,20 +79,26 @@ export default class BaseView extends React.Component {
 
     render() {
         const language = {language: this.state.language};
-        return (
+        return this.state.redirectTo ?
+            <Redirect to={this.state.redirectTo}/> :
             <div>
                 <Header {...this.state} handleSignOut={this.handleSignOut.bind(this)}/>
 
                 <div style={{marginTop: 30}}>
                     <Switch>
-                        <PrivateRoute path='/options' render={() => <Options />} />
+                        <PrivateRoute loggedIn={this.state.loginData.loggedIn} path='/options' render={() => <Options />} />
 
                         <Route exact path='/'         render={() => <HomeView {...language}/>}/>
                         <Route path='/search'         render={() => <SERPView {...language}/>}/>
                         <Route path='/event/:id'      render={routeParams => <EventView {...language} {...routeParams} />}/>
                         <Route path='/organizer'      render={() => <OrganizerView {...language}/>}/>
                         <Route path='/location'       render={() => <LocationView {...language}/>}/>
-                        <Route path='/signin'         render={() => <SignIn {...language} loginData={this.state.loginData} setLoginData={this.setLoginData.bind(this)}/> }/>
+                        <Route path='/signin'         render={routeParams => <SignIn 
+                            {...language}
+                            {...routeParams}
+                            loginData={this.state.loginData}
+                            setLoginData={this.setLoginData.bind(this)}
+                        />}/>
                         <Route path='/signup'         render={() => <SignUp {...language} loginData={this.state.loginData} />}/>
                         <Route path='/mailConfirmed'  render={() => <Confirm {...language} />} />
                         
@@ -98,6 +109,15 @@ export default class BaseView extends React.Component {
 
                 <Footer language={this.state.language}/>
             </div>
-        )
+    }
+
+    componentDidUpdate(){
+        // Check if the redirectTo property was set and reset it in this case to prevent unnecessary 
+        // recursions on the redirect element
+        if(this.state.redirectTo){
+            this.setState({
+                redirectTo: null,
+            })
+        }
     }
 }

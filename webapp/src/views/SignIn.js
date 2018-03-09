@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
-import {withRouter} from 'react-router'
+import {Redirect} from 'react-router'
 
 import SignInPanel from '../components/SignInPanel';
 
@@ -65,12 +65,34 @@ export class ShowingSignInPanel extends React.Component{
 }
 
 
+
 export default class SignInView extends React.Component {
+
+    state = {
+        redirectTo: null,
+    }
+    
+    handleSuccessfulSignIn(loginData){
+        
+        let redirectTo = '';
+        const locationState = this.props.location.state;
+        if(locationState){
+            if(locationState.hasOwnProperty('from')){
+                // Redirects the user to the original page
+                redirectTo = locationState.from;
+            }
+        }else{
+            // Redirects the user to the main page
+            redirectTo = '/';
+        }
+        console.log(redirectTo);
+        this.props.setLoginData(loginData, redirectTo);
+    }
 
     render(){
         const langData = {language: this.props.language}
         return this.props.loginData.loggedIn ? 
             <AlreadyLoggedInView {...langData}/> :
-            <ShowingSignInPanel {...langData} setLoginData={this.props.setLoginData}/>
+            <ShowingSignInPanel {...langData} setLoginData={this.handleSuccessfulSignIn.bind(this)}/>
     }
 }

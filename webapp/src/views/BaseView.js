@@ -1,7 +1,5 @@
 import React from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
-import Axios from 'axios'
-import {createHashHistory} from 'history'
 
 import Header from './Header'
 import HomeView from './Home'
@@ -29,7 +27,7 @@ export const PrivateRoute = ({ loggedIn, render, path}) => (
             return (
                 <Redirect push to={{
                     pathname: "/signIn",
-                    state: { from: props.match.url }
+                    state: { from: props.location.pathname }
                 }}/>
             )
         }
@@ -86,7 +84,11 @@ export default class BaseView extends React.Component {
 
                 <div style={{marginTop: 30}}>
                     <Switch>
-                        <PrivateRoute loggedIn={this.state.loginData.loggedIn} path='/options' render={() => <Options />} />
+                        <PrivateRoute
+                            loggedIn={this.state.loginData.loggedIn}
+                            path='/options'
+                            render={ routeParams => <Options {...routeParams} {...language}/>}
+                        />
 
                         <Route exact path='/'         render={() => <HomeView {...language}/>}/>
                         <Route path='/search'         render={() => <SERPView {...language}/>}/>

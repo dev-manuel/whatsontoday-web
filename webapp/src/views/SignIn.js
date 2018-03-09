@@ -53,6 +53,7 @@ export class ShowingSignInPanel extends React.Component{
                 >
                 <Grid.Column style={{ maxWidth: 450 }}>
                     <SignInPanel
+                        withRedirect={this.props.withRedirect}
                         language={this.props.language}
                         onSuccess={this.onSuccess}
                         setLoginData={this.props.setLoginData}
@@ -93,6 +94,10 @@ export default class SignInView extends React.Component {
         const langData = {language: this.props.language}
         return this.props.loginData.loggedIn ? 
             <AlreadyLoggedInView {...langData}/> :
-            <ShowingSignInPanel {...langData} setLoginData={this.handleSuccessfulSignIn.bind(this)}/>
+            <ShowingSignInPanel 
+                {...langData} 
+                withRedirect={!(this.props.location.state)}
+                setLoginData={this.handleSuccessfulSignIn.bind(this)}
+            />
     }
 }

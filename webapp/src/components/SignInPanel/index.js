@@ -51,7 +51,7 @@ class SignInPanel extends React.Component {
                 <ModalError language={this.props.language} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
 
                 <Header color='grey' as='h2' textAlign='center'>
-                    {lang.message}
+                    {this.props.withRedirect ? lang.message : lang.redirectMessage}
                 </Header>
                 <Form size='large'>
                     <Segment>

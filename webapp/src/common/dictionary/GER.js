@@ -68,7 +68,8 @@ export default {
         userAlreadyExistsError: 'Es existiert bereits ein nutzer mit dieser E-Mail Adresse',
     },
     signIn: {
-        message: 'Anmelden',        
+        message: 'Anmelden',
+        redirectMessage: 'Du musst angemeldet sein um diese Seite zu besuchen',       
         email: 'E-Mail Adresse',
         password: 'Passwort',
         rememberMe: 'Eingeloggt bleiben',
@@ -78,6 +79,11 @@ export default {
         errorHeading: 'Anmeldung fehlgeschlagen!',
         errorDescription: 'Nutzername oder Passwort ist falsch', 
         alreadyLoggedIn: 'Du bist bereits angemeldet!',
+    },
+    options: {
+        options: 'Einstellungen',
+        here: 'Hier',
+        newPassword: 'Neues Passwort festlegen:',
     },
     modal:{
         heading: 'Oooops',

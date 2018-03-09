@@ -27,7 +27,7 @@ export const PrivateRoute = ({ loggedIn, render, path}) => (
             return (
                 <Redirect push to={{
                     pathname: "/signIn",
-                    state: { from: props.location.pathname }
+                    state: { from: props.location }
                 }}/>
             )
         }

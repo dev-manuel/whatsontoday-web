@@ -17,7 +17,7 @@ export default class OptionView extends React.Component {
                         <h4 className="Options_Overview_entry">{lang.newPassword}</h4>
                         <Link to={{
                             pathname: `${this.props.match.url}/new_password`,
-                            state: {from: this.props.location.pathname},
+                            state: {from: this.props.location},
                         }}>
                             <Button size='mini'>{lang.here}</Button>
                         </Link>

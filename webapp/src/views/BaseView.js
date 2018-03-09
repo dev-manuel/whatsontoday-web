@@ -1,24 +1,43 @@
-import React from 'react';
-import {Switch, Route} from 'react-router-dom';
-import Axios from 'axios';
+import React from 'react'
+import {Switch, Route, Redirect} from 'react-router-dom'
+import Axios from 'axios'
 import {createHashHistory} from 'history'
 
-import Header from './Header';
-import HomeView from './Home';
-import SERPView from './SERP';
-import EventView from './Event';
-import OrganizerView from './Organizer';
-import LocationView from './Location';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
-import Confirm from './Confirm';
-import _404 from './404';
-import Footer from './Footer';
+import Header from './Header'
+import HomeView from './Home'
+import SERPView from './SERP'
+import EventView from './Event'
+import OrganizerView from './Organizer'
+import LocationView from './Location'
+import SignIn from './SignIn'
+import SignUp from './SignUp'
+import Options from './Options'
+import Confirm from './Confirm'
+import _404 from './404'
+import Footer from './Footer'
 
-import {axios, setToken, removeToken} from '../common/api';
-import GER from '../common/dictionary/GER';
+import {axios, setToken, removeToken} from '../common/api'
+import GER from '../common/dictionary/GER'
 
-class BaseView extends React.Component {
+
+// Shows its content only if the user is loggedIn otherwise it will redirect the user to the SignIn view
+export const PrivateRoute = ({ loggedIn, render, path}) => (
+    <Route path={path} render={props => {
+        if(loggedIn){
+            return render(props);
+        }else{
+            return (
+                <Redirect to={{
+                    pathname: "/signIn",
+                    state: { from: props.location }
+                }}/>
+            )
+        }
+    }}/>
+)
+
+
+export default class BaseView extends React.Component {
 
     state = {
         loginData: {
@@ -54,7 +73,6 @@ class BaseView extends React.Component {
     }
 
     render() {
-
         const language = {language: this.state.language};
         return (
             <div>
@@ -62,17 +80,19 @@ class BaseView extends React.Component {
 
                 <div style={{marginTop: 30}}>
                     <Switch>
-                        <Route exact path='/'        render={() => <HomeView {...language}/>}/>
-                        <Route path='/search'        render={() => <SERPView {...language}/>}/>
-                        <Route path='/event/:id'     render={routeParams => <EventView {...language} {...routeParams} />}/>
-                        <Route path='/organizer'     render={() => <OrganizerView {...language}/>}/>
-                        <Route path='/location'      render={() => <LocationView {...language}/>}/>
-                        <Route path='/signin'        render={() => <SignIn {...language} loginData={this.state.loginData} setLoginData={this.setLoginData.bind(this)}/> }/>
-                        <Route path='/signup'        render={() => <SignUp {...language} loginData={this.state.loginData} />}/>
-                        <Route path='/mailConfirmed' render={() => <Confirm {...language} />} />
+                        <PrivateRoute path='/options' render={() => <Options />} />
+
+                        <Route exact path='/'         render={() => <HomeView {...language}/>}/>
+                        <Route path='/search'         render={() => <SERPView {...language}/>}/>
+                        <Route path='/event/:id'      render={routeParams => <EventView {...language} {...routeParams} />}/>
+                        <Route path='/organizer'      render={() => <OrganizerView {...language}/>}/>
+                        <Route path='/location'       render={() => <LocationView {...language}/>}/>
+                        <Route path='/signin'         render={() => <SignIn {...language} loginData={this.state.loginData} setLoginData={this.setLoginData.bind(this)}/> }/>
+                        <Route path='/signup'         render={() => <SignUp {...language} loginData={this.state.loginData} />}/>
+                        <Route path='/mailConfirmed'  render={() => <Confirm {...language} />} />
                         
                         {/* Error 404 page; Has to be at the last position! */}
-                        <Route path='/*'             render={() => <_404 {...language}/>}/>
+                        <Route path='/*'              render={() => <_404 {...language}/>}/>
                     </Switch>
                 </div>
 
@@ -81,5 +101,3 @@ class BaseView extends React.Component {
         )
     }
 }
-
-export default BaseView;

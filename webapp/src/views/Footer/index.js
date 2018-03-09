@@ -1,76 +1,74 @@
-import React from 'react';
-import { Segment, Container, Grid, Header, List, Divider } from 'semantic-ui-react';
+import React from 'react'
+import { Segment, Container, Grid, Header, List, Divider } from 'semantic-ui-react'
 
 export default ({language}) => {
     const lang = language.footer;
     return (
-        <div>
-            <Segment
-                inverted
-                vertical
-                style={{ padding: '5em 0em' }}>
-                <Container textAlign="center">
-                    <Grid textAlign="center" columns={3} divided inverted stackable>
-                        <Grid.Row>
-                            <Grid.Column width={3}>
-                                <Header inverted as='h4' content={lang.about} />
-                                <List link inverted>
-                                    <List.Item as='a'>{lang.contactUs}</List.Item>
-                                    <List.Item as='a'>{lang.theTeam}</List.Item>
-                                    <List.Item as='a'>{lang.faq}</List.Item>                    
-                                </List>
-                            </Grid.Column>
-                            <Grid.Column width={3}>
-                                <Header inverted as='h4' content={lang.socialMedia} />
-                                <List link inverted>
-                                    <List.Item as='a'>{lang.facebook}</List.Item>
-                                    <List.Item as='a'>{lang.twitter}</List.Item>
-                                    <List.Item as='a'>{lang.instagram}</List.Item>
-                                </List>
-                            </Grid.Column>
-                            <Grid.Column width={7}>
-                                <Header as='h4' inverted>What's On</Header>
-                                <p>
-                                    {lang.slogan}
-                                </p>
-                            </Grid.Column>
-                        </Grid.Row>
-
-                        <Divider inverted section/>
-                        <Grid.Row>
-                            <List inverted divided horizontal link size="small">
-                                <List.Item>
-                                    <List.Content>
-                                        <List.Header>
-                                            <a href="#Contact">
-                                                {lang.contactUs}
-                                            </a>
-                                        </List.Header>
-                                    </List.Content>
-                                </List.Item>
-                                <List.Item>
-                                    <List.Content>
-                                        <List.Header>
-                                            <a href="#Terms">
-                                                {lang.terms}
-                                            </a>
-                                        </List.Header>
-                                    </List.Content>
-                                </List.Item>
-                                <List.Item>
-                                    <List.Content>
-                                        <List.Header>
-                                            <a href="#PrivacyPolicy">
-                                                {lang.privacyPolicy}
-                                            </a>
-                                        </List.Header>
-                                    </List.Content>
-                                </List.Item>
+        <Segment
+            inverted
+            vertical
+            style={{ padding: '5em 0em' }}>
+            <Container textAlign="center">
+                <Grid textAlign="center" columns={3} divided inverted stackable>
+                    <Grid.Row>
+                        <Grid.Column width={3}>
+                            <Header inverted as='h4' content={lang.about} />
+                            <List link inverted>
+                                <List.Item as='a'>{lang.contactUs}</List.Item>
+                                <List.Item as='a'>{lang.theTeam}</List.Item>
+                                <List.Item as='a'>{lang.faq}</List.Item>                    
                             </List>
-                        </Grid.Row>
-                    </Grid>
-                </Container>
-            </Segment>
-        </div>
+                        </Grid.Column>
+                        <Grid.Column width={3}>
+                            <Header inverted as='h4' content={lang.socialMedia} />
+                            <List link inverted>
+                                <List.Item as='a'>{lang.facebook}</List.Item>
+                                <List.Item as='a'>{lang.twitter}</List.Item>
+                                <List.Item as='a'>{lang.instagram}</List.Item>
+                            </List>
+                        </Grid.Column>
+                        <Grid.Column width={7}>
+                            <Header as='h4' inverted>What's On</Header>
+                            <p>
+                                {lang.slogan}
+                            </p>
+                        </Grid.Column>
+                    </Grid.Row>
+
+                    <Divider inverted section/>
+                    <Grid.Row>
+                        <List inverted divided horizontal link size="small">
+                            <List.Item>
+                                <List.Content>
+                                    <List.Header>
+                                        <a href="#Contact">
+                                            {lang.contactUs}
+                                        </a>
+                                    </List.Header>
+                                </List.Content>
+                            </List.Item>
+                            <List.Item>
+                                <List.Content>
+                                    <List.Header>
+                                        <a href="#Terms">
+                                            {lang.terms}
+                                        </a>
+                                    </List.Header>
+                                </List.Content>
+                            </List.Item>
+                            <List.Item>
+                                <List.Content>
+                                    <List.Header>
+                                        <a href="#PrivacyPolicy">
+                                            {lang.privacyPolicy}
+                                        </a>
+                                    </List.Header>
+                                </List.Content>
+                            </List.Item>
+                        </List>
+                    </Grid.Row>
+                </Grid>
+            </Container>
+        </Segment>
     )
 }

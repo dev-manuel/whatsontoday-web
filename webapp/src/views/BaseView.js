@@ -17,6 +17,7 @@ import Footer from './Footer'
 import {axios, setToken, removeToken} from '../common/api'
 import GER from '../common/dictionary/GER'
 
+import './BaseView.less'
 
 // Shows its content only if the user is loggedIn otherwise it will redirect the user to the SignIn view
 export const PrivateRoute = ({ loggedIn, render, path}) => (
@@ -79,10 +80,13 @@ export default class BaseView extends React.Component {
         const language = {language: this.state.language};
         return this.state.redirectTo ?
             <Redirect to={this.state.redirectTo}/> :
-            <div>
-                <Header {...this.state} handleSignOut={this.handleSignOut.bind(this)}/>
+            <div className="BaseView_container">
 
-                <div style={{marginTop: 30}}>
+                <div className="BaseView_header">
+                    <Header {...this.state} handleSignOut={this.handleSignOut.bind(this)}/>
+                </div>
+
+                <div className="BaseView_body">
                     <Switch>
                         <PrivateRoute
                             loggedIn={this.state.loginData.loggedIn}
@@ -109,7 +113,9 @@ export default class BaseView extends React.Component {
                     </Switch>
                 </div>
 
-                <Footer language={this.state.language}/>
+                <div className="BaseView_footer">
+                    <Footer language={this.state.language}/>
+                </div>
             </div>
     }
 

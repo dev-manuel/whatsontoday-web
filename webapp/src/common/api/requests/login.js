@@ -20,7 +20,7 @@ export const signIn = (email, password, rememberMe) => {
  * 
 */
 export const signOut = () => {
-    return axios.get('/login/signOut/')
+    return axios.get('/login/signOut')
         .then( response => {
             return response.data;
         })

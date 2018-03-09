@@ -15,28 +15,10 @@ import Confirm from './Confirm';
 import _404 from './404';
 import Footer from './Footer';
 
-import Global from '../common/Global';
+import {axios, setToken, removeToken} from '../common/api';
 import GER from '../common/dictionary/GER';
 
 class BaseView extends React.Component {
-    
-    constructor(props){
-        super(props);
-
-        // const forceUpdate = this.forceUpdate.bind(this);
-
-        // this.global = new Global({
-        //     axios: Axios.create({
-        //         baseURL: 'http://localhost:9000/api/v1/', // Just for dev!
-        //         timeout: 10000
-        //     }),
-        //     onUpdate: () => {
-        //         forceUpdate(); // Rerender component
-        //     },
-        //     LANG: GER,
-        //     history: createHashHistory(),
-        // });
-    }
 
     state = {
         loginData: {
@@ -44,16 +26,31 @@ class BaseView extends React.Component {
             token: null,
             userMail: null,
         },
-
         language: GER,
     }
 
     /**
-     * 
+     * This method will be invoked after a SUCCESSFUL signIn 
      * @param {{loggedIn: boolean, token: string, userMail: string}} loginData 
      */
     setLoginData(loginData){
+        setToken( loginData.token);
         this.setState({loginData});
+    }
+
+    /**
+     * This method will be invoked after a SUCCESSFUL signOut
+    */
+    handleSignOut(){
+        console.log('lakjslksaj')
+        removeToken();
+        this.setState({
+            loginData: {
+                loggedIn: false,
+                token: null,
+                userMail: null,
+            },
+        })
     }
 
     render() {
@@ -61,7 +58,7 @@ class BaseView extends React.Component {
         const language = {language: this.state.language};
         return (
             <div>
-                <Header {...this.state}/>
+                <Header {...this.state} handleSignOut={this.handleSignOut.bind(this)}/>
 
                 <div style={{marginTop: 30}}>
                     <Switch>

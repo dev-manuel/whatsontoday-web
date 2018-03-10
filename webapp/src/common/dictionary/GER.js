@@ -84,6 +84,7 @@ export default {
         options: 'Einstellungen',
         here: 'Hier',
         newPassword: 'Neues Passwort festlegen:',
+        deleteAccount: 'Account löschen:'
     },
     modal:{
         heading: 'Oooops',

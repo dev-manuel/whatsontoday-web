@@ -6,11 +6,19 @@ import NewPassword from './NewPassword'
 
 import './Options.less'
 
+export const optionLinks = {
+    newPassword: 'new_password',
+    deleteAccount: 'delete_account',
+}
+
 export default ({match, language}) => {
+    const basePath = match.path
     return (
         <React.Fragment>
-            <Route exact path={`${match.path}/`} render={routeProps => <Overview {...routeProps} language={language}/>} />
-            <Route path={`${match.path}/new_password`} render={routeProps => <NewPassword {...routeProps} language={language}/>} />
+            <Route exact path={`${basePath}/`} render={routeProps => <Overview {...routeProps} language={language}/>} />
+            <Route path={`${basePath}/${optionLinks.newPassword}`} render={routeProps => <NewPassword {...routeProps} language={language}/>} />
+            <Route path={`${basePath}/${optionLinks.deleteAccount}`} render={routeProps => <NewPassword {...routeProps} language={language}/>} />
+            
         </React.Fragment>
     )
 }

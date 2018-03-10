@@ -5,16 +5,20 @@ const path = require('path');
 const RewriteImportPlugin = require("less-plugin-rewrite-import");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const shared= {
+const shared = {
 
     // Directory-constants
     ROOT_DIR: path.resolve(__dirname, '../'),
     SRC_DIR: path.resolve(__dirname, '../src'),
     BUILD_DIR : path.resolve(__dirname, '../../public'),
     NODE_MODULES_DIR: path.resolve(__dirname, '../node_modules'),
-}
 
-shared.createLessLoader = (minimized, publicPath = './') => (
+    // Insert definitions (for the webpack definition plugin) that will included in any case here
+    crateBaseDefinitions: env => ({
+        DISABLE_PRIVATE_ROUTES: JSON.stringify( env.DISABLE_PRIVATE_ROUTES || false),
+    }),
+    
+    createLessLoader: (minimized, publicPath = './') => (
     // Loading less-files
     {
         test: /\.(less|config)/, // Loading .less or .config files
@@ -46,7 +50,7 @@ shared.createLessLoader = (minimized, publicPath = './') => (
                 }
             ],
         }),
-    }
-)
+    })
+}
 
 module.exports = shared;

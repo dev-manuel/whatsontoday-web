@@ -102,5 +102,9 @@ export default {
     },
     notFound:{
         message: 'Wir haben leider keine Ergebnisse für diese URL gefunden :('
+    },
+    noAccess: {
+        organizer: 'Du musst als Veranstalter registriert sein, um diese Seite aufrufen zu können.',
+        default: 'Du hast leider keine Berechtigung diese Seite aufzurufen.',
     }
 }

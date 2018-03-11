@@ -1,12 +1,14 @@
 import React from 'react'
-import {withRouter} from 'react-router-dom'
+import {withRouter, Link} from 'react-router-dom'
 import {parse} from 'query-string'
 import {Grid, Pagination, Segment, Container, Header, Button, Icon } from 'semantic-ui-react'
 import log from 'loglevel'
 
 
 
-export const NoAccessMessage = ({message}) => {
+export const NoAccessMessage = ({message, language}) => {
+    const lang = language.noAccess;
+
     return (
         <div>
             <Segment
@@ -20,6 +22,12 @@ export const NoAccessMessage = ({message}) => {
                         content={message}
                         style={{ fontSize: '42px', fontWeight: 'normal', marginBottom: 20, marginTop: '3em' }}
                     />
+                    <Link to='/'>
+                        <Button size='huge' color='teal'>
+                            <Icon name='home' />
+                            {lang.backToHome}
+                        </Button>
+                    </Link>
                 </Container>
             </Segment>
         </div>
@@ -36,11 +44,11 @@ class NoAccess extends React.Component {
 
         switch(reason){
             case 'organizer':
-                return <NoAccessMessage message={lang.organizer} />
+                return <NoAccessMessage message={lang.organizer} language={this.props.language}/>
             break;
 
             default:
-                return <NoAccessMessage message={lang.default} />
+                return <NoAccessMessage message={lang.default} language={this.props.language}/>
             break;
         }
 

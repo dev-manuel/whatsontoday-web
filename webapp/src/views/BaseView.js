@@ -12,29 +12,17 @@ import SignIn from './SignIn'
 import SignUp from './SignUp'
 import Options from './Options'
 import Confirm from './Confirm'
+import NoAccess from './NoAccess'
 import _404 from './404'
 import Footer from './Footer'
 
-import {axios, setToken, removeToken} from '../common/api'
+import {PrivateRoute, PrivateOrganizerRoute} from '../components/routes'
+import {setToken, removeToken} from '../common/api'
 import GER from '../common/dictionary/GER'
 
 import './BaseView.less'
 
-// Shows its content only if the user is loggedIn otherwise it will redirect the user to the SignIn view
-export const PrivateRoute = ({ loggedIn, render, path}) => (
-    <Route path={path} render={props => {
-        if(loggedIn || DISABLE_PRIVATE_ROUTES){ // DISABLE_PRIVATE_ROUTES is defined by the webpack definition plugin
-            return render(props);
-        }else{
-            return (
-                <Redirect push to={{
-                    pathname: "/signIn",
-                    state: { from: props.location }
-                }}/>
-            )
-        }
-    }}/>
-)
+
 
 
 export default class BaseView extends React.Component {
@@ -113,7 +101,8 @@ export default class BaseView extends React.Component {
                         />}/>
                         <Route path='/signup'         render={() => <SignUp {...language} loginData={this.state.loginData} />}/>
                         <Route path='/mailConfirmed'  render={() => <Confirm {...language} />} />
-                        
+                        <Route path='/no_access'      render={() => <NoAccess {...language} />} />
+
                         {/* Error 404 page; Has to be at the last position! */}
                         <Route path='/*'              render={() => <_404 {...language}/>}/>
                     </Switch>

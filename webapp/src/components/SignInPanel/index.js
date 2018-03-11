@@ -24,6 +24,7 @@ class SignInPanel extends React.Component {
                     loggedIn: true,
                     token,
                     userMail: this.state.emailValue,
+                    isOrganizer: false, // <-- TODO!
                 });
             })
             .catch(err => {

@@ -12,6 +12,10 @@ import 'slick-carousel/slick/slick-theme.less';
 
 
 log.setLevel(LOG_LEVEL); // LOG_LEVEL is defined by webpack define plugin
+log.debug('Webpack definition plugin:', {
+    DISABLE_PRIVATE_ROUTES,
+    LOG_LEVEL,
+})
 
 // Setup of local page routing
 const routing = (

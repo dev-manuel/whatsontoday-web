@@ -65,21 +65,33 @@ export default class SignInView extends React.Component {
     state = {
         redirectTo: null,
     }
-    
-    handleSuccessfulSignIn(loginData){
-        
-        let redirectTo = '';
-        const locationState = this.props.location.state;
-        if(locationState){
-            if(locationState.hasOwnProperty('from')){
-                // Redirects the user to the original page
-                redirectTo = locationState.from;
+
+    getRedirectLink(locationState){
+        if(locationState){ // If the whole locationState Object is undefined
+            if(locationState.organizerRightsNeeded){ // If the organizerRightsNeeded is set to true (or not undefined)
+                // Redirects the user to the NoAccess Page (with the hint that needs organizer rights)
+                return '/no_access?reason=organizer'
+            }else{
+                if(locationState.hasOwnProperty('from')){
+                    // Redirects the user to the original page
+                    return locationState.from;
+                }else{
+                    // Redirects the user to the main page
+                    return '/';
+                }
             }
         }else{
             // Redirects the user to the main page
-            redirectTo = '/';
+            return '/';
         }
-        log.debug('redirectTo', redirectTo);
+    }
+    
+    handleSuccessfulSignIn(loginData){
+        
+        const locationState = this.props.location.state;
+        const redirectTo = this.getRedirectLink(locationState);
+        log.debug('SignInView#redirectTo', redirectTo);
+
         this.props.setLoginData(loginData, redirectTo);
     }
 

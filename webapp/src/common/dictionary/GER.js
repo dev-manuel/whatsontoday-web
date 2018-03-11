@@ -83,8 +83,14 @@ export default {
     options: {
         options: 'Einstellungen',
         here: 'Hier',
+        yes: 'Ja',
+        no: 'Nein',
+
         newPassword: 'Neues Passwort festlegen:',
-        deleteAccount: 'Account löschen:'
+
+        deleteAccount: 'Account löschen:',
+        deleteAccountMessage: 'Möchtest du deinen Account wirklich löschen?',
+        deleteAccountDescription: 'Wenn du mit "Ja" bestätigst wird dein Account unwideruflich gelöscht!',
     },
     modal:{
         heading: 'Oooops',

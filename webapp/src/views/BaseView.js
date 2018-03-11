@@ -92,7 +92,13 @@ export default class BaseView extends React.Component {
                         <PrivateRoute
                             loggedIn={this.state.loginData.loggedIn}
                             path='/options'
-                            render={ routeParams => <Options {...routeParams} {...language}/>}
+                            render={ routeParams => (
+                                <Options
+                                    {...language}
+                                    {...routeParams}
+                                    setLoginData={this.setLoginData.bind(this)}
+                                />
+                            )}
                         />
 
                         <Route exact path='/'         render={() => <HomeView {...language}/>}/>

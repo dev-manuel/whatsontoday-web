@@ -12,13 +12,22 @@ export const optionLinks = {
     deleteAccount: 'delete_account',
 }
 
-export default ({match, language}) => {
+export default ({match, language, setLoginData}) => {
     const basePath = match.path
     return (
         <React.Fragment>
             <Route exact path={`${basePath}/`} render={routeProps => <Overview {...routeProps} language={language}/>} />
             <Route path={`${basePath}/${optionLinks.newPassword}`} render={routeProps => <NewPassword {...routeProps} language={language}/>} />
-            <Route path={`${basePath}/${optionLinks.deleteAccount}`} render={routeProps => <DeleteAccount {...routeProps} language={language}/>} />
+            <Route 
+                path={`${basePath}/${optionLinks.deleteAccount}`}
+                render={routeProps => (
+                    <DeleteAccount
+                        {...routeProps}
+                        setLoginData={setLoginData}
+                        language={language}
+                    />
+                )}
+            />
             
         </React.Fragment>
     )

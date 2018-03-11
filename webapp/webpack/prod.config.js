@@ -26,6 +26,8 @@ module.exports = (env = {}) => {
             new webpack.DefinePlugin(Object.assign({}, shared.crateBaseDefinitions(env), {
                 'process.env.NODE_ENV': JSON.stringify('production'), 
                 DISABLE_PRIVATE_ROUTES: JSON.stringify(false), // To ensure this property is set to false
+                LOG_LEVEL: JSON.stringify(log.levels.SILENT),
+                
                         
             })),
 

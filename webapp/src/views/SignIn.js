@@ -1,4 +1,5 @@
 import React from 'react'
+import log from 'loglevel'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
 import {Redirect} from 'react-router'
 
@@ -78,7 +79,7 @@ export default class SignInView extends React.Component {
             // Redirects the user to the main page
             redirectTo = '/';
         }
-        console.log(redirectTo);
+        log.debug('redirectTo', redirectTo);
         this.props.setLoginData(loginData, redirectTo);
     }
 

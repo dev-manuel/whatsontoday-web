@@ -1,3 +1,5 @@
+import log from 'loglevel'
+
 import {axios} from '../index'
 
 /**
@@ -8,5 +10,8 @@ export const userSignUp =  (email, password) => {
     return axios.post('/user/signUp', {
         email,
         password,
+    }).then(response => {
+        log.debug('userSignUp#then', response);        
+        return response.data;
     })
 }

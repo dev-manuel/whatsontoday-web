@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import log from 'loglevel'
 import {Message, Segment, Container, Button} from 'semantic-ui-react'
 
 import ModalError from '../../components/modal'
@@ -21,7 +22,7 @@ export default class OptionView extends React.Component {
                 }, '/')
             })
             .catch( error => {
-                console.log(error);
+                log.debug('deleteUser#catch', error);
                 this.setState({
                     showModalError: true,
                 })

@@ -1,5 +1,6 @@
-import {axios} from '../index'
+import log from 'loglevel'
 
+import {axios} from '../index'
 
 /**
  * Authentication needed!
@@ -11,13 +12,15 @@ export const createCategory = (name, parentId) => {
         name,
         parentId,
     }).then( response => {
-        return response.data;
+            log.debug('createCategory#then', response);
+            return response.data;
     })
 }
 
 export const getCategories = () => {
     return axios.get('/category')
         .then( response => {
+            log.debug('getCategories#then', response);
             return response.data;
         })
 }

@@ -1,3 +1,5 @@
+import log from 'loglevel'
+
 import {axios} from '../index'
 
 /**
@@ -10,6 +12,9 @@ export const organizerSignUp = (email, password, name) => {
         email,
         password,
         name,
+    }).then(response => {
+        log.debug('organizerSignUp#then', response);
+        return response.data;
     })
 }
 
@@ -19,6 +24,7 @@ export const organizerSignUp = (email, password, name) => {
 export const readOrganizer = id => {
     return axios.get(`/organizer/${id}`)
         .then( response => {
+            log.debug('readOrganizer#then', response);
             return response.data;
         })
 }

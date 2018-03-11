@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import log from 'loglevel'
 import GridRow, { Segment, Container, Button, Divider, Header, Grid } from 'semantic-ui-react'
 
 import {optionLinks} from './index'
@@ -8,7 +9,6 @@ export default class OptionView extends React.Component {
 
     
     render(){
-        console.log(this.props.language);
         const lang = this.props.language.options;
 
         const basePath = this.props.match.url;

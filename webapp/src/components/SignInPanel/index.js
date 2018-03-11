@@ -1,4 +1,5 @@
 import React from 'react'
+import log from 'loglevel'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 import {withRouter} from 'react-router'
 
@@ -26,7 +27,7 @@ class SignInPanel extends React.Component {
                 });
             })
             .catch(err => {
-                console.log('Response error:', err.response); 
+                log.debug('signIn#catch:', err); 
                 switch(err.response.status){
                     
                     // Wrong Credentials

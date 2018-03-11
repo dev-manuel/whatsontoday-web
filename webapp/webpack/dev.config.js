@@ -5,6 +5,7 @@ const baseConfig = require('./base.config.js');
 
 // Lode node modules
 const merge = require('webpack-merge');
+const log = require('loglevel');
 
 // Load webpack-plugins here!
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -40,7 +41,7 @@ module.exports = (env = {}) => {
             }),
 
             new webpack.DefinePlugin(Object.assign({}, shared.crateBaseDefinitions(env), {
-                
+                LOG_LEVEL: JSON.stringify(env.LOG_LEVEL || log.levels.TRACE),
             }))
         ],
     })

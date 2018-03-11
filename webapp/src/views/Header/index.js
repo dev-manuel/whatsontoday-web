@@ -1,5 +1,6 @@
 // Import modules
 import React from 'react';
+import log from 'loglevel'
 import {Menu, Search, Icon, Button, Dropdown, Image} from 'semantic-ui-react';
 import {withRouter} from 'react-router'
 
@@ -63,11 +64,10 @@ class Header extends React.Component{
         if(this.props.loginData.loggedIn){
             signOut()
                 .then(data => {
-                    console.log(this);
                     this.props.handleSignOut();
                 })
                 .catch( error => {
-                    console.log(error);
+                    log.debug('signOut#catch', error);
                     this.setState({showModalError: true})
                 })
         }

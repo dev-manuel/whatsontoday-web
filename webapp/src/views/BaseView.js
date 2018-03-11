@@ -1,5 +1,6 @@
 import React from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
+import log from 'loglevel'
 
 import Header from './Header'
 import HomeView from './Home'
@@ -22,7 +23,6 @@ import './BaseView.less'
 // Shows its content only if the user is loggedIn otherwise it will redirect the user to the SignIn view
 export const PrivateRoute = ({ loggedIn, render, path}) => (
     <Route path={path} render={props => {
-        console.log(DISABLE_PRIVATE_ROUTES);
         if(loggedIn || DISABLE_PRIVATE_ROUTES){ // DISABLE_PRIVATE_ROUTES is defined by the webpack definition plugin
             return render(props);
         }else{
@@ -66,7 +66,6 @@ export default class BaseView extends React.Component {
      * This method will be invoked after a SUCCESSFUL signOut
     */
     handleSignOut(){
-        console.log('lakjslksaj')
         removeToken();
         this.setState({
             loginData: {

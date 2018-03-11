@@ -1,3 +1,5 @@
+import log from 'loglevel'
+
 import {axios} from '../index'
 
 /**
@@ -13,7 +15,8 @@ export const getLocations = (name, xPage = 0, xPageSize = 20) => {
             "X-Page-Size": xPageSize,
         },
     }).then( response => {
-        return response.data;
+            log.debug('getLocations#then', response);
+            return response.data;
     })
 }
 
@@ -24,6 +27,7 @@ export const getLocations = (name, xPage = 0, xPageSize = 20) => {
 export const readLocation = id => {
     return axios.get(`/locations/${id}`)
         .then( response => {
+            log.debug('readLocation#then', response);
             return response.data;
         })
 }
@@ -42,6 +46,7 @@ export const getNearbyLocations = (id, xPage = 0, xPageSize = 20) => {
         },
     })
         .then( response => {
+            log.debug('getNearbyLocations#then', response);
             return response.data;
         })
 }
@@ -58,6 +63,7 @@ export const createLocation = (name, latitude, longitude) => {
         latitude,
         longitude,
       }).then( response => {
-          return response.data;
+            log.debug('createLocation#then', response);
+            return response.data;
       })
 }

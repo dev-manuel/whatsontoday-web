@@ -1,5 +1,6 @@
-import {axios} from '../index'
+import log from 'loglevel'
 
+import {axios} from '../index'
 
 /**
  * @param {string} email
@@ -12,6 +13,7 @@ export const signIn = (email, password, rememberMe) => {
         password,
         rememberMe,
     }).then(response => {
+            log.debug('signIn#then', response);
             return response.data.token;
     })
 }
@@ -22,6 +24,7 @@ export const signIn = (email, password, rememberMe) => {
 export const signOut = () => {
     return axios.get('/login/signOut')
         .then( response => {
+            log.debug('signOut#then', response);
             return response.data;
         })
 }
@@ -32,6 +35,7 @@ export const signOut = () => {
 export const getLoggedInUser = () => {
     return axios.get('/login')
         .then( response => {
+            log.debug('getLoggedInUser#then', response);
             return response.data;
         })
 }
@@ -44,7 +48,8 @@ export const updatePassword = newPassword => {
     return axios.put('/login', {
         password: newPassword,
     }).then( response => {
-        return response.data;
+            log.debug('updatePassword#then', response);
+            return response.data;
     })
 }
 
@@ -56,7 +61,8 @@ export const resetPassword = email => {
     return axios.put('/login/resetPassword', {
         email,
     }).then( response => {
-        return response.data;
+            log.debug('resetPassword#then', response);
+            return response.data;
     })
 }
 
@@ -66,6 +72,7 @@ export const resetPassword = email => {
 export const deleteUser = () => {
     return axios.delete('/login')
         .then( response => {
+            log.debug('deleteUser#then', response);
             return response.data;
         })
 }

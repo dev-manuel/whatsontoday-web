@@ -1,4 +1,5 @@
 import React from 'react'
+import log from 'loglevel'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
 import ModalError from '../modal'
@@ -54,11 +55,11 @@ class SignUpPanel extends React.Component {
         // When no error will occur during the api request no error will displayed
         if(readyToSubmitRegistrationRequest){
             userSignUp(this.state.emailValue, this.state.passwordValue)
-                .then( () => {
+                .then(() => {
                     this.props.onSuccess();
                 })
                 .catch( err => {
-                    console.log(err);
+                    log.debug('userSignUp#catch', err);
 
                     if(!err.response)
                         this.setState({showModalError: true});

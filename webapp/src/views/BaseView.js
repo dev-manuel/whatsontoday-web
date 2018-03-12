@@ -11,6 +11,7 @@ import LocationView from './Location'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 import Options from './Options'
+import EventTool from './EventTool'
 import Confirm from './Confirm'
 import NoAccess from './NoAccess'
 import _404 from './404'
@@ -60,6 +61,7 @@ export default class BaseView extends React.Component {
                 loggedIn: false,
                 token: null,
                 userMail: null,
+                isOrganizer: false,
             },
         })
     }
@@ -76,6 +78,8 @@ export default class BaseView extends React.Component {
 
                 <div className="BaseView_body">
                     <Switch>
+
+                        {/* Private routes */}
                         <PrivateRoute
                             loggedIn={this.state.loginData.loggedIn}
                             path='/options'
@@ -88,6 +92,21 @@ export default class BaseView extends React.Component {
                             )}
                         />
 
+                        {/* Private organizer routes */}
+                        <PrivateOrganizerRoute
+                            loggedIn={this.state.loginData.loggedIn}
+                            isOrganizer={this.state.loginData.isOrganizer}
+                            path='/event_tool'
+                            render={ routeParams => (
+                                <EventTool
+                                    {...language}
+                                    {...routeParams}
+                                    setLoginData={this.setLoginData.bind(this)}
+                                />
+                            )}
+                        />
+
+                        {/* Regular routes */}
                         <Route exact path='/'         render={() => <HomeView {...language}/>}/>
                         <Route path='/search'         render={() => <SERPView {...language}/>}/>
                         <Route path='/event/:id'      render={routeParams => <EventView {...language} {...routeParams} />}/>

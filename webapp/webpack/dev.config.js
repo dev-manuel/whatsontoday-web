@@ -14,9 +14,15 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const shared = require('./shared');
 
 module.exports = (env = {}) => { 
-    console.log('Webpack env:', env);
+    console.log('Webpack env settings:', env);
+
+    const definitions = {
+        DISABLE_PRIVATE_ROUTES: JSON.stringify( env.DISABLE_PRIVATE_ROUTES || false),
+        LOG_LEVEL: JSON.stringify(env.LOG_LEVEL || log.levels.TRACE),      
+    }
+    console.log('Webpack definitions:', definitions);
+
     return merge(baseConfig, {
-        
         // This option provides a source-map after the project was built, so you can see
         // errors in their original files rather than in the bundled js-file (client.js)
         devtool: 'source-map',
@@ -40,9 +46,7 @@ module.exports = (env = {}) => {
                 filename: "[name].[contenthash].css",
             }),
 
-            new webpack.DefinePlugin(Object.assign({}, shared.crateBaseDefinitions(env), {
-                LOG_LEVEL: JSON.stringify(env.LOG_LEVEL || log.levels.TRACE),
-            }))
+            new webpack.DefinePlugin(definitions),
         ],
     })
 }

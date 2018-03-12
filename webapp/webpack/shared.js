@@ -12,11 +12,6 @@ const shared = {
     SRC_DIR: path.resolve(__dirname, '../src'),
     BUILD_DIR : path.resolve(__dirname, '../../public'),
     NODE_MODULES_DIR: path.resolve(__dirname, '../node_modules'),
-
-    // Insert definitions (for the webpack definition plugin) that will included in any case here
-    crateBaseDefinitions: env => ({
-        DISABLE_PRIVATE_ROUTES: JSON.stringify( env.DISABLE_PRIVATE_ROUTES || false),
-    }),
     
     createLessLoader: (minimized, publicPath = './') => (
     // Loading less-files

@@ -4,12 +4,15 @@ import {axios} from '../index'
 
 /**
  * 
- * @param {string} name 
+ * @param {string} search 
  * @param {number} [xPage=0]
  * @param {number} [xPageSize=20]
  */
-export const getLocations = (name, xPage = 0, xPageSize = 20) => {
+export const getLocations = (search, xPage = 0, xPageSize = 20) => {
     return axios.get('/location',{
+        params: {
+            search,
+        },
         headers: {
             "X-Page": xPage,
             "X-Page-Size": xPageSize,

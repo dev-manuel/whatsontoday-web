@@ -114,6 +114,45 @@ export class LocationSelector extends React.Component {
     }
 }
 
+export class ImageUploadFormField extends React.Component {
+
+    state = {
+
+    }
+
+    componentDidMount(){
+        this.input.onchange = (event => {
+            
+            if(this.props.onChange instanceof Function){
+                this.props.onChange(event, this.input.files);
+            }else{
+                log.warn('onChange is not a function');
+            }
+        })
+    }
+
+    render() {
+        return (
+            <div>
+                <input
+                    type='file'
+                    ref={(input) => this.input = input}
+                    style={{ display: 'none' }}
+                    multiple
+                    accept='image/*'
+                />
+                <Button
+                    onClick={event => {
+                        this.input.click();
+                    }}
+                >
+                    {this.props.text}
+                </Button>
+            </div>
+        );
+    }
+}
+
 
 export default class Create extends React.Component {
 
@@ -162,6 +201,14 @@ export default class Create extends React.Component {
                         />
 
                         <LocationSelector />
+
+                        <ImageUploadFormField
+                            text='Add Images'
+                            onChange={(event, files) => {
+                                log.debug('ImageUploadFormField#event', event);
+                                log.debug('ImageUploadFormField#files', files);
+                            }}
+                        />
                        
 
                         <Form.TextArea label={lang.description} placeholder={lang.descriptionPlaceholder} />

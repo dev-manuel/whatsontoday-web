@@ -10,18 +10,23 @@ import 'react-datepicker/dist/react-datepicker.css'
 import './EventTool.less'
 
 
-export const DateSelector = ({label, plHolder, onClick, value}) => {
-    log.debug('DateSelector#plHolder', plHolder);
-    log.debug('DateSelector#value', value);
-    return (
-        <Form.Input
-            onClick={onClick}
-            value={value===''?'':`${value} Uhr`}
-            placeholder={plHolder}
-            label={label}
-        />
-    )
+export class DateSelector extends React.Component{
+    render(){
+        const {label, plHolder, onClick, value} = this.props;
+        log.debug('DateSelector#plHolder', plHolder);
+        log.debug('DateSelector#value', value);
+        return (
+            <Form.Input
+                onClick={onClick}
+                value={value===''?'':`${value} Uhr`}
+                placeholder={plHolder}
+                label={label}
+            />
+        )
+    }
 }
+    
+
 
 export const DateSelectFormField = ({selected, onChange, placeholder, label, timeCaption, minDate}) => {
     return(
@@ -115,10 +120,6 @@ export class LocationSelector extends React.Component {
 }
 
 export class ImageUploadFormField extends React.Component {
-
-    state = {
-
-    }
 
     componentDidMount(){
         this.input.onchange = (event => {

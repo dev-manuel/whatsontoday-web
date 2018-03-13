@@ -16,7 +16,7 @@ const shared = {
     createLessLoader: (minimized, publicPath = './') => (
     // Loading less-files
     {
-        test: /\.(less|config)/, // Loading .less or .config files
+        test: /\.(css|less|config)/, // Loading .less or .config files
         use: ExtractTextPlugin.extract({ // Instructs webpack to store the style data in a seperate css-file (see plugins!)
             
             // Here we need to update the public path for css files to avoid double publicPath usage (>...>/<publicPath>/<publicPath>/<...>)

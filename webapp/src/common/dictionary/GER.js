@@ -7,6 +7,7 @@ export default {
     time: {
         locale: 'de',
         to: 'bis',
+        time: 'Uhrzeit'
     },
     header: {
         blog: 'Blog',
@@ -107,5 +108,23 @@ export default {
         backToHome: 'Zurück zur Startseite',
         organizer: 'Du musst als Veranstalter registriert sein, um diese Seite aufrufen zu können.',
         default: 'Du hast leider keine Berechtigung diese Seite aufzurufen.',
+    },
+    eventTool: {
+        create: {
+            addEvent: 'Neues Event hinzufügen',
+            name: 'Titel',
+            namePlaceholder: 'Bitte Title eingeben...',
+            categories: 'Kategorien',
+            categoriesPlaceholder: 'Bitte Kategorien auswählen...',
+            from: 'Beginn',
+            fromPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
+            to: 'Ende',
+            toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
+            location: 'Veranstalutngsort',
+            locationPlaceholder: 'Bitte Ort auswählen',
+            description: 'Beschreibung',
+            descriptionPlaceholder: 'Bitte Text eingeben...',
+            submit: 'Abschicken'
+        }
     }
 }

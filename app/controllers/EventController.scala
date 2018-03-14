@@ -84,8 +84,8 @@ class EventController @Inject()(cc: ControllerComponents,
 
     val q = ParticipantCountView.participantCount.filter(_.id === id.bind)
       .join(EventTable.event).on(_.event_fk === _.id)
-      .sortBy(y => y._1.count).map(_._2)
-      .filter(y => y => y.id =!= e.id && y.from >= currentTimestamp)
+      .sortBy(y => y._1.count.desc).map(_._2)
+      .filter(y => y.id =!= id.bind && y.from >= currentTimestamp)
 
     val s = q.queryPaged.detailed
 

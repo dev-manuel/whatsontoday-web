@@ -592,4 +592,133 @@ class EventControllerSpec extends RestTestSuite {
       content.map(x => x.id) must contain (event4.id)
     }
   }
+
+  "EventController GET alsoViewed" should {
+    "return a list of events" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event4 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val participate1 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event1.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+      val participate2 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event2.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+
+      Thread.sleep(1000)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events/alsoViewed/" + event1.id.getOrElse(-1))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.map(x => x.id) must contain (event2.id)
+    }
+
+    "not return the event itself" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event4 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val participate1 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event1.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+      val participate2 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event2.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+
+      Thread.sleep(1000)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events/alsoViewed/" + event1.id.getOrElse(-1))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.map(x => x.id) must not contain (event1.id)
+    }
+
+    "only return events users participate in" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event4 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val participate1 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event1.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+      val participate2 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event2.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+
+      Thread.sleep(1000)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events/alsoViewed/" + event1.id.getOrElse(-1))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.map(x => x.id) must not contain (event3.id)
+      content.map(x => x.id) must not contain (event4.id)
+    }
+
+    "only return events in the future" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(0, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event4 = Await.result(createEvent(from = new Timestamp(0, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val participate1 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event1.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+      val participate2 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event2.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user._3))),"")).get
+      val participate3 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event3.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user._3))),"")).get
+      val participate4 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event4.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user._3))),"")).get
+
+      Thread.sleep(1000)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events/alsoViewed/" + event1.id.getOrElse(-1))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.map(x => x.id) must contain (event2.id)
+      content.map(x => x.id) must not contain (event3.id)
+      content.map(x => x.id) must not contain (event4.id)
+    }
+
+    "sort by most similar participants" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(0, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+
+      val user1 = Await.result(createUser(), Duration.Inf)
+      val user2 = Await.result(createUser(), Duration.Inf)
+      val user3 = Await.result(createUser(), Duration.Inf)
+
+      val participate1 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event1.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user1._3))),"")).get
+      val participate2 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event2.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user1._3))),"")).get
+      val participate3 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event3.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user1._3))),"")).get
+
+      val participate4 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event1.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user2._3))),"")).get
+      val participate5 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event2.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user2._3))),"")).get
+      val participate6 = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event2.id.getOrElse(-1).toString,
+                                                new Headers(List(("x-auth-token",user2._3))),"")).get
+
+      Thread.sleep(1000)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events/alsoViewed/" + event1.id.getOrElse(-1))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.sortBy(x => -x.participantCount) mustEqual content
+    }
+  }
 }

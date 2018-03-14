@@ -37,28 +37,35 @@ export default class FileTable extends React.Component {
         const fileEntryList = this.props.fileEntryList;
         log.debug('FileTable#fileEntryList', fileEntryList);
 
-        
+        const tableEntries = fileEntryList.map((fileEntry, index) => (
+            <Table.Row key={index}>
+                <Table.Cell>{fileEntry.file.name}</Table.Cell>
+                <Table.Cell>
+                    {this.getIconByFileEntryStatus(fileEntry.status)}
+                </Table.Cell>
+            </Table.Row>
+        ))
 
         return (
             <Table fixed>
 
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>FileName</Table.HeaderCell>
-                        <Table.HeaderCell>Is Uploaded</Table.HeaderCell>
+                        <Table.HeaderCell>{this.props.textFileName}</Table.HeaderCell>
+                        <Table.HeaderCell>{this.props.textIsUploaded}</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
         
                 <Table.Body>
                     {
-                        fileEntryList.map((fileEntry, index) => (
-                            <Table.Row key={index}>
-                                <Table.Cell>{fileEntry.file.name}</Table.Cell>
-                                <Table.Cell>
-                                    {this.getIconByFileEntryStatus(fileEntry.status)}
-                                </Table.Cell>
-                            </Table.Row>
-                        ))
+                        tableEntries.length !== 0 ?
+                        tableEntries :
+                        (
+                            <Table.Row>
+                                <Table.Cell>---</Table.Cell>
+                                <Table.Cell>---</Table.Cell>
+                            </Table.Row>   
+                        )
                     }
                 </Table.Body>
             </Table>

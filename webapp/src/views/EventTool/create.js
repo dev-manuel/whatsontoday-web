@@ -1,5 +1,5 @@
 import React from 'react'
-import {Segment, Container, Header, Divider, Dropdown, Form, Button, Table, Icon, Loader} from 'semantic-ui-react'
+import GridColumn, { Segment, Container, Header, Divider, Dropdown, Form, Button, Grid } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import log from 'loglevel'
@@ -175,18 +175,30 @@ export default class Create extends React.Component {
                             searchQuery={locationSearchQuery}
                             loading={locationIsFetching}
                         />
-
-                        <ImageUploadFormField
-                            text='Add Images'
-                            onChange={this.handleSliderImageSelection.bind(this)}
-                        />
                         
-                        <FileTable
-                            fileEntryList={this.state.sliderImages}
-                        />
-                       
-
                         <Form.TextArea label={lang.description} placeholder={lang.descriptionPlaceholder} />
+
+                        <Divider horizontal>Images</Divider>
+
+                        <Grid columns={2}>
+                            <Grid.Column width={4}>
+                                <ImageUploadFormField
+                                    text={lang.sliderImageUploadButtonAddImage}
+                                    onChange={this.handleSliderImageSelection.bind(this)}
+                                    multiple
+                                />
+                            </Grid.Column>
+                            <Grid.Column width={12}>
+                                <FileTable
+                                    textFileName={lang.sliderImageFileTableFileName}
+                                    textIsUploaded={lang.sliderImageFileTableIsUploaded}
+                                    fileEntryList={this.state.sliderImages}
+                                />
+                            </Grid.Column>
+                        </Grid>
+
+                        
+
                         <Form.Button>{lang.submit}</Form.Button>
                     </Form>
 

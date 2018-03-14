@@ -37,7 +37,7 @@ export default class ImageUploadFormField extends React.Component {
                     type='file'
                     ref={(input) => this.input = input}
                     style={{ display: 'none' }}
-                    multiple
+                    multiple={this.props.multiple || false}
                     accept='image/*'
                 />
                 <Button

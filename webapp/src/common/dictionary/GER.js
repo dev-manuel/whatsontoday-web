@@ -122,6 +122,9 @@ export default {
             toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
             location: 'Veranstalutngsort',
             locationPlaceholder: 'Bitte Ort auswählen',
+            sliderImageUploadButtonAddImage: 'Bild hinzufügen',
+            sliderImageFileTableFileName: 'Dateiname',
+            sliderImageFileTableIsUploaded: 'Hochgeladen',
             description: 'Beschreibung',
             descriptionPlaceholder: 'Bitte Text eingeben...',
             submit: 'Abschicken'

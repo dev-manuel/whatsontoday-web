@@ -165,10 +165,6 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 #    name: image
 #    type: file
 #    description: The file to upload.
-#  - in: formData
-#    name: data
-#    schema:
-#      $ref: '#/definitions/whatson.model.forms.ImageForm.Data'
 #  responses:
 #    200:
 #      description: success

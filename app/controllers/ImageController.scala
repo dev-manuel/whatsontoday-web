@@ -67,7 +67,7 @@ class ImageController @Inject()(cc: ControllerComponents,
         val str = new FileInputStream(file)
         val bytes = IOUtils.toByteArray(str)
 
-        val img = Image(None,Json.parse(data).as[ImageForm.Data].name,bytes,contentType)
+        val img = Image(None,bytes,contentType)
 
         db.run(insertAndReturn[Image,ImageTable](image,img))
       }

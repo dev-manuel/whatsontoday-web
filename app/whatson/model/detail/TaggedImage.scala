@@ -3,7 +3,7 @@ package whatson.model.detail
 import play.api.libs.json._
 import whatson.model._
 
-case class TaggedImage(id: Option[Int], name: String, tag: Option[String]) extends HasCopy[TaggedImage] {
+case class TaggedImage(id: Option[Int], tag: Option[String]) extends HasCopy[TaggedImage] {
   def cpy(i: Option[Int]) = this.copy(id = i)
 }
 

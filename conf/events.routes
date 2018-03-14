@@ -84,6 +84,34 @@ GET      /:id                         controllers.EventController.getEvent(id: I
 GET      /nearby/:id                         controllers.EventController.getNearby(id: Int)
 
 ###
+#  summary: Query events other participants also particpate in
+#  description: This will return events sorted by most similar participants wich have not started yet
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#    default: 0
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
+#    default: 20
+#  responses:
+#    200:
+#      description: success
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.EventDetail'
+###
+GET      /alsoViewed/:id                         controllers.EventController.getSameViewed(id: Int)
+
+###
 #  summary: Delete an event
 #  parameters:
 #  - in: header

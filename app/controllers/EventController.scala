@@ -71,11 +71,25 @@ class EventController @Inject()(cc: ControllerComponents,
       case Some(e) => {
         val q = EventTable.event.join(LocationTable.location).on(_.locationId === _.id)
           .sortBy(y => geoDistance(e.location.latitude, e.location.longitude, y._2.latitude, y._2.longitude))
-        val s = q.map(_._1).filter(y => y.id =!= e.id && y.from >= currentTimestamp).queryPaged.detailed
+          .map(_._1).filter(y => y.id =!= e.id && y.from >= currentTimestamp)
+        val s = q.queryPaged.detailed
         returnPaged(s,q,db)
       }
       case None => Future(NotFound)
     }
+  }
+
+  def getSameViewed(id: Int) = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get events other participants also visit")
+
+    val q = ParticipantCountView.participantCount.filter(_.id === id.bind)
+      .join(EventTable.event).on(_.event_fk === _.id)
+      .sortBy(y => y._1.count).map(_._2)
+      .filter(y => y => y.id =!= e.id && y.from >= currentTimestamp)
+
+    val s = q.queryPaged.detailed
+
+    returnPaged(s,q,db)
   }
 
   def deleteEvent(id: Int) = organizerRequest(parse.default) { (request,organizer) =>

@@ -40,6 +40,12 @@ object Util extends Results {
     })
   }
 
+  def returnPagedNoCount[A](a: DBIOAction[Seq[A],NoStream,Nothing], db: Database)(implicit request: Request[_], ec: ExecutionContext, tjs: Writes[A]) = {
+    db.run(a).map(x => {
+      Ok(Json.toJson(x))
+    })
+  }
+
   implicit class QueryUtils[B,C](q: Query[B,C,Seq]) {
     def queryPaged[A,B,C](implicit request: Request[A]) = {
       val page = request.headers.get("X-Page").map(_.toInt).getOrElse(0)

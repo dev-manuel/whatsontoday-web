@@ -27,8 +27,9 @@ export default class Create extends React.Component {
         categoryValue: [],
         categoryOptions: [],
         categoryIsFetching: false,
-        from: null,
-        to: moment.now(),
+
+        fromValue: null,
+        toValue: null,
 
         locationIsFetching: false,
         locationOptions: [],
@@ -204,14 +205,32 @@ export default class Create extends React.Component {
                             </Form.Field>
                         </Form.Group>
 
-                        <DateSelectFormField
-                            placeholder={lang.fromPlaceholder}
-                            label={lang.from}
-                            minDate={moment()}
-                            selected={this.state.from}
-                            onChange={date => {this.setState({from: date})}}
-                            timeCaption={this.props.language.time.time}
-                        />
+                        <Form.TextArea label={lang.description} placeholder={lang.descriptionPlaceholder} />
+
+                        <Grid stackable columns={2}>
+                            <Grid.Column width={8}>
+                                <DateSelectFormField
+                                    placeholder={lang.fromPlaceholder}
+                                    label={lang.from}
+                                    minDate={moment()}
+                                    selected={this.state.fromValue}
+                                    onChange={date => {this.setState({fromValue: date})}}
+                                    timeCaption={this.props.language.time.time}
+                                    locale={this.props.language.time.locale}
+                                />
+                            </Grid.Column>
+                            <Grid.Column width={8}>
+                                <DateSelectFormField
+                                    placeholder={lang.toPlaceholder}
+                                    label={lang.to}
+                                    minDate={moment()}
+                                    selected={this.state.toValue}
+                                    onChange={date => {this.setState({toValue: date})}}
+                                    timeCaption={this.props.language.time.time}
+                                    locale={this.props.language.time.locale}
+                                />
+                            </Grid.Column>
+                        </Grid>
 
                         <LocationSelectFormField
                             options={locationOptions}
@@ -223,7 +242,6 @@ export default class Create extends React.Component {
                             loading={locationIsFetching}
                         />
                         
-                        <Form.TextArea label={lang.description} placeholder={lang.descriptionPlaceholder} />
 
                         <Divider horizontal>Images</Divider>
 

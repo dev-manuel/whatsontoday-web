@@ -13,6 +13,7 @@ export class DateSelector extends React.Component{
         log.debug('DateSelector#value', value);
         return (
             <Form.Input
+                className="DateSelectFormField_FormInput"
                 onClick={onClick}
                 value={value===''?'':`${value} Uhr`}
                 placeholder={plHolder}
@@ -22,7 +23,7 @@ export class DateSelector extends React.Component{
     }
 }
     
-export default ({selected, onChange, placeholder, label, timeCaption, minDate}) => {
+export default ({selected, onChange, placeholder, label, timeCaption, minDate, locale}) => {
     return(
         <DatePicker
             minDate={minDate}
@@ -35,6 +36,7 @@ export default ({selected, onChange, placeholder, label, timeCaption, minDate}) 
             dateFormat='ddd DD MMM YYYY - HH:mm'
             timeCaption={timeCaption}
             calendarClassName="DateSelectFormField_DatePicker"
+            locale={locale}
         />
     )
 }

@@ -528,4 +528,68 @@ class EventControllerSpec extends RestTestSuite {
       status(unparticipate2) mustBe BAD_REQUEST
     }
   }
+
+  "EventController GET nearby" should {
+    "return a list of events" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event4 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events/nearby/" + event1.id.getOrElse(-1))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.map(x => x.id) must contain (event2.id)
+      content.map(x => x.id) must contain (event3.id)
+      content.map(x => x.id) must contain (event4.id)
+    }
+
+    "not return the event itself" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event4 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events/nearby/" + event1.id.getOrElse(-1))).get
+
+      status(events) mustBe OK
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.map(x => x.id) must not contain (event1.id)
+    }
+
+    "sort by distance" in {
+      val location1 = Await.result(createLocation(), Duration.Inf)
+      val location2 = Await.result(createLocation(lat = 10.0f, long = 10.0f), Duration.Inf)
+      val location3 = Await.result(createLocation(lat = 10.0f, long = -20.0f), Duration.Inf)
+
+      val event1 = Await.result(createEvent(locationId = location1.id, from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event2 = Await.result(createEvent(locationId = location3.id, from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event3 = Await.result(createEvent(locationId = location2.id, from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event4 = Await.result(createEvent(locationId = location1.id, from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events/nearby/" + event1.id.getOrElse(-1))).get
+
+      status(events) mustBe OK
+
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.sortBy(x => x.location.distance(location1)) mustEqual content
+    }
+
+    "only return events in the future" in {
+      val event1 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event2 = Await.result(createEvent(from = new Timestamp(0, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event3 = Await.result(createEvent(from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+      val event4 = Await.result(createEvent(from = new Timestamp(4000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
+
+      val events = route(app, FakeRequest(GET, "/api/v1/events/nearby/" + event1.id.getOrElse(-1))).get
+
+      status(events) mustBe OK
+
+      val content = contentAsJson(events).as[List[EventDetail]]
+      content.map(x => x.id) must not contain (event2.id)
+      content.map(x => x.id) must contain (event3.id)
+      content.map(x => x.id) must contain (event4.id)
+    }
+  }
 }

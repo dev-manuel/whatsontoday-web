@@ -34,7 +34,7 @@ export default class Create extends React.Component {
         locationIsFetching: false,
         locationOptions: [],
         locationValue: null,
-        locationSearchQuery: '',
+        // locationSearchQuery: '',
 
         description: '',
         /**
@@ -93,7 +93,9 @@ export default class Create extends React.Component {
         getLocations(searchQuery, 0, 5)
             .then( data => {
                 const locationOptions = data.map( (locationEntry, index) => ({
-                    key: index, text: locationEntry.name, value: locationEntry.name
+                    key: index,
+                    text: locationEntry.name,
+                    value: locationEntry.id,
                 }))
                 log.debug('Create#fetchLocations#locationOptions', locationOptions);
 
@@ -111,9 +113,9 @@ export default class Create extends React.Component {
     }
     handleLocationChange(event, {value, ...rest}){
         log.debug('Create#handleLocationChange', value, rest);
+        
         this.setState({
             locationValue: value,
-            locationSearchQuery: value,
         })
     }
     handleLocationSearchChange(event, {searchQuery, ...rest}){
@@ -121,7 +123,6 @@ export default class Create extends React.Component {
         
         this.setState({
             locationIsFetching: true,
-            locationSearchQuery: searchQuery,
         }),
 
         this.fetchLocations(searchQuery);
@@ -175,7 +176,7 @@ export default class Create extends React.Component {
             locationIsFetching,
             locationOptions,
             locationValue,
-            locationSearchQuery,
+            // locationSearchQuery,
         } = this.state;
 
         return (
@@ -238,8 +239,9 @@ export default class Create extends React.Component {
                             placeholder={'Location'}
                             onChange={this.handleLocationChange.bind(this)}
                             onSearchChange={this.handleLocationSearchChange.bind(this)}
-                            searchQuery={locationSearchQuery}
+                            // searchQuery={locationSearchQuery}
                             loading={locationIsFetching}
+                            noResultsMessage={lang.noResults}                                    
                         />
                         
 

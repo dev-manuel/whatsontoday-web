@@ -3,7 +3,7 @@ import {Form, Dropdown} from 'semantic-ui-react'
 import log from 'loglevel'
 
 
-export default ({options, value, placeholder, onChange, onSearchChange, searchQuery, loading}) => {
+export default ({options, value, placeholder, onChange, onSearchChange, searchQuery, loading, noResultsMessage}) => {
     return (
         <React.Fragment>
             <Form.Field>
@@ -19,8 +19,9 @@ export default ({options, value, placeholder, onChange, onSearchChange, searchQu
                     onChange={onChange}
                     onSearchChange={onSearchChange}
                     search={ options => options} //Todo: Update search function to pass all query options (without additions)
-                    searchQuery={searchQuery}
+                    // searchQuery={searchQuery} // Todo: Store search query
                     loading={loading}
+                    noResultsMessage={noResultsMessage}
                 />
             </Form.Field>
         </React.Fragment>

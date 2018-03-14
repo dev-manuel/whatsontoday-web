@@ -3,10 +3,10 @@ import {Form, Dropdown} from 'semantic-ui-react'
 import log from 'loglevel'
 
 
-export default ({options, value, placeholder, onChange, onSearchChange, searchQuery, loading, noResultsMessage}) => {
+export default ({options, value, placeholder, onChange, onSearchChange, searchQuery, loading, noResultsMessage, error}) => {
     return (
         <React.Fragment>
-            <Form.Field>
+            <Form.Field error={error}>
                 <label>Location</label>
                 <Dropdown
                     fluid

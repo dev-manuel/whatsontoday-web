@@ -134,15 +134,11 @@ export const unparticipateToEvent = id => {
  * @param {[{id: number, name: string, parentId: number}]} images
  */
 export const createEvent = (name, description, locationId, from, to, images, categories) => {
-    return axios.post('/events', {
+    const location = locationId ? {id: locationId, name: 'void', latitude: 0, longitude: 0} : undefined;
+    const req = {
         name,
         description,
-        location: { //Todo: use all data!
-            id: locationId,
-            name: 'void',
-            latitude: 0,
-  	        longitude: 0
-        },
+        location,
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
         images,
@@ -151,7 +147,11 @@ export const createEvent = (name, description, locationId, from, to, images, cat
             name: 'void',
             parentId: 1,
         })),
-    }).then( response => {
+    }
+    log.debug('createEvent#req', req);  
+    
+    return axios.post('/events', req)
+        .then( response => {
             log.debug('createEvent#then', response);
             return response.data;
     })
@@ -168,15 +168,12 @@ export const createEvent = (name, description, locationId, from, to, images, cat
  * @param {[number]} images
  */
 export const updateEvent = (id, name, description, locationId, from, to, images, categories) => {
-    return axios.put('/events', {
+
+    const location = locationId ? {id: locationId, name: 'void', latitude: 0, longitude: 0} : undefined;
+    const req = {
         name,
         description,
-        location: {
-            id: locationId,
-            name: 'void',
-            latitude: 0,
-  	        longitude: 0
-        },
+        location,
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
         images,
@@ -185,7 +182,10 @@ export const updateEvent = (id, name, description, locationId, from, to, images,
             name: 'void',
             parentId: 1,
         })),
-    }).then( response => {
+    }
+    log.debug('updateEvent#req', req);    
+
+    return axios.put('/events', req).then( response => {
             log.debug('updateEvent#then', response);
             return response.data;
     })

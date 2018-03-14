@@ -27,6 +27,12 @@ import {setToken} from '../../common/api/'
 export default class Create extends React.Component {
 
     state = {
+        nameError: false,
+        descriptionError: false,
+        fromError: false,
+        toError: false,
+        locationError: false,
+
         nameValue: '',
         categoryValue: [],
         categoryOptions: [],
@@ -58,15 +64,8 @@ export default class Create extends React.Component {
         this.fetchCategory();
     }
 
-    validateInputs(){
-
-        return false; //Todo
-    }
-
     handleSubmit(){
-        log.debug.log('submit!')
-        if(this.validateInputs())
-            return
+        log.debug('submit!')
         
         const {
             nameValue,
@@ -84,15 +83,56 @@ export default class Create extends React.Component {
             sliderImages,
         } = this.state;
 
+        const parsedFrom = fromValue ? fromValue.toDate() : null;
+        const parsedTo = toValue ? toValue.toDate() : null;
+        const parsedThumbnailImage = (thumbnailImage && thumbnailImage.id) ? [{id: thumbnailImage.id, tag: 'thumbnail'}] : [];
+
+        setToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxLW9lbjZvSjN4WE9zb1VWS2I1S2RkUTZjT3Ywc2ZQTlVGeGJnZGpaRU85NytPa1pyRW1hT0RRc1FOK2l1Sms4K1I5eVo1YlROa3p6M0lLSEdOaTBXb2RcL2IxZ3RxWW5XdjR6MnlwdTVOTDlXZXEiLCJpc3MiOiJwbGF5LXNpbGhvdWV0dGUiLCJleHAiOjE1MjExMDM3ODYsImlhdCI6MTUyMTA2MDU4NiwianRpIjoiZDMwZDU0OGNiMzVlZTI0MjExZjE4Nzg0ODRhMzRhODE3N2UyNWEwZmQ3M2IyN2NkNTU0MzhjNTlkZTU3MTgwYjZiOGY5NGQxMzFjNDU0NzNhYTY3YWUwZWI1MTI2NmQ3MTljYTA0OTUwZDk0MjY4YzJjZjYwYzVkNDg0ZTU2Y2JiZTIwYjZlM2E0NWM4ZWNiNmNiOTk5NWVmMGIyYjZhZjU0ODcyYzMwMGQ0MjdmZjM3NzFkYWQ2NTUzOTQ5ZWQxMWU1YWIzYmZjM2IzOGZlZTRiM2UxOThkYmNiZDhhYzY0Mzg0ZDZkNDFjOGI0ZmJhOGViZGY2NGEyMDZmYjRjOCJ9.wQVMQNeHsoz5INQ9UDkfVn11TGDMeaLkeIOiLjwYezo');
+
         createEvent(nameValue, descriptionValue, locationValue,
-            fromValue.toDate(), toValue.toDate(),
-            sliderImages.map(fileEntry => ({id: fileEntry.id})).concat([{id: thumbnailImage.id, tag: 'thumbnail'}]),
+            parsedFrom, parsedTo,
+            sliderImages.map(fileEntry => ({id: fileEntry.id})).concat(parsedThumbnailImage),
             categoryValue.map(id => id))
             .then(data => {
                 log.debug('Create#handleSubmit#handleSubmit#data', data);
             })
             .catch(error => {
                 log.debug('Create#handleSubmit#handleSubmit#error', error);
+                const errorData = error.response.data;
+                let successful = true;
+
+                const formErrors = {
+                    nameError: false,
+                    descriptionError: false,
+                    fromError: false,
+                    toError: false,
+                    locationError: false,
+                }
+
+                if(errorData.name){
+                    formErrors.nameError = true;
+                    successful = false;
+                }
+                if(errorData.description){
+                    formErrors.descriptionError = true;
+                    successful = false;
+                }
+                if(errorData.from){
+                    formErrors.fromError = true;
+                    successful = false;
+                }
+                if(errorData.to){
+                    formErrors.toError = true;
+                    successful = false;
+                }
+                if(Object.keys(errorData).indexOf(keyName => keyName.startsWith('location') !== -1)){
+                    formErrors.locationError = true;
+                    successful = false;
+                }
+
+                this.setState(formErrors);
+                log.debug('Create#handleSubmit#handleSubmit#formErrors', formErrors);                
+                log.info('Submit successful:', successful);
             })
     }
 
@@ -269,6 +309,7 @@ export default class Create extends React.Component {
                     <Form onSubmit={this.handleSubmit.bind(this)}>
                         <Form.Group  widths='equal'>
                             <Form.Input
+                                error={this.state.nameError}
                                 label={lang.name}
                                 fluid
                                 placeholder={lang.namePlaceholder}
@@ -293,6 +334,7 @@ export default class Create extends React.Component {
                         </Form.Group>
 
                         <Form.TextArea
+                            error={this.state.descriptionError}
                             label={lang.description}
                             placeholder={lang.descriptionPlaceholder}
                             value={this.state.descriptionValue}
@@ -302,6 +344,7 @@ export default class Create extends React.Component {
                         <Grid stackable columns={2}>
                             <Grid.Column width={8}>
                                 <DateSelectFormField
+                                    error={this.state.fromError}
                                     placeholder={lang.fromPlaceholder}
                                     label={lang.from}
                                     minDate={moment()}
@@ -313,6 +356,7 @@ export default class Create extends React.Component {
                             </Grid.Column>
                             <Grid.Column width={8}>
                                 <DateSelectFormField
+                                    error={this.state.toError}
                                     placeholder={lang.toPlaceholder}
                                     label={lang.to}
                                     minDate={moment()}
@@ -325,6 +369,7 @@ export default class Create extends React.Component {
                         </Grid>
 
                         <LocationSelectFormField
+                            error={this.state.locationError}                        
                             options={locationOptions}
                             value={locationValue}
                             placeholder={'Location'}
@@ -379,6 +424,7 @@ export default class Create extends React.Component {
                         
 
                         <Form.Button
+                            type="submit"
                             color='green'
                         >{lang.submit}</Form.Button>
                     </Form>

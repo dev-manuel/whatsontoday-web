@@ -372,7 +372,7 @@ export default class Create extends React.Component {
                             error={this.state.locationError}                        
                             options={locationOptions}
                             value={locationValue}
-                            placeholder={'Location'}
+                            placeholder={lang.locationPlaceholder}
                             onChange={this.handleLocationChange.bind(this)}
                             onSearchChange={this.handleLocationSearchChange.bind(this)}
                             // searchQuery={locationSearchQuery}

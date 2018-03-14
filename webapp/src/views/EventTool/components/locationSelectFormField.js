@@ -15,7 +15,7 @@ export default ({options, value, placeholder, onChange, onSearchChange, searchQu
                     selection
                     options={options}
                     value={value}
-                    placeholder='Location'
+                    placeholder={placeholder}
                     onChange={onChange}
                     onSearchChange={onSearchChange}
                     search={ options => options} //Todo: Update search function to pass all query options (without additions)

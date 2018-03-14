@@ -1,6 +1,9 @@
 ### NoDocs ###
 GET    /                         controllers.HomeController.index
 
+### NoDocs ###
+GET    /web/*any                 controllers.HomeController.indexWeb(any: String)
+
 ->     /api/v1                   api.Routes
 
 # This is needed for the swagger-ui

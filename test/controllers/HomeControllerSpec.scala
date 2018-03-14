@@ -15,4 +15,18 @@ class HomeControllerSpec extends RestTestSuite {
       status(index) mustBe OK
     }
   }
+
+  "HomeController GET web" should {
+    "render the index page" in {
+      val index = route(app, FakeRequest(GET, "/web/login")).get
+
+      status(index) mustBe OK
+    }
+
+    "work for nested routes" in {
+      val index = route(app, FakeRequest(GET, "/web/event/5")).get
+
+      status(index) mustBe OK
+    }
+  }
 }

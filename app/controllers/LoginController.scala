@@ -162,7 +162,7 @@ class LoginController @Inject()(cc: ControllerComponents,
              case Left(result) => Future.successful(result)
              case Right(StatefulAuthInfo(authInfo,state)) => for {
                profile <- p.retrieveProfile(authInfo)
-               login <- loginService.save(profile)
+               login <- loginService.save(profile, userType.getOrElse("user"))
                authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
                authenticator <- silhouette.env.authenticatorService.create(profile.loginInfo)
                token <- silhouette.env.authenticatorService.init(authenticator)
@@ -176,7 +176,7 @@ class LoginController @Inject()(cc: ControllerComponents,
                  case _ =>
                }
                silhouette.env.eventBus.publish(LoginEvent(login, request))
-               Redirect("http://" + request.host + "?token=" + token)
+               Redirect("http://" + request.host + "?token=" + token + "&userType=" + userType.getOrElse("user"))
              }
            }
          case _ => Future.failed(new ProviderException(s"Cannot authenticate with unexpected social provider $provider"))

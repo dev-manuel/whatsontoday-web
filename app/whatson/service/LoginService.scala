@@ -16,6 +16,16 @@ trait LoginService extends IdentityService[Login] {
   def save(user: Login): Future[Login]
 
   /**
+    * Saves the social profile for a user.
+    *
+    * If a user exists for this profile then update the user, otherwise create a new user with the given profile.
+    *
+    * @param profile The social profile to save.
+    * @return The user for whom the profile was saved.
+    */
+  def save(profile: CommonSocialProfile): Future[Login]
+
+  /**
    * Saves the social profile for a user.
    *
    * If a user exists for this profile then update the user, otherwise create a new user with the given profile.
@@ -23,7 +33,7 @@ trait LoginService extends IdentityService[Login] {
    * @param profile The social profile to save.
    * @return The user for whom the profile was saved.
    */
-  def save(profile: CommonSocialProfile): Future[Login]
+  def save(profile: CommonSocialProfile, userType: String): Future[Login]
 
   def confirm(loginInfo: LoginInfo): Future[Option[Login]]
 

@@ -11,6 +11,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import java.sql.Timestamp
 import whatson.model.forms._
+import whatson.model._
 import whatson.model.forms.SignInForm._
 
 class AuthenticationSpec extends RestTestSuite {
@@ -53,6 +54,30 @@ class AuthenticationSpec extends RestTestSuite {
                                           Json.toJson(form))).get
 
       status(events) mustBe UNAUTHORIZED
+    }
+
+    "return the correct user type for organizers" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+
+      val form = SignInForm(organizer._1.email, "", true)
+      val login = route(app, FakeRequest(POST, "/api/v1/login/signIn", new Headers(List(("Content-Type","application/json"))),
+                                          Json.toJson(form))).get
+
+      status(login) mustBe OK
+      val content = contentAsJson(login).as[AccessToken]
+      content.userType mustEqual "organizer"
+    }
+
+    "return the correct user type for users" in {
+      val user = Await.result(createUser(), Duration.Inf)
+
+      val form = SignInForm(user._1.email, "", true)
+      val login = route(app, FakeRequest(POST, "/api/v1/login/signIn", new Headers(List(("Content-Type","application/json"))),
+                                         Json.toJson(form))).get
+
+      status(login) mustBe OK
+      val content = contentAsJson(login).as[AccessToken]
+      content.userType mustEqual "user"
     }
   }
 

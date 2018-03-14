@@ -80,16 +80,16 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   def getToken(login: Login): Future[String] = authenticatorService.create(LoginInfo("credentials", login.email))
     .flatMap(x => authenticatorService.init(x))
 
-
-  def createLogin(mail: String): Future[Login] = createLogin(mail,true)
-
-  def createLogin(mail: String, confirmed: Boolean): Future[Login] = {
+  def createLogin(mail: String, confirmed: Boolean = true, userType: String = "user"): Future[Login] = {
     val pwInfo = passwordHasher.hash("")
-    db.run(insertAndReturn[Login,LoginTable](LoginTable.login,Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, confirmed)))
+
+    val login = Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, confirmed, userType)
+
+    db.run(insertAndReturn[Login,LoginTable](LoginTable.login,login))
   }
 
   def createOrganizer(name: String = "testorganizer", mail: String = "testorganizer@test.de", confirmed: Boolean = true): Future[(Login,Organizer,String)] = {
-    createLogin(mail, confirmed).flatMap { case login =>
+    createLogin(mail, confirmed, "organizer").flatMap { case login =>
       db.run(insertAndReturn[Organizer,OrganizerTable](OrganizerTable.organizer,Organizer(None, name, login.id.getOrElse(-1), None)))
         .map(o => (login,o))
     }.flatMap { case (l,o) =>
@@ -98,7 +98,7 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   }
 
   def createUser(mail: String = "testuser@test.de"): Future[(Login,User,String)] = {
-    createLogin(mail).flatMap { case login =>
+    createLogin(mail, true, "user").flatMap { case login =>
       db.run(insertAndReturn[User,UserTable](UserTable.user,User(None, login.id.getOrElse(-1), None)))
         .map(o => (login,o))
     }.flatMap { case (l,o) =>

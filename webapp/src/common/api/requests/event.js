@@ -134,14 +134,23 @@ export const unparticipateToEvent = id => {
  * @param {[{id: number, name: string, parentId: number}]} images
  */
 export const createEvent = (name, description, locationId, from, to, images, categories) => {
-    return axios.post('/event', {
+    return axios.post('/events', {
         name,
         description,
-        locationId,
+        location: { //Todo: use all data!
+            id: locationId,
+            name: 'void',
+            latitude: 0,
+  	        longitude: 0
+        },
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
         images,
-        categories,
+        categories: categories.map(id => ({
+            id,
+            name: 'void',
+            parentId: 1,
+        })),
     }).then( response => {
             log.debug('createEvent#then', response);
             return response.data;
@@ -156,17 +165,26 @@ export const createEvent = (name, description, locationId, from, to, images, cat
  * @param {Date} from 
  * @param {Date} to
  * @param {[{id: number, tag: (string|undefined)}]} images
- * @param {[{id: number, name: string, parentId: number}]} images
+ * @param {[number]} images
  */
 export const updateEvent = (id, name, description, locationId, from, to, images, categories) => {
-    return axios.put('/event', {
+    return axios.put('/events', {
         name,
         description,
-        locationId,
+        location: {
+            id: locationId,
+            name: 'void',
+            latitude: 0,
+  	        longitude: 0
+        },
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
         images,
-        categories,
+        categories: categories.map(id => ({
+            id,
+            name: 'void',
+            parentId: 1,
+        })),
     }).then( response => {
             log.debug('updateEvent#then', response);
             return response.data;
@@ -177,7 +195,7 @@ export const updateEvent = (id, name, description, locationId, from, to, images,
  * @param {number} id 
  */
 export const deleteEvent = id => {
-    return axios.delete(`/event/${id}`)
+    return axios.delete(`/events/${id}`)
         .then( response => {
             log.debug('deleteEvent#then', response);
             return response.data;

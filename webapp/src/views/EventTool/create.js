@@ -11,8 +11,12 @@ import FileTable, {getIconByFileEntryStatus} from './components/fileTable'
 import {getCategories} from '../../common/api/requests/category'
 import {getLocations} from '../../common/api/requests/location'
 import {uploadImage} from '../../common/api/requests/image'
+import {createEvent} from '../../common/api/requests/event'
 
 import 'react-datepicker/dist/react-datepicker.css'
+
+
+import {setToken} from '../../common/api/'
 
 /**
  * @typedef {{status: FileEntryStatus, file: File, key: number, id: number}} FileEntry
@@ -23,7 +27,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 export default class Create extends React.Component {
 
     state = {
-        name: '',
+        nameValue: '',
         categoryValue: [],
         categoryOptions: [],
         categoryIsFetching: false,
@@ -36,7 +40,7 @@ export default class Create extends React.Component {
         locationValue: null,
         // locationSearchQuery: '',
 
-        description: '',
+        descriptionValue: '',
         /**
          * @type {FileEntry}
          */
@@ -52,6 +56,44 @@ export default class Create extends React.Component {
             categoryIsFetching: true,
         });
         this.fetchCategory();
+    }
+
+    validateInputs(){
+
+        return false; //Todo
+    }
+
+    handleSubmit(){
+        log.debug.log('submit!')
+        if(this.validateInputs())
+            return
+        
+        const {
+            nameValue,
+            categoryValue,
+            categoryOptions,
+            categoryIsFetching,
+            fromValue,
+            toValue,
+            locationIsFetching,
+            locationOptions,
+            locationValue,
+            // locationSearchQuery,
+            descriptionValue,
+            thumbnailImage,
+            sliderImages,
+        } = this.state;
+
+        createEvent(nameValue, descriptionValue, locationValue,
+            fromValue.toDate(), toValue.toDate(),
+            sliderImages.map(fileEntry => ({id: fileEntry.id})).concat([{id: thumbnailImage.id, tag: 'thumbnail'}]),
+            categoryValue.map(id => id))
+            .then(data => {
+                log.debug('Create#handleSubmit#handleSubmit#data', data);
+            })
+            .catch(error => {
+                log.debug('Create#handleSubmit#handleSubmit#error', error);
+            })
     }
 
     //
@@ -219,15 +261,20 @@ export default class Create extends React.Component {
         } = this.state;
 
         return (
-            <div>
             <Segment vertical>
                 <Container text>
                     <Header as='h3' style={{ fontSize: '2em' }}>{lang.addEvent}</Header>
                     <Divider/>
 
-                    <Form>
+                    <Form onSubmit={this.handleSubmit.bind(this)}>
                         <Form.Group  widths='equal'>
-                            <Form.Input label={lang.name} fluid placeholder={lang.namePlaceholder} />
+                            <Form.Input
+                                label={lang.name}
+                                fluid
+                                placeholder={lang.namePlaceholder}
+                                value={this.state.nameValue}
+                                onChange={(event, {value}) => this.setState({nameValue: value})}
+                            />
                             <Form.Field>
                                 <label>{lang.categories}</label>
                                 <Dropdown
@@ -245,7 +292,12 @@ export default class Create extends React.Component {
                             </Form.Field>
                         </Form.Group>
 
-                        <Form.TextArea label={lang.description} placeholder={lang.descriptionPlaceholder} />
+                        <Form.TextArea
+                            label={lang.description}
+                            placeholder={lang.descriptionPlaceholder}
+                            value={this.state.descriptionValue}
+                            onChange={(event, {value}) => this.setState({descriptionValue: value})}
+                        />
 
                         <Grid stackable columns={2}>
                             <Grid.Column width={8}>
@@ -326,12 +378,13 @@ export default class Create extends React.Component {
 
                         
 
-                        <Form.Button>{lang.submit}</Form.Button>
+                        <Form.Button
+                            color='green'
+                        >{lang.submit}</Form.Button>
                     </Form>
 
                 </Container>
             </Segment>
-            </div>
         )
     }
 }

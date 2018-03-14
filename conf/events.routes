@@ -56,6 +56,34 @@ GET      /   controllers.EventController.searchEvents(search: Option[String], lo
 GET      /:id                         controllers.EventController.getEvent(id: Int)
 
 ###
+#  summary: Query events nearby another event
+#  description: This will return events sorted by distance to the given event wich have not started yet.
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#    default: 0
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
+#    default: 20
+#  responses:
+#    200:
+#      description: success
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.EventDetail'
+###
+GET      /nearby/:id                         controllers.EventController.getNearby(id: Int)
+
+###
 #  summary: Delete an event
 #  parameters:
 #  - in: header

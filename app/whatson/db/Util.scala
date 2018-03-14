@@ -25,6 +25,8 @@ object Util extends Results {
   def lower(a: Rep[String]) =
     SimpleFunction[String]("lower").apply(Seq(a))
 
+  def currentTimestamp = SimpleLiteral[java.sql.Timestamp]("current_timestamp")
+
   def insertAndReturn[T, U <: HasID[T]](a: TableQuery[U], b: U#TableElementType) = {
     (a returning a.map(x => x.id) into ((event,i) => event.cpy(Some(i))) += b)
   }

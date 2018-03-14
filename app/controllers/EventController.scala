@@ -62,6 +62,22 @@ class EventController @Inject()(cc: ControllerComponents,
     returnPaged(s,q,db)
   }
 
+  def getNearby(id: Int) = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get events nearby another event")
+
+    val q = for(e <- EventTable.event if e.id === id.bind) yield e;
+
+    db.run(q.detailed).map(_.headOption).flatMap {
+      case Some(e) => {
+        val q = EventTable.event.join(LocationTable.location).on(_.locationId === _.id)
+          .sortBy(y => geoDistance(e.location.latitude, e.location.longitude, y._2.latitude, y._2.longitude))
+        val s = q.map(_._1).filter(y => y.id =!= e.id && y.from >= currentTimestamp).queryPaged.detailed
+        returnPaged(s,q,db)
+      }
+      case None => Future(NotFound)
+    }
+  }
+
   def deleteEvent(id: Int) = organizerRequest(parse.default) { (request,organizer) =>
     log.debug("Rest request to get event")
 

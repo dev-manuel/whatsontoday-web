@@ -7,7 +7,7 @@ import log from 'loglevel'
 import DateSelectFormField from './components/dateSelectFormField'
 import LocationSelectFormField from './components/locationSelectFormField'
 import ImageUploadFormField, {FileEntryStatus} from './components/imageUploadFormField'
-import FileTable from './components/fileTable'
+import FileTable, {getIconByFileEntryStatus} from './components/fileTable'
 import {getCategories} from '../../common/api/requests/category'
 import {getLocations} from '../../common/api/requests/location'
 import {uploadImage} from '../../common/api/requests/image'
@@ -128,13 +128,48 @@ export default class Create extends React.Component {
         this.fetchLocations(searchQuery);
     }
 
+    //
+    // ─── THUMBNAILIMAGE ─────────────────────────────────────────────────────────────
+    //
+    handleThumbnailImageSelection(event, files){
+        log.debug('handleThumbnailImageSelection#event', event);
+        log.debug('handleThumbnailImageSelection#files', files);
+
+        const thumbnailImage = {
+            status: FileEntryStatus.LOADING,
+            key: 0,
+            file: files.item(0),
+        }
+
+        this.setState({
+            thumbnailImage,
+        })
+
+        
+        uploadImage(thumbnailImage.file, `img${Math.floor(Math.random()*1000000)}`)
+            .then(data => {
+                this.setState((prevState, props) => {
+                    const newThumbnailImage = prevState.thumbnailImage;
+                    newThumbnailImage.status =  FileEntryStatus.UPLOADED;
+                    return {
+                        thumbnailImage: newThumbnailImage,
+                    }
+                })
+            })
+            .catch(error => {
+                log.debug('handleSliderImageSelection#error', error);
+            })
+    }
+    
+        
+
 
     //
     // ─── SLIDERIMAGES ───────────────────────────────────────────────────────────────
     //
     handleSliderImageSelection(event, files){
-        log.debug('ImageUploadFormField#event', event);
-        log.debug('ImageUploadFormField#files', files);
+        log.debug('handleSliderImageSelection#event', event);
+        log.debug('handleSliderImageSelection#files', files);
 
         const sliderImages = Array.from(files).map( (file, index) => ({
             status: FileEntryStatus.LOADING,
@@ -245,7 +280,27 @@ export default class Create extends React.Component {
                         />
                         
 
-                        <Divider horizontal>Images</Divider>
+                        <Divider horizontal>{lang.images}</Divider>
+
+                        <Grid columns={2}>
+                            <Grid.Column width={4}>
+                                <ImageUploadFormField
+                                    text={lang.thumbnailImageUploadButtonAddImage}
+                                    onChange={this.handleThumbnailImageSelection.bind(this)}
+                                    fluid
+                                />
+                            </Grid.Column>
+                            <Grid.Column width={12}>
+                                    {
+                                        this.state.thumbnailImage ?
+                                        (<p>
+                                            {this.state.thumbnailImage.file.name}
+                                            {getIconByFileEntryStatus(this.state.thumbnailImage.status)}
+                                        </p>) :
+                                        <p>{lang.thumbnailImageNoFileSelected}</p>
+                                    }
+                            </Grid.Column>
+                        </Grid>
 
                         <Grid columns={2}>
                             <Grid.Column width={4}>
@@ -253,6 +308,7 @@ export default class Create extends React.Component {
                                     text={lang.sliderImageUploadButtonAddImage}
                                     onChange={this.handleSliderImageSelection.bind(this)}
                                     multiple
+                                    fluid
                                 />
                             </Grid.Column>
                             <Grid.Column width={12}>

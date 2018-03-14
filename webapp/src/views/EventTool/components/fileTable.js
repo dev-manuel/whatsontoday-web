@@ -9,26 +9,29 @@ import {FileEntryStatus} from './imageUploadFormField'
  * @typedef {[FileEntry]} FileEntryList
  */
 
+export const getIconByFileEntryStatus = status =>{
+    switch(status){
+        case FileEntryStatus.LOCAL:
+            return <Icon name='close' color='red' size='large'/>
+        break;
+
+        case FileEntryStatus.LOADING:
+            return <Loader active inline size='small'/>
+        break;
+
+        case FileEntryStatus.UPLOADED:
+            return <Icon name='checkmark' color='green' size='large'/>
+        break;
+
+        default:
+        break;
+    }
+}
+
+
 export default class FileTable extends React.Component {
 
-    getIconByFileEntryStatus(status){
-        switch(status){
-            case FileEntryStatus.LOCAL:
-                return <Icon name='close' color='red' size='large'/>
-            break;
 
-            case FileEntryStatus.LOADING:
-                return <Loader active inline size='small'/>
-            break;
-
-            case FileEntryStatus.UPLOADED:
-                return <Icon name='checkmark' color='green' size='large'/>
-            break;
-
-            default:
-            break;
-        }
-    }
 
     render(){
         /**
@@ -41,7 +44,7 @@ export default class FileTable extends React.Component {
             <Table.Row key={index}>
                 <Table.Cell>{fileEntry.file.name}</Table.Cell>
                 <Table.Cell>
-                    {this.getIconByFileEntryStatus(fileEntry.status)}
+                    {getIconByFileEntryStatus(fileEntry.status)}
                 </Table.Cell>
             </Table.Row>
         ))

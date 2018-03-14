@@ -41,6 +41,7 @@ export default class ImageUploadFormField extends React.Component {
                     accept='image/*'
                 />
                 <Button
+                    fluid={this.props.fluid || false}
                     onClick={event => {
                         this.input.click();
                     }}

@@ -162,7 +162,7 @@ class LoginController @Inject()(cc: ControllerComponents,
              case Left(result) => Future.successful(result)
              case Right(StatefulAuthInfo(authInfo,state)) => for {
                profile <- p.retrieveProfile(authInfo)
-               login <- loginService.save(profile)
+               login <- loginService.save(profile, userType.getOrElse("user"))
                authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
                authenticator <- silhouette.env.authenticatorService.create(profile.loginInfo)
                token <- silhouette.env.authenticatorService.init(authenticator)

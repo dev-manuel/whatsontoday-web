@@ -38,6 +38,7 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <Create
                         {...routeProps}
+                        basePath={basePath}
                         language={language}
                     />
                 )}

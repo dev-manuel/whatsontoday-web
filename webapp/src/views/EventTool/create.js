@@ -87,14 +87,14 @@ export default class Create extends React.Component {
         const parsedTo = toValue ? toValue.toDate() : null;
         const parsedThumbnailImage = (thumbnailImage && thumbnailImage.id) ? [{id: thumbnailImage.id, tag: 'thumbnail'}] : [];
 
-        setToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxLW9lbjZvSjN4WE9zb1VWS2I1S2RkUTZjT3Ywc2ZQTlVGeGJnZGpaRU85NytPa1pyRW1hT0RRc1FOK2l1Sms4K1I5eVo1YlROa3p6M0lLSEdOaTBXb2RcL2IxZ3RxWW5XdjR6MnlwdTVOTDlXZXEiLCJpc3MiOiJwbGF5LXNpbGhvdWV0dGUiLCJleHAiOjE1MjExMDM3ODYsImlhdCI6MTUyMTA2MDU4NiwianRpIjoiZDMwZDU0OGNiMzVlZTI0MjExZjE4Nzg0ODRhMzRhODE3N2UyNWEwZmQ3M2IyN2NkNTU0MzhjNTlkZTU3MTgwYjZiOGY5NGQxMzFjNDU0NzNhYTY3YWUwZWI1MTI2NmQ3MTljYTA0OTUwZDk0MjY4YzJjZjYwYzVkNDg0ZTU2Y2JiZTIwYjZlM2E0NWM4ZWNiNmNiOTk5NWVmMGIyYjZhZjU0ODcyYzMwMGQ0MjdmZjM3NzFkYWQ2NTUzOTQ5ZWQxMWU1YWIzYmZjM2IzOGZlZTRiM2UxOThkYmNiZDhhYzY0Mzg0ZDZkNDFjOGI0ZmJhOGViZGY2NGEyMDZmYjRjOCJ9.wQVMQNeHsoz5INQ9UDkfVn11TGDMeaLkeIOiLjwYezo');
-
         createEvent(nameValue, descriptionValue, locationValue,
             parsedFrom, parsedTo,
             sliderImages.map(fileEntry => ({id: fileEntry.id})).concat(parsedThumbnailImage),
             categoryValue.map(id => id))
             .then(data => {
                 log.debug('Create#handleSubmit#handleSubmit#data', data);
+
+                this.props.history.push(`${this.props.basePath}/successful?topic=create_event`)
             })
             .catch(error => {
                 log.debug('Create#handleSubmit#handleSubmit#error', error);

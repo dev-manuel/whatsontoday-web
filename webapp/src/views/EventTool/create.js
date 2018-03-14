@@ -8,6 +8,7 @@ import DateSelectFormField from './components/dateSelectFormField'
 import LocationSelectFormField from './components/locationSelectFormField'
 import ImageUploadFormField, {FileEntryStatus} from './components/imageUploadFormField'
 import FileTable from './components/fileTable'
+import {getCategories} from '../../common/api/requests/category'
 import {getLocations} from '../../common/api/requests/location'
 import {uploadImage} from '../../common/api/requests/image'
 
@@ -23,7 +24,9 @@ export default class Create extends React.Component {
 
     state = {
         name: '',
-        categories: [],
+        categoryValue: [],
+        categoryOptions: [],
+        categoryIsFetching: false,
         from: null,
         to: moment.now(),
 
@@ -42,6 +45,45 @@ export default class Create extends React.Component {
          */
         sliderImages: [],
     }
+
+    componentDidMount(){
+        this.setState({
+            categoryIsFetching: true,
+        });
+        this.fetchCategory();
+    }
+
+    //
+    // ─── CATEGORY ─────────────────────────────────────────────────────────────────
+    //
+    fetchCategory(){
+        getCategories()
+            .then(data =>  {
+                const categoryOptions = data
+                    .filter(category => category.id!==1)
+                    .map((category, index) => ({
+                        key: category.id,
+                        text: category.name,
+                        value: category.id,
+                    }))
+                log.debug('Create#fetchCategory#categoryOptions', categoryOptions);
+                
+                this.setState({
+                    categoryOptions,
+                    categoryIsFetching: false,
+                })
+
+            })
+            .catch(error => {
+                log.debug('Create#fetchCategory#error', error);
+            })
+    }
+    handleCategoryChange(event, {value, ...rest}){
+        this.setState({
+            categoryValue: value,
+        })
+    }
+    
 
     //
     // ─── LOCATION ───────────────────────────────────────────────────────────────────
@@ -126,12 +168,6 @@ export default class Create extends React.Component {
     
 
     render(){
-        const categoryOptions = [{
-            key: 'party',
-            value: 'party',
-            text: 'party',
-        }]
-
         const lang = this.props.language.eventTool.create;
 
         const {
@@ -153,7 +189,18 @@ export default class Create extends React.Component {
                             <Form.Input label={lang.name} fluid placeholder={lang.namePlaceholder} />
                             <Form.Field>
                                 <label>{lang.categories}</label>
-                                <Dropdown placeholder={lang.categoriesPlaceholder} fluid multiple search selection options={categoryOptions} />
+                                <Dropdown
+                                    placeholder={lang.categoriesPlaceholder}
+                                    onChange={this.handleCategoryChange.bind(this)}
+                                    fluid
+                                    multiple
+                                    // search
+                                    selection
+                                    selectedLabel={null} //No label selected
+                                    options={this.state.categoryOptions}
+                                    loading={this.state.categoryIsFetching}
+                                    noResultsMessage={lang.noResults}                                    
+                                />
                             </Form.Field>
                         </Form.Group>
 

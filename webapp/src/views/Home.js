@@ -35,8 +35,8 @@ const Home = ({language}) => (
         // Todo: Use dictionary!
         <div>
             <Slider title='Education' language={language}/>
-            <CategoryTileTable categoryList={categoryList} language={language}/>
-            <EvenTileTable eventList={eventList} language={language}/>
+            {/* <CategoryTileTable categoryList={categoryList} language={language}/>
+            <EvenTileTable eventList={eventList} language={language}/> */}
         </div>
 )
 

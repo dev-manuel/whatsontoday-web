@@ -111,6 +111,7 @@ export default {
     },
     eventTool: {
         create: {
+            noResults: 'Keine Ergebnisse gefunden...',
             addEvent: 'Neues Event hinzufügen',
             name: 'Titel',
             namePlaceholder: 'Bitte Title eingeben...',

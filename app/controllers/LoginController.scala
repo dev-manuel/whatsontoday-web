@@ -176,7 +176,7 @@ class LoginController @Inject()(cc: ControllerComponents,
                  case _ =>
                }
                silhouette.env.eventBus.publish(LoginEvent(login, request))
-               Redirect("http://" + request.host + "?token=" + token)
+               Redirect("http://" + request.host + "?token=" + token + "&userType=" + userType.getOrElse("user"))
              }
            }
          case _ => Future.failed(new ProviderException(s"Cannot authenticate with unexpected social provider $provider"))

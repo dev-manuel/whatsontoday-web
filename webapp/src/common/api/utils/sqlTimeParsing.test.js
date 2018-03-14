@@ -3,7 +3,7 @@ import {sqlTimestampToDate, dateToSqlTimestamp} from './sqlTimeParsing'
 
 
 describe('sqlTimeToDate', () => {
-    it('should return the correct values', () => {
+     it('should return the correct values', () => {
         const examples = [
             ['2008-11-11 13:23:44', new Date('11 Nov 2008 13:23:44 GMT')],
             ['1970-01-01 00:00:00', new Date('01 Jan 1970 00:00:00 GMT')],
@@ -30,6 +30,11 @@ describe('sqlTimeToDate', () => {
 })
 
 describe('dateToSqlTimestamp', () => {
+    it('should return empty string if it received null or undefined', () => {
+        expect(dateToSqlTimestamp(null)).toEqual('');
+        expect(dateToSqlTimestamp(undefined)).toEqual('');
+    })
+
     it('should return the correct values', () => {
         const examples = [
             [new Date('11 Nov 2008 13:23:44 GMT'), '2008-11-11 13:23:44'],

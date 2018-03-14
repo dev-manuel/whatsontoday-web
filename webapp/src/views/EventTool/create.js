@@ -5,6 +5,7 @@ import moment from 'moment'
 import log from 'loglevel'
 
 import DateSelectFormField from './components/dateSelectFormField'
+import LocationSelectFormField from './components/locationSelectFormField'
 import {getLocations} from '../../common/api/requests/location'
 import {uploadImage} from '../../common/api/requests/image'
 
@@ -12,79 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 
 
-export class LocationSelector extends React.Component {
 
-    state = {
-        isFetching: false,
-        locationOptions: [],
-        value: null,
-        searchQuery: ''
-    }
-
-    handleChange(event, {value, ...rest}){
-        log.debug('LocationSelector#handleChange', value, rest);
-        this.setState({
-            value: value,
-            searchQuery: value,
-        })
-    }
-
-    handleAddition = (event, {value, ...rest}) => {
-        log.debug('LocationSelector#handleAddition', value, rest);
-    }
-
-    handleSearchChange(event,data){
-        log.debug('LocationSelector#handleSearchChange', data);
-        
-        this.setState({
-            isFetching: true,
-            searchQuery: data.searchQuery,
-        }),
-
-        this.fetchLocations(data.searchQuery);
-    }
-
-
-    fetchLocations( searchQuery){
-        getLocations(searchQuery, 0, 5)
-            .then( data => {
-                this.setState({
-                    isFetching: false,
-                    locationOptions: data.map( (locationEntry, index) => ({
-                        key: index, text: locationEntry.name, value: locationEntry.name
-                    })),
-            })
-        })
-    }
-
-
-    render(){
-        const {value, locationOptions, isFetching, searchQuery} = this.state;
-        log.debug('LocationSelector#render', locationOptions);
-
-        return (
-            <React.Fragment>
-                <Form.Field>
-                    <label>Location</label>
-                    <Dropdown
-                        fluid
-                        allowAdditions
-                        additionLabel={<i style={{ color: 'blue' }}>Location hinzufügen: </i>}
-                        selection
-                        options={locationOptions}
-                        value={value}
-                        placeholder='Location'
-                        onChange={this.handleChange.bind(this)}
-                        onSearchChange={this.handleSearchChange.bind(this)}
-                        search //Todo: Update search function to pass all query options (without additions)
-                        searchQuery={searchQuery}
-                        loading={isFetching}
-                    />
-                </Form.Field>
-            </React.Fragment>
-        )
-    }
-}
 
 /**
  * @readonly
@@ -201,7 +130,12 @@ export default class Create extends React.Component {
         categories: [],
         from: null,
         to: moment.now(),
-        location: {},
+
+        locationIsFetching: false,
+        locationOptions: [],
+        locationValue: null,
+        locationSearchQuery: '',
+
         description: '',
         /**
          * @type {FileEntry}
@@ -213,7 +147,51 @@ export default class Create extends React.Component {
         sliderImages: [],
     }
 
+    //
+    // ─── LOCATION ───────────────────────────────────────────────────────────────────
+    //
+    fetchLocations( searchQuery){
+        getLocations(searchQuery, 0, 5)
+            .then( data => {
+                const locationOptions = data.map( (locationEntry, index) => ({
+                    key: index, text: locationEntry.name, value: locationEntry.name
+                }))
+                log.debug('Create#fetchLocations#locationOptions', locationOptions);
+                
+                this.setState({
+                    locationIsFetching: false,
+                    locationOptions,
+                })
+            })
+            .catch(error => {
+                log.debug('Create#fetchLocations#error', error);
+                this.setState({
+                    locationIsFetching: false,
+                })
+            })
+    }
+    handleLocationChange(event, {value, ...rest}){
+        log.debug('Create#handleLocationChange', value, rest);
+        this.setState({
+            locationValue: value,
+            locationSearchQuery: value,
+        })
+    }
+    handleLocationSearchChange(event, {searchQuery, ...rest}){
+        log.debug('Create#handleLocationSearchChange', searchQuery, rest);
+        
+        this.setState({
+            locationIsFetching: true,
+            locationSearchQuery: searchQuery,
+        }),
 
+        this.fetchLocations(searchQuery);
+    }
+
+
+    //
+    // ─── SLIDERIMAGES ───────────────────────────────────────────────────────────────
+    //
     handleSliderImageSelection(event, files){
         log.debug('ImageUploadFormField#event', event);
         log.debug('ImageUploadFormField#files', files);
@@ -260,6 +238,13 @@ export default class Create extends React.Component {
 
         const lang = this.props.language.eventTool.create;
 
+        const {
+            locationIsFetching,
+            locationOptions,
+            locationValue,
+            locationSearchQuery,
+        } = this.state;
+
         return (
             <div>
             <Segment vertical>
@@ -285,7 +270,15 @@ export default class Create extends React.Component {
                             timeCaption={this.props.language.time.time}
                         />
 
-                        <LocationSelector />
+                        <LocationSelectFormField
+                            options={locationOptions}
+                            value={locationValue}
+                            placeholder={'Location'}
+                            onChange={this.handleLocationChange.bind(this)}
+                            onSearchChange={this.handleLocationSearchChange.bind(this)}
+                            searchQuery={locationSearchQuery}
+                            loading={locationIsFetching}
+                        />
 
                         <ImageUploadFormField
                             text='Add Images'

@@ -19,7 +19,7 @@ import whatson.auth._
 import whatson.service._
 import whatson.model.forms._
 import whatson.util.FormErrorJson._
-
+import java.sql.Timestamp
 
 /**
  * This Controller handles API Requests concerning events
@@ -47,16 +47,48 @@ class EventController @Inject()(cc: ControllerComponents,
     })
   }
 
-  def searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort: Option[String], sortDir: Boolean) = Action.async { implicit request: Request[AnyContent] =>
+  def searchEvents(search: Option[String], location: Option[Int], category: Option[Int],
+                   sort: Option[String], sortDir: Boolean, from: Option[Timestamp], to: Option[Timestamp]) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to search events")
 
     val q = for {
       e <- event if similar(e.name,search.getOrElse("").bind) || search.getOrElse("").bind === ""
                  if e.categories.filter(_.id === category.getOrElse(-1)).exists || category.getOrElse(-1).bind === -1
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
+                 if e.from >= from.getOrElse(new Timestamp(0,0,0,0,0,0,0)) && e.from <= to.getOrElse(new Timestamp(4000,0,0,0,0,0,0))
     } yield e
 
     val s = q.sortColumn(sort,sortDir).queryPaged.detailed
+    returnPaged(s,q,db)
+  }
+
+  def getNearby(id: Int) = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get events nearby another event")
+
+    val q = for(e <- EventTable.event if e.id === id.bind) yield e;
+
+    db.run(q.detailed).map(_.headOption).flatMap {
+      case Some(e) => {
+        val q = EventTable.event.join(LocationTable.location).on(_.locationId === _.id)
+          .sortBy(y => geoDistance(e.location.latitude, e.location.longitude, y._2.latitude, y._2.longitude))
+          .map(_._1).filter(y => y.id =!= e.id && y.from >= currentTimestamp)
+        val s = q.queryPaged.detailed
+        returnPaged(s,q,db)
+      }
+      case None => Future(NotFound)
+    }
+  }
+
+  def getSameViewed(id: Int) = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get events other participants also visit")
+
+    val q = ParticipantCountView.participantCount.filter(_.id === id.bind)
+      .join(EventTable.event).on(_.event_fk === _.id)
+      .sortBy(y => y._1.count.desc).map(_._2)
+      .filter(y => y.id =!= id.bind && y.from >= currentTimestamp)
+
+    val s = q.queryPaged.detailed
+
     returnPaged(s,q,db)
   }
 

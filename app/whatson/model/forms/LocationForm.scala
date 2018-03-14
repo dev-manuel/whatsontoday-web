@@ -9,7 +9,10 @@ object LocationForm {
     "id" -> optional(number(min=1)),
     "name" -> nonEmptyText,
     "latitude" -> bigDecimal.transform(x => x.toFloat,(x: Float) => BigDecimal(x)),
-    "longitude" -> bigDecimal.transform(x => x.toFloat,(x: Float) => BigDecimal(x))
+    "longitude" -> bigDecimal.transform(x => x.toFloat,(x: Float) => BigDecimal(x)),
+    "country" -> nonEmptyText,
+    "city" -> nonEmptyText,
+    "street" -> nonEmptyText
   )(Location.apply)(x => Location.unapply(x))
   val form = Form(map)
 }

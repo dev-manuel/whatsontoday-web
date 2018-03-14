@@ -25,6 +25,8 @@ object Util extends Results {
   def lower(a: Rep[String]) =
     SimpleFunction[String]("lower").apply(Seq(a))
 
+  def currentTimestamp = SimpleLiteral[java.sql.Timestamp]("current_timestamp")
+
   def insertAndReturn[T, U <: HasID[T]](a: TableQuery[U], b: U#TableElementType) = {
     (a returning a.map(x => x.id) into ((event,i) => event.cpy(Some(i))) += b)
   }
@@ -35,6 +37,12 @@ object Util extends Results {
   def returnPaged[A,B,C](a: DBIOAction[Seq[A],NoStream,Nothing], q: Query[B,C,Seq], db: Database)(implicit request: Request[_], ec: ExecutionContext, tjs: Writes[A]) = {
     db.run(a).zip(db.run(q.length.result)).map(x => {
       Ok(Json.toJson(x._1)).withHeaders("X-Number-Items" -> x._2.toString())
+    })
+  }
+
+  def returnPagedNoCount[A](a: DBIOAction[Seq[A],NoStream,Nothing], db: Database)(implicit request: Request[_], ec: ExecutionContext, tjs: Writes[A]) = {
+    db.run(a).map(x => {
+      Ok(Json.toJson(x))
     })
   }
 

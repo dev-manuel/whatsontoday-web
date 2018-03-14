@@ -132,6 +132,10 @@ export default {
             description: 'Beschreibung',
             descriptionPlaceholder: 'Bitte Text eingeben...',
             submit: 'Abschicken'
-        }
+        },
+        successful: {
+            createEvent: 'Event erfolgreich erstellt',
+            default: 'Aktion erfolgreich ausgeführt',
+        },
     }
 }

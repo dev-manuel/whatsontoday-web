@@ -6,12 +6,14 @@ import Create from './create'
 import Update from './update'
 import Delete from './delete'
 import NotFound from '../404'
+import Successful from './successful';
 
 
 export const eventToolLinks = {
     create: 'create',
     update: 'update',
     delete: 'delete',
+    successful: 'successful',
 }
 
 export default ({match, language, setLoginData}) => {
@@ -68,6 +70,17 @@ export default ({match, language, setLoginData}) => {
                 path={`${basePath}/${eventToolLinks.delete}`}
                 render={routeProps => (
                     <Delete
+                        {...routeProps}
+                        language={language}
+                    />
+                )}
+            />
+
+            {/* Successful */}
+            <Route
+                path={`${basePath}/${eventToolLinks.successful}`}
+                render={routeProps => (
+                    <Successful
                         {...routeProps}
                         language={language}
                     />

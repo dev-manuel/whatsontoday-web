@@ -6,121 +6,17 @@ import log from 'loglevel'
 
 import DateSelectFormField from './components/dateSelectFormField'
 import LocationSelectFormField from './components/locationSelectFormField'
+import ImageUploadFormField, {FileEntryStatus} from './components/imageUploadFormField'
+import FileTable from './components/fileTable'
 import {getLocations} from '../../common/api/requests/location'
 import {uploadImage} from '../../common/api/requests/image'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-
-
-
-
-/**
- * @readonly
- * @enum {string}
- */
-export const FileEntryStatus = {
-    LOCAL: 'local',
-    LOADING: 'loading',
-    UPLOADED: 'uploaded',
-}
-
 /**
  * @typedef {{status: FileEntryStatus, file: File, key: number}} FileEntry
  * @typedef {[FileEntry]} FileEntryList
  */
-
-export class ImageUploadFormField extends React.Component {
-
-    componentDidMount(){
-        this.input.onchange = (event => {
-            
-            if(this.props.onChange instanceof Function){
-                this.props.onChange(event, this.input.files);
-            }else{
-                log.warn('onChange is not a function');
-            }
-        })
-    }
-
-    render() {
-        return (
-            <div>
-                <input
-                    type='file'
-                    ref={(input) => this.input = input}
-                    style={{ display: 'none' }}
-                    multiple
-                    accept='image/*'
-                />
-                <Button
-                    onClick={event => {
-                        this.input.click();
-                    }}
-                >
-                    {this.props.text}
-                </Button>
-            </div>
-        );
-    }
-}
-
-class FileTable extends React.Component {
-
-    getIconByFileEntryStatus(status){
-        switch(status){
-            case FileEntryStatus.LOCAL:
-                return <Icon name='close' color='red' size='large'/>
-            break;
-
-            case FileEntryStatus.LOADING:
-                return <Loader active inline size='small'/>
-            break;
-
-            case FileEntryStatus.UPLOADED:
-                return <Icon name='checkmark' color='green' size='large'/>
-            break;
-
-            default:
-            break;
-        }
-    }
-
-    render(){
-        /**
-         * @type {FileEntryList}
-         */
-        const fileEntryList = this.props.fileEntryList;
-        log.debug('FileTable#fileEntryList', fileEntryList);
-
-        
-
-        return (
-            <Table fixed>
-
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>FileName</Table.HeaderCell>
-                        <Table.HeaderCell>Is Uploaded</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-        
-                <Table.Body>
-                    {
-                        fileEntryList.map((fileEntry, index) => (
-                            <Table.Row key={index}>
-                                <Table.Cell>{fileEntry.file.name}</Table.Cell>
-                                <Table.Cell>
-                                    {this.getIconByFileEntryStatus(fileEntry.status)}
-                                </Table.Cell>
-                            </Table.Row>
-                        ))
-                    }
-                </Table.Body>
-            </Table>
-        )
-    }
-}
 
 
 export default class Create extends React.Component {
@@ -157,7 +53,7 @@ export default class Create extends React.Component {
                     key: index, text: locationEntry.name, value: locationEntry.name
                 }))
                 log.debug('Create#fetchLocations#locationOptions', locationOptions);
-                
+
                 this.setState({
                     locationIsFetching: false,
                     locationOptions,

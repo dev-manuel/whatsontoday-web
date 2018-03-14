@@ -15,7 +15,7 @@ import {uploadImage} from '../../common/api/requests/image'
 import 'react-datepicker/dist/react-datepicker.css'
 
 /**
- * @typedef {{status: FileEntryStatus, file: File, key: number}} FileEntry
+ * @typedef {{status: FileEntryStatus, file: File, key: number, id: number}} FileEntry
  * @typedef {[FileEntry]} FileEntryList
  */
 
@@ -138,6 +138,7 @@ export default class Create extends React.Component {
         const thumbnailImage = {
             status: FileEntryStatus.LOADING,
             key: 0,
+            id: null,
             file: files.item(0),
         }
 
@@ -151,6 +152,7 @@ export default class Create extends React.Component {
                 this.setState((prevState, props) => {
                     const newThumbnailImage = prevState.thumbnailImage;
                     newThumbnailImage.status =  FileEntryStatus.UPLOADED;
+                    newThumbnailImage.id = data.id;
                     return {
                         thumbnailImage: newThumbnailImage,
                     }
@@ -174,6 +176,7 @@ export default class Create extends React.Component {
         const sliderImages = Array.from(files).map( (file, index) => ({
             status: FileEntryStatus.LOADING,
             key: index,
+            id: null,
             file,
         }));
 
@@ -191,6 +194,7 @@ export default class Create extends React.Component {
                         } else {
                             const newSliderImages = prevState.sliderImages;
                             newSliderImages[index].status = FileEntryStatus.UPLOADED;
+                            newSliderImages[index].id = data.id;
                             return {
                                 sliderImages: newSliderImages,
                             }

@@ -5,7 +5,7 @@ import log from 'loglevel'
 import {FileEntryStatus} from './imageUploadFormField'
 
 /**
- * @typedef {{status: FileEntryStatus, file: File, key: number}} FileEntry
+ * @typedef {{status: FileEntryStatus, file: File, key: number, id: number}} FileEntry
  * @typedef {[FileEntry]} FileEntryList
  */
 

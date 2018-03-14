@@ -3,7 +3,7 @@ import {Button} from 'semantic-ui-react'
 import log from 'loglevel'
 
 /**
- * @typedef {{status: FileEntryStatus, file: File, key: number}} FileEntry
+ * @typedef {{status: FileEntryStatus, file: File, key: number, id: number}} FileEntry
  * @typedef {[FileEntry]} FileEntryList
  */
 

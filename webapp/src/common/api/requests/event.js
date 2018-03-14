@@ -130,14 +130,16 @@ export const unparticipateToEvent = id => {
  * @param {number} locationId 
  * @param {Date} from 
  * @param {Date} to
+ * @param {[{id: number, tag: (string|undefined)}]} images
  */
-export const createEvent = (name, description, locationId, from, to) => {
+export const createEvent = (name, description, locationId, from, to, images) => {
     return axios.post('/event', {
         name,
         description,
         locationId,
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
+        images,
     }).then( response => {
             log.debug('createEvent#then', response);
             return response.data;
@@ -151,14 +153,16 @@ export const createEvent = (name, description, locationId, from, to) => {
  * @param {number} locationId 
  * @param {Date} from 
  * @param {Date} to
+ * @param {[{id: number, tag: (string|undefined)}]} images
  */
-export const updateEvent = (id, name, description, locationId, from, to) => {
+export const updateEvent = (id, name, description, locationId, from, to, images) => {
     return axios.put('/event', {
         name,
         description,
         locationId,
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
+        images,
     }).then( response => {
             log.debug('updateEvent#then', response);
             return response.data;

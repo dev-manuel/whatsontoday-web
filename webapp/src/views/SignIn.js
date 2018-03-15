@@ -66,9 +66,10 @@ export default class SignInView extends React.Component {
         redirectTo: null,
     }
 
-    getRedirectLink(locationState){
+    getRedirectLink(locationState, isOrganizer){
         if(locationState){ // If the whole locationState Object is undefined
-            if(locationState.organizerRightsNeeded){ // If the organizerRightsNeeded is set to true (or not undefined)
+            // If the organizerRightsNeeded is set to true (or not undefined) and the user not an organizer
+            if(locationState.organizerRightsNeeded && !isOrganizer){
                 // Redirects the user to the NoAccess Page (with the hint that needs organizer rights)
                 return '/no_access?reason=organizer'
             }else{
@@ -89,7 +90,7 @@ export default class SignInView extends React.Component {
     handleSuccessfulSignIn(loginData){
         
         const locationState = this.props.location.state;
-        const redirectTo = this.getRedirectLink(locationState);
+        const redirectTo = this.getRedirectLink(locationState, loginData.isOrganizer);
         log.debug('SignInView#redirectTo', redirectTo);
 
         this.props.setLoginData(loginData, redirectTo);

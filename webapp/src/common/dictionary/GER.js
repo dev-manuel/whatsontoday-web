@@ -7,6 +7,7 @@ export default {
     time: {
         locale: 'de',
         to: 'bis',
+        time: 'Uhrzeit'
     },
     header: {
         blog: 'Blog',
@@ -68,7 +69,8 @@ export default {
         userAlreadyExistsError: 'Es existiert bereits ein nutzer mit dieser E-Mail Adresse',
     },
     signIn: {
-        message: 'Anmelden',        
+        message: 'Anmelden',
+        redirectMessage: 'Du musst angemeldet sein um diese Seite zu besuchen',       
         email: 'E-Mail Adresse',
         password: 'Passwort',
         rememberMe: 'Eingeloggt bleiben',
@@ -78,6 +80,18 @@ export default {
         errorHeading: 'Anmeldung fehlgeschlagen!',
         errorDescription: 'Nutzername oder Passwort ist falsch', 
         alreadyLoggedIn: 'Du bist bereits angemeldet!',
+    },
+    options: {
+        options: 'Einstellungen',
+        here: 'Hier',
+        yes: 'Ja',
+        no: 'Nein',
+
+        newPassword: 'Neues Passwort festlegen:',
+
+        deleteAccount: 'Account löschen:',
+        deleteAccountMessage: 'Möchtest du deinen Account wirklich löschen?',
+        deleteAccountDescription: 'Wenn du mit "Ja" bestätigst wird dein Account unwideruflich gelöscht!',
     },
     modal:{
         heading: 'Oooops',
@@ -89,5 +103,39 @@ export default {
     },
     notFound:{
         message: 'Wir haben leider keine Ergebnisse für diese URL gefunden :('
+    },
+    noAccess: {
+        backToHome: 'Zurück zur Startseite',
+        organizer: 'Du musst als Veranstalter registriert sein, um diese Seite aufrufen zu können.',
+        default: 'Du hast leider keine Berechtigung diese Seite aufzurufen.',
+    },
+    eventTool: {
+        create: {
+            noResults: 'Keine Ergebnisse gefunden...',
+            addEvent: 'Neues Event hinzufügen',
+            name: 'Titel',
+            namePlaceholder: 'Bitte Title eingeben...',
+            categories: 'Kategorien',
+            categoriesPlaceholder: 'Bitte Kategorien auswählen...',
+            from: 'Beginn',
+            fromPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
+            to: 'Ende',
+            toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
+            location: 'Veranstalutngsort',
+            locationPlaceholder: 'Bitte Ort auswählen',
+            images: 'Bilder',
+            thumbnailImageUploadButtonAddImage: 'Thumbnail hinzufügen',
+            thumbnailImageNoFileSelected: 'Keine Deitei ausgewählt',
+            sliderImageUploadButtonAddImage: 'Bild hinzufügen',
+            sliderImageFileTableFileName: 'Dateiname',
+            sliderImageFileTableIsUploaded: 'Hochgeladen',
+            description: 'Beschreibung',
+            descriptionPlaceholder: 'Bitte Text eingeben...',
+            submit: 'Abschicken'
+        },
+        successful: {
+            createEvent: 'Event erfolgreich erstellt',
+            default: 'Aktion erfolgreich ausgeführt',
+        },
     }
 }

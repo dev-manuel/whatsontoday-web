@@ -1,3 +1,5 @@
+import log from 'loglevel'
+
 import {axios} from '../index'
 
 /**
@@ -19,6 +21,7 @@ export const entityType = {
 export const rateEntity = (id, entityType, rate) => {
     return axios.get(`/rating/${id}/${entityType}/${rate}`)
         .then( response => {
-            return response.data;
+        log.debug('rateEntity#then', response);
+        return response.data;
         })
 }

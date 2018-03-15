@@ -1,19 +1,25 @@
+import log from 'loglevel'
+
 import {axios} from '../index'
 
 /**
  * 
- * @param {string} name 
+ * @param {string} search 
  * @param {number} [xPage=0]
  * @param {number} [xPageSize=20]
  */
-export const getLocations = (name, xPage = 0, xPageSize = 20) => {
+export const getLocations = (search, xPage = 0, xPageSize = 20) => {
     return axios.get('/location',{
+        params: {
+            search,
+        },
         headers: {
             "X-Page": xPage,
             "X-Page-Size": xPageSize,
         },
     }).then( response => {
-        return response.data;
+            log.debug('getLocations#then', response);
+            return response.data;
     })
 }
 
@@ -24,6 +30,7 @@ export const getLocations = (name, xPage = 0, xPageSize = 20) => {
 export const readLocation = id => {
     return axios.get(`/locations/${id}`)
         .then( response => {
+            log.debug('readLocation#then', response);
             return response.data;
         })
 }
@@ -42,6 +49,7 @@ export const getNearbyLocations = (id, xPage = 0, xPageSize = 20) => {
         },
     })
         .then( response => {
+            log.debug('getNearbyLocations#then', response);
             return response.data;
         })
 }
@@ -58,6 +66,7 @@ export const createLocation = (name, latitude, longitude) => {
         latitude,
         longitude,
       }).then( response => {
-          return response.data;
+            log.debug('createLocation#then', response);
+            return response.data;
       })
 }

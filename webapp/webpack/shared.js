@@ -5,19 +5,18 @@ const path = require('path');
 const RewriteImportPlugin = require("less-plugin-rewrite-import");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const shared= {
+const shared = {
 
     // Directory-constants
     ROOT_DIR: path.resolve(__dirname, '../'),
     SRC_DIR: path.resolve(__dirname, '../src'),
     BUILD_DIR : path.resolve(__dirname, '../../public'),
     NODE_MODULES_DIR: path.resolve(__dirname, '../node_modules'),
-}
-
-shared.createLessLoader = (minimized, publicPath = './') => (
+    
+    createLessLoader: (minimized, publicPath = './') => (
     // Loading less-files
     {
-        test: /\.(less|config)/, // Loading .less or .config files
+        test: /\.(css|less|config)/, // Loading .less or .config files
         use: ExtractTextPlugin.extract({ // Instructs webpack to store the style data in a seperate css-file (see plugins!)
             
             // Here we need to update the public path for css files to avoid double publicPath usage (>...>/<publicPath>/<publicPath>/<...>)
@@ -46,7 +45,7 @@ shared.createLessLoader = (minimized, publicPath = './') => (
                 }
             ],
         }),
-    }
-)
+    })
+}
 
 module.exports = shared;

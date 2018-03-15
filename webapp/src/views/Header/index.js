@@ -1,5 +1,6 @@
 // Import modules
 import React from 'react';
+import log from 'loglevel'
 import {Menu, Search, Icon, Button, Dropdown, Image} from 'semantic-ui-react';
 import {withRouter} from 'react-router'
 
@@ -8,6 +9,7 @@ import logo from '../../img/logo.png';
 import './menu.less';
 import ModalError from '../../components/modal';
 import {signOut} from '../../common/api/requests/login'
+import { axios } from '../../common/api';
 
 
 const LoggedOutButtons = ({language}) => {
@@ -61,7 +63,11 @@ class Header extends React.Component{
     onSignOut(){
         if(this.props.loginData.loggedIn){
             signOut()
+                .then(data => {
+                    this.props.handleSignOut();
+                })
                 .catch( error => {
+                    log.debug('signOut#catch', error);
                     this.setState({showModalError: true})
                 })
         }

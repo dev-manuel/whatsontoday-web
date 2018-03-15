@@ -1,6 +1,7 @@
 import React from 'react'
 import {withRouter, Link} from 'react-router-dom'
 import {parse, stringify} from 'query-string'
+import log from 'loglevel'
 import {Grid, Pagination, Segment, Container, Header, Button, Icon } from 'semantic-ui-react'
 
 import './SERP.less'
@@ -220,7 +221,7 @@ class SERP extends React.Component{
                     isLoading: false,
                 }));
             }).catch( error => {
-                console.log(error);
+                log.debug('searchEvents#catch', error);
             })
     }
 

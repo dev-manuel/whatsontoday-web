@@ -1,4 +1,5 @@
 import React from 'react'
+import log from 'loglevel'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 import {withRouter} from 'react-router'
 
@@ -16,12 +17,6 @@ class SignInPanel extends React.Component {
         showCredentialError: false,
     }
 
-
-    onSuccess(){
-        // Redirects the user to the main page
-        this.props.history.push('/');
-    }
-
     handleSubmit(){
         signIn(this.state.emailValue, this.state.passwordValue, this.state.rememberValue)
             .then(token => {
@@ -29,11 +24,11 @@ class SignInPanel extends React.Component {
                     loggedIn: true,
                     token,
                     userMail: this.state.emailValue,
+                    isOrganizer: false, // <-- TODO!
                 });
-                this.onSuccess();
             })
             .catch(err => {
-                console.log('Response error:', err.response); 
+                log.debug('signIn#catch:', err); 
                 switch(err.response.status){
                     
                     // Wrong Credentials
@@ -58,7 +53,7 @@ class SignInPanel extends React.Component {
                 <ModalError language={this.props.language} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
 
                 <Header color='grey' as='h2' textAlign='center'>
-                    {lang.message}
+                    {this.props.withRedirect ? lang.message : lang.redirectMessage}
                 </Header>
                 <Form size='large'>
                     <Segment>

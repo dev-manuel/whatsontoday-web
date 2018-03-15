@@ -25,6 +25,10 @@ export const sqlTimestampToDate = timestamp => {
  * @returns {string} sql timestamp string of the format "yyyy-mm-dd hh:mm:ss" (represents a UTC+0 date)
  */
 export const dateToSqlTimestamp = date => {
+
+    if(!date){
+        return '';
+    }
     
     const pad = number => {
         if (number < 10) {

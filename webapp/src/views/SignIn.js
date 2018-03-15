@@ -1,6 +1,7 @@
 import React from 'react'
+import log from 'loglevel'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
-import {withRouter} from 'react-router'
+import {Redirect} from 'react-router'
 
 import SignInPanel from '../components/SignInPanel';
 
@@ -39,20 +40,13 @@ export class ShowingSignInPanel extends React.Component{
     render(){
         return (
             <div className='login-form'>
-                <style>{`
-                    body > div,
-                    body > div > div,
-                    body > div > div > div.login-form {
-                        height: 100%;
-                    }
-                `}</style>
+                
                 <Grid
                     textAlign='center'
-                    style={{ height: '100%' }}
-                    verticalAlign='middle'
                 >
                 <Grid.Column style={{ maxWidth: 450 }}>
                     <SignInPanel
+                        withRedirect={this.props.withRedirect}
                         language={this.props.language}
                         onSuccess={this.onSuccess}
                         setLoginData={this.props.setLoginData}
@@ -65,12 +59,50 @@ export class ShowingSignInPanel extends React.Component{
 }
 
 
+
 export default class SignInView extends React.Component {
+
+    state = {
+        redirectTo: null,
+    }
+
+    getRedirectLink(locationState){
+        if(locationState){ // If the whole locationState Object is undefined
+            if(locationState.organizerRightsNeeded){ // If the organizerRightsNeeded is set to true (or not undefined)
+                // Redirects the user to the NoAccess Page (with the hint that needs organizer rights)
+                return '/no_access?reason=organizer'
+            }else{
+                if(locationState.hasOwnProperty('from')){
+                    // Redirects the user to the original page
+                    return locationState.from;
+                }else{
+                    // Redirects the user to the main page
+                    return '/';
+                }
+            }
+        }else{
+            // Redirects the user to the main page
+            return '/';
+        }
+    }
+    
+    handleSuccessfulSignIn(loginData){
+        
+        const locationState = this.props.location.state;
+        const redirectTo = this.getRedirectLink(locationState);
+        log.debug('SignInView#redirectTo', redirectTo);
+
+        this.props.setLoginData(loginData, redirectTo);
+    }
 
     render(){
         const langData = {language: this.props.language}
         return this.props.loginData.loggedIn ? 
             <AlreadyLoggedInView {...langData}/> :
-            <ShowingSignInPanel {...langData} setLoginData={this.props.setLoginData}/>
+            <ShowingSignInPanel 
+                {...langData} 
+                withRedirect={!(this.props.location.state)}
+                setLoginData={this.handleSuccessfulSignIn.bind(this)}
+            />
     }
 }

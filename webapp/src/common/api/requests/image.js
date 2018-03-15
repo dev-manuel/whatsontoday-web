@@ -1,3 +1,5 @@
+import log from 'loglevel'
+
 import {axios} from '../index'
 
 /**
@@ -23,6 +25,7 @@ export const uploadImage = ( file, name) => {
 
     return axios.post(`images`, data)
         .then( response => {
+            log.debug('uploadImage#then', response);
             return response.data;
         })
 }
@@ -34,6 +37,7 @@ export const uploadImage = ( file, name) => {
 export const readImageData = id => {
     return axios.get(`/images/${id}`)
         .then( response => {
+            log.debug('readImageData#then', response);
             return response.data;
         })
 }
@@ -55,6 +59,7 @@ export const attachImage = (entityType, entityId, tag) => {
     return axios.get('/image/attach', {
         params: queryParams,
     }).then(response => {
-        return response.data;
+            log.debug('attachImage#then', response);
+            return response.data;
     })
 }

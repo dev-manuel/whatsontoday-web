@@ -236,7 +236,7 @@ export default class Create extends React.Component {
         })
 
         
-        uploadImage(thumbnailImage.file, `img${Math.floor(Math.random()*1000000)}`)
+        uploadImage(thumbnailImage.file)
             .then(data => {
                 this.setState((prevState, props) => {
                     const newThumbnailImage = prevState.thumbnailImage;
@@ -271,7 +271,7 @@ export default class Create extends React.Component {
         })
 
         sliderImages.forEach(fileEntry => {
-            uploadImage(fileEntry.file, `img${Math.floor(Math.random()*1000000)}`)
+            uploadImage(fileEntry.file)
                 .then(data => {
                     this.setState((prevState, props) => {
 

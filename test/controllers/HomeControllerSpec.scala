@@ -12,7 +12,7 @@ class HomeControllerSpec extends RestTestSuite {
     "render the index page" in {
       val index = route(app, FakeRequest(GET, "/")).get
 
-      status(index) mustBe OK
+      status(index) mustBe MOVED_PERMANENTLY
     }
   }
 

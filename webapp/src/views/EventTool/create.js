@@ -15,6 +15,7 @@ import {createEvent} from '../../common/api/requests/event'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
+
 /**
  * @typedef {{status: FileEntryStatus, file: File, key: number, id: number}} FileEntry
  * @typedef {[FileEntry]} FileEntryList
@@ -125,7 +126,10 @@ export default class Create extends React.Component {
                     formErrors.toError = true;
                     successful = false;
                 }
-                if(Object.keys(errorData).indexOf(keyName => keyName.startsWith('location') !== -1)){
+
+                const indexOfLocationPrefixedKeys = Object.keys(errorData).findIndex(keyName => keyName.startsWith('location'));
+                log.debug('Create#handleSubmit#handleSubmit#indexOfLocationPrefixedKeys', indexOfLocationPrefixedKeys)
+                if( indexOfLocationPrefixedKeys !== -1){
                     formErrors.locationError = true;
                     successful = false;
                 }

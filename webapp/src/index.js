@@ -12,7 +12,9 @@ import 'slick-carousel/slick/slick-theme.less';
 
 // Setup of local page routing
 const routing = (
-    <Router>
+    <Router
+        basename='/web'
+    >
         <BaseView/>
     </Router>
 );

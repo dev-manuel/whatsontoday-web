@@ -2,6 +2,8 @@ import log from 'loglevel'
 
 import {axios} from '../index'
 
+export const imageBasePath = '/images';
+
 /**
  * @readonly
  * @enum {string}
@@ -16,14 +18,14 @@ export const entityType = {
  * @param {File} file
  * @param {string} name
  */
-export const uploadImage = ( file, name) => {
+export const uploadImage = file => {
     const data = new FormData();
     data.set('image', file);
     data.set('data',JSON.stringify({
         name: name,
     }))
 
-    return axios.post(`images`, data)
+    return axios.post(imageBasePath, data)
         .then( response => {
             log.debug('uploadImage#then', response);
             return response.data;
@@ -35,7 +37,7 @@ export const uploadImage = ( file, name) => {
  * @param {number} id 
  */
 export const readImageData = id => {
-    return axios.get(`/images/${id}`)
+    return axios.get(`${imageBasePath}/${id}`)
         .then( response => {
             log.debug('readImageData#then', response);
             return response.data;
@@ -56,7 +58,7 @@ export const attachImage = (entityType, entityId, tag) => {
     if(tag) // Appending a `tag` parameter according if is set
         queryParams.tag = tag;
 
-    return axios.get('/image/attach', {
+    return axios.get(`${imageBasePath}/attach`, {
         params: queryParams,
     }).then(response => {
             log.debug('attachImage#then', response);

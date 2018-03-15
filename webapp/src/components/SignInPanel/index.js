@@ -19,12 +19,12 @@ class SignInPanel extends React.Component {
 
     handleSubmit(){
         signIn(this.state.emailValue, this.state.passwordValue, this.state.rememberValue)
-            .then(token => {
+            .then(data => {
                 this.props.setLoginData({
                     loggedIn: true,
-                    token,
+                    token: data.token,
                     userMail: this.state.emailValue,
-                    isOrganizer: false, // <-- TODO!
+                    isOrganizer: data.userType === 'organizer', // <-- TODO!
                 });
             })
             .catch(err => {

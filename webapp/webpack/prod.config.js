@@ -15,10 +15,15 @@ const log = require('loglevel');
 module.exports = (env = {}) => { 
     console.log('Webpack env settings:', env);
 
+    if(!env.API_BASE_PATH){
+        throw new Error(`API_BASE_PATH environment variable is not defined but needed! Please specify your API base path with npm run build -- --env.API_BASE_PATH=<...>`);
+    }
+
     const definitions = {
         'process.env.NODE_ENV': JSON.stringify('production'), 
         DISABLE_PRIVATE_ROUTES: JSON.stringify(false), // To ensure this property is set to false
-        LOG_LEVEL: JSON.stringify(log.levels.SILENT),        
+        LOG_LEVEL: JSON.stringify(log.levels.SILENT),   
+        API_BASE_PATH: JSON.stringify(env.API_BASE_PATH),
     }
     console.log('Webpack definitions:', definitions);
 

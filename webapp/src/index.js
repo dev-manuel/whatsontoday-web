@@ -15,6 +15,7 @@ log.setLevel(LOG_LEVEL); // LOG_LEVEL is defined by webpack define plugin
 log.debug('Webpack definition plugin:', {
     DISABLE_PRIVATE_ROUTES,
     LOG_LEVEL,
+    API_BASE_URL,
 })
 
 // Setup of local page routing

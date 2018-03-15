@@ -18,7 +18,8 @@ module.exports = (env = {}) => {
 
     const definitions = {
         DISABLE_PRIVATE_ROUTES: JSON.stringify( env.DISABLE_PRIVATE_ROUTES || false),
-        LOG_LEVEL: JSON.stringify(env.LOG_LEVEL || log.levels.TRACE),      
+        LOG_LEVEL: JSON.stringify(env.LOG_LEVEL || log.levels.TRACE),
+        API_BASE_URL: JSON.stringify(env.API_BASE_URL || 'http://localhost:9000/api/v1'),             
     }
     console.log('Webpack definitions:', definitions);
 

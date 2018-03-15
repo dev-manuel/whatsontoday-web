@@ -15,9 +15,6 @@ import {createEvent} from '../../common/api/requests/event'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-
-import {setToken} from '../../common/api/'
-
 /**
  * @typedef {{status: FileEntryStatus, file: File, key: number, id: number}} FileEntry
  * @typedef {[FileEntry]} FileEntryList
@@ -64,6 +61,9 @@ export default class Create extends React.Component {
         this.fetchCategory();
     }
 
+    //
+    // ─── SUBMIT ─────────────────────────────────────────────────────────────────────
+    //
     handleSubmit(){
         log.debug('submit!')
         
@@ -159,6 +159,9 @@ export default class Create extends React.Component {
             })
             .catch(error => {
                 log.debug('Create#fetchCategory#error', error);
+                this.setState({
+                    categoryIsFetching: false,
+                })
             })
     }
     handleCategoryChange(event, {value, ...rest}){
@@ -245,9 +248,6 @@ export default class Create extends React.Component {
             })
     }
     
-        
-
-
     //
     // ─── SLIDERIMAGES ───────────────────────────────────────────────────────────────
     //
@@ -289,15 +289,37 @@ export default class Create extends React.Component {
         })
     }
     
-
+    //
+    // ─── RENDER ─────────────────────────────────────────────────────────────────────
+    //  
     render(){
         const lang = this.props.language.eventTool.create;
 
         const {
+            nameError,
+            nameValue,
+
+            categoryIsFetching,
+            categoryOptions,
+            categoryValue,
+
+            descriptionError,
+            descriptionValue,
+
+            fromError,
+            fromValue,
+
+            toError,
+            toValue,
+
             locationIsFetching,
             locationOptions,
             locationValue,
+            locationError,
             // locationSearchQuery,
+
+            thumbnailImage,
+            sliderImages,
         } = this.state;
 
         return (
@@ -309,11 +331,11 @@ export default class Create extends React.Component {
                     <Form onSubmit={this.handleSubmit.bind(this)}>
                         <Form.Group  widths='equal'>
                             <Form.Input
-                                error={this.state.nameError}
+                                error={nameError}
                                 label={lang.name}
                                 fluid
                                 placeholder={lang.namePlaceholder}
-                                value={this.state.nameValue}
+                                value={nameValue}
                                 onChange={(event, {value}) => this.setState({nameValue: value})}
                             />
                             <Form.Field>
@@ -326,29 +348,29 @@ export default class Create extends React.Component {
                                     // search
                                     selection
                                     selectedLabel={null} //No label selected
-                                    options={this.state.categoryOptions}
-                                    loading={this.state.categoryIsFetching}
+                                    options={categoryOptions}
+                                    loading={categoryIsFetching}
                                     noResultsMessage={lang.noResults}                                    
                                 />
                             </Form.Field>
                         </Form.Group>
 
                         <Form.TextArea
-                            error={this.state.descriptionError}
+                            error={descriptionError}
                             label={lang.description}
                             placeholder={lang.descriptionPlaceholder}
-                            value={this.state.descriptionValue}
+                            value={descriptionValue}
                             onChange={(event, {value}) => this.setState({descriptionValue: value})}
                         />
 
                         <Grid stackable columns={2}>
                             <Grid.Column width={8}>
                                 <DateSelectFormField
-                                    error={this.state.fromError}
+                                    error={fromError}
                                     placeholder={lang.fromPlaceholder}
                                     label={lang.from}
                                     minDate={moment()}
-                                    selected={this.state.fromValue}
+                                    selected={fromValue}
                                     onChange={date => {this.setState({fromValue: date})}}
                                     timeCaption={this.props.language.time.time}
                                     locale={this.props.language.time.locale}
@@ -356,11 +378,11 @@ export default class Create extends React.Component {
                             </Grid.Column>
                             <Grid.Column width={8}>
                                 <DateSelectFormField
-                                    error={this.state.toError}
+                                    error={toError}
                                     placeholder={lang.toPlaceholder}
                                     label={lang.to}
                                     minDate={moment()}
-                                    selected={this.state.toValue}
+                                    selected={toValue}
                                     onChange={date => {this.setState({toValue: date})}}
                                     timeCaption={this.props.language.time.time}
                                     locale={this.props.language.time.locale}
@@ -369,7 +391,7 @@ export default class Create extends React.Component {
                         </Grid>
 
                         <LocationSelectFormField
-                            error={this.state.locationError}                        
+                            error={locationError}                        
                             options={locationOptions}
                             value={locationValue}
                             placeholder={lang.locationPlaceholder}
@@ -393,10 +415,10 @@ export default class Create extends React.Component {
                             </Grid.Column>
                             <Grid.Column width={12}>
                                     {
-                                        this.state.thumbnailImage ?
+                                        thumbnailImage ?
                                         (<p>
-                                            {this.state.thumbnailImage.file.name}
-                                            {getIconByFileEntryStatus(this.state.thumbnailImage.status)}
+                                            {thumbnailImage.file.name}
+                                            {getIconByFileEntryStatus(thumbnailImage.status)}
                                         </p>) :
                                         <p>{lang.thumbnailImageNoFileSelected}</p>
                                     }
@@ -416,12 +438,10 @@ export default class Create extends React.Component {
                                 <FileTable
                                     textFileName={lang.sliderImageFileTableFileName}
                                     textIsUploaded={lang.sliderImageFileTableIsUploaded}
-                                    fileEntryList={this.state.sliderImages}
+                                    fileEntryList={sliderImages}
                                 />
                             </Grid.Column>
                         </Grid>
-
-                        
 
                         <Form.Button
                             type="submit"

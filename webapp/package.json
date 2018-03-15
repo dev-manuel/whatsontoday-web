@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --config webpack/dev.config.js --progress",
     "test": "jest",
-    "build": "webpack --config webpack/prod.config.js --bail"
+    "build": "webpack --config webpack/prod.config.js --progress --bail"
   },
   "author": "WhatsOnToday",
   "license": "ISC",

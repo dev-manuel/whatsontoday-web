@@ -2,7 +2,7 @@
 import React from 'react';
 import log from 'loglevel'
 import {Menu, Search, Icon, Button, Dropdown, Image} from 'semantic-ui-react';
-import {withRouter} from 'react-router'
+import {withRouter, Link} from 'react-router-dom'
 
 // Import resources
 import logo from '../../img/logo.png';
@@ -14,26 +14,28 @@ import { axios } from '../../common/api';
 
 const LoggedOutButtons = ({language}) => {
     return [(
-        <Button 
-            className='headerButtonStyle'
-            basic
-            color='teal'
-            href='signin'
-            key={1}
-        >
-            <Icon name='sign in' /> {language.signIn}
-        </Button>
+        <Link to='/signIn'>
+            <Button 
+                className='headerButtonStyle'
+                basic
+                color='teal'
+                key={1}
+            >
+                <Icon name='sign in' /> {language.signIn}
+            </Button>
+        </Link>
     ),
     (
-        <Button 
-            className='headerButtonStyle'
-            basic
-            color='teal'
-            href='signup'
-            key={2}
-        >
-            <Icon name='signup' /> {language.signUp}
-        </Button>
+        <Link to='/signUp'>        
+            <Button 
+                className='headerButtonStyle'
+                basic
+                color='teal'
+                key={2}
+            >
+                <Icon name='signup' /> {language.signUp}
+            </Button>
+        </Link>
     )]
 }
 
@@ -44,7 +46,6 @@ const LoggedInButtons = ({language, onSignOut}) => {
             className='headerButtonStyle'
             basic
             color='teal'
-            href='#'
             onClick={onSignOut}
         >
             <Icon name='sign out' /> {language.signOut}
@@ -101,7 +102,9 @@ class Header extends React.Component{
                     <Menu.Item className='headerSpacer'/>
 
                     <Menu.Item className='headerLogo'>
-                        <Image src={logo} href='/'/>
+                        <Link to='/'>
+                            <Image src={logo}/>
+                        </Link>
                     </Menu.Item>
 
                     <Menu.Item className='headerSearch'>
@@ -125,13 +128,15 @@ class Header extends React.Component{
                                 <Icon name='newspaper' /> {language.blog}
                             </Button>
 
-                            <Button 
-                                className='headerButtonStyle'
-                                basic
-                                color='teal'
-                            >
-                                <Icon name='plus' /> {language.addEvent}
-                            </Button>
+                            <Link to='/event_tool/create'>                            
+                                <Button 
+                                    className='headerButtonStyle'
+                                    basic
+                                    color='teal'
+                                >
+                                    <Icon name='plus' /> {language.addEvent}
+                                </Button>
+                            </Link>
 
                             {conditionalButtons}
                             

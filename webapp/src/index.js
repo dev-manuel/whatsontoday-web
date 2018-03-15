@@ -19,7 +19,9 @@ log.debug('Webpack definition plugin:', {
 
 // Setup of local page routing
 const routing = (
-    <Router>
+    <Router
+        basename='/web'
+    >
         <BaseView/>
     </Router>
 );

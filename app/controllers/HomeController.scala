@@ -19,8 +19,8 @@ class HomeController @Inject()(cc: ControllerComponents, protected val dbConfigP
   val log = Logger("api.home")
 
   def index() = Action { implicit request: Request[AnyContent] =>
-    log.debug("Rest request for the main page")
-    Ok.sendFile(new java.io.File("./public/index.html"))
+    log.debug("Rest request for the main page ('/') redirect to '/web'")
+    Redirect("/web", MOVED_PERMANENTLY)
   }
 
   def indexWeb(any: String) = Action { implicit request: Request[AnyContent] =>

@@ -2,6 +2,9 @@
 GET    /                         controllers.HomeController.index
 
 ### NoDocs ###
+GET    /web                     controllers.HomeController.indexWeb(any="")
+
+### NoDocs ###
 GET    /web/*any                 controllers.HomeController.indexWeb(any: String)
 
 ->     /api/v1                   api.Routes

@@ -8,5 +8,3 @@ CREATE VIEW participant_counts AS
 # --- !Downs
 
 DROP VIEW participant_counts;
-
-

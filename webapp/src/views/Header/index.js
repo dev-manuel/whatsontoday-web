@@ -13,33 +13,41 @@ import { axios } from '../../common/api';
 
 
 const LoggedOutButtons = ({language}) => {
-    return [(
-        <Link 
-            to='/signIn'
-            className='headerButtonStyle'                        
-        >
-            <Icon name='sign in' /> {language.signIn}
-        </Link>
-    ),
-    (
-        <Link
-            to='/signUp'
-            className='headerButtonStyle'            
-        >        
-                <Icon name='signup' /> {language.signUp}
-        </Link>
-    )]
+    return (
+        <React.Fragment>
+            <Link 
+                to='/signIn'
+                className='headerButtonStyle'                        
+            >
+                <Icon name='sign in' /> {language.signIn}
+            </Link>
+            <Link
+                to='/signUp'
+                className='headerButtonStyle'            
+            >        
+                    <Icon name='signup' /> {language.signUp}
+            </Link>
+        </React.Fragment>
+    )
 }
 
 const LoggedInButtons = ({language, onSignOut}) => {
 
     return (
-        <a 
-            className='headerButtonStyle'
-            onClick={onSignOut}
-        >
-            <Icon name='sign out' /> {language.signOut}
-        </a>
+        <React.Fragment>
+            <a 
+                className='headerButtonStyle'
+                onClick={onSignOut}
+            >
+                <Icon name='sign out' /> {language.signOut}
+            </a>
+            <Link 
+                to='/options'
+                className='headerButtonStyle'                        
+            >
+                <Icon name='setting' /> {language.options}
+            </Link>
+        </React.Fragment>
     )
 }
 

@@ -90,7 +90,7 @@ class LocationControllerSpec extends RestTestSuite {
       status(create) mustBe OK
     }
 
-    "return BAD REQUEST on proper request from default users" in {
+    "return Unauthorized on proper request from default users" in {
       val location = Location(None, "testlocation", 0, 0, "testcountry", "testcity", "teststreet")
       val user = Await.result(createUser(roleName = "DEFAULT"), Duration.Inf)
 
@@ -98,7 +98,7 @@ class LocationControllerSpec extends RestTestSuite {
                                           new Headers(List(("Content-Type","application/json"),("x-auth-token",user._3))),
                                           Json.toJson(location))).get
 
-      status(create) mustBe BAD_REQUEST
+      status(create) mustBe UNAUTHORIZED
     }
 
     "return BAD REQUEST on empty name" in {

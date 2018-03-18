@@ -59,7 +59,7 @@ class ImageController @Inject()(cc: ControllerComponents,
     })
   }
 
-  def createImage = Action(parse.multipartFormData).async { request =>
+  def createImage = withRights(whatson.model.Right.CreateImage)(parse.multipartFormData) { case (request,login,role) =>
     log.debug("Rest request to create image")
 
     request.body.file("image").zip(request.body.dataParts("data")).flatMap { case (x,data) =>

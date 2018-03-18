@@ -116,7 +116,7 @@ class LoginController @Inject()(cc: ControllerComponents,
     JWTAuthenticator.unserialize(token, encoder, settings) match {
       case Success(auth) => {
         loginService.confirm(auth.loginInfo).map {
-          case Some(l) => Redirect("http://" + request.host + "/#/mailConfirmed")
+          case Some(l) => Redirect("http://" + request.host + "/web/mailConfirmed")
           case None => NotFound
         }
       }

@@ -93,10 +93,10 @@ class EventController @Inject()(cc: ControllerComponents,
     returnPaged(s,q,db)
   }
 
-  def deleteEvent(id: Int) = organizerRequest(parse.default) { (request,organizer) =>
+  def deleteEvent(id: Int) = withRights(Right.CreateEvent)(parse.default) { (request,login,role) =>
     log.debug("Rest request to get event")
 
-    val q = event.filter(x => x.id === id.bind && x.creatorId === organizer.id).delete
+    val q = event.filter(x => x.id === id.bind && x.creatorId === login.id).delete
 
     db.run(q).map {
       case 0 => NotFound

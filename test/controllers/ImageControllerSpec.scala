@@ -70,7 +70,7 @@ class ImageControllerSpec extends RestTestSuite {
   "ImageController GET attach" should {
 
     "return Unauthorized on non existing image" in {
-      val user = Await.result(createUser(), Duration.Inf)
+      val user = Await.result(createUser(roleName = "Admin"), Duration.Inf)
 
       val image = route(app, FakeRequest(GET, "/api/v1/images/attach/20000?entityType=Event&entityId=5",
                                          new Headers(List(("x-auth-token",user._3))),"")).get
@@ -80,7 +80,7 @@ class ImageControllerSpec extends RestTestSuite {
 
     "return OK on existing image for Locations" in {
       val image = Await.result(createImage(), Duration.Inf)
-      val user = Await.result(createUser(), Duration.Inf)
+      val user = Await.result(createUser(roleName = "Admin"), Duration.Inf)
 
       val get = route(app, FakeRequest(GET,"/api/v1/images/attach/" ++ image.id.getOrElse(-1).toString ++ "?entityType=Location&entityId=5",
                                        new Headers(List(("x-auth-token",user._3))),
@@ -89,64 +89,43 @@ class ImageControllerSpec extends RestTestSuite {
       status(get) mustBe OK
     }
 
-    "return Unauthorized for users on events" in {
+    "return Unauthorized for users on events not created by them" in {
       val image = Await.result(createImage(), Duration.Inf)
-      val user = Await.result(createUser(), Duration.Inf)
+      val user = Await.result(createUser("testorganizer2@test.de", roleName = "DEFAULT"), Duration.Inf)
+      val event = Await.result(createEvent(), Duration.Inf)
 
-      val attach = route(app, FakeRequest(GET, "/api/v1/images/attach/" ++ image.id.getOrElse(-1).toString ++ "?entityType=Event&entityId=5",
+      val attach = route(app, FakeRequest(GET, "/api/v1/images/attach/" ++ image.id.getOrElse(-1).toString ++
+                                           "?entityType=Event&entityId=" ++ event.id.getOrElse(-1).toString,
                                          new Headers(List(("x-auth-token",user._3))),"")).get
 
       status(attach) mustBe UNAUTHORIZED
     }
 
-    "return Unauthorized for organizers on events not created by them" in {
+    /*"return OK for users on events created by them" in {
       val image = Await.result(createImage(), Duration.Inf)
-      val organizer = Await.result(createOrganizer("testorganizer2", "testorganizer2@test.de"), Duration.Inf)
-      val event = Await.result(createEvent(), Duration.Inf)
+      val user = Await.result(createUser(roleName = "Admin"), Duration.Inf)
+      val event = Await.result(createEvent(Some(user._1)), Duration.Inf)
 
       val attach = route(app, FakeRequest(GET, "/api/v1/images/attach/" ++ image.id.getOrElse(-1).toString ++
                                            "?entityType=Event&entityId=" ++ event.id.getOrElse(-1).toString,
-                                         new Headers(List(("x-auth-token",organizer._3))),"")).get
-
-      status(attach) mustBe UNAUTHORIZED
-    }
-
-    "return OK for organizers on events created by them" in {
-      val image = Await.result(createImage(), Duration.Inf)
-      val organizer = Await.result(createOrganizer(), Duration.Inf)
-      val event = Await.result(createEvent(Some(organizer._2)), Duration.Inf)
-
-      val attach = route(app, FakeRequest(GET, "/api/v1/images/attach/" ++ image.id.getOrElse(-1).toString ++
-                                           "?entityType=Event&entityId=" ++ event.id.getOrElse(-1).toString,
-                                         new Headers(List(("x-auth-token",organizer._3))),"")).get
+                                         new Headers(List(("x-auth-token",user._3))),"")).get
 
       status(attach) mustBe OK
     }
 
     "attach a tag if specified" in {
       val image = Await.result(createImage(), Duration.Inf)
-      val organizer = Await.result(createOrganizer(), Duration.Inf)
-      val event = Await.result(createEvent(Some(organizer._2)), Duration.Inf)
+      val user = Await.result(createUser(roleName = "Admin"), Duration.Inf)
+      val event = Await.result(createEvent(Some(user._1)), Duration.Inf)
 
       val attach = route(app, FakeRequest(GET, "/api/v1/images/attach/" ++ image.id.getOrElse(-1).toString ++
                                             "?entityType=Event&entityId=" ++ event.id.getOrElse(-1).toString ++ "&tag=testtag",
-                                          new Headers(List(("x-auth-token",organizer._3))),"")).get
-
-      status(attach) mustBe OK
-    }
-
-    "return Unauthorized for users on organizers" in {
-      val image = Await.result(createImage(), Duration.Inf)
-      val user = Await.result(createUser(), Duration.Inf)
-
-      val attach = route(app, FakeRequest(GET, "/api/v1/images/attach/" ++ image.id.getOrElse(-1).toString ++ "?entityType=Organizer&entityId=5",
                                           new Headers(List(("x-auth-token",user._3))),"")).get
 
-      status(attach) mustBe UNAUTHORIZED
-    }
+      status(attach) mustBe OK
+    }*/
 
-
-    "return Unauthorized for organizers on other organizers" in {
+    /*"return Unauthorized for organizers on other organizers" in {
       val image = Await.result(createImage(), Duration.Inf)
       val organizer = Await.result(createOrganizer("testorganizer2", "testorganizer2@test.de"), Duration.Inf)
       val organizer2 = Await.result(createOrganizer(),Duration.Inf)
@@ -167,6 +146,6 @@ class ImageControllerSpec extends RestTestSuite {
                                          new Headers(List(("x-auth-token",organizer._3))),"")).get
 
       status(attach) mustBe OK
-    }
+    }*/
   }
 }

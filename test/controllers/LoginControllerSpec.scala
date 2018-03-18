@@ -17,6 +17,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import whatson.db._
 import slick.jdbc.PostgresProfile.api._
+import whatson.model.detail._
 
 
 class LoginControllerSpec extends RestTestSuite {
@@ -163,6 +164,74 @@ class LoginControllerSpec extends RestTestSuite {
                                        "")).get
 
       status(get) mustBe UNAUTHORIZED
+    }
+  }
+
+  "LoginController GET participating" should {
+    "return Ok for users" in {
+      val user = Await.result(createUser(),Duration.Inf)
+
+      val get = route(app, FakeRequest(GET, "/api/v1/login/participating",
+                                       new Headers(List(("x-auth-token",user._3))),"")).get
+
+      status(get) mustBe OK
+    }
+
+    "return an empty list for new users" in {
+      Await.result(createEvent(),Duration.Inf)
+      val user = Await.result(createUser(),Duration.Inf)
+
+      val get = route(app, FakeRequest(GET, "/api/v1/login/participating",
+                                       new Headers(List(("x-auth-token",user._3))),"")).get
+
+      status(get) mustBe OK
+      val content = contentAsJson(get).as[List[EventDetail]]
+      content.length mustBe 0
+    }
+
+    "contain an event after participating" in {
+      val event = Await.result(createEvent(),Duration.Inf)
+      val user = Await.result(createUser(),Duration.Inf)
+
+      val participate = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+
+      Thread.sleep(1000)
+
+      val get = route(app, FakeRequest(GET, "/api/v1/login/participating",
+                                       new Headers(List(("x-auth-token",user._3))),"")).get
+
+      status(get) mustBe OK
+      val content = contentAsJson(get).as[List[EventDetail]]
+      content.map(x => x.id) must contain (event.id)
+    }
+
+    "be pageable" in {
+      val event1 = Await.result(createEvent(),Duration.Inf)
+      val event2 = Await.result(createEvent(),Duration.Inf)
+      val event3 = Await.result(createEvent(),Duration.Inf)
+      val user = Await.result(createUser(),Duration.Inf)
+
+      def participate(event: Event) = route(app, FakeRequest(GET, "/api/v1/events/participate/" ++ event.id.getOrElse(-1).toString,
+                                               new Headers(List(("x-auth-token",user._3))),"")).get
+
+      participate(event1)
+      participate(event2)
+      participate(event3)
+      Thread.sleep(1000)
+
+      val get1 = route(app, FakeRequest(GET, "/api/v1/login/participating",
+                                        new Headers(List(("x-auth-token",user._3),("x-page","0"),("x-page-size","2"))),"")).get
+
+      val get2 = route(app, FakeRequest(GET, "/api/v1/login/participating",
+                                        new Headers(List(("x-auth-token",user._3),("x-page","1"),("x-page-size","2"))),"")).get
+
+      status(get1) mustBe OK
+      status(get2) mustBe OK
+      val content1 = contentAsJson(get1).as[List[EventDetail]]
+      val content2 = contentAsJson(get2).as[List[EventDetail]]
+      content1.length mustBe 2
+      content2.length mustBe 1
     }
   }
 }

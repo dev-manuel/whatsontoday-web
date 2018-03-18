@@ -52,6 +52,8 @@ ALTER TABLE rating
 ALTER TABLE event
       DROP CONSTRAINT event_creator_fk;
 
+DELETE FROM event WHERE NOT EXISTS (SELECT o.id FROM organizer o WHERE o.login_fk = creator_fk);
+
 UPDATE event e SET creator_fk = (
        SELECT o.id FROM organizer o
        JOIN login l ON l.id = o.login_fk
@@ -69,6 +71,8 @@ ALTER TABLE participant
 
 ALTER TABLE participant RENAME COLUMN login_fk TO user_fk;
 
+DELETE FROM participant WHERE NOT EXISTS (SELECT u.id FROM users u WHERE u.login_fk = user_fk);
+
 UPDATE participant p SET user_fk = (
        SELECT u.id FROM users u
        JOIN login l ON l.id = u.login_fk
@@ -83,6 +87,8 @@ ALTER TABLE participant
 
 ALTER TABLE rating
       DROP CONSTRAINT rating_login_fk;
+
+DELETE FROM rating WHERE NOT EXISTS (SELECT u.id FROM users u WHERE u.login_fk = login_fk);
 
 ALTER TABLE rating RENAME COLUMN login_fk TO user_fk;
 

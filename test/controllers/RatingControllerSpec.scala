@@ -47,15 +47,5 @@ class RatingControllerSpec extends RestTestSuite {
 
       status(post) mustBe OK
     }
-
-    "return Unauthorized for organizers" in {
-      val organizer = Await.result(createOrganizer(), Duration.Inf)
-
-      val post = route(app, FakeRequest(GET, "/api/v1/rating/" ++ organizer._2.id.getOrElse(-1).toString ++ "/Organizer/5.0",
-                                        new Headers(List(("Accept", "application/json"),("x-auth-token",organizer._3))),
-                                        "")).get
-
-      status(post) mustBe UNAUTHORIZED
-    }
   }
 }

@@ -52,4 +52,13 @@ trait Util {
         case _ => Future(Unauthorized)
       }
     }
+
+  def withRights[A](rights: whatson.model.Right.Rights.Value*)(pars: BodyParser[A])
+                (r: (SecuredRequest[AuthEnv,A],Login,RoleDetail) => Future[Result])(implicit executionContext: ExecutionContext): Action[A] =
+    roleRequest(pars) { case (req,login,role) =>
+      if(rights.forall(r => role.rights.map(_.name).contains(r)))
+        r(req,login,role)
+      else
+        Future(Unauthorized)
+    }
 }

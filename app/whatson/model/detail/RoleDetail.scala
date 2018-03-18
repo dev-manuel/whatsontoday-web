@@ -7,7 +7,7 @@ import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import scala.concurrent.ExecutionContext
 
-case class RoleDetail(id: Option[Int], name: String, right: List[Right])
+case class RoleDetail(id: Option[Int], name: String, rights: List[Right])
 
 object RoleDetail {
   implicit val roleDetailReads = Json.reads[RoleDetail]

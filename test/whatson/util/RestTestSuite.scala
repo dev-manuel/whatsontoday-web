@@ -83,7 +83,7 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   def createLogin(mail: String, confirmed: Boolean = true, userType: String = "user"): Future[Login] = {
     val pwInfo = passwordHasher.hash("")
 
-    val login = Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, confirmed, userType)
+    val login = Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, confirmed, userType, 1)
 
     db.run(insertAndReturn[Login,LoginTable](LoginTable.login,login))
   }

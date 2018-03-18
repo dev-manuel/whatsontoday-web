@@ -86,7 +86,7 @@ class OrganizerController@Inject() (
           Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
         case None =>
           val authInfo = passwordHasher.hash(data.password)
-          val login = Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, "organizer")
+          val login = Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, "organizer", 1)
           for {
             login <- loginService.save(login)
             authInfo <- authInfoRepository.add(loginInfo, authInfo)

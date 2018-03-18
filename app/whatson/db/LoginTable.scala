@@ -20,7 +20,9 @@ class LoginTable(tag: Tag) extends Table[Login](tag, "login") with HasID[Login] 
 
   def userType = column[String]("user_type")
 
-  def * = (id.?,email,pwHash.?, pwSalt.?, pwHasher.? ,providerId, providerKey, confirmed, userType) <> (Login.tupled, Login.unapply)
+  def roleId = column[Int]("role_fk")
+
+  def * = (id.?,email,pwHash.?, pwSalt.?, pwHasher.? ,providerId, providerKey, confirmed, userType, roleId) <> (Login.tupled, Login.unapply)
 }
 
 object LoginTable {

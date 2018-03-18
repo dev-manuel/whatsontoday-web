@@ -6,7 +6,7 @@ import com.mohiva.play.silhouette.api.actions._
 
 import scala.concurrent._
 import com.mohiva.play.silhouette.api._
-import whatson.model._
+import whatson.model.{Organizer, User}
 import whatson.service._
 
 trait Util {

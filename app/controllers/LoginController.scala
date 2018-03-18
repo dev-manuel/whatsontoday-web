@@ -35,7 +35,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import slick.jdbc.JdbcProfile
 import whatson.auth._
-import whatson.model._
+import whatson.model.{Login}
 import whatson.model.forms._
 import whatson.service._
 import whatson.util.FormErrorJson._

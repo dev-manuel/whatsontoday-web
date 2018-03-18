@@ -67,6 +67,9 @@ export default {
         alreadyLoggedIn: 'Du bist bereits angemeldet!',
         errorHeading: 'Registrierung Fehlgeschlagen',
         userAlreadyExistsError: 'Es existiert bereits ein nutzer mit dieser E-Mail Adresse',
+        signUpAsOrganizer: 'Als Veranstalter registrieren',
+        signUpAsUser: 'Als Nutzer registrieren',
+        organizerNamePlaceholder: 'Name',
     },
     signIn: {
         message: 'Anmelden',

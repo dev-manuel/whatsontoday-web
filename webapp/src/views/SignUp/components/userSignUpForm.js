@@ -1,9 +1,10 @@
 import React from 'react'
 import log from 'loglevel'
+import {Link} from 'react-router-dom'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
-import ModalError from '../modal'
-import {userSignUp} from '../../common/api/requests/user'
+import ModalError from '../../../components/modal'
+import {userSignUp} from '../../../common/api/requests/user'
 
 
 class SignUpPanel extends React.Component {
@@ -145,6 +146,9 @@ class SignUpPanel extends React.Component {
                         <Button color='olive' fluid size='large'>{lang.submit}</Button>
                     </Segment>
                 </Form>
+                <Message>
+                    <Link to='/signup/organizer'>{lang.signUpAsOrganizer}</Link>
+                </Message>
             </div>
         )
     }

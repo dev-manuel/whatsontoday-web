@@ -104,7 +104,8 @@ class EventController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def createEvent() = organizerRequest(parse.json) { case (request,organizer) =>
+  def createEvent() = withRights(Right.CreateEvent)(parse.json) { case (request,login,role) =>
+    //TODO: Check Role for creating location, categories
     EventForm.form.bindFromRequest()(request).fold(
       form => {
         Future.successful(BadRequest(Json.toJson(form.errors)))
@@ -129,7 +130,7 @@ class EventController @Inject()(cc: ControllerComponents,
           }).map(_.flatten)
 
         db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery)).flatMap { case ((location,images),categories) =>
-          val event = Event(None, data.name, data.from, data.to, data.description, organizer.id, location.id.getOrElse(-1))
+          val event = Event(None, data.name, data.from, data.to, data.description, login.id, location.id.getOrElse(-1))
           db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,images,categories))
         }.flatMap { case (event,images,categories) =>
           val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img._1.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event,img._2))
@@ -140,7 +141,8 @@ class EventController @Inject()(cc: ControllerComponents,
       })
   }
 
-  def updateEvent(id: Int) = organizerRequest(parse.json) { case (request,organizer) =>
+  def updateEvent(id: Int) = withRights(Right.CreateEvent)(parse.json) { case (request,login,role) =>
+    //TODO: Check Role for creating location, categories
     EventForm.form.bindFromRequest()(request).fold(
       form => {
         Future.successful(BadRequest(Json.toJson(form.errors)))
@@ -164,13 +166,13 @@ class EventController @Inject()(cc: ControllerComponents,
               }
           }).map(_.flatten)
 
-        val eventQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === organizer.id).result.map(_.headOption)
+        val eventQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === login.id).result.map(_.headOption)
 
         db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery).zip(eventQuery)).flatMap {
           case (((location,images),categories),Some(event)) => {
-            val event = Event(Some(id), data.name, data.from, data.to, data.description, organizer.id, location.id.getOrElse(-1))
+            val event = Event(Some(id), data.name, data.from, data.to, data.description, login.id, location.id.getOrElse(-1))
 
-            val getQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === organizer.id)
+            val getQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === login.id)
 
             db.run(getQuery.update(event) >> getQuery.result.map(_.head))
               .map(r => Some((r,images,categories)))
@@ -195,15 +197,15 @@ class EventController @Inject()(cc: ControllerComponents,
       })
   }
 
-  def participate(id: Int) = userRequest(parse.default) { case (request,user) =>
+  def participate(id: Int) = withRights(Right.Participate)(parse.default) { case (request,login,role) =>
     log.debug("Rest request to participate in event")
 
     val q = (event.filter(x => x.id === id.bind).result)
-      .zip(ParticipantTable.participant.filter(x => x.eventID === id.bind && x.userID === user.id.getOrElse(-1).bind).result)
+      .zip(ParticipantTable.participant.filter(x => x.eventID === id.bind && x.loginID === login.id.getOrElse(-1).bind).result)
 
     db.run(q).map(x => (x._1.headOption,x._2.headOption)).flatMap {
       case (Some(e),None) => {
-        db.run(ParticipantTable.participant += ((user.id.getOrElse(-1),id)))
+        db.run(ParticipantTable.participant += ((login.id.getOrElse(-1),id)))
         Future.successful(Ok)
       }
       case (Some(e),Some(p)) => Future.successful(Conflict)
@@ -211,10 +213,10 @@ class EventController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def unparticipate(id: Int) = userRequest(parse.default) { case (request,user) =>
+  def unparticipate(id: Int) = withRights(Right.CreateEvent)(parse.default) { case (request,login,role) =>
     log.debug("Rest request to unparticipate in event")
 
-    db.run(ParticipantTable.participant.filter(x => x.eventID === id.bind && x.userID === user.id.getOrElse(-1).bind).delete)
+    db.run(ParticipantTable.participant.filter(x => x.eventID === id.bind && x.loginID === login.id.getOrElse(-1).bind).delete)
       .flatMap {
       case 1 => {
         Future.successful(Ok)

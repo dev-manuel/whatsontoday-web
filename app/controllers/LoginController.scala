@@ -12,6 +12,7 @@ import slick.jdbc.JdbcProfile
 import slick.jdbc.PostgresProfile.api._
 import whatson.auth._
 import whatson.db.LoginTable._
+import whatson.db._
 import whatson.model.Login._
 import com.mohiva.play.silhouette.api.services._
 import com.mohiva.play.silhouette.impl.authenticators._
@@ -39,10 +40,12 @@ import whatson.model.{Login}
 import whatson.model.forms._
 import whatson.service._
 import whatson.util.FormErrorJson._
+import whatson.db.Util._
+import whatson.model.detail.EventDetail._
 
 class LoginController @Inject()(cc: ControllerComponents,
                                protected val dbConfigProvider: DatabaseConfigProvider,
-                                silhouette: Silhouette[AuthEnv],
+                                val silhouette: Silhouette[AuthEnv],
                                 encoder: AuthenticatorEncoder,
                                 settings: JWTAuthenticatorSettings,
                                 loginService: LoginService,
@@ -53,13 +56,15 @@ class LoginController @Inject()(cc: ControllerComponents,
                                 clock: Clock,
                                 cache: AsyncCacheApi,
                                 passwordHasher: PasswordHasher,
-                                userService: UserService,
-                                organizerService: OrganizerService,
+                                val userService: UserService,
+                                val organizerService: OrganizerService,
                                 mailService: MailService,
-                                avatarService: AvatarService)
+                                avatarService: AvatarService,
+                                val roleService: RoleService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
-    with HasDatabaseConfigProvider[JdbcProfile]{
+    with HasDatabaseConfigProvider[JdbcProfile]
+    with Util {
 
   val log = Logger("api.login")
 
@@ -211,5 +216,15 @@ class LoginController @Inject()(cc: ControllerComponents,
       }
       case _ => f(request)
     }
+  }
+
+  def getParticipatingEvents = withRights(whatson.model.Right.Participate)(parse.default) { case (request,login,role) =>
+    log.debug("Rest request to get events participating in")
+
+    implicit val r = request
+    val q = LoginTable.login.filter(_.id === login.id.getOrElse(-1)).flatMap(_.events)
+    val s = q.queryPaged(request).detailed
+
+    returnPaged(s,q,db)
   }
 }

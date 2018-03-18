@@ -6,13 +6,13 @@ import whatson.db.LoginTable._
 import whatson.db.EventTable._
 
 class ParticipantTable(tag: Tag) extends Table[(Int,Int)](tag, "participant") {
-  def userID = column[Int]("user_fk")
+  def loginID = column[Int]("login_fk")
   def eventID = column[Int]("event_fk")
 
-  def * = (userID,eventID)
+  def * = (loginID,eventID)
 
   def eventFK = foreignKey("event", eventID,event)(_.id)
-  def participant = foreignKey("participant", userID,UserTable.user)(_.id)
+  def participant = foreignKey("participant", loginID,LoginTable.login)(_.id)
 }
 
 object ParticipantTable {

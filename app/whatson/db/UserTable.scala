@@ -14,8 +14,6 @@ class UserTable(tag: Tag) extends Table[User](tag, "users") with HasID[User] {
   def * = (id.?,loginFk,avatar) <> (User.tupled, User.unapply)
 
   def login = foreignKey("login", loginFk,LoginTable.login)(_.id)
-
-  def events = ParticipantTable.participant.filter(_.userID === id).flatMap(_.eventFK)
 }
 
 object UserTable {

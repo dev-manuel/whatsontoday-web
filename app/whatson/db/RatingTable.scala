@@ -8,15 +8,15 @@ class RatingTable(tag: Tag) extends Table[Rating](tag, "rating") with HasID[Rati
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def rating = column[Float]("rating")
 
-  def userId = column[Int]("user_fk")
+  def loginId = column[Int]("login_fk")
 
   def entityId = column[Int]("entity_fk")
 
   def entityType = column[EntityType.Value]("entity_type")
 
-  def * = (id.?,rating,userId,entityId,entityType) <> (Rating.tupled, Rating.unapply)
+  def * = (id.?,rating,loginId,entityId,entityType) <> (Rating.tupled, Rating.unapply)
 
-  def user = foreignKey("user",userId,LoginTable.login)(_.id)
+  def login = foreignKey("login",loginId,LoginTable.login)(_.id)
 }
 
 object RatingTable {

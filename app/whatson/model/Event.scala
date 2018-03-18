@@ -14,8 +14,5 @@ object Event {
   implicit val eventReads = Json.reads[Event]
   implicit val eventWrites = Json.writes[Event]
 
-  implicit val getEventResult = GetResult(r => Event(r.nextIntOption, r.nextString, r.nextTimestamp, r.nextTimestamp,
-                                                           r.nextString, r.nextIntOption, r.nextInt))
-
   val tupled = (this.apply _).tupled
 }

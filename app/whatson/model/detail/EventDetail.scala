@@ -10,8 +10,8 @@ import whatson.db._
 import scala.concurrent.ExecutionContext
 
 case class EventDetail(id: Option[Int], name: String, from: Timestamp,
-                       to: Timestamp, description: String,
-                       creator: Organizer, categories: List[Category],
+                       to: Timestamp, description: String, creatorId: Option[Int],
+                       categories: List[Category],
                        avgRating: Option[Float], location: Location,
                        images: List[TaggedImage], participantCount: Int) extends Rateable with WithTaggedImages
 
@@ -24,11 +24,10 @@ object EventDetail {
   implicit class EventDetailQuery(q: Query[EventTable, Event, Seq]) {
     def detailed(implicit ec: ExecutionContext) = {
       val s = q.map(x => (x,x.participants.length,x.avgRating))
-        .join(OrganizerTable.organizer).on(_._1.creatorId === _.id)
-        .join(LocationTable.location).on(_._1._1.locationId === _.id)
+        .join(LocationTable.location).on(_._1.locationId === _.id)
       val t = s.result.flatMap(y => {
         DBIO.sequence(y.map {
-          case (((event,pCount,r), creator), location) => {
+          case ((event,pCount,r), location) => {
             val taggedImgs = EventTable.event.filter(_.id === event.id).flatMap(_.taggedImages).result.map(l => l.map(x => TaggedImage(x._2.id,x._1)))
 
             val c = for (
@@ -37,9 +36,8 @@ object EventDetail {
             ) yield c
 
             c.result.zip(taggedImgs).map(o => {
-              EventDetail(event.id, event.name, event.from, event.to, event.description,
-                          creator, o._1.toList, r,
-                          location, o._2.toList, pCount)
+              EventDetail(event.id, event.name, event.from, event.to, event.description, event.creatorId,
+                          o._1.toList, r,location, o._2.toList, pCount)
             })
           }
         })

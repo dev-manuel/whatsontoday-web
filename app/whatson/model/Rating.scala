@@ -4,7 +4,7 @@ import play.api.libs.json._
 import whatson.model._
 import whatson.model.EntityType._
 
-case class Rating(id: Option[Int], rating: Float, userId: Int, entityId: Int, entityType: EntityType.Value) extends HasCopy[Rating] {
+case class Rating(id: Option[Int], rating: Float, loginId: Int, entityId: Int, entityType: EntityType.Value) extends HasCopy[Rating] {
   def cpy(i: Option[Int]) = this.copy(id = i)
 }
 

@@ -29,10 +29,10 @@ class RatingController @Inject()(cc: ControllerComponents,
 
   val log = Logger("api.rating")
 
-  def rateEntity(id: Int, entityType: String, rate: Float) = userRequest(parse.default) { case (request,user) =>
+  def rateEntity(id: Int, entityType: String, rate: Float) = withRights()(parse.default) { case (request,login,role) =>
     log.debug("Rest request to rate entity")
 
-    val r = Rating(None,rate,user.id.getOrElse(1), id, EntityType.withName(entityType))
+    val r = Rating(None,rate,login.id.getOrElse(1), id, EntityType.withName(entityType))
     val inserted = db.run(insertAndReturn[Rating,RatingTable](rating,r))
 
     inserted.map(x => Ok(Json.toJson(x)))

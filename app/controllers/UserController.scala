@@ -87,14 +87,4 @@ class UserController@Inject() (
         }
       })
   }
-
-  def getParticipatingEvents = userRequest(parse.default) { case (request,user) =>
-    log.debug("Rest request to get events participating in")
-
-    implicit val r = request
-    val q = UserTable.user.filter(_.id === user.id.getOrElse(-1)).flatMap(_.events)
-    val s = q.queryPaged(request).detailed
-
-    returnPaged(s,q,db)
-  }
 }

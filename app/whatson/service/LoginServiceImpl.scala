@@ -12,11 +12,13 @@ import whatson.db._
 import whatson.db.LoginTable._
 import whatson.db.Util._
 import whatson.model._
+import whatson.service._
 import whatson.util._
 
 class LoginServiceImpl @Inject()(
   protected val dbConfigProvider: DatabaseConfigProvider,
-  applicationConfig: ApplicationConfig)(implicit context: ExecutionContext)
+  applicationConfig: ApplicationConfig,
+  roleService: RoleService)(implicit context: ExecutionContext)
     extends LoginService with HasDatabaseConfigProvider[JdbcProfile] {
 
   /**
@@ -81,12 +83,14 @@ class LoginServiceImpl @Inject()(
     val qa = q.map(x => x.email)
 
     val l = profile.email.getOrElse("")
-    val loginInsert = Login(None,profile.email.getOrElse(""),None,None,None,
-                 profile.loginInfo.providerID,profile.loginInfo.providerKey,true, userType, 1)
 
-    db.run(qa.update(l)).flatMap {
-      case 0 => db.run(login += loginInsert)
-      case i => Future(i)
+    db.run(qa.update(l)).zip(roleService.getByName("DEFAULT")).flatMap {
+      case (0,defId) => {
+        val loginInsert = Login(None,profile.email.getOrElse(""),None,None,None,
+                                profile.loginInfo.providerID,profile.loginInfo.providerKey,true, userType, defId.flatMap(_.id).getOrElse(-1))
+        db.run(login += loginInsert)
+      }
+      case (i,_) => Future(i)
     }.flatMap(_ => db.run(q.result)).map(_.head)
   }
 

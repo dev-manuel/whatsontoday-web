@@ -43,7 +43,8 @@ class OrganizerController@Inject() (
   protected val dbConfigProvider: DatabaseConfigProvider,
   organizerService: OrganizerService,
   mailService: MailService,
-  avatarService: AvatarService)
+  avatarService: AvatarService,
+  roleService: RoleService)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
 
   val log = Logger("api.organizer")
@@ -86,9 +87,10 @@ class OrganizerController@Inject() (
           Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
         case None =>
           val authInfo = passwordHasher.hash(data.password)
-          val login = Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, "organizer", 1)
           for {
-            login <- loginService.save(login)
+            defaultRole <- roleService.getByName("DEFAULT")
+            login <- loginService.save(
+              Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, "organizer", defaultRole.flatMap(_.id).getOrElse(-1)))
             authInfo <- authInfoRepository.add(loginInfo, authInfo)
             authenticator <- silhouette.env.authenticatorService.create(loginInfo)
             token <- silhouette.env.authenticatorService.init(authenticator)

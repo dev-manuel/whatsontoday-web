@@ -1,7 +1,7 @@
 import React from 'react'
 import log from 'loglevel'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
-import {withRouter} from 'react-router'
+import {withRouter, Link} from 'react-router-dom'
 
 import ModalError from '../modal'
 import {signIn} from '../../common/api/requests/login'
@@ -88,7 +88,7 @@ class SignInPanel extends React.Component {
                     </Segment>
                 </Form>
                 <Message>
-                    {lang.newToUs} <a href='signup'>{lang.signUp}</a>
+                    {lang.newToUs} <Link to='/signup'>{lang.signUp}</Link>
                 </Message>
             </div>
         )

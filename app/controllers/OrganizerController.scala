@@ -44,7 +44,7 @@ class OrganizerController@Inject() (
   organizerService: OrganizerService,
   mailService: MailService,
   avatarService: AvatarService,
-  roleService: RoleService)
+  val roleService: RoleService)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
 
   val log = Logger("api.organizer")

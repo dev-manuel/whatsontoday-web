@@ -12,7 +12,7 @@ import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import whatson.db.ImageTable._
 import whatson.db.Util._
-import whatson.model._
+import whatson.model.{Image, EntityType, Organizer, Login, ImageEntity}
 import whatson.model.Image._
 import akka.util._
 import java.io._
@@ -29,7 +29,8 @@ class ImageController @Inject()(cc: ControllerComponents,
                                 protected val dbConfigProvider: DatabaseConfigProvider,
                                 val silhouette: Silhouette[AuthEnv],
                                 val organizerService: OrganizerService,
-                                val userService: UserService)
+                                val userService: UserService,
+                                val roleService: RoleService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] with Util {

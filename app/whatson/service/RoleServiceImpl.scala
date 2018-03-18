@@ -8,6 +8,7 @@ import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import whatson.db.Util._
 import whatson.model._
+import whatson.model.detail.RoleDetail._
 import whatson.util._
 
 class RoleServiceImpl @Inject()(
@@ -16,4 +17,6 @@ class RoleServiceImpl @Inject()(
     extends RoleService with HasDatabaseConfigProvider[JdbcProfile] {
 
   def getByName(name: String) = db.run(RoleTable.role.filter(_.name === name).result).map(_.headOption)
+
+  def getDetailed(id: Int) = db.run(RoleTable.role.filter(_.id === id).detailed).map(_.headOption)
 }

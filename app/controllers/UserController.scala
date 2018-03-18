@@ -46,7 +46,7 @@ class UserController@Inject() (
   mailService: MailService,
   avatarService: AvatarService,
   val organizerService: OrganizerService,
-  roleService: RoleService)
+  val roleService: RoleService)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile]
     with Util{
 

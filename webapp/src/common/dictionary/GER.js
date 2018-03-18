@@ -15,6 +15,7 @@ export default {
         signIn: 'Anmelden',
         signUp: 'Registrieren',
         signOut: 'Ausloggen',
+        options: 'Profil verwalten',
         // dropdown...
     },
     home: {

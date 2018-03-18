@@ -13,43 +13,41 @@ import { axios } from '../../common/api';
 
 
 const LoggedOutButtons = ({language}) => {
-    return [(
-        <Link to='/signIn'>
-            <Button 
-                className='headerButtonStyle'
-                basic
-                color='teal'
-                key={1}
+    return (
+        <React.Fragment>
+            <Link 
+                to='/signIn'
+                className='headerButtonStyle'                        
             >
                 <Icon name='sign in' /> {language.signIn}
-            </Button>
-        </Link>
-    ),
-    (
-        <Link to='/signUp'>        
-            <Button 
-                className='headerButtonStyle'
-                basic
-                color='teal'
-                key={2}
-            >
-                <Icon name='signup' /> {language.signUp}
-            </Button>
-        </Link>
-    )]
+            </Link>
+            <Link
+                to='/signUp'
+                className='headerButtonStyle'            
+            >        
+                    <Icon name='signup' /> {language.signUp}
+            </Link>
+        </React.Fragment>
+    )
 }
 
 const LoggedInButtons = ({language, onSignOut}) => {
 
     return (
-        <Button 
-            className='headerButtonStyle'
-            basic
-            color='teal'
-            onClick={onSignOut}
-        >
-            <Icon name='sign out' /> {language.signOut}
-        </Button>
+        <React.Fragment>
+            <a 
+                className='headerButtonStyle'
+                onClick={onSignOut}
+            >
+                <Icon name='sign out' /> {language.signOut}
+            </a>
+            <Link 
+                to='/options'
+                className='headerButtonStyle'                        
+            >
+                <Icon name='setting' /> {language.options}
+            </Link>
+        </React.Fragment>
     )
 }
 
@@ -120,22 +118,17 @@ class Header extends React.Component{
 
                     <Menu.Item className='headerButtons'>
 
-                            <Button 
-                                className='headerButtonStyle'
-                                basic
-                                color='teal'                    
+                            <a 
+                                className='headerButtonStyle'                  
                             >
                                 <Icon name='newspaper' /> {language.blog}
-                            </Button>
+                            </a>
 
-                            <Link to='/event_tool/create'>                            
-                                <Button 
-                                    className='headerButtonStyle'
-                                    basic
-                                    color='teal'
-                                >
-                                    <Icon name='plus' /> {language.addEvent}
-                                </Button>
+                            <Link 
+                                to='/event_tool/create'
+                                className='headerButtonStyle'            
+                            >                            
+                                <Icon name='plus' /> {language.addEvent}
                             </Link>
 
                             {conditionalButtons}

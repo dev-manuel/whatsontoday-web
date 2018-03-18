@@ -15,6 +15,7 @@ object Right {
   val tupled = (this.apply _).tupled
 
   object Rights extends DbEnumeration {
-    val CreateEvent, ConfirmEvent, CreateCategory = Value
+    val CreateEvent, ConfirmEvent, CreateCategory, CreateLocation,
+        Participate, CreateImage, ConfirmUser = Value
   }
 }

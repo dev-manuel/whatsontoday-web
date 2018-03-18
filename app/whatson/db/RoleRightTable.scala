@@ -16,5 +16,5 @@ class RoleRightsTable(tag: Tag) extends Table[(Int,Int)](tag, "rolerights") {
 }
 
 object RoleRightsTable {
-  val roleRight = TableQuery[RoleRightsTable]
+  val roleRights = TableQuery[RoleRightsTable]
 }

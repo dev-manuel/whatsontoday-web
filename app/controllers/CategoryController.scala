@@ -42,7 +42,7 @@ class CategoryController @Inject()(cc: ControllerComponents,
     db.run(q.detailed).map(x => Ok(Json.toJson(x)))
   }
 
-  def createCategory() = organizerRequest(parse.json) { case (request,organizer) =>
+  def createCategory() = withRights(Right.CreateCategory)(parse.json) { case (request,login,role) =>
     CategoryForm.form.bindFromRequest()(request).fold(
       form => {
         Future.successful(BadRequest(Json.toJson(form.errors)))

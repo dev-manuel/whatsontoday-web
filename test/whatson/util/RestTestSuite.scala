@@ -80,16 +80,21 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   def getToken(login: Login): Future[String] = authenticatorService.create(LoginInfo("credentials", login.email))
     .flatMap(x => authenticatorService.init(x))
 
-  def createLogin(mail: String, confirmed: Boolean = true, userType: String = "user"): Future[Login] = {
+  def createLogin(mail: String, confirmed: Boolean = true, userType: String = "user", roleName: String = "DEFAULT"): Future[Login] = {
     val pwInfo = passwordHasher.hash("")
 
-    val login = Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, confirmed, userType, 1)
+    db.run(RoleTable.role.filter(_.name === roleName).result.map(_.headOption)).map {
+      case Some(role) => role.id.getOrElse(-1)
+      case None => -1
+    }.flatMap { case roleId =>
+        val login = Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, confirmed, userType, roleId)
 
-    db.run(insertAndReturn[Login,LoginTable](LoginTable.login,login))
+        db.run(insertAndReturn[Login,LoginTable](LoginTable.login,login))
+    }
   }
 
-  def createOrganizer(name: String = "testorganizer", mail: String = "testorganizer@test.de", confirmed: Boolean = true): Future[(Login,Organizer,String)] = {
-    createLogin(mail, confirmed, "organizer").flatMap { case login =>
+  def createOrganizer(name: String = "testorganizer", mail: String = "testorganizer@test.de", confirmed: Boolean = true, roleName: String = "DEFAULT"): Future[(Login,Organizer,String)] = {
+    createLogin(mail, confirmed, "organizer", roleName).flatMap { case login =>
       db.run(insertAndReturn[Organizer,OrganizerTable](OrganizerTable.organizer,Organizer(None, name, login.id.getOrElse(-1), None)))
         .map(o => (login,o))
     }.flatMap { case (l,o) =>
@@ -97,8 +102,8 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
     }
   }
 
-  def createUser(mail: String = "testuser@test.de"): Future[(Login,User,String)] = {
-    createLogin(mail, true, "user").flatMap { case login =>
+  def createUser(mail: String = "testuser@test.de", roleName: String = "DEFAULT"): Future[(Login,User,String)] = {
+    createLogin(mail, true, "user", roleName).flatMap { case login =>
       db.run(insertAndReturn[User,UserTable](UserTable.user,User(None, login.id.getOrElse(-1), None)))
         .map(o => (login,o))
     }.flatMap { case (l,o) =>

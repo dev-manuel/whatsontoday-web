@@ -19,14 +19,19 @@ import com.mohiva.play.silhouette.api._
 import whatson.auth._
 import whatson.model.forms._
 import whatson.util.FormErrorJson._
+import whatson.service._
 
 
 class LocationController @Inject()(cc: ControllerComponents,
                                    protected val dbConfigProvider: DatabaseConfigProvider,
-                                   silhouette: Silhouette[AuthEnv])
+                                   val silhouette: Silhouette[AuthEnv],
+                                   val organizerService: OrganizerService,
+                                   val userService: UserService,
+                                   val roleService: RoleService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
-    with HasDatabaseConfigProvider[JdbcProfile] {
+    with HasDatabaseConfigProvider[JdbcProfile]
+    with Util {
 
   val log = Logger("api.location")
 
@@ -67,7 +72,7 @@ class LocationController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def createLocation() = silhouette.SecuredAction.async(parse.json) { implicit request =>
+  def createLocation() = withRights(Right.CreateLocation)(parse.json) { case (request,login,role) =>
     LocationForm.form.bindFromRequest()(request).fold(
       form => {
         Future.successful(BadRequest(Json.toJson(form.errors)))

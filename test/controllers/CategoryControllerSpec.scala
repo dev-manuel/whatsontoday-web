@@ -23,8 +23,8 @@ class CategoryControllerSpec extends RestTestSuite {
   }
 
   "CategoryController POST" should {
-    "return OK on proper request from organizer" in {
-      val organizer = Await.result(createOrganizer(), Duration.Inf)
+    "return OK on proper request from admins" in {
+      val organizer = Await.result(createUser(roleName = "Admin"), Duration.Inf)
       val category = Category(None, "testcategory", 1)
 
       val create = route(app, FakeRequest(POST, "/api/v1/category",
@@ -34,8 +34,19 @@ class CategoryControllerSpec extends RestTestSuite {
       status(create) mustBe OK
     }
 
-    "return Unauthorized on request from user" in {
+    "return Unauthorized on request from default users" in {
       val user = Await.result(createUser(), Duration.Inf)
+      val category = Category(None, "testcategory", 1)
+
+      val create = route(app, FakeRequest(POST, "/api/v1/category",
+                                          new Headers(List(("Content-Type","application/json"),("x-auth-token",user._3))),
+                                          Json.toJson(category))).get
+
+      status(create) mustBe UNAUTHORIZED
+    }
+
+    "return Unauthorized on request from confirmed users" in {
+      val user = Await.result(createUser(roleName = "ConfirmedUser"), Duration.Inf)
       val category = Category(None, "testcategory", 1)
 
       val create = route(app, FakeRequest(POST, "/api/v1/category",

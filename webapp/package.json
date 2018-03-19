@@ -6,10 +6,17 @@
   "scripts": {
     "dev": "webpack-dev-server --config webpack/dev.config.js --progress",
     "test": "jest",
+    "testCov": "jest --all --bail --coverage",
     "build": "webpack --config webpack/prod.config.js --progress --bail"
   },
   "author": "WhatsOnToday",
-  "license": "ISC",
+  "license": "MS-PL",
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters":[
+      "html"
+    ]
+  },
   "devDependencies": {
     "axios": "^0.17.1",
     "axios-mock-adapter": "^1.12.0",

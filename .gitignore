@@ -2,6 +2,7 @@ logs
 .vscode
 public/
 secrets.sh
+webapp/coverage/
  
 ### Node ###
 # Logs

@@ -180,8 +180,8 @@ export default class Create extends React.Component {
     //
     fetchLocations( searchQuery){
         getLocations(searchQuery, 0, 5)
-            .then( data => {
-                const locationOptions = data.map( (locationEntry, index) => ({
+            .then( locationResult => {
+                const locationOptions = locationResult.map( (locationEntry, index) => ({
                     key: index,
                     text: locationEntry.name,
                     value: locationEntry.id,

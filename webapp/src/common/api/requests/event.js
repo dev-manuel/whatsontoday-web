@@ -134,7 +134,8 @@ export const unparticipateToEvent = id => {
  * @param {[{id: number, name: string, parentId: number}]} images
  */
 export const createEvent = (name, description, locationId, from, to, images, categories) => {
-    const location = locationId ? {id: locationId, name: 'void', latitude: 0, longitude: 0} : undefined;
+    const location = locationId ? {id: locationId, name: 'void', latitude: 0,
+        longitude: 0, country: 'void', city: 'void', street: 'void'} : undefined;
     const req = {
         name,
         description,
@@ -168,8 +169,8 @@ export const createEvent = (name, description, locationId, from, to, images, cat
  * @param {[number]} images
  */
 export const updateEvent = (id, name, description, locationId, from, to, images, categories) => {
-
-    const location = locationId ? {id: locationId, name: 'void', latitude: 0, longitude: 0} : undefined;
+    const location = locationId ? {id: locationId, name: 'void', latitude: 0,
+        longitude: 0, country: 'void', city: 'void', street: 'void'} : undefined;
     const req = {
         name,
         description,

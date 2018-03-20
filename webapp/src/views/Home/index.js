@@ -2,10 +2,10 @@
 import React from 'react';
 
 // Import resources
-import Slider from '../components/slider';
-import CategoryTileTable from '../components/categoryTileTable';
-import EvenTileTable from '../components/eventTileTable';
-import exampleTileImage from '../img/example_tile.png';
+import Slider from '../../components/slider';
+import CategoryTileTable from '../../components/categoryTileTable';
+import EvenTileTable from '../../components/eventTileTable';
+import exampleTileImage from '../../img/example_tile.png';
 
 
 const categoryList = [

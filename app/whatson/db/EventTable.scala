@@ -16,13 +16,15 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Ev
   def from = column[Timestamp]("fromtime")
   def to = column[Timestamp]("totime")
 
-  def description = column[String]("description",O.Unique)
+  def description = column[String]("description")
+
+  def shortDescription = column[String]("short_description")
 
   def creatorId = column[Option[Int]]("creator_fk")
 
   def locationId = column[Int]("location_fk")
 
-  def * = (id.?,name,from,to,description,creatorId,locationId) <> (Event.tupled, Event.unapply)
+  def * = (id.?,name,from,to,description,shortDescription,creatorId,locationId) <> (Event.tupled, Event.unapply)
 
   def creator = foreignKey("creator",creatorId,OrganizerTable.organizer)(_.id.?)
   def location = foreignKey("location",locationId,LocationTable.location)(_.id)

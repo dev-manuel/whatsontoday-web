@@ -18,14 +18,15 @@ object EventForm {
       "categories" -> list(CategoryForm.map),
       "location" -> LocationForm.map,
       "images" -> list(TaggedImageForm.map),
-      "description" -> nonEmptyText
+      "description" -> nonEmptyText,
+      "shortDescription" -> nonEmptyText
     )(Data.apply)(Data.unapply)
   val form = Form(map)
 
   case class Data(name: String, from: Timestamp,
                   to: Timestamp, categories: List[Category],
                   location: Location, images: List[TaggedImageForm.Data],
-                  description: String)
+                  description: String, shortDescription: String)
 
   object Data {
     implicit val jsonFormat = Json.format[Data]

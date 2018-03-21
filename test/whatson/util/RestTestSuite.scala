@@ -118,7 +118,7 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   }
 
   def createEvent(org: Option[Organizer] = None, name: String = "testevent",
-                  from: Timestamp = new Timestamp(0), to: Timestamp = new Timestamp(0),
+                  from: Timestamp = new Timestamp(0), to: Option[Timestamp] = Some(new Timestamp(0)),
                   description: String = "testdescription", locationId: Option[Int] = None): Future[Event] = {
 
     org.map(Future.successful(_)).getOrElse(createOrganizer().map(_._2))

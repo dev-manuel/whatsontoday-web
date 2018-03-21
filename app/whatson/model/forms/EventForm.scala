@@ -14,7 +14,7 @@ object EventForm {
   val map = mapping(
       "name" -> nonEmptyText,
       "from" -> sqlTimestamp("yyyy-MM-dd HH:mm:ss"),
-      "to" -> sqlTimestamp("yyyy-MM-dd HH:mm:ss"),
+      "to" -> optional(sqlTimestamp("yyyy-MM-dd HH:mm:ss")),
       "categories" -> list(CategoryForm.map),
       "location" -> LocationForm.map,
       "images" -> list(TaggedImageForm.map),
@@ -23,7 +23,7 @@ object EventForm {
   val form = Form(map)
 
   case class Data(name: String, from: Timestamp,
-                  to: Timestamp, categories: List[Category],
+                  to: Option[Timestamp], categories: List[Category],
                   location: Location, images: List[TaggedImageForm.Data],
                   description: String)
 

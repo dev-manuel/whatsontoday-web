@@ -192,7 +192,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescription")
+                                     List(), "testdescription", "short description")
 
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
@@ -209,7 +209,7 @@ class EventControllerSpec extends RestTestSuite {
       val location = Await.result(createLocation(), Duration.Inf)
 
       val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(), location,
-                                     List(), "testdescription")
+                                     List(), "testdescription", "short description")
 
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
@@ -227,7 +227,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(category),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescription")
+                                     List(), "testdescription", "short description")
 
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
@@ -245,7 +245,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(category),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescription")
+                                     List(), "testdescription", "short description")
 
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
@@ -261,7 +261,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(TaggedImageForm.Data(image.id.getOrElse(-1),None)), "testdescription")
+                                     List(TaggedImageForm.Data(image.id.getOrElse(-1),None)), "testdescription", "short description")
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
 
@@ -277,7 +277,7 @@ class EventControllerSpec extends RestTestSuite {
       val tag = Some("testtag")
       val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(TaggedImageForm.Data(image.id.getOrElse(-1),tag)), "testdescription")
+                                     List(TaggedImageForm.Data(image.id.getOrElse(-1),tag)), "testdescription", "short description")
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
 
@@ -293,7 +293,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescription")
+                                     List(), "testdescription", "short description")
 
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
@@ -308,7 +308,21 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "")
+                                     List(), "", "short description")
+
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
+                                          Json.toJson(eventForm))).get
+
+      status(events) mustBe BAD_REQUEST
+    }
+
+    "return BadRequest for empty short event description" in {
+      val organizer = Await.result(createOrganizer(), Duration.Inf)
+      val location = Await.result(createLocation(), Duration.Inf)
+
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(),
+                                     Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
+                                     List(), "description", "")
 
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
@@ -321,7 +335,7 @@ class EventControllerSpec extends RestTestSuite {
       val location = Await.result(createLocation(), Duration.Inf)
 
       val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(), location,
-                                     List(), "testdescription")
+                                     List(), "testdescription", "short description")
 
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),
                                           Json.toJson(eventForm))).get
@@ -367,7 +381,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("testeventupdated", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescriptionupdated")
+                                     List(), "testdescriptionupdated", "short description updated")
       val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
@@ -380,7 +394,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("testeventupdated", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescriptionupdated")
+                                     List(), "testdescriptionupdated", "short description")
       val events = route(app, FakeRequest(PUT, "/api/v1/events/20000",
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
@@ -395,7 +409,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("testeventupdated", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescriptionupdated")
+                                     List(), "testdescriptionupdated", "short description")
       val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer2._3))),
                                           Json.toJson(eventForm))).get
@@ -409,7 +423,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescriptionupdated")
+                                     List(), "testdescriptionupdated", "short description")
       val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
@@ -423,7 +437,7 @@ class EventControllerSpec extends RestTestSuite {
 
       val eventForm = EventForm.Data("testeventupdated", new Timestamp(0), new Timestamp(0), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescriptionupdated")
+                                     List(), "testdescriptionupdated", "short description")
       val events = route(app, FakeRequest(PUT, "/api/v1/events/" ++ event.id.getOrElse(-1).toString,
                                           new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),
                                           Json.toJson(eventForm))).get

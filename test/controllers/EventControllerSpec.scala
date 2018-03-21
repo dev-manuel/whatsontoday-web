@@ -320,7 +320,7 @@ class EventControllerSpec extends RestTestSuite {
       val organizer = Await.result(createOrganizer(), Duration.Inf)
       val location = Await.result(createLocation(), Duration.Inf)
 
-      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(),
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), Some(new Timestamp(0)), List(),
                                      Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
                                      List(), "description", "")
 

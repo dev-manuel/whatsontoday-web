@@ -5,8 +5,9 @@ import play.api.libs.json._
 import whatson.util.DateTime._
 import slick.jdbc._
 
-case class Event(id: Option[Int], name: String, from: Timestamp, to: Timestamp, description: String,
-                 shortDescription: String, creatorId: Option[Int], locationId: Int) extends HasCopy[Event] {
+case class Event(id: Option[Int], name: String, from: Timestamp, to: Option[Timestamp],
+                 description: String, shortDescription: String, creatorId: Option[Int],
+                 locationId: Int) extends HasCopy[Event] {
   def cpy(i: Option[Int]) = this.copy(id = i)
 }
 

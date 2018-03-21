@@ -14,7 +14,7 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Ev
   def name = column[String]("name",O.Unique)
 
   def from = column[Timestamp]("fromtime")
-  def to = column[Timestamp]("totime")
+  def to = column[Option[Timestamp]]("totime")
 
   def description = column[String]("description")
 

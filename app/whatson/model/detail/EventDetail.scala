@@ -10,7 +10,7 @@ import whatson.db._
 import scala.concurrent.ExecutionContext
 
 case class EventDetail(id: Option[Int], name: String, from: Timestamp,
-                       to: Timestamp, description: String, shortDescription: String,
+                       to: Option[Timestamp], description: String, shortDescription: String,
                        creator: Organizer, categories: List[Category],
                        avgRating: Option[Float], location: Location,
                        images: List[TaggedImage], participantCount: Int) extends Rateable with WithTaggedImages

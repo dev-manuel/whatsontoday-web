@@ -4,6 +4,7 @@
 @small: ~"only screen and (max-width: 767px)";
 
 
+
 .BaseView_container {
     min-height: 100vh; /* will cover the 100% of viewport */
     overflow: hidden;
@@ -21,11 +22,44 @@
 .BaseView_header {
 }
 .BaseView_body {
-    padding-top: 30px; // <--? Todo
 }
 .BaseView_footer {
     
     width: 100%;
     position: absolute;
     bottom: 0px;
+}
+
+
+
+.BaseView_container_smBar {
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    min-height: 800px;
+    
+}
+
+.BaseView_footer_smBar {
+    width: 100%;
+    position: absolute;
+    
+    // Handle respnosive "jupms" of the footer hight
+    @media @big {
+        bottom: -310px; /* height of your footer */
+    }
+    @media @small {
+        bottom: -566px; /* height of your footer */
+    }
+}
+
+.BaseView_smBar {
+    width: 100%;
+    position: absolute;
+    bottom: 0px;    
+}
+
+.BaseView_smBarHidden {
+    display: none;
 }

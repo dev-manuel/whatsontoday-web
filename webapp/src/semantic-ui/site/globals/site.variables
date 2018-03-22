@@ -2,11 +2,13 @@
          Site Settings
 *******************************/
 
+@import "../../../common/less/colors";
+
 /*-------------------
        Fonts
 --------------------*/
 
-@fontName          : 'Lato';
+@fontName          : 'Oxygen';
 @fontSmoothing     : antialiased;
 
 @headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -75,13 +77,13 @@
 ---------------*/
 
 /* This adjusts the default form input across all elements */
-@inputBackground        : @white;
+@inputBackground        : @mainLightGray1;
 @inputVerticalPadding   : @relative11px;
 @inputHorizontalPadding : @relative14px;
 @inputPadding           : @inputVerticalPadding @inputHorizontalPadding;
 
 /* Input Text Color */
-@inputColor: @textColor;
+@inputColor: @mainLightGray3;
 @inputPlaceholderColor: lighten(@inputColor, 75);
 @inputPlaceholderFocusColor: lighten(@inputColor, 45);
 
@@ -93,10 +95,10 @@
 --------------------*/
 
 /* Used on inputs, textarea etc */
-@focusedFormBorderColor: #85B7D9;
+@focusedFormBorderColor: @mainGreen;
 
 /* Used on dropdowns, other larger blocks */
-@focusedFormMutedBorderColor: #96C8DA;
+@focusedFormMutedBorderColor: @mainGreen;
 
 /*-------------------
         Sizes
@@ -121,11 +123,11 @@
         Page
 --------------------*/
 
-@pageBackground      : #FFFFFF;
+@pageBackground      : @mainGray;
 @pageOverflowX       : hidden;
 
 @lineHeight          : 1.4285em;
-@textColor           : rgba(0, 0, 0, 0.87);
+@textColor           : @mainLightGray3;
 
 /*-------------------
       Paragraph
@@ -138,7 +140,7 @@
        Links
 --------------------*/
 
-@linkColor           : #4183C4;
+@linkColor           : @mainGreen;
 @linkUnderline       : none;
 @linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
 @linkHoverUnderline  : @linkUnderline;
@@ -224,7 +226,7 @@
 @orange           : #F2711C;
 @yellow           : #FBBD08;
 @olive            : #B5CC18;
-@green            : #21BA45;
+@green            : @mainGreen;
 @teal             : #00B5AD;
 @blue             : #2185D0;
 @violet           : #6435C9;
@@ -475,7 +477,7 @@
 @strongSelectedBorderColor : rgba(34, 36, 38, 0.5);
 @disabledBorderColor       : rgba(34, 36, 38, 0.5);
 
-@solidInternalBorderColor  : #FAFAFA;
+@solidInternalBorderColor  : @mainLightGray2;
 @solidBorderColor          : #D4D4D5;
 @solidSelectedBorderColor  : #BCBDBD;
 
@@ -961,5 +963,7 @@
 
 /*---  Light Tones  ---*/
 @whiteActive           : darken(@white, 5);
+@offWhiteActive        : darken(@offWhite, 5);
+@darkWhiteActive       : darken(@darkWhite, 5);
 @offWhiteActive        : darken(@offWhite, 5);
 @darkWhiteActive       : darken(@darkWhite, 5);

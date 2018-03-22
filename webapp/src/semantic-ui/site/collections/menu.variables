@@ -19,7 +19,7 @@
 @borderWidth: 1px;
 @border: @borderWidth solid @borderColor;
 @boxShadow: @subtleShadow;
-@borderRadius: @defaultBorderRadius;
+@borderRadius: 0px;
 @minHeight: (@itemVerticalPadding * 2) + 1em;
 
 /* Menu Item */

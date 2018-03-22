@@ -1,5 +1,6 @@
 import React from 'react'
 import log from 'loglevel'
+import {Button} from 'semantic-ui-react'
 
 import Slider from './components/slider'
 import CategoryTileTable from '../../components/categoryTileTable'
@@ -18,6 +19,8 @@ const Home = ({language}) => {
         },
     ]
     
+    const socialMediaSize = 'huge';
+
     return (
         <div>
             <div className="Home_search">
@@ -40,6 +43,15 @@ const Home = ({language}) => {
                     <ExampleSlide/>
                 ]}
             />
+            <div
+                className="Home_socialMedia"
+            >
+                <div>
+                    <Button size={socialMediaSize} circular color='facebook' icon='facebook f' />
+                    <Button size={socialMediaSize} circular color='twitter' icon='twitter' />
+                    <Button size={socialMediaSize} circular color='instagram' icon='instagram' />
+                </div>
+            </div>
             {/* <CategoryTileTable categoryList={categoryList} language={language}/>
             <EvenTileTable eventList={eventList} language={language}/> */}
         </div>

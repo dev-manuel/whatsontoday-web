@@ -6,8 +6,8 @@ import CategoryTileTable from '../../components/categoryTileTable'
 import EvenTileTable from '../../components/eventTileTable'
 import exampleTileImage from '../../img/example_tile.png'
 import SearchPanel from './components/searchPanel'
+import ExampleSlide from './slides/example'
 
-import backgroundImage from '../../img/blurred.jpeg'
 import './Home.less'
 
 const Home = ({language}) => {
@@ -37,7 +37,7 @@ const Home = ({language}) => {
             <Slider
                 language={language}
                 slides={[
-                    <img src={backgroundImage}/>
+                    <ExampleSlide/>
                 ]}
             />
             {/* <CategoryTileTable categoryList={categoryList} language={language}/>

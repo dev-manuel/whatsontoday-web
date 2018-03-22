@@ -20,6 +20,7 @@ const Home = ({language}) => {
     ]
     
     const socialMediaSize = 'huge';
+    const lang = language.externalLinks;
 
     return (
         <div>
@@ -47,9 +48,9 @@ const Home = ({language}) => {
                 className="Home_socialMedia"
             >
                 <div>
-                    <Button size={socialMediaSize} circular color='facebook' icon='facebook f' />
-                    <Button size={socialMediaSize} circular color='twitter' icon='twitter' />
-                    <Button size={socialMediaSize} circular color='instagram' icon='instagram' />
+                    <Button href={lang.facebook} size={socialMediaSize} circular color='facebook' icon='facebook f' />
+                    <Button href={lang.twitter} size={socialMediaSize} circular color='twitter' icon='twitter' />
+                    <Button href={lang.instagram} size={socialMediaSize} circular color='instagram' icon='instagram' />
                 </div>
             </div>
             {/* <CategoryTileTable categoryList={categoryList} language={language}/>

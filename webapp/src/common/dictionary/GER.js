@@ -4,6 +4,11 @@ import moment from 'moment'
  * @readonly
  */
 export default {
+    externalLinks: {
+        facebook: 'https://www.facebook.com/findyournextevent/',
+        instagram: 'https://www.instagram.com/findyournextevent/',
+        twitter: 'https://twitter.com/yournextevent',
+    },
     time: {
         locale: 'de',
         to: 'bis',

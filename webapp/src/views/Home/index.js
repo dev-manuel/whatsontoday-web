@@ -19,11 +19,15 @@ const Home = ({language}) => {
         },
     ]
     
-    const socialMediaSize = 'huge';
-    const lang = language.externalLinks;
 
     return (
         <div>
+            <Slider
+                language={language}
+                slides={[
+                    <ExampleSlide/>
+                ]}
+            />
             <div className="Home_search">
                 <h1>Find your next event!</h1>
                 <div className="Home_searchPanel">
@@ -38,21 +42,7 @@ const Home = ({language}) => {
                     />
                 </div>
             </div>
-            <Slider
-                language={language}
-                slides={[
-                    <ExampleSlide/>
-                ]}
-            />
-            <div
-                className="Home_socialMedia"
-            >
-                <div>
-                    <Button href={lang.facebook} size={socialMediaSize} circular color='facebook' icon='facebook f' />
-                    <Button href={lang.twitter} size={socialMediaSize} circular color='twitter' icon='twitter' />
-                    <Button href={lang.instagram} size={socialMediaSize} circular color='instagram' icon='instagram' />
-                </div>
-            </div>
+            
             {/* <CategoryTileTable categoryList={categoryList} language={language}/>
             <EvenTileTable eventList={eventList} language={language}/> */}
         </div>

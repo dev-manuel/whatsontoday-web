@@ -23,7 +23,12 @@ export default {
         science: 'Wissenschaft',
         party: 'Party',
         culture: 'Kultur',
-        fair: 'Feste'
+        fair: 'Feste',
+        
+        search: 'Suche...',
+        city: 'Stadt...',
+        category: 'Kategorie...',
+        submit: 'Suche',
     },
     footer: {
         socialMedia: 'Social Media',

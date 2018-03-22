@@ -23,7 +23,7 @@ module.exports = {
         loaders: [
             // Loading image- and font-files
             {
-                test: /\.(png|jpg|gif|woff|svg|eot|ttf|woff2)$/,
+                test: /\.(png|jpg|jpeg|gif|woff|svg|eot|ttf|woff2)$/,
                 use: [
                   { loader: 'file-loader' },
                 ],

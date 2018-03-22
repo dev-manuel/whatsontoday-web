@@ -29,7 +29,7 @@
 @textTransition: none;
 
 /* Menu */
-@menuBackground: @mainLightGray2;
+@menuBackground: @mainLightGray3;
 @menuMargin: 0em;
 @menuPadding: 0em 0em;
 @menuTop: 100%;

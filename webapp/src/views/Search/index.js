@@ -4,10 +4,10 @@ import {parse, stringify} from 'query-string'
 import log from 'loglevel'
 import {Grid, Pagination, Segment, Container, Header, Button, Icon } from 'semantic-ui-react'
 
-import './SERP.less'
-import FilterPanel from '../components/filterPanel'
-import EventTileTableBig from '../components/eventTileTableBig'
-import {searchEvents, sortDirection as SortDirectionEnum, sort as SortEnum} from '../common/api/requests/event'
+import './Search.less'
+import FilterPanel from '../../components/filterPanel'
+import EventTileTableBig from './components/eventTileTableBig'
+import {searchEvents, sortDirection as SortDirectionEnum, sort as SortEnum} from '../../common/api/requests/event'
 
 
 export const LoadingView = () => (
@@ -43,13 +43,13 @@ export const ShowingEvents = ({eventList, language, itemNumber, page, pageSize, 
     const pageNumber = Math.ceil(itemNumber / pageSize);
 
     return (
-        <div className="pageContent">
+        <div className="Search_pageContent">
             {/* <FilterPanel global={global}/> */}
-            <div className="tileTable">
+            <div className="Search_tileTable">
                 <EventTileTableBig itemNumber={itemNumber} eventList={eventList} language={language}/>
 
                 {/* Page has offset of one */}
-                <div className="SERP_pagination">
+                <div className="Search_pagination">
                     <Pagination
                         activePage={page}
                         totalPages={pageNumber}

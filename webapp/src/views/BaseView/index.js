@@ -4,7 +4,7 @@ import log from 'loglevel'
 
 import Header from '../Header'
 import HomeView from '../Home'
-import SERPView from '../SERP'
+import SERPView from '../Search'
 import EventView from '../Event'
 import OrganizerView from '../Organizer'
 import LocationView from '../Location'

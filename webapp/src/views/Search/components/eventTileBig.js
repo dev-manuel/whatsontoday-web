@@ -2,10 +2,10 @@ import React from 'react'
 import {Icon} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
-import ConditionalHide from '../conditionalHide'
-import {stringifyTime} from '../../common/timeStringification'
-import {maxNameMapping} from '../../common/api/utils/categoryUtils'
-import exampleTileImage from '../../img/example_tile.png'
+import ConditionalHide from '../../../components/conditionalHide'
+import {stringifyTime} from '../../../common/timeStringification'
+import {maxNameMapping} from '../../../common/api/utils/categoryUtils'
+import exampleTileImage from '../../../img/example_tile.png'
 
 import './eventTileBig.less'
 

@@ -23,7 +23,7 @@ export default class OptionView extends React.Component {
         const lang = this.props.language.options.changePassword;
         return <div>
                    <ModalSuccess message={lang.modal} show={this.state.showModalSuccess}
-                       onClose={()=>{this.setState({showModalSuccess: false})}}/>
+                       onClose={()=>{ this.props.history.push('/options')}}/>
 
                 <Form size='large'>
                     <Segment>

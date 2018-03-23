@@ -27,6 +27,7 @@ export default class Create extends React.Component {
     state = {
         nameError: false,
         descriptionError: false,
+        shortDescriptionError: false,
         fromError: false,
         toError: false,
         locationError: false,
@@ -45,6 +46,8 @@ export default class Create extends React.Component {
         // locationSearchQuery: '',
 
         descriptionValue: '',
+        shortDescriptionValue: '',
+        
         /**
          * @type {FileEntry}
          */
@@ -80,6 +83,7 @@ export default class Create extends React.Component {
             locationValue,
             // locationSearchQuery,
             descriptionValue,
+            shortDescriptionValue,
             thumbnailImage,
             sliderImages,
         } = this.state;
@@ -88,7 +92,7 @@ export default class Create extends React.Component {
         const parsedTo = toValue ? toValue.toDate() : null;
         const parsedThumbnailImage = (thumbnailImage && thumbnailImage.id) ? [{id: thumbnailImage.id, tag: 'thumbnail'}] : [];
 
-        createEvent(nameValue, descriptionValue, locationValue,
+        createEvent(nameValue, descriptionValue, shortDescriptionValue,locationValue,
             parsedFrom, parsedTo,
             sliderImages.map(fileEntry => ({id: fileEntry.id})).concat(parsedThumbnailImage),
             categoryValue.map(id => id))
@@ -105,6 +109,7 @@ export default class Create extends React.Component {
                 const formErrors = {
                     nameError: false,
                     descriptionError: false,
+                    shortDescriptionError: false,
                     fromError: false,
                     toError: false,
                     locationError: false,
@@ -112,6 +117,10 @@ export default class Create extends React.Component {
 
                 if(errorData.name){
                     formErrors.nameError = true;
+                    successful = false;
+                }
+                if(errorData.shortDescription){
+                    formErrors.descriptionError = true;
                     successful = false;
                 }
                 if(errorData.description){
@@ -309,6 +318,8 @@ export default class Create extends React.Component {
 
             descriptionError,
             descriptionValue,
+            shortDescriptionError,
+            shortDescriptionValue,
 
             fromError,
             fromValue,
@@ -358,6 +369,14 @@ export default class Create extends React.Component {
                                 />
                             </Form.Field>
                         </Form.Group>
+
+                        <Form.TextArea
+                            error={shortDescriptionError}
+                            label={lang.shortDescription}
+                            placeholder={lang.shortDescriptionPlaceholder}
+                            value={shortDescriptionValue}
+                            onChange={(event, {value}) => this.setState({shortDescriptionValue: value})}
+                        />
 
                         <Form.TextArea
                             error={descriptionError}

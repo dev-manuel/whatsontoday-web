@@ -135,6 +135,8 @@ export default {
             sliderImageFileTableIsUploaded: 'Hochgeladen',
             description: 'Beschreibung',
             descriptionPlaceholder: 'Bitte Text eingeben...',
+            shortDescriptionPlaceholder: 'Bitte Text eingeben...',
+            shortDescription: 'Beschreibung',
             submit: 'Abschicken'
         },
         successful: {

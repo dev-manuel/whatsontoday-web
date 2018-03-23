@@ -48,3 +48,4 @@ coverageExcludedPackages := """controllers\..*Reverse.*;..*Routes.*;views.html\.
 
 import com.typesafe.sbt.packager.MappingsHelper._
 mappings in Universal ++= directory(baseDirectory.value / "public")
+mappings in Universal ++= directory(baseDirectory.value / "other")

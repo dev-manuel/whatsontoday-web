@@ -109,6 +109,11 @@ export default {
                     heading: 'Ändern des Passwort fehlgeschlagen!',
                     description: 'Passwörter stimmen nicht überein'
                 }
+            },
+            modal:{
+                heading: 'Passwort geändert',
+                description: 'Dein Passwort wurde geändert!',
+                button: 'Ok'
             }
         }
     },

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ModalError from '../../components/modal'
+import ModalSuccess from '../../components/modalSuccess'
 
 import { updatePassword } from '../../common/api/requests/login'
 
@@ -15,13 +15,15 @@ export default class OptionView extends React.Component {
         passwordRepeatValue: '',
 
         showMatchError: false,
-        showPasswordError: false
+        showPasswordError: false,
+        showModalSuccess: false
     }
 
     render(){
         const lang = this.props.language.options.changePassword;
         return <div>
-                <ModalError language={this.props.language} show={this.state.showModalError} onClose={()=>{this.setState({showModalError: false})}}/>
+                   <ModalSuccess message={lang.modal} show={this.state.showModalSuccess}
+                       onClose={()=>{this.setState({showModalSuccess: false})}}/>
 
                 <Form size='large'>
                     <Segment>
@@ -63,6 +65,11 @@ export default class OptionView extends React.Component {
            && this.state.passwordValue.length > 7) {
             updatePassword(this.state.passwordValue)
             .then(data => {
+                this.setState({
+                    showModalSuccess: true,
+                    showPasswordError: false,
+                    showMatchError: false
+                });
             })
             .catch(err => {
                 log.debug('signIn#catch:', err);

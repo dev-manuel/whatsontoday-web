@@ -3,6 +3,7 @@ import { Segment, Container, Grid, Header, List, Divider } from 'semantic-ui-rea
 
 export default ({language}) => {
     const lang = language.footer;
+    const links = language.externalLinks;
     return (
         <Segment
             inverted
@@ -22,9 +23,9 @@ export default ({language}) => {
                         <Grid.Column width={3}>
                             <Header inverted as='h4' content={lang.socialMedia} />
                             <List link inverted>
-                                <List.Item as='a'>{lang.facebook}</List.Item>
-                                <List.Item as='a'>{lang.twitter}</List.Item>
-                                <List.Item as='a'>{lang.instagram}</List.Item>
+                                <List.Item as='a' href={links.facebook}>{lang.facebook}</List.Item>
+                                <List.Item as='a' href={links.twitter}>{lang.twitter}</List.Item>
+                                <List.Item as='a' href={links.instagram}>{lang.instagram}</List.Item>
                             </List>
                         </Grid.Column>
                         <Grid.Column width={7}>

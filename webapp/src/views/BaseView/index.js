@@ -1,32 +1,34 @@
 import React from 'react'
-import {Switch, Route, Redirect} from 'react-router-dom'
+import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import log from 'loglevel'
 
-import Header from './Header'
-import HomeView from './Home'
-import SERPView from './SERP'
-import EventView from './Event'
-import OrganizerView from './Organizer'
-import LocationView from './Location'
-import SignIn from './SignIn'
-import SignUp from './SignUp/index'
-import Options from './Options'
-import EventTool from './EventTool'
-import Confirm from './Confirm'
-import NoAccess from './NoAccess'
-import _404 from './404'
-import Footer from './Footer'
+import Header from '../Header'
+import HomeView from '../Home'
+import SERPView from '../SERP'
+import EventView from '../Event'
+import OrganizerView from '../Organizer'
+import LocationView from '../Location'
+import SignIn from '../SignIn'
+import SignUp from '../SignUp/index'
+import Options from '../Options'
+import EventTool from '../EventTool'
+import Confirm from '../Confirm'
+import NoAccess from '../NoAccess'
+import _404 from '../404'
+import Footer from '../Footer'
 
-import {PrivateRoute, PrivateOrganizerRoute} from '../components/routes'
-import {setToken, removeToken} from '../common/api'
-import GER from '../common/dictionary/GER'
+import SocialMediaBar from './components/socialMediaBar'
+
+import {PrivateRoute, PrivateOrganizerRoute} from '../../components/routes'
+import {setToken, removeToken} from '../../common/api'
+import GER from '../../common/dictionary/GER'
 
 import './BaseView.less'
 
 
 
 
-export default class BaseView extends React.Component {
+class BaseView extends React.Component {
 
     state = {
         loginData: {
@@ -68,9 +70,16 @@ export default class BaseView extends React.Component {
 
     render() {
         const language = {language: this.state.language};
+
+        // Set social media bar to active if on home-view (`/`)
+        const {pathname} = this.props.location;
+        const smBarActive = pathname === '/';
+
         return this.state.redirectTo ?
             <Redirect to={this.state.redirectTo}/> :
-            <div className="BaseView_container">
+            <div 
+                className={ smBarActive ? "BaseView_container_smBar" : "BaseView_container"}
+            >
 
                 <div className="BaseView_header">
                     <Header {...this.state} handleSignOut={this.handleSignOut.bind(this)}/>
@@ -127,7 +136,13 @@ export default class BaseView extends React.Component {
                     </Switch>
                 </div>
 
-                <div className="BaseView_footer">
+     
+                {/* Footer */}
+
+                <div className={ smBarActive ? "BaseView_smBar" : "BaseView_smBarHidden"} >
+                    <SocialMediaBar {...language}/>
+                </div>
+                <div className={ smBarActive ? "BaseView_footer_smBar" : "BaseView_footer"}>
                     <Footer language={this.state.language}/>
                 </div>
             </div>
@@ -143,3 +158,5 @@ export default class BaseView extends React.Component {
         }
     }
 }
+
+export default withRouter(BaseView);

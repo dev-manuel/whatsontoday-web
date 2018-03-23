@@ -1,32 +1,28 @@
-// Import modules
-import React from 'react';
+import React from 'react'
 import log from 'loglevel'
-import {Menu, Search, Icon, Button, Dropdown, Image} from 'semantic-ui-react';
+import { Menu, Search, Icon, Button, Dropdown, Image, Container} from 'semantic-ui-react'
 import {withRouter, Link} from 'react-router-dom'
 
-// Import resources
-import logo from '../../img/logo.png';
-import './menu.less';
-import ModalError from '../../components/modal';
+import logo from '../../img/logo.png'
+import './header.less'
+import ModalError from '../../components/modal'
 import {signOut} from '../../common/api/requests/login'
-import { axios } from '../../common/api';
+import { axios } from '../../common/api'
 
 
 const LoggedOutButtons = ({language}) => {
     return (
         <React.Fragment>
-            <Link 
-                to='/signIn'
-                className='headerButtonStyle'                        
-            >
-                <Icon name='sign in' /> {language.signIn}
-            </Link>
-            <Link
-                to='/signUp'
-                className='headerButtonStyle'            
-            >        
-                    <Icon name='signup' /> {language.signUp}
-            </Link>
+            <Menu.Item>
+                <Link to='/signIn'>
+                {language.signIn}
+                </Link>
+            </Menu.Item>
+            <Menu.Item>
+                <Link to='/signUp'>        
+                    {language.signUp}
+                </Link>
+            </Menu.Item>
         </React.Fragment>
     )
 }
@@ -35,18 +31,16 @@ const LoggedInButtons = ({language, onSignOut}) => {
 
     return (
         <React.Fragment>
-            <a 
-                className='headerButtonStyle'
-                onClick={onSignOut}
-            >
-                <Icon name='sign out' /> {language.signOut}
-            </a>
-            <Link 
-                to='/options'
-                className='headerButtonStyle'                        
-            >
-                <Icon name='setting' /> {language.options}
-            </Link>
+            <Menu.Item>
+                <a onClick={onSignOut}>
+                    {language.signOut}
+                </a>
+            </Menu.Item>
+            <Menu.Item>
+                <Link to='/options'>
+                    {language.options}
+                </Link>
+            </Menu.Item>
         </React.Fragment>
     )
 }
@@ -96,54 +90,53 @@ class Header extends React.Component{
                     show={this.state.showModalError}
                     onClose={()=>{this.setState({showModalError:false})}}
                 />
-                <Menu borderless className='headerMenu' size='large'>
-                    <Menu.Item className='headerSpacer'/>
+                <Menu 
+                    size='huge'
+                    borderless
+                    className="Header_menu"
+                >
+                    <Container>
 
-                    <Menu.Item className='headerLogo'>
-                        <Link to='/'>
-                            <Image src={logo}/>
-                        </Link>
-                    </Menu.Item>
-
-                    <Menu.Item className='headerSearch'>
-                        <Search
-                            className='headerSearchBar'
-                            value={this.state.searchValue} 
-                            input={{ fluid: true}} // About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846
-                            showNoResults={false}
-                            onKeyPress={(e)=>{if(e.key === 'Enter') this.onEnter()}} // when enter key is pressed
-                            onSearchChange={this.handleSearchChange.bind(this)}
-                        />
-                    </Menu.Item>
-
-                    <Menu.Item className='headerButtons'>
-
-                            <a 
-                                className='headerButtonStyle'                  
-                            >
-                                <Icon name='newspaper' /> {language.blog}
-                            </a>
-
-                            <Link 
-                                to='/event_tool/create'
-                                className='headerButtonStyle'            
-                            >                            
-                                <Icon name='plus' /> {language.addEvent}
+                        <Menu.Item>
+                            <Link to='/'>
+                                <Image src={logo}/>
                             </Link>
+                        </Menu.Item>
 
+                        <Menu.Item 
+                            header
+                            className="Header_header"
+                        >
+                            <Link to='/'>
+                                What's On Today
+                            </Link>
+                        </Menu.Item>
+
+                        {/* <Menu.Item className='headerSearch'>
+                            <Search
+                                className='headerSearchBar'
+                                value={this.state.searchValue} 
+                                input={{ fluid: true}} // About the input property: https://github.com/Semantic-Org/Semantic-UI-React/issues/1846
+                                showNoResults={false}
+                                onKeyPress={(e)=>{if(e.key === 'Enter') this.onEnter()}} // when enter key is pressed
+                                onSearchChange={this.handleSearchChange.bind(this)}
+                            />
+                        </Menu.Item> */}
+
+                        <Menu.Menu position='right'>
+                            {/* <Menu.Item>
+                                <Link to='/'>
+                                    {language.blog}
+                                </Link>
+                            </Menu.Item> */}
+                            <Menu.Item>
+                                <Link to='/event_tool/create'>                            
+                                    {language.addEvent}
+                                </Link>
+                            </Menu.Item>
                             {conditionalButtons}
-                            
-                            <Dropdown icon='sidebar' pointing className='item headerDropdownButton'>
-                                <Dropdown.Menu>
-                                    {/* Todo */}
-                                    <Dropdown.Item>Lorem</Dropdown.Item>
-                                    <Dropdown.Item>Ipsum</Dropdown.Item>
-                                    <Dropdown.Item>Dolor</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                    </Menu.Item>  
-
-                    <Menu.Item className='headerSpacer'/>
+                        </Menu.Menu>
+                    </Container>
                 </Menu>
             </div>
         )

@@ -30,10 +30,10 @@ export default {
         culture: 'Kultur',
         fair: 'Feste',
         
-        search: 'Suche...',
+        search: 'Event/Beschreibung...',
         city: 'Stadt...',
         category: 'Kategorie...',
-        submit: 'Suche',
+        submit: 'Suchen',
     },
     footer: {
         socialMedia: 'Social Media',

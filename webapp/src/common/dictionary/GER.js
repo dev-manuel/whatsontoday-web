@@ -96,6 +96,13 @@ export default {
         deleteAccount: 'Account löschen:',
         deleteAccountMessage: 'Möchtest du deinen Account wirklich löschen?',
         deleteAccountDescription: 'Wenn du mit "Ja" bestätigst wird dein Account unwideruflich gelöscht!',
+        changePassword: {
+            password: 'Passwort',
+            passwordRepeat: 'Passwort wiederholen',
+            submit: 'Passwort ändern',
+            errorHeading: 'Ändern des Passwort fehlgeschlagen!',
+            errorDescription: 'Passwort zu kurz'
+        }
     },
     modal:{
         heading: 'Oooops',

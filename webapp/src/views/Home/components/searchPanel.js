@@ -38,8 +38,8 @@ export default class SearchPanel extends React.Component {
         } = this.state;
 
         const {
-            defaultCategory=null,
-            defaultCity=null,
+            defaultCategory={},
+            defaultCity={},
         } = this.props;
 
         this.props.onSubmit({
@@ -51,6 +51,8 @@ export default class SearchPanel extends React.Component {
 
     render(){
         const {
+            categoryLoading,
+            cityLoading,
             defaultCategory={},
             defaultCity={},
             /**
@@ -96,6 +98,7 @@ export default class SearchPanel extends React.Component {
                             className="Home_searchPanel_city"
                         >
                             <Dropdown
+                                loading={cityLoading}
                                 value={cityValue || defaultCity.value}
                                 onChange={this.handleCityChange.bind(this)}
                                 text={cityText || defaultCity.text}
@@ -110,6 +113,7 @@ export default class SearchPanel extends React.Component {
                             className="Home_searchPanel_category"
                         >
                             <Dropdown
+                                loading={categoryLoading}
                                 value={categoryValue || defaultCategory.value}
                                 onChange={this.handleCategoryChange.bind(this)}
                                 text={categoryText || defaultCategory.text}

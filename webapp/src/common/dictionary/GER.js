@@ -166,7 +166,7 @@ export default {
             description: 'Beschreibung',
             descriptionPlaceholder: 'Bitte Text eingeben...',
             shortDescriptionPlaceholder: 'Bitte Text eingeben...',
-            shortDescription: 'Beschreibung',
+            shortDescription: 'Kurzbeschreibung',
             submit: 'Abschicken'
         },
         successful: {

@@ -9,8 +9,27 @@ export default class SearchPanel extends React.Component {
         inputValue: '', // Value of the input form field
         categoryValue: null, // Value of the category drop down
         cityValue: null, // Value of city selection drop down
+
+        categoryText: '',
+        cityText: '',
     }
 
+    
+    handleCategoryChange(event, {value}){
+        const newCategory = this.props.categoryOptions.find(entry => entry.value === value);
+        this.setState({
+            categoryValue: newCategory.value,
+            categoryText: newCategory.text,
+        })
+    }
+    handleCityChange(event, {value}){
+        const newCity = this.props.cityOptions.find(entry => entry.value === value);
+        this.setState({
+            cityValue: newCity.value,
+            cityText: newCity.text,
+        })
+    }
+    
     handleSubmit(){
         const {
             inputValue,
@@ -23,14 +42,24 @@ export default class SearchPanel extends React.Component {
             defaultCity=null,
         } = this.props;
 
-        this.props.onSubmit(inputValue, categoryValue || defaultCategory, cityValue || defaultCity);
+        this.props.onSubmit({
+            searchValue: inputValue,
+            categoryValue: categoryValue || defaultCategory.value,
+            cityValue: cityValue || defaultCity.value,
+        });
     }
 
     render(){
         const {
-            defaultCategory=null,
-            defaultCity=null,
+            defaultCategory={},
+            defaultCity={},
+            /**
+             * @type {[{value: number, text: string}]}
+             */
             categoryOptions,
+            /**
+             * @type {[{value: number, text: string}]}
+             */
             cityOptions,
             language,
         } = this.props;
@@ -39,6 +68,8 @@ export default class SearchPanel extends React.Component {
             inputValue,
             categoryValue,
             cityValue,
+            categoryText,
+            cityText,
         } = this.state;
 
         const lang = language.home;
@@ -65,9 +96,9 @@ export default class SearchPanel extends React.Component {
                             className="Home_searchPanel_city"
                         >
                             <Dropdown
-                                value={cityValue || defaultCity}
-                                onChange={(event, {value}) => {this.setState({cityValue: value})}}
-                                text={cityValue || defaultCity}
+                                value={cityValue || defaultCity.value}
+                                onChange={this.handleCityChange.bind(this)}
+                                text={cityText || defaultCity.text}
                                 placeholder={lang.city}
                                 options={cityOptions}
                                 selection
@@ -79,9 +110,9 @@ export default class SearchPanel extends React.Component {
                             className="Home_searchPanel_category"
                         >
                             <Dropdown
-                                value={categoryValue || defaultCategory}
-                                onChange={(event, {value}) => this.setState({categoryValue: value})}
-                                text={categoryValue || defaultCategory}
+                                value={categoryValue || defaultCategory.value}
+                                onChange={this.handleCategoryChange.bind(this)}
+                                text={categoryText || defaultCategory.text}
                                 placeholder={lang.category}
                                 options={categoryOptions}
                                 selection

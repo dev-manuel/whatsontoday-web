@@ -100,8 +100,16 @@ export default {
             password: 'Passwort',
             passwordRepeat: 'Passwort wiederholen',
             submit: 'Passwort ändern',
-            errorHeading: 'Ändern des Passwort fehlgeschlagen!',
-            errorDescription: 'Passwort zu kurz'
+            error: {
+                password: {
+                    heading: 'Ändern des Passwort fehlgeschlagen!',
+                    description: 'Passwort zu kurz'
+                },
+                match : {
+                    heading: 'Ändern des Passwort fehlgeschlagen!',
+                    description: 'Passwörter stimmen nicht überein'
+                }
+            }
         }
     },
     modal:{

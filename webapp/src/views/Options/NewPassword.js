@@ -6,14 +6,16 @@ import { updatePassword } from '../../common/api/requests/login'
 
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 
+import log from 'loglevel'
+
 export default class OptionView extends React.Component {
 
     state = {
         passwordValue: '',
         passwordRepeatValue: '',
 
-        showModalError: false,
-        showPasswordError: false,
+        showMatchError: false,
+        showPasswordError: false
     }
 
     render(){
@@ -23,9 +25,13 @@ export default class OptionView extends React.Component {
 
                 <Form size='large'>
                     <Segment>
+                        <Message negative hidden={!this.state.showMatchError}>
+                            <Message.Header>{lang.error.match.heading}</Message.Header>
+                            <p>{lang.error.match.description}</p>
+                        </Message>
                         <Message negative hidden={!this.state.showPasswordError}>
-                            <Message.Header>{lang.errorHeading}</Message.Header>
-                            <p>{lang.errorDescription}</p>
+                            <Message.Header>{lang.error.password.heading}</Message.Header>
+                            <p>{lang.error.password.description}</p>
                         </Message>
                         <Form.Input
                             value={this.state.passwordValue}
@@ -53,16 +59,24 @@ export default class OptionView extends React.Component {
     }
 
     handleSubmit(){
-        updatePassword(this.state.passwordValue)
+        if(this.state.passwordValue == this.state.passwordRepeatValue
+           && this.state.passwordValue.length > 7) {
+            updatePassword(this.state.passwordValue)
             .then(data => {
-                
             })
             .catch(err => {
                 log.debug('signIn#catch:', err);
                 if(err.response.status == 400)
                     this.setState({
-                            showCredentialError: true,
-                        });
-        })
+                        showPasswordError: true,
+                        showMatchError: false
+                    });
+            });
+        } else {
+            this.setState({
+                showMatchError: this.state.passwordValue != this.state.passwordRepeatValue,
+                showPasswordError: this.state.passwordValue.length <= 7
+            });
+        }
     }
 }

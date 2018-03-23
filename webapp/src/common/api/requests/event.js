@@ -14,7 +14,7 @@ import {mapEvent} from '../utils/mapEvent'
  *
  * @typedef {{id:number,tag:string}} ImageResponse
  *
- * @typedef {{id:number,name:string,avgRating:number,description:string,from:Date,to:Date,categories:[categoryResponse],location:LocationResponse,images:[ImageResponse],participantCount:number}} EventResponse
+ * @typedef {{id:number,name:string,avgRating:number,description:string,shortDescription:string,from:Date,to:Date,categories:[categoryResponse],location:LocationResponse,images:[ImageResponse],participantCount:number}} EventResponse
  */
 
 export const eventBasePath = '/events'
@@ -112,18 +112,20 @@ export const unparticipateToEvent = id => {
  * 
  * @param {string} name 
  * @param {string} description 
+ * @param {string} shortDescription 
  * @param {number} locationId 
  * @param {Date} from 
  * @param {Date} to
  * @param {[{id: number, tag: (string|undefined)}]} images
  * @param {[{id: number, name: string, parentId: number}]} images
  */
-export const createEvent = (name, description, locationId, from, to, images, categories) => {
+export const createEvent = (name, description, shortDescription, locationId, from, to, images, categories) => {
     const location = locationId ? {id: locationId, name: 'void', latitude: 0,
         longitude: 0, country: 'void', city: 'void', street: 'void'} : undefined;
     const req = {
         name,
         description,
+        shortDescription,
         location,
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
@@ -147,13 +149,14 @@ export const createEvent = (name, description, locationId, from, to, images, cat
  * @param {number} id
  * @param {string} name 
  * @param {string} description 
+ * @param {string} shortDescription 
  * @param {number} locationId 
  * @param {Date} from 
  * @param {Date} to
  * @param {[{id: number, tag: (string|undefined)}]} images
  * @param {[number]} images
  */
-export const updateEvent = (id, name, description, locationId, from, to, images, categories) => {
+export const updateEvent = (id, name, description, shortDescription, locationId, from, to, images, categories) => {
     const location = locationId ? {id: locationId, name: 'void', latitude: 0,
         longitude: 0, country: 'void', city: 'void', street: 'void'} : undefined;
     const req = {

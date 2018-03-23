@@ -13,6 +13,19 @@ export const timeExpressions = {
  * @param {Date} currentDate 
  * @param {string} locale
  */
+export const getEndOfTheWeek = (currentDate, locale) => {
+    let date = new Date(currentDate);
+    date.setHours(23, 59, 59, 999);
+    date.setDate(currentDate.getDate() + (7 - currentDate.getDay())%7);
+    return date;
+}
+
+/**
+ * 
+ * @param {string} expression 
+ * @param {Date} currentDate 
+ * @param {string} locale
+ */
 export const parseTimeExpression = (expression, currentDate, locale) => {
     moment.locale(locale);
 

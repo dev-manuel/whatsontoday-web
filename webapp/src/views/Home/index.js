@@ -17,16 +17,20 @@ class Home extends React.Component {
 
     state = {
         categoryOptions: [],
+        isCategoryFetching: false,
     }
 
-    componentWillMount(){
+    componentDidMount(){
+        this.setState({isCategoryFetching: true})
+
         getCategories()
             .then( data => {
                 this.setState({
+                    isCategoryFetching: false,
                     categoryOptions: data.map( category => ({
                         text: category.name,
                         value: category.id,
-                    }))
+                    })),
                 })
             })
     }
@@ -50,6 +54,7 @@ class Home extends React.Component {
     render(){
         const {
             categoryOptions,
+            isCategoryFetching,
         } = this.state;
         const {
             language,
@@ -78,6 +83,7 @@ class Home extends React.Component {
                         <SearchPanel
                             language={language}
                             categoryOptions={categoryOptions}
+                            categoryLoading={isCategoryFetching}
                             cityOptions={cityOptions}
                             defaultCity={defaultCity}
                             onSubmit={this.handleSubmit.bind(this)}

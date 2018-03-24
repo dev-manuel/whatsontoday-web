@@ -15,6 +15,9 @@ env:
   - secure: Yrf18kn2JXkhVrAx+GJLOhNWUNLucoOYisY0A7Xm3kEo3zNcofZ8xvktgHiwhtQLlUa95vHOyQTIdUYfkGJMD/btXzR4Q24Tu16IamsB3R8LKGzuGuKuXBmxsoaZyyk/U1jm9mtFle6IynV98P4zSWzO60pK3Anr+flCzDSjMz8nMORp19bjr54kr/Ebqk5fy1rIAe5B7NPtJiJKt+KAimmQ6ZhqknPdkZMDp2UO0Gfyj3Gx2+jJmbYCoXF53SGYoCHtWcfYjUjvn3WFMDqhtN678e2C/Nj0ShsAsET4/XpUs/y8nc5s1O+oXL1hD6Kowc7a8v0DeJciEXmImrbQV8rcOAjpqXjw4oZm6G+pXGnUajl94TgrJqR2UL4f2FZMUt+4hSGgPDEsOL75rxG82UrdN7AmucXnvgD3ye6f/U0P6vBQhPS0/a64ugnQuQabz47YhaBEc0gHD+9KJsCMFDttem8uf4hcTwwuDSZXTzlzJznO+eOB8K7iP876nbDzIU+eD0xmg4pVTNbLiYNl0FO/xwo/+3p46Hjr0JQTfQNU4Hz8/eQr0zdZGnftyl5klLxz+tNVcWKew+XB5fsZGcj+vAy9uGQrkiuj5a/FsI0vd6BsYy3V6SSRFbXeJJxHlBah+0F0Ft5CDtQm8Hzoupbcb4qXkBlXC7i8B5ULzxc=
 services:
 - postgresql
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y sshpass
 before_script:
 - psql -c 'create database "WhatsOnDBTest";' -U postgres
 script: "./travis/build.sh"

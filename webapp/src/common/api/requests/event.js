@@ -2,7 +2,6 @@ import log from 'loglevel'
 
 import {axios} from '../index'
 import {sqlTimestampToDate, dateToSqlTimestamp} from '../utils/sqlTimeParsing'
-import {createEventTargetLink} from '../utils/createTargetLinks'
 import {mapEvent} from '../utils/mapEvent'
 
 /**

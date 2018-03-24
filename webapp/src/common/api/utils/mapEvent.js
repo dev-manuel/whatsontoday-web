@@ -1,4 +1,6 @@
+import {createEventTargetLink} from './createTargetLinks'
 import {sqlTimestampToDate, dateToSqlTimestamp} from './sqlTimeParsing'
+import {createThumbnailImageLinkFromImages} from '../utils/imageUtils'
 
 /**
  * @typedef {{id:number,name:string,parentId:string}} categoryResponse
@@ -9,7 +11,7 @@ import {sqlTimestampToDate, dateToSqlTimestamp} from './sqlTimeParsing'
  *
  * @typedef {{id:number,tag:string}} ImageResponse
  *
- * @typedef {{id:number,name:string,avgRating:number,description:string,from:Date,to:Date,categories:[categoryResponse],location:LocationResponse,images:[ImageResponse],participantCount:number}} EventResponse
+ * @typedef {{id:number,name:string,avgRating:number,description:string,shortDescription:string,from:Date,to:Date,categories:[categoryResponse],location:LocationResponse,images:[ImageResponse],participantCount:number}} EventResponse
  */
 
 /**
@@ -23,6 +25,7 @@ export const mapEvent = eventResponse => ({
     to: sqlTimestampToDate(eventResponse.to),
     categories: eventResponse.categories, 
     description: eventResponse.description,
-    // imageURI: '#', //Todo
+    shortDescription: eventResponse.shortDescription,
+    thumbnailImage: createThumbnailImageLinkFromImages(eventResponse.images),
     target: createEventTargetLink(eventResponse.id)
 })

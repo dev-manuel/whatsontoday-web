@@ -2,7 +2,7 @@ import React from 'react'
 import Bla, {Grid, Segment, Container, Card} from 'semantic-ui-react'
 
 import EventTileBig from './eventTileBig'
-import './index.less'
+import './eventTileTableBig.less'
 
 /**
  * 

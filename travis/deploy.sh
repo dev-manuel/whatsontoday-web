@@ -1,6 +1,6 @@
 echo "Hello from deploy.sh"
 
-if [ $TRAVIS_BRANCH = "master" ]
+if [ $TRAVIS_BRANCH = "master" ] && [ $TRAVIS_PULL_REQUEST -eq false ]
 then
     echo "Deploying new version to server"
 

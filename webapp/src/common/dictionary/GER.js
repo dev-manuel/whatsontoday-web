@@ -72,12 +72,12 @@ export default {
         email: 'E-Mail Adresse',
         password: 'Passwort',
         passwordRepeat: 'Wiederhole das Passwort',
-        agree: 'Ich akzieptiere die Nutzungsbedingungen',
+        agree: 'Ich akzeptiere die Nutzungsbedingungen',
         submit: 'Los Geht\'s',
         success: 'Fast geschafft! Bitte bestätige noch deine E-Mail Adresse.',
         alreadyLoggedIn: 'Du bist bereits angemeldet!',
-        errorHeading: 'Registrierung Fehlgeschlagen',
-        userAlreadyExistsError: 'Es existiert bereits ein nutzer mit dieser E-Mail Adresse',
+        errorHeading: 'Registrierung fehlgeschlagen',
+        userAlreadyExistsError: 'Es existiert bereits ein Nutzer mit dieser E-Mail Adresse',
         signUpAsOrganizer: 'Als Veranstalter registrieren',
         signUpAsUser: 'Als Nutzer registrieren',
         organizerNamePlaceholder: 'Name',
@@ -122,7 +122,7 @@ export default {
             },
             modal:{
                 heading: 'Passwort geändert',
-                description: 'Dein Passwort wurde geändert!',
+                description: 'Dein Passwort wurde erfolgreich geändert!',
                 button: 'Ok'
             }
         }
@@ -133,7 +133,7 @@ export default {
         button: 'Ok',
     },
     confirm:{
-        confirmed: 'Deine E-Mail Adresse wurde erfolgreich bestätigt. Du kannst dich nun Anmelden.'
+        confirmed: 'Deine E-Mail Adresse wurde erfolgreich bestätigt. Du kannst dich nun anmelden.'
     },
     notFound:{
         message: 'Wir haben leider keine Ergebnisse für diese URL gefunden :('
@@ -148,7 +148,7 @@ export default {
             noResults: 'Keine Ergebnisse gefunden...',
             addEvent: 'Neues Event hinzufügen',
             name: 'Titel',
-            namePlaceholder: 'Bitte Title eingeben...',
+            namePlaceholder: 'Bitte gib einen Title ein...',
             categories: 'Kategorien',
             categoriesPlaceholder: 'Bitte Kategorien auswählen...',
             from: 'Beginn',
@@ -156,21 +156,21 @@ export default {
             to: 'Ende',
             toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
             location: 'Veranstalutngsort',
-            locationPlaceholder: 'Bitte Ort auswählen',
+            locationPlaceholder: 'Bitte wähle einen Ort aus',
             images: 'Bilder',
             thumbnailImageUploadButtonAddImage: 'Thumbnail hinzufügen',
-            thumbnailImageNoFileSelected: 'Keine Deitei ausgewählt',
+            thumbnailImageNoFileSelected: 'Keine Datei ausgewählt',
             sliderImageUploadButtonAddImage: 'Bild hinzufügen',
             sliderImageFileTableFileName: 'Dateiname',
             sliderImageFileTableIsUploaded: 'Hochgeladen',
             description: 'Beschreibung',
-            descriptionPlaceholder: 'Bitte Text eingeben...',
-            shortDescriptionPlaceholder: 'Bitte Text eingeben...',
+            descriptionPlaceholder: 'Bitte gib einen Text ein...',
+            shortDescriptionPlaceholder: 'Bitte gib einen Text ein...',
             shortDescription: 'Kurzbeschreibung',
             submit: 'Abschicken'
         },
         successful: {
-            createEvent: 'Event erfolgreich erstellt',
+            createEvent: 'Du hast ein Event erfolgreich erstellt!',
             default: 'Aktion erfolgreich ausgeführt',
         },
     }

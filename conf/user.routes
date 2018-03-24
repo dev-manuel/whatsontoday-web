@@ -1,0 +1,48 @@
+###
+#  summary: Create a new account
+#  description: >
+#      A new account gets created. The access token to this account is returned.
+#      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
+#      In production an confirmation mail gets send to the provided email. For development accounts are
+#      automatically unlocked for convenience.
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.forms.UserSignUpForm.Data'
+#      description: The user data. The password must not be hashed.
+#  responses:
+#    200:
+#      description: Success. A login/confirmation is required after this.
+#    400:
+#      description: User already exists
+###
+POST   /signUp                   controllers.UserController.signUp
+
+###
+#  summary: Query the events the currently logged in user is participating in
+#  description: >
+#      Queries all events the currently logged in user is participating in. This will not work for organizer accounts
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#    default: 0
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
+#    default: 20
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: Success. A list of events will be returned
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
+###
+GET   /participating                   controllers.UserController.getParticipatingEvents

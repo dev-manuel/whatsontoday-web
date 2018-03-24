@@ -30,6 +30,6 @@ CREATE TABLE participant (
 # --- !Downs
 
 DROP TABLE IF EXISTS event;
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS participant;
 DROP TABLE IF EXISTS category;

@@ -1,0 +1,147 @@
+###
+#  summary: Delete the currently logged in user
+#  description: >
+#      The JWT will be invalid after calling this token.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: User deleted
+#    401:
+#      description: Access forbidden
+###
+DELETE   /   controllers.LoginController.deleteUser
+
+###
+#  summary: Update the currently logged in users password
+#  description: >
+#      Updates the password of the currently logged in user. This invalidates the old authentication token,
+#      so a new one has to be supplied.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.forms.LoginUpdateForm.Data'
+#  responses:
+#    200:
+#      description: Users password updated
+#      schema:
+#        $ref: '#/definitions/whatson.model.AccessToken'
+#    401:
+#      description: Access forbidden
+###
+PUT      /     controllers.LoginController.updateUser
+
+###
+#  summary: Send a password reset mail
+#  description: >
+#      Sends a mail for resetting a users password containing a link to a password reset form.
+#  parameters:
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.forms.PasswordResetForm.Data'
+#  responses:
+#    200:
+#      description: Password reset mail sent
+#    400:
+#      description: User not found
+###
+PUT      /resetPassword     controllers.LoginController.requestPasswordReset
+
+###
+#  summary: Sign out of account
+#  description: >
+#      Since we are using JWT wich are stateless this action has no result.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: success
+###
+GET    /signOut                  controllers.Authentication.signOut
+
+###
+#  summary: Sign into an existing account
+#  description: >
+#      The access token to this account is returned.
+#      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
+#  parameters:
+#    - name: body
+#      schema:
+#        $ref: '#/definitions/whatson.model.forms.SignInForm'
+#      description: >
+#        The user data. If rememberMe is true, the authentication token will be valid for several days.
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.AccessToken'
+#    401:
+#      description: Access forbidden
+###
+POST   /signIn                   controllers.Authentication.login
+
+###
+#  summary: Returns the currently logged in user
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: Success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Login'
+#    401:
+#      description: Access forbidden
+###
+GET   /                          controllers.LoginController.getUser
+
+
+###
+#  summary: Confirms the account of the user
+#  description: >
+#      This confirms an account. After calling this action users can log in an use all secured enpoints normally.
+#      This normally gets called by following the link in confirmation mails.
+#  parameters:
+#    name: token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: Success
+###
+GET   /confirm                          controllers.LoginController.confirm(token: String)
+
+
+###
+#  summary: Authenticate a user/organizer via a social provider
+#  description: >
+#      This method authenticates a user/organizer via a social network.
+#      If the authorisation is successfull, the user gets redirected to the home page(index).
+#      The webapplication can then get the authorisation token from the url parameter called token.
+#      Note: This method is not supposed to be called in an ajax request. Provide a link to this url instead.
+#  parameters:
+#    - name: provider
+#      enum: ["facebook", "google"]
+#    - name: userType
+#      default: user
+#      enum: ["user","organizer"]
+#  responses:
+#    200:
+#      description: success
+###
+GET    /authenticate/:provider   controllers.LoginController.authenticate(provider: String, userType: Option[String])
+
+### NoDocs ###
+POST   /authenticate/:provider   controllers.LoginController.authenticate(provider: String, userType: Option[String])

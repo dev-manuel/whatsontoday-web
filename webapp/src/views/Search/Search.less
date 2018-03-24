@@ -1,0 +1,29 @@
+@import "../../common/less/colors";
+
+@margin: 15%;
+@marginTileTable: 5%;
+
+.Search_pageContent {
+    margin-left: @margin;
+    margin-right: @margin;
+}
+
+.Search_tileTable {
+    margin-left: @marginTileTable !important;
+    margin-right: @marginTileTable !important;
+}
+
+.Search_pagination {
+
+    // See: https://stackoverflow.com/questions/19026884/flexbox-center-horizontally-and-vertically
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin-bottom: 65px;
+    
+    > div {
+        background-color: @mainLightGray2 !important;
+        border-radius: 4px !important;
+    }
+}

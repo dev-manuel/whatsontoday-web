@@ -1,0 +1,26 @@
+@import "../../../common/less/colors.less";
+
+
+.BaseView_socialMediaBar {
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    background-color: @mainDarkGray1;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.BaseView_buttonContainer {
+    a {
+        box-sizing: border-box !important;
+        margin-right: 20px !important;
+    }
+
+    // See http://www.olivergast.de/blog/2013/04/13/css-basics-elemente-nebeneinander-anordnen/
+    a:last-child {
+        margin-right: 0 ;
+   }
+}

@@ -1,47 +1,220 @@
-###
-#  summary: Query all events
-#  responses:
-#    200:
-#      description: success
-#      schema:
-#        $ref: '#/definitions/whatson.model.Event'
-###
-GET    /events       controllers.EventController.events
-###
-#  summary: Query the event with a specific id
-#  responses:
-#    200:
-#      description: success
-#      schema:
-#        $ref: '#/definitions/whatson.model.Event'
-###
-GET    /events/:id   controllers.EventController.getEvent(id: Long)
-###
-#  summary: Create an event
-#  responses:
-#    200:
-#      description: success
-#      schema:
-#        $ref: '#/definitions/whatson.model.Event'
-###
-POST   /events       controllers.EventController.createEvent
-###
-#  summary: Update an event with a specific id
-#  responses:
-#    200:
-#      description: success
-#      schema:
-#        $ref: '#/definitions/whatson.model.Event'
-###
-PUT    /events/:id   controllers.EventController.updateEvent(id: Long)
+->     /events                         events.Routes
+
+->     /login                          login.Routes
+
+->     /user                           user.Routes
+
+->     /organizer                      organizer.Routes
 
 
 ###
 #  summary: Query all categories
+#  description: >
+#      Returns a list of all categories. A category consists of an id, name, and a parentId wich references
+#      The parent category. If the parentId is equal to the category id, the category has no parent.
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.CategoryDetail'
+###
+GET    /category                     controllers.CategoryController.categories
+
+###
+#  summary: Search locations by name
+#  description: >
+#      Searches for locations wich contain the search string in their name.
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
+#  responses:
+#    200:
+#      description: success
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.LocationDetail'
+###
+GET    /location                       controllers.LocationController.searchLocations(search: Option[String])
+
+###
+#  summary: Get a specific location
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.detail.LocationDetail'
+#    404:
+#      description: The location with the given id does not exist
+###
+GET    /location/:id                   controllers.LocationController.getLocation(id: Int)
+
+###
+#  summary: Get locations nearby a specific location
+#  description: >
+#      Returns a list of locations sorted by the distance to the given location.
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
+#  responses:
+#    200:
+#      description: success
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.LocationDetail'
+#    404:
+#      description: The location with the given id could not be found
+###
+GET    /location/nearby/:id            controllers.LocationController.getNearby(id: Int)
+
+###
+#  summary: Create a location
+#  description: >
+#      Create a location. Returns the created location with its id.
+#      This request is callable for all logged in users and organizers.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.Location'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Location'
+###
+POST   /location                       controllers.LocationController.createLocation()
+
+###
+#  summary: Rate a specific entity
+#  description: >
+#      Rate a given entity. This action is only callable for logged in users. If a user has already rated the same entity
+#      the rating gets updated. The rating must be a float in between 1 and 5(inclusivly).
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: entityType
+#    enum: ["Event","Location","Organizer"]
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Rating'
+###
+GET    /rating/:id/:entityType/:rate   controllers.RatingController.rateEntity(id: Int, entityType: String, rate: Float)
+
+###
+#  summary: Get a specific image
+#  description: >
+#      Returns name and id of an image. The content is not returned.
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Image'
+###
+GET    /images/:id            controllers.ImageController.get(id: Int)
+
+###
+#  summary: Get bytes of a specific image
+#  description: >
+#      Returns the content of the image as a byte array.
+#  responses:
+#    200:
+#      description: success
+###
+GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int)
+
+###
+#  summary: Create an image
+#  description: >
+#      Creates an image. The imagedata is expected as a multipart file in the request body. Returns id and name of the
+#      created image.
+#  consumes:
+#  - multipart/form-data
+#  parameters:
+#  - in: formData
+#    name: image
+#    type: file
+#    description: The file to upload.
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Image'
+###
+POST   /images                    controllers.ImageController.createImage
+
+###
+#  summary: Attach an image
+#  description: >
+#      Attach an image to a given entity. This is callable for logged in users and organizers.
+#      Organizers can attach images to their own account, events created by them and locations, while users
+#      can only attach images to locations.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#    required: true
+#  - name: entityType
+#    enum: ["Event","Location","Organizer"]
+#  - name: tag
+#    enum: ["logo"]
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.ImageEntity'
+###
+GET   /images/attach/:id             controllers.ImageController.attachImage(id: Int, entityType: String, entityId: Int, tag: Option[String])
+
+
+###
+#  summary: Create a category
+#  description: >
+#      Creates a category. The parentId must reference an existing category. If the category should have no parent
+#      the id of the category named 'All' must be used. That id can be obtained using the GET /category Request.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.Category'
 #  responses:
 #    200:
 #      description: success
 #      schema:
 #        $ref: '#/definitions/whatson.model.Category'
 ###
-GET    /categories   controllers.CategoryController.categories
+POST   /category                       controllers.CategoryController.createCategory()

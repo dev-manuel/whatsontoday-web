@@ -1,0 +1,65 @@
+// Inspired by: https://medium.com/@zerox/keep-that-damn-footer-at-the-bottom-c7a921cb9551
+
+@big: ~"only screen and (min-width: 768px)";
+@small: ~"only screen and (max-width: 767px)";
+
+
+
+.BaseView_container {
+    min-height: 100vh; /* will cover the 100% of viewport */
+    overflow: hidden;
+    display: block;
+    position: relative;
+
+    // Handle respnosive "jupms" of the footer hight
+    @media @big {
+        padding-bottom: 310px; /* height of your footer */
+    }
+    @media @small {
+        padding-bottom: 566px; /* height of your footer */
+    }
+}
+.BaseView_header {
+}
+.BaseView_body {
+}
+.BaseView_footer {
+    
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+}
+
+
+
+.BaseView_container_smBar {
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    min-height: 800px;
+    
+}
+
+.BaseView_footer_smBar {
+    width: 100%;
+    position: absolute;
+    
+    // Handle respnosive "jupms" of the footer hight
+    @media @big {
+        bottom: -310px; /* height of your footer */
+    }
+    @media @small {
+        bottom: -566px; /* height of your footer */
+    }
+}
+
+.BaseView_smBar {
+    width: 100%;
+    position: absolute;
+    bottom: 0px;    
+}
+
+.BaseView_smBarHidden {
+    display: none;
+}

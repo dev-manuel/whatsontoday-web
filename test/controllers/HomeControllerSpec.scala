@@ -1,45 +1,32 @@
 package controllers
 
-import org.scalatestplus.play._
-import org.scalatestplus.play.guice._
+import org.scalatest._
+import play.api._
 import play.api.test._
 import play.api.test.Helpers._
+import whatson.util._
+import scala.concurrent._
 
-/**
- * Add your spec here.
- * You can mock out a whole application including requests, plugins etc.
- *
- * For more information, see https://www.playframework.com/documentation/latest/ScalaTestingWithScalaTest
- */
-class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
-
+class HomeControllerSpec extends RestTestSuite {
   "HomeController GET" should {
+    "render the index page" in {
+      val index = route(app, FakeRequest(GET, "/")).get
 
-    "render the index page from a new instance of controller" in {
-      val controller = new HomeController(stubControllerComponents())
-      val home = controller.index().apply(FakeRequest(GET, "/"))
+      status(index) mustBe MOVED_PERMANENTLY
+    }
+  }
 
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+  "HomeController GET web" should {
+    "render the index page" in {
+      val index = route(app, FakeRequest(GET, "/web/login")).get
+
+      status(index) mustBe OK
     }
 
-    "render the index page from the application" in {
-      val controller = inject[HomeController]
-      val home = controller.index().apply(FakeRequest(GET, "/"))
+    "work for nested routes" in {
+      val index = route(app, FakeRequest(GET, "/web/event/5")).get
 
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
-    }
-
-    "render the index page from the router" in {
-      val request = FakeRequest(GET, "/")
-      val home = route(app, request).get
-
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+      status(index) mustBe OK
     }
   }
 }

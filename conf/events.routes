@@ -1,0 +1,205 @@
+###
+#  summary: Query all events by name, location, categories
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#    default: 0
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
+#    default: 20
+#  - name: sort
+#    description: Specifies wich column to sort by
+#    default: "id"
+#    enum: ["id","name","from","to","rating","location"]
+#  - name: sortDir
+#    description: Specifies wether to sort ascending(true) or descending
+#  - name: location
+#    description: If sort is set to location, events will be ordered by distance to the given location
+#  - name: category
+#    description: Specifies the category of the event
+#  - name: from
+#    description: Specifies the earliest date the event should start (Format yyyy-MM-dd HH:mm:ss)
+#    schema:
+#      type: string
+#      format: yyyy-MM-dd HH:mm:ss
+#  - name: to
+#    description: Specifies the latest date the event should start (Format yyyy-MM-dd HH:mm:ss)
+#    schema:
+#      type: string
+#      format: yyyy-MM-dd HH:mm:ss
+#  responses:
+#    200:
+#      description: success
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.EventDetail'
+###
+GET      /   controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort:Option[String], sortDir: Boolean, from: Option[Timestamp], to: Option[Timestamp])
+
+###
+#  summary: Query the event with a specific id
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.detail.EventDetail'
+###
+GET      /:id                         controllers.EventController.getEvent(id: Int)
+
+###
+#  summary: Query events nearby another event
+#  description: This will return events sorted by distance to the given event wich have not started yet.
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#    default: 0
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
+#    default: 20
+#  responses:
+#    200:
+#      description: success
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.EventDetail'
+###
+GET      /nearby/:id                         controllers.EventController.getNearby(id: Int)
+
+###
+#  summary: Query events other participants also particpate in
+#  description: This will return events sorted by most similar participants wich have not started yet
+#  parameters:
+#  - in: header
+#    name: X-Page
+#    schema:
+#      type: integer
+#    default: 0
+#  - in: header
+#    name: X-Page-Size
+#    schema:
+#      type: integer
+#    default: 20
+#  responses:
+#    200:
+#      description: success
+#      headers:
+#        x-number-items:
+#          type: integer
+#          description: The total number of items on all pages
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.EventDetail'
+###
+GET      /alsoViewed/:id                         controllers.EventController.getSameViewed(id: Int)
+
+###
+#  summary: Delete an event
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: Event deleted
+###
+DELETE   /:id                         controllers.EventController.deleteEvent(id: Int)
+
+###
+#  summary: Create an event
+#  description: >
+#    Creates an event. The location and category can either be specified by their id or only by name
+#    and their other attributes. In that case they will be created before creating the event.
+#    Images must be uploaded before creating the event, so they can only be referenced by id.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.forms.EventForm.Data'
+#    description: Dates (from and to), should be in the format 'yyyy-MM-dd HH:mm:ss' (example "2017-05-23 23:05:22")
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.detail.EventDetail'
+###
+POST     /                            controllers.EventController.createEvent
+
+###
+#  summary: Update an event with a specific id
+#  description: >
+#    Updates an event. The location and category can either be specified by their id or only by name
+#    and their other attributes. In that case they will be created before creating the event.
+#    Images must be uploaded before creating the event, so they can only be referenced by id.
+#    Categories and Images not specified in the request that where attached to the event before will be removed.
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.forms.EventForm.Data'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.detail.EventDetail'
+###
+PUT      /:id                         controllers.EventController.updateEvent(id: Int)
+
+###
+#  summary: Participate in an event
+#  description: Adds the user as a participant to the event
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: success
+#    400:
+#      description: The given event does not exist.
+#    409:
+#      description: The user is already participating.
+###
+GET     /participate/:id                          controllers.EventController.participate(id: Int)
+
+###
+#  summary: Remove participation in an event
+#  description: Removes the user as a participant to the event
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: success
+#    400:
+#      description: The user is not one of the participants
+###
+GET     /unparticipate/:id                          controllers.EventController.unparticipate(id: Int)

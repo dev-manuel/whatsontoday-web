@@ -10,7 +10,7 @@ import exampleTileImage from '../../../img/example_tile.png'
 import './eventTileBig.less'
 
 
-export default ({name, from, to, categories, description, thumbnailImage, target, language}) => {
+export default ({name, from, to, categories, description, shortDescription, thumbnailImage, target, language}) => {
     const {firstLine, secondLine} = stringifyTime(from, to, language.time);    
     const {categoryNameList, noCategories} = maxNameMapping(categories, 3);
 
@@ -30,7 +30,7 @@ export default ({name, from, to, categories, description, thumbnailImage, target
 
                     <div className="eventTileBig_sectionMiddle">
                         <div className="eventTileBig_description">
-                            {description}
+                            {shortDescription}
                         </div>
                     </div>
 

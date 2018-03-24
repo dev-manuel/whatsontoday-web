@@ -11,7 +11,7 @@ import {createThumbnailImageLinkFromImages} from '../utils/imageUtils'
  *
  * @typedef {{id:number,tag:string}} ImageResponse
  *
- * @typedef {{id:number,name:string,avgRating:number,description:string,from:Date,to:Date,categories:[categoryResponse],location:LocationResponse,images:[ImageResponse],participantCount:number}} EventResponse
+ * @typedef {{id:number,name:string,avgRating:number,description:string,shortDescription:string,from:Date,to:Date,categories:[categoryResponse],location:LocationResponse,images:[ImageResponse],participantCount:number}} EventResponse
  */
 
 /**
@@ -25,6 +25,7 @@ export const mapEvent = eventResponse => ({
     to: sqlTimestampToDate(eventResponse.to),
     categories: eventResponse.categories, 
     description: eventResponse.description,
+    shortDescription: eventResponse.shortDescription,
     thumbnailImage: createThumbnailImageLinkFromImages(eventResponse.images),
     target: createEventTargetLink(eventResponse.id)
 })

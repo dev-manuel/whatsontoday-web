@@ -1,9 +1,9 @@
 import React from 'react'
 import {Grid, Rating} from 'semantic-ui-react'
 
-import {stringifyTime} from '../../common/timeStringification'
-import ImageSlider from '../imageSlider'
-import exampleImage from '../../img/example_image.jpg'
+import {stringifyTime} from '../../../common/timeStringification'
+import ImageSlider from '../../../components/imageSlider'
+import exampleImage from '../../../img/example_image.jpg'
 import './eventOverview.less'
 
 /**

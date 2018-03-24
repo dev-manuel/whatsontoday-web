@@ -1,13 +1,13 @@
 import React from 'react'
 import {Grid, Rating} from 'semantic-ui-react'
 
-import {readEvent} from '../common/api/requests/event'
-import EventOverview from '../components/eventOverview'
-import EventDetails from '../components/eventDetails'
-import LocationDetails from '../components/locationDetails'
-import OrganizerDetails from '../components/organizerDetails'
-import EventRecommender from '../components/eventRecommender'
-import exampleTileImage from '../img/example_tile.png'
+import {readEvent} from '../../common/api/requests/event'
+import EventOverview from './components/eventOverview'
+import EventDetails from './components/eventDetails'
+import LocationDetails from './components/locationDetails'
+import OrganizerDetails from './components/organizerDetails'
+import EventRecommender from '../../components/eventRecommender'
+import exampleTileImage from '../../img/example_tile.png'
 
 /**
  * @typedef {{name: string, rating: number, description: string, from: Date, to: Date, categories: [string]}} eventData

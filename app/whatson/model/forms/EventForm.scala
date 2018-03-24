@@ -19,7 +19,7 @@ object EventForm {
       "location" -> LocationForm.map,
       "images" -> list(TaggedImageForm.map),
       "description" -> nonEmptyText,
-      "shortDescription" -> nonEmptyText
+      "shortDescription" -> nonEmptyText(maxLength = 128)
     )(Data.apply)(Data.unapply)
   val form = Form(map)
 

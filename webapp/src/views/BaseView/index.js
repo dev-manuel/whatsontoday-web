@@ -12,6 +12,7 @@ import SignIn from '../SignIn'
 import SignUp from '../SignUp/index'
 import Options from '../Options'
 import EventTool from '../EventTool'
+import LocationTool from  '../LocationTool'
 import Confirm from '../Confirm'
 import NoAccess from '../NoAccess'
 import _404 from '../404'
@@ -110,7 +111,17 @@ class BaseView extends React.Component {
                                 <EventTool
                                     {...language}
                                     {...routeParams}
-                                    setLoginData={this.setLoginData.bind(this)}
+                                />
+                            )}
+                        />
+                        <PrivateOrganizerRoute
+                            loggedIn={this.state.loginData.loggedIn}
+                            isOrganizer={this.state.loginData.isOrganizer}
+                            path='/location_tool'
+                            render={ routeParams => (
+                                <LocationTool
+                                    {...language}
+                                    {...routeParams}
                                 />
                             )}
                         />

@@ -4,6 +4,11 @@ import moment from 'moment'
  * @readonly
  */
 export default {
+    externalLinks: {
+        facebook: 'https://www.facebook.com/findyournextevent/',
+        instagram: 'https://www.instagram.com/findyournextevent/',
+        twitter: 'https://twitter.com/yournextevent',
+    },
     time: {
         locale: 'de',
         to: 'bis',
@@ -23,7 +28,12 @@ export default {
         science: 'Wissenschaft',
         party: 'Party',
         culture: 'Kultur',
-        fair: 'Feste'
+        fair: 'Feste',
+        
+        search: 'Event/Beschreibung...',
+        city: 'Stadt...',
+        category: 'Kategorie...',
+        submit: 'Suchen',
     },
     footer: {
         socialMedia: 'Social Media',
@@ -155,6 +165,8 @@ export default {
             sliderImageFileTableIsUploaded: 'Hochgeladen',
             description: 'Beschreibung',
             descriptionPlaceholder: 'Bitte Text eingeben...',
+            shortDescriptionPlaceholder: 'Bitte Text eingeben...',
+            shortDescription: 'Kurzbeschreibung',
             submit: 'Abschicken'
         },
         successful: {

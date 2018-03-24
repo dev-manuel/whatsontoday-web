@@ -1,26 +1,14 @@
-import {apiEnums} from './api'
+import exampleImage from '../../../img/example_tile.png'
 
-
-/**
- * @param {number} id
- * @returns {string}
- */
-const createImageLink = (id) => {
-    return `${apiEnums.baseUrl}images/bytes/${id}`;
-}
-
-/**
- * @param {[{id: number, name: string, tag: string}]} images
- * @returns {number} Returns undefined if logo is not found
- */
-const getLogoImageId = (images) => {
-    const logo = images.find( image => {
-        return image.tag === 'logo';
+export const createThumbnailImageLinkFromImages = images => {
+    const baseUrl = API_BASE_URL; // Defined by the webpack definition plugin
+    const thumbnailImage = images.find( image => {
+        return image.tag === 'thumbnail';
     })
 
-    if(logo){
-        return logo.id;
+    if(thumbnailImage){
+        return `${baseUrl}/images/bytes/${thumbnailImage.id}`;
     }else{
-        return undefined;
+        return exampleImage;
     }
 }

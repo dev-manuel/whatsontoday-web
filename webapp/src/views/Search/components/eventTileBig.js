@@ -10,14 +10,14 @@ import exampleTileImage from '../../../img/example_tile.png'
 import './eventTileBig.less'
 
 
-export default ({name, from, to, categories, description, imageURI, target, language}) => {
+export default ({name, from, to, categories, description, thumbnailImage, target, language}) => {
     const {firstLine, secondLine} = stringifyTime(from, to, language.time);    
     const {categoryNameList, noCategories} = maxNameMapping(categories, 3);
 
     return (
         <Link to={target}>
             <div className="eventTileBig_main">
-                <img src={exampleTileImage} className="eventTileBig_image"/>
+                <img src={thumbnailImage} className="eventTileBig_image"/>
                 <div className="eventTileBig_body">
                 
                     <div className="eventTileBig_sectionTop">

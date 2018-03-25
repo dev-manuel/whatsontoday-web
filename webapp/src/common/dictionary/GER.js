@@ -174,8 +174,13 @@ export default {
             shortDescription: 'Kurzbeschreibung',
             submit: 'Abschicken',
         },
+        delete: {
+            deleteEventMessage: 'Möchtest du das Event wirklich löschen?',
+            deleteEventDescription: 'Wenn du mit "Ja" bestätigst wird das Event unwideruflich gelöscht!',
+        },
         successful: {
             createEvent: 'Du hast ein Event erfolgreich erstellt!',
+            deleteEvent: 'Das Event wurde erfolgreich gelöscht',
             default: 'Aktion erfolgreich ausgeführt',
 
             goBack: 'Zurück'

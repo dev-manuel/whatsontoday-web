@@ -1,6 +1,7 @@
 package whatson.model
 
 import play.api.libs.json._
+import whatson.model.forms._
 
 case class Location(id: Option[Int], name: String, latitude: Float, longitude: Float,
                     country: String, city: String, street: String) extends HasCopy[Location] {
@@ -22,6 +23,8 @@ case class Location(id: Option[Int], name: String, latitude: Float, longitude: F
   }
 
   private def fromAngle(a: Float) = a/180*Math.PI;
+
+  def toForm = LocationForm.Data(id,name,country,city,street)
 }
 
 object Location {

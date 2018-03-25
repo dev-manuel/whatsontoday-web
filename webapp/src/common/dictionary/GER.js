@@ -9,6 +9,10 @@ export default {
         instagram: 'https://www.instagram.com/findyournextevent/',
         twitter: 'https://twitter.com/yournextevent',
     },
+    deleteMessage: {
+        yes: 'Ja',
+        no: 'Nein',
+    },
     time: {
         locale: 'de',
         to: 'bis',

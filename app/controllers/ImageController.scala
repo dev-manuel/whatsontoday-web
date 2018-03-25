@@ -74,6 +74,17 @@ class ImageController @Inject()(cc: ControllerComponents,
     }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
   }
 
+  def deleteImage(id: Int) = silhouette.SecuredAction.async { request =>
+    log.debug("Rest request to delete image")
+
+    val q = ImageTable.image.filter(x => x.id === id.bind && x.creatorId === request.identity.id).delete
+
+    db.run(q).map {
+      case 0 => NotFound
+      case x => Ok(Json.toJson(x))
+    }
+  }
+
   def attachImage(id: Int, entityType: String, entityId: Int, tag: Option[String]) = userOrganizerRequest(parse.default) { case (request,login) =>
     log.debug("Rest request to attach image")
 

@@ -178,6 +178,19 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 POST   /images                    controllers.ImageController.createImage
 
 ###
+#  summary: Delete an image
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: Event deleted
+###
+DELETE   /images/:id                         controllers.ImageController.deleteImage(id: Int)
+
+###
 #  summary: Attach an image
 #  description: >
 #      Attach an image to a given entity. This is callable for logged in users and organizers.

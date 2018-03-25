@@ -111,8 +111,10 @@ class EventController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to create event")
 
-        val locationQuery = (data.location.id match {
-          case None => insertAndReturn[Location,LocationTable](LocationTable.location,data.location)
+        val loc = data.location.toLocation //TODO
+
+        val locationQuery = (loc.id match {
+          case None => insertAndReturn[Location,LocationTable](LocationTable.location,loc)
           case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
         })
 
@@ -149,8 +151,10 @@ class EventController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to update event")
 
-        val locationQuery = (data.location.id match {
-          case None => insertAndReturn[Location,LocationTable](LocationTable.location,data.location)
+        val loc = data.location.toLocation //TODO
+
+        val locationQuery = (loc.id match {
+          case None => insertAndReturn[Location,LocationTable](LocationTable.location,loc)
           case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
         })
 

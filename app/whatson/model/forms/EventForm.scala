@@ -6,6 +6,7 @@ import play.api.libs.json.Json
 import java.sql.Timestamp
 import whatson.util.DateTime._
 import whatson.model._
+import whatson.model.forms.LocationForm.Data._
 
 /**
   * The form which handles creating/updating Events.
@@ -25,7 +26,7 @@ object EventForm {
 
   case class Data(name: String, from: Timestamp,
                   to: Option[Timestamp], categories: List[Category],
-                  location: Location, images: List[TaggedImageForm.Data],
+                  location: LocationForm.Data, images: List[TaggedImageForm.Data],
                   description: String, shortDescription: String)
 
   object Data {

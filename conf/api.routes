@@ -102,7 +102,7 @@ GET    /location/nearby/:id            controllers.LocationController.getNearby(
 #      type: string
 #  - name: body
 #    schema:
-#      $ref: '#/definitions/whatson.model.Location'
+#      $ref: '#/definitions/whatson.model.forms.LocationForm.Data'
 #  responses:
 #    200:
 #      description: success

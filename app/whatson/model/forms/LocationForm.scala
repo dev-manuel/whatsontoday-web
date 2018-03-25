@@ -8,11 +8,11 @@ object LocationForm {
   val map = mapping(
     "id" -> optional(number(min=1)),
     "name" -> nonEmptyText,
-    "latitude" -> bigDecimal.transform(x => x.toFloat,(x: Float) => BigDecimal(x)),
-    "longitude" -> bigDecimal.transform(x => x.toFloat,(x: Float) => BigDecimal(x)),
+    /*"latitude" -> bigDecimal.transform(x => x.toFloat,(x: Float) => BigDecimal(x)),
+    "longitude" -> ignored(0.0f)bigDecimal.transform(x => x.toFloat,(x: Float) => BigDecimal(x)),*/
     "country" -> nonEmptyText,
     "city" -> nonEmptyText,
     "street" -> nonEmptyText
-  )(Location.apply)(x => Location.unapply(x))
+  ){ case x => Location(x._1,x._2,0.0f,0.0f,x._3,x._4,x._5)}(x => Some((x.id,x.name,x.country,x.city,x.street)))
   val form = Form(map)
 }

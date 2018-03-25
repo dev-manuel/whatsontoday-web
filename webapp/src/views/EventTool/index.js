@@ -44,6 +44,7 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <Dashboard
                         {...routeProps}
+                        basePath={basePath}
                         language={language}
                     />
                 )}
@@ -55,6 +56,7 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <Update
                         {...routeProps}
+                        basePath={basePath}
                         language={language}
                     />
                 )}
@@ -66,6 +68,7 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <Delete
                         {...routeProps}
+                        basePath={basePath}
                         language={language}
                     />
                 )}
@@ -77,6 +80,7 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <Successful
                         {...routeProps}
+                        basePath={basePath}
                         language={language}
                     />
                 )}

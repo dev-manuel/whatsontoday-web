@@ -13,7 +13,9 @@ class ImageTable(tag: Tag) extends Table[Image](tag, "images") with HasID[Image]
 
   def contentType = column[String]("content_type")
 
-  def * = (id.?,data,contentType) <> (Image.tupled, Image.unapply)
+  def creatorId = column[Option[Int]]("creator_fk")
+
+  def * = (id.?,data,contentType,creatorId) <> (Image.tupled, Image.unapply)
 }
 
 object ImageTable {

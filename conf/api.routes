@@ -165,6 +165,10 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 #    name: image
 #    type: file
 #    description: The file to upload.
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
 #  responses:
 #    200:
 #      description: success

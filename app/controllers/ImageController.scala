@@ -58,16 +58,16 @@ class ImageController @Inject()(cc: ControllerComponents,
     })
   }
 
-  def createImage = Action(parse.multipartFormData).async { request =>
+  def createImage = silhouette.SecuredAction.async(parse.multipartFormData) { request =>
     log.debug("Rest request to create image")
 
-    request.body.file("image").zip(request.body.dataParts("data")).flatMap { case (x,data) =>
+    request.body.file("image").flatMap { case x =>
       x.contentType.map { contentType =>
         val file = x.ref.path.toFile()
         val str = new FileInputStream(file)
         val bytes = IOUtils.toByteArray(str)
 
-        val img = Image(None,bytes,contentType)
+        val img = Image(None,bytes,contentType,request.identity.id)
 
         db.run(insertAndReturn[Image,ImageTable](image,img))
       }

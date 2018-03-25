@@ -3,18 +3,12 @@ import {Route, Switch} from 'react-router-dom'
 
 import Overview from './overview'
 import Create from './create'
+import Dashboard from './dashboard'
 import Update from './update'
 import Delete from './delete'
 import NotFound from '../404'
 import Successful from './successful';
 
-
-export const eventToolLinks = {
-    create: 'create',
-    update: 'update',
-    delete: 'delete',
-    successful: 'successful',
-}
 
 export default ({match, language, setLoginData}) => {
     const basePath = match.path;
@@ -34,7 +28,7 @@ export default ({match, language, setLoginData}) => {
             
             {/* Create */}
             <Route
-                path={`${basePath}/${eventToolLinks.create}`}
+                path={`${basePath}/create`}
                 render={routeProps => (
                     <Create
                         {...routeProps}
@@ -43,10 +37,21 @@ export default ({match, language, setLoginData}) => {
                     />
                 )}
             />
+
+            {/* Dashboard */}
+            <Route
+                path={`${basePath}/dashboard`}
+                render={routeProps => (
+                    <Dashboard
+                        {...routeProps}
+                        language={language}
+                    />
+                )}
+            />
             
             {/* Update */}
             <Route
-                path={`${basePath}/${eventToolLinks.update}`}
+                path={`${basePath}/update`}
                 render={routeProps => (
                     <Update
                         {...routeProps}
@@ -57,18 +62,7 @@ export default ({match, language, setLoginData}) => {
 
             {/* Delete */}
             <Route
-                path={`${basePath}/${eventToolLinks.delete}`}
-                render={routeProps => (
-                    <Delete
-                        {...routeProps}
-                        language={language}
-                    />
-                )}
-            />
-
-            {/* Delete */}
-            <Route
-                path={`${basePath}/${eventToolLinks.delete}`}
+                path={`${basePath}/delete`}
                 render={routeProps => (
                     <Delete
                         {...routeProps}
@@ -79,7 +73,7 @@ export default ({match, language, setLoginData}) => {
 
             {/* Successful */}
             <Route
-                path={`${basePath}/${eventToolLinks.successful}`}
+                path={`${basePath}/successful`}
                 render={routeProps => (
                     <Successful
                         {...routeProps}

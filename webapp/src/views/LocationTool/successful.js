@@ -35,7 +35,7 @@ export default ({language, location}) => {
                         style={{ fontSize: '42px', fontWeight: 'normal', marginBottom: 20, marginTop: '3em' }}
                     />
                     <Link
-                        to={hasFrom ? location.from : '/'}
+                        to={hasFrom ? location.state.from || '/' : '/'}
                     >
                         <Button
                             color='green'

@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import GridColumn, { Segment, Container, Header, Divider, Dropdown, Form, Button, Grid } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -424,6 +425,20 @@ export default class Create extends React.Component {
                             loading={locationIsFetching}
                             noResultsMessage={lang.noResults}                                    
                         />
+
+                        <Link
+                            to={{
+                                pathname: '/location_tool/create',
+                                state: {
+                                    from: this.props.location,
+                                },
+                            }}
+                        >
+                            <Button
+                                color='gray'
+                                content={'Create new Location'}
+                            />
+                        </Link>
                         
 
                         <Divider horizontal>{lang.images}</Divider>

@@ -188,6 +188,7 @@ export default {
             country: 'Land',
             countryPlaceholder: 'Bitte gib das Land ein...',
             submit: 'Abschicken',
+            back: 'zurück'
         },
         successful: {
             createLocation: 'Du hast eine Location erfolgreich erstellt!',

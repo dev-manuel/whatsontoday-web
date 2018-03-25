@@ -3,6 +3,7 @@ import {Segment, Container, Divider, Header, Form, Button} from 'semantic-ui-rea
 import log from 'loglevel'
 
 import {createLocation} from '../../common/api/requests/location'
+import FormNavigationBar from '../../components/formNavigationBar'
 
 export default class Create extends React.Component {
 
@@ -16,6 +17,10 @@ export default class Create extends React.Component {
         streetValue: '',
         cityValue: '',
         countryValue: '',
+    }
+
+    handleBackClick(){
+        this.props.history.push(this.props.location.state.from);
     }
 
     handleSubmit(){
@@ -32,6 +37,7 @@ export default class Create extends React.Component {
             basePath,
             location,
         } = this.props;
+
 
         createLocation(nameValue, countryValue, cityValue, streetValue)
             .then( locationResult => {
@@ -81,6 +87,9 @@ export default class Create extends React.Component {
             countryValue,
         } = this.state;
 
+        const {location} = this.props;
+        const hasFrom = location.state && location.state.from;
+
         return (
             <Segment vertical>
                 <Container text>
@@ -120,10 +129,11 @@ export default class Create extends React.Component {
                             onChange={(event, {value}) => this.setState({countryValue: value})}
                         />
 
-                        <Button 
-                            type='submit'
-                            color='green'
-                            content={lang.submit}
+                        <FormNavigationBar
+                            nextText={lang.submit}
+                            backText={lang.back}
+                            hideBack={!hasFrom}
+                            onBackClicked={this.handleBackClick.bind(this)}
                         />
                     </Form>
                 </Container>

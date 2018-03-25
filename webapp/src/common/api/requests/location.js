@@ -35,7 +35,7 @@ export const getLocations = (search, xPage = 0, xPageSize = 20) => {
  * @param {number} id 
  */
 export const readLocation = id => {
-    return axios.get(`/locations/${id}`)
+    return axios.get(`/location/${id}`)
         .then( response => {
             log.debug('readLocation#then', response);
             return response.data;
@@ -49,7 +49,7 @@ export const readLocation = id => {
  * @param {number} xPageSize 
  */
 export const getNearbyLocations = (id, xPage = 0, xPageSize = 20) => {
-    return axios.get(`locations/nearby/${id}`, {
+    return axios.get(`location/nearby/${id}`, {
         headers: {
             "X-Page": xPage,
             "X-Page-Size": xPageSize,
@@ -64,18 +64,16 @@ export const getNearbyLocations = (id, xPage = 0, xPageSize = 20) => {
 /**
  * 
  * @param {string} name 
- * @param {number} latitude 
- * @param {number} longitude 
  * @param {string} country 
  * @param {string} city 
  * @param {string} street 
  * @returns {Promise<LocationResult>}
  */
-export const createLocation = (name, latitude, longitude, country, city, street) => {
-    return axios.post('/locations', {
+export const createLocation = (name, country, city, street) => {
+    return axios.post('/location', {
         name,
-        latitude,
-        longitude,
+        latitude: 0,
+        longitude: 0,
         country,
         city,
         street,

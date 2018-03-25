@@ -171,7 +171,10 @@ export default {
         },
         successful: {
             createEvent: 'Du hast ein Event erfolgreich erstellt!',
+            createLocation: 'Du hast eine Location erfolgreich erstellt!',
             default: 'Aktion erfolgreich ausgeführt',
+
+            goBack: 'Zurück'
         },
     }
 }

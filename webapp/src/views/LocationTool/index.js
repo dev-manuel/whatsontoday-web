@@ -3,11 +3,10 @@ import {Route, Switch} from 'react-router-dom'
 
 import Overview from './overview'
 import Create from './create'
-import Dashboard from './dashboard'
 import Update from './update'
 import Delete from './delete'
-import NotFound from '../404'
 import Successful from './successful';
+import NotFound from '../404'
 
 
 export default ({match, language, setLoginData}) => {
@@ -37,18 +36,6 @@ export default ({match, language, setLoginData}) => {
                     />
                 )}
             />
-
-            {/* Dashboard */}
-            <Route
-                path={`${basePath}/dashboard`}
-                render={routeProps => (
-                    <Dashboard
-                        {...routeProps}
-                        basePath={basePath}
-                        language={language}
-                    />
-                )}
-            />
             
             {/* Update */}
             <Route
@@ -56,7 +43,6 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <Update
                         {...routeProps}
-                        basePath={basePath}
                         language={language}
                     />
                 )}
@@ -68,7 +54,6 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <Delete
                         {...routeProps}
-                        basePath={basePath}
                         language={language}
                     />
                 )}
@@ -80,7 +65,6 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <Successful
                         {...routeProps}
-                        basePath={basePath}
                         language={language}
                     />
                 )}

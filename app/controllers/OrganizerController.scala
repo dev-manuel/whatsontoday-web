@@ -27,10 +27,12 @@ import whatson.service._
 import whatson.util.FormErrorJson._
 import whatson.db.Util._
 import whatson.model.detail.EventDetail._
+import whatson.db.Util._
+import whatson.model.detail.EventDetail._
 
 
 class OrganizerController@Inject() (
-  silhouette: Silhouette[AuthEnv],
+  val silhouette: Silhouette[AuthEnv],
   loginService: LoginService,
   authInfoRepository: AuthInfoRepository,
   credentialsProvider: CredentialsProvider,
@@ -41,10 +43,12 @@ class OrganizerController@Inject() (
   cache: AsyncCacheApi,
   passwordHasher: PasswordHasher,
   protected val dbConfigProvider: DatabaseConfigProvider,
-  organizerService: OrganizerService,
+  val organizerService: OrganizerService,
+  val userService: UserService,
   mailService: MailService,
   avatarService: AvatarService)
-    extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile] {
+    extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile]
+    with Util{
 
   val log = Logger("api.organizer")
 
@@ -67,6 +71,19 @@ class OrganizerController@Inject() (
     } yield e
 
     val s = q.sortColumn(sort,sortDir).queryPaged.detailed
+    returnPaged(s,q,db)
+  }
+
+  def getLoggedInEvents = organizerRequest(parse.default) { case (request,organizer) =>
+    log.debug("Rest request to get events of currently logged in organizer")
+
+    implicit val r = request
+
+    val q = for {
+      e <- EventTable.event if e.creatorId === organizer.id.getOrElse(-1)
+    } yield e
+
+    val s = q.queryPaged.detailed
     returnPaged(s,q,db)
   }
 

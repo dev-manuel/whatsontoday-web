@@ -436,7 +436,7 @@ export default class Create extends React.Component {
                         >
                             <Button
                                 color='gray'
-                                content={'Create new Location'}
+                                content={lang.createNewLocation}
                             />
                         </Link>
                         

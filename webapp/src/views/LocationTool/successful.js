@@ -5,7 +5,7 @@ import log from 'loglevel'
 import {Grid, Segment, Container, Header, Button, Icon } from 'semantic-ui-react'
 
 export default ({language, location}) => {
-    const lang = language.eventTool.successful;
+    const lang = language.locationTool.successful;
 
     const queryParams = parse(location.search);
     // Select text

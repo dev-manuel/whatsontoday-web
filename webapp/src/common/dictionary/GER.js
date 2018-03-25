@@ -157,6 +157,7 @@ export default {
             toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
             location: 'Veranstalutngsort',
             locationPlaceholder: 'Bitte wähle einen Ort aus',
+            createNewLocation: 'Neue Location hinzufügen',
             images: 'Bilder',
             thumbnailImageUploadButtonAddImage: 'Thumbnail hinzufügen',
             thumbnailImageNoFileSelected: 'Keine Datei ausgewählt',
@@ -167,14 +168,32 @@ export default {
             descriptionPlaceholder: 'Bitte gib einen Text ein...',
             shortDescriptionPlaceholder: 'Bitte gib einen Text ein...',
             shortDescription: 'Kurzbeschreibung',
-            submit: 'Abschicken'
+            submit: 'Abschicken',
         },
         successful: {
             createEvent: 'Du hast ein Event erfolgreich erstellt!',
+            default: 'Aktion erfolgreich ausgeführt',
+
+            goBack: 'Zurück'
+        },
+    },
+    locationTool: {
+        create: {
+            name: 'Name',
+            namePlaceholder: 'Bitte gib den Namen der Location ein...',
+            street: 'Straße',
+            streetPlaceholder: 'Bitte gib die Strße ein...',
+            city: 'Stadt',
+            cityPlaceholder: 'Bitte gib die Stadt ein...',
+            country: 'Land',
+            countryPlaceholder: 'Bitte gib das Land ein...',
+            submit: 'Abschicken',
+        },
+        successful: {
             createLocation: 'Du hast eine Location erfolgreich erstellt!',
             default: 'Aktion erfolgreich ausgeführt',
 
             goBack: 'Zurück'
         },
-    }
+    },
 }

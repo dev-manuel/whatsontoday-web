@@ -67,6 +67,8 @@ export default class Create extends React.Component {
     }
 
     render(){
+        const lang = this.props.language. locationTool.create;
+
         const {
             nameError,
             cityError,
@@ -87,33 +89,33 @@ export default class Create extends React.Component {
                     <Form onSubmit={this.handleSubmit.bind(this)}>
                         <Form.Input
                             error={nameError}
-                            label={'Name'}
+                            label={lang.name}
                             fluid
-                            placeholder={'Enter Text...'}
+                            placeholder={lang.namePlaceholder}
                             value={nameValue}
                             onChange={(event, {value}) => this.setState({nameValue: value})}
                         />
                         <Form.Input
                             error={streetError}
-                            label={'street'}
+                            label={lang.street}
                             fluid
-                            placeholder={'Enter Text...'}
+                            placeholder={lang.streetPlaceholder}
                             value={streetValue}
                             onChange={(event, {value}) => this.setState({streetValue: value})}
                         />
                         <Form.Input
                             error={cityError}
-                            label={'city'}
+                            label={lang.city}
                             fluid
-                            placeholder={'Enter Text...'}
+                            placeholder={lang.cityPlaceholder}
                             value={cityValue}
                             onChange={(event, {value}) => this.setState({cityValue: value})}
                         />
                         <Form.Input
                             error={countryError}
-                            label={'country'}
+                            label={lang.country}
                             fluid
-                            placeholder={'Enter Text...'}
+                            placeholder={lang.countryPlaceholder}
                             value={countryValue}
                             onChange={(event, {value}) => this.setState({countryValue: value})}
                         />
@@ -121,7 +123,7 @@ export default class Create extends React.Component {
                         <Button 
                             type='submit'
                             color='green'
-                            content='Submit'
+                            content={lang.submit}
                         />
                     </Form>
                 </Container>

@@ -8,8 +8,10 @@ export default class DashboardTable extends React.Component {
         const {
             eventList,
             basePath,
+            language,
         } = this.props;
 
+        const lang = language.eventTool.dashboard;
         const tableEntries = eventList.map((event, index) => (
             <Table.Row key={index}>
                 <Table.Cell>{event.id}</Table.Cell>
@@ -32,8 +34,8 @@ export default class DashboardTable extends React.Component {
             <Table>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>{'id'}</Table.HeaderCell>
-                        <Table.HeaderCell>{'name'}</Table.HeaderCell>
+                        <Table.HeaderCell>{lang.id}</Table.HeaderCell>
+                        <Table.HeaderCell>{lang.name}</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>

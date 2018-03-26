@@ -58,19 +58,21 @@ export default class Dashboard extends React.Component {
         } = this.props
 
         const hasFrom = location.state && location.state.from;
+        const lang = language.eventTool.dashboard;
 
         return (
 
             <Segment vertical>
                 <Container text>
-                    <Header as='h3' style={{ fontSize: '2em' }}>{'Dashboard'}</Header>
+                    <Header as='h3' style={{ fontSize: '2em' }}>{lang.dashboard}</Header>
                     <Divider/>
                     <DashboardTable
                         eventList={eventList}
                         basePath={this.props.basePath}
+                        language={language}
                     />
                     <FormNavigationBar
-                        backText={'Zurück'}
+                        backText={lang.back}
                         hideNext
                         hideBack={!hasFrom}
                         onBackClicked={this.handeleBackClick.bind(this)}

@@ -149,7 +149,7 @@ export default {
     },
     forOrganizers: {
         forOrganizers: 'Für Veranstalter',
-        createEvent: 'Event hinzenufüg',
+        createEvent: 'Event hinzufügen',
         crateLocation: 'Location hinzufügen',
         dashboard: 'Dashboard',
     },
@@ -184,6 +184,12 @@ export default {
         delete: {
             deleteEventMessage: 'Möchtest du das Event wirklich löschen?',
             deleteEventDescription: 'Wenn du mit "Ja" bestätigst wird das Event unwideruflich gelöscht!',
+        },
+        dashboard: {
+            dashboard: 'Dashboard',
+            id: 'Id',
+            name: 'Name',
+            back: 'Zurück',
         },
         successful: {
             createEvent: 'Du hast ein Event erfolgreich erstellt!',

@@ -3,7 +3,7 @@ import React from 'react'
 import backgroundImage from '../../../img/blurred.jpeg'
 
 const divStyle = {
-    background: `url(${backgroundImage}) no-repeat center center fixed`,
+    background: `url(${backgroundImage}) no-repeat center`,
     height: '100%',
     width: '100%',
 }

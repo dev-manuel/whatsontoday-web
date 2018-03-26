@@ -13,6 +13,7 @@ class Slider extends React.Component {
 			dots: false,
 			infinite: true,
 			speed: 500,
+			autoplaySpeed: 6666,
 			slidesToShow: 1,
 			slidesToScroll: 1
 		};

@@ -4,25 +4,23 @@ import {parse, stringify} from 'query-string'
 import log from 'loglevel'
 import {Grid, Segment, Container, Header, Button, Icon } from 'semantic-ui-react'
 
-export default ({language}) => {
-    const lang = language.eventTool.successful;
+export default ({language, location}) => {
+    const lang = language.locationTool.successful;
 
     const queryParams = parse(location.search);
     // Select text
-    let message = ''
+    let message = '';
     switch(queryParams.topic){
-        case 'create_event':
-            message = lang.createEvent;
-        break;
-
-        case 'delete_event':
-            message = lang.deleteEvent;
+        case 'create_location':
+            message = lang.createLocation;
         break;
 
         default:
             message = lang.default;
         break;
     }
+
+    const hasFrom = location.state && location.state.from;
 
     return (
         <Segment
@@ -36,6 +34,14 @@ export default ({language}) => {
                         content={message}
                         style={{ fontSize: '42px', fontWeight: 'normal', marginBottom: 20, marginTop: '3em' }}
                     />
+                    <Link
+                        to={hasFrom ? location.state.from || '/' : '/'}
+                    >
+                        <Button
+                            color='green'
+                            content={lang.goBack}
+                        />
+                    </Link>
                 </Container>
             </Segment>
     )

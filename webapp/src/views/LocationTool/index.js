@@ -3,11 +3,10 @@ import {Route, Switch} from 'react-router-dom'
 
 import Overview from './overview'
 import Create from './create'
-import Dashboard from './dashboard'
 import Update from './update'
 import Delete from './delete'
-import NotFound from '../404'
 import Successful from './successful';
+import NotFound from '../404'
 
 
 export default ({match, language, setLoginData}) => {
@@ -37,26 +36,13 @@ export default ({match, language, setLoginData}) => {
                     />
                 )}
             />
-
-            {/* Dashboard */}
-            <Route
-                path={`${basePath}/dashboard`}
-                render={routeProps => (
-                    <Dashboard
-                        {...routeProps}
-                        basePath={basePath}
-                        language={language}
-                    />
-                )}
-            />
             
             {/* Update */}
             <Route
-                path={`${basePath}/update/:id`}
+                path={`${basePath}/update`}
                 render={routeProps => (
                     <Update
                         {...routeProps}
-                        basePath={basePath}
                         language={language}
                     />
                 )}
@@ -64,11 +50,10 @@ export default ({match, language, setLoginData}) => {
 
             {/* Delete */}
             <Route
-                path={`${basePath}/delete/:id`}
+                path={`${basePath}/delete`}
                 render={routeProps => (
                     <Delete
                         {...routeProps}
-                        basePath={basePath}
                         language={language}
                     />
                 )}
@@ -80,7 +65,6 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <Successful
                         {...routeProps}
-                        basePath={basePath}
                         language={language}
                     />
                 )}

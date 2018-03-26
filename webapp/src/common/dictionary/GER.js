@@ -9,6 +9,10 @@ export default {
         instagram: 'https://www.instagram.com/findyournextevent/',
         twitter: 'https://twitter.com/yournextevent',
     },
+    deleteMessage: {
+        yes: 'Ja',
+        no: 'Nein',
+    },
     time: {
         locale: 'de',
         to: 'bis',
@@ -143,6 +147,12 @@ export default {
         organizer: 'Du musst als Veranstalter registriert sein, um diese Seite aufrufen zu können.',
         default: 'Du hast leider keine Berechtigung diese Seite aufzurufen.',
     },
+    forOrganizers: {
+        forOrganizers: 'Für Veranstalter',
+        createEvent: 'Event hinzufügen',
+        crateLocation: 'Location hinzufügen',
+        dashboard: 'Dashboard',
+    },
     eventTool: {
         create: {
             noResults: 'Keine Ergebnisse gefunden...',
@@ -157,6 +167,7 @@ export default {
             toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
             location: 'Veranstalutngsort',
             locationPlaceholder: 'Bitte wähle einen Ort aus',
+            createNewLocation: 'Neue Location hinzufügen',
             images: 'Bilder',
             thumbnailImageUploadButtonAddImage: 'Thumbnail hinzufügen',
             thumbnailImageNoFileSelected: 'Keine Datei ausgewählt',
@@ -167,11 +178,45 @@ export default {
             descriptionPlaceholder: 'Bitte gib einen Text ein...',
             shortDescriptionPlaceholder: 'Bitte gib einen Text ein...',
             shortDescription: 'Kurzbeschreibung',
-            submit: 'Abschicken'
+            submit: 'Abschicken',
+            back: 'Zurück'
+        },
+        delete: {
+            deleteEventMessage: 'Möchtest du das Event wirklich löschen?',
+            deleteEventDescription: 'Wenn du mit "Ja" bestätigst wird das Event unwideruflich gelöscht!',
+        },
+        dashboard: {
+            dashboard: 'Dashboard',
+            id: 'Id',
+            name: 'Name',
+            back: 'Zurück',
         },
         successful: {
             createEvent: 'Du hast ein Event erfolgreich erstellt!',
+            deleteEvent: 'Das Event wurde erfolgreich gelöscht',
             default: 'Aktion erfolgreich ausgeführt',
+
+            goBack: 'Zurück'
         },
-    }
+    },
+    locationTool: {
+        create: {
+            name: 'Name',
+            namePlaceholder: 'Bitte gib den Namen der Location ein...',
+            street: 'Straße',
+            streetPlaceholder: 'Bitte gib die Strße ein...',
+            city: 'Stadt',
+            cityPlaceholder: 'Bitte gib die Stadt ein...',
+            country: 'Land',
+            countryPlaceholder: 'Bitte gib das Land ein...',
+            submit: 'Abschicken',
+            back: 'zurück'
+        },
+        successful: {
+            createLocation: 'Du hast eine Location erfolgreich erstellt!',
+            default: 'Aktion erfolgreich ausgeführt',
+
+            goBack: 'Zurück'
+        },
+    },
 }

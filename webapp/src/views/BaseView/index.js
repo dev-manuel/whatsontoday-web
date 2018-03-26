@@ -11,7 +11,9 @@ import LocationView from '../Location'
 import SignIn from '../SignIn'
 import SignUp from '../SignUp/index'
 import Options from '../Options'
+import ForOrganizers from '../ForOrganizers'
 import EventTool from '../EventTool'
+import LocationTool from  '../LocationTool'
 import Confirm from '../Confirm'
 import NoAccess from '../NoAccess'
 import _404 from '../404'
@@ -110,10 +112,32 @@ class BaseView extends React.Component {
                                 <EventTool
                                     {...language}
                                     {...routeParams}
-                                    setLoginData={this.setLoginData.bind(this)}
                                 />
                             )}
                         />
+                        <PrivateOrganizerRoute
+                            loggedIn={this.state.loginData.loggedIn}
+                            isOrganizer={this.state.loginData.isOrganizer}
+                            path='/location_tool'
+                            render={ routeParams => (
+                                <LocationTool
+                                    {...language}
+                                    {...routeParams}
+                                />
+                            )}
+                        />
+                        <PrivateOrganizerRoute
+                            loggedIn={this.state.loginData.loggedIn}
+                            isOrganizer={this.state.loginData.isOrganizer}
+                            path='/for_organizers'
+                            render={ routeParams => (
+                                <ForOrganizers
+                                    {...language}
+                                    {...routeParams}
+                                />
+                            )}
+                        />
+
 
                         {/* Regular routes */}
                         <Route exact path='/'         render={() => <HomeView {...language}/>}/>

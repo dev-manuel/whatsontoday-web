@@ -1,9 +1,11 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import GridColumn, { Segment, Container, Header, Divider, Dropdown, Form, Button, Grid } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import log from 'loglevel'
 
+import FormNavigationBar from '../../components/formNavigationBar'
 import DateSelectFormField from './components/dateSelectFormField'
 import LocationSelectFormField from './components/locationSelectFormField'
 import ImageUploadFormField, {FileEntryStatus} from './components/imageUploadFormField'
@@ -13,6 +15,7 @@ import {getLocations} from '../../common/api/requests/location'
 import {uploadImage} from '../../common/api/requests/image'
 import {createEvent} from '../../common/api/requests/event'
 
+import './create.less'
 import 'react-datepicker/dist/react-datepicker.css'
 
 
@@ -120,7 +123,7 @@ export default class Create extends React.Component {
                     successful = false;
                 }
                 if(errorData.shortDescription){
-                    formErrors.descriptionError = true;
+                    formErrors.shortDescriptionError = true;
                     successful = false;
                 }
                 if(errorData.description){
@@ -147,6 +150,10 @@ export default class Create extends React.Component {
                 log.debug('Create#handleSubmit#handleSubmit#formErrors', formErrors);                
                 log.info('Submit successful:', successful);
             })
+    }
+
+    handleBackClick(){
+        this.props.history.push(this.props.location.state.from);
     }
 
     //
@@ -306,37 +313,43 @@ export default class Create extends React.Component {
     // ─── RENDER ─────────────────────────────────────────────────────────────────────
     //  
     render(){
-        const lang = this.props.language.eventTool.create;
 
+        const {
+            language,
+            location,
+        } = this.props;
         const {
             nameError,
             nameValue,
-
+            
             categoryIsFetching,
             categoryOptions,
             categoryValue,
-
+            
             descriptionError,
             descriptionValue,
             shortDescriptionError,
             shortDescriptionValue,
-
+            
             fromError,
             fromValue,
-
+            
             toError,
             toValue,
-
+            
             locationIsFetching,
             locationOptions,
             locationValue,
             locationError,
             // locationSearchQuery,
-
+            
             thumbnailImage,
             sliderImages,
         } = this.state;
-
+        
+        const lang = language.eventTool.create;
+        const hasFrom = location.state && location.state.from;
+        
         return (
             <Segment vertical>
                 <Container text>
@@ -424,6 +437,20 @@ export default class Create extends React.Component {
                             loading={locationIsFetching}
                             noResultsMessage={lang.noResults}                                    
                         />
+
+                        <Link
+                            to={{
+                                pathname: '/location_tool/create',
+                                state: {
+                                    from: this.props.location,
+                                },
+                            }}
+                        >
+                            <Button
+                                color='gray'
+                                content={lang.createNewLocation}
+                            />
+                        </Link>
                         
 
                         <Divider horizontal>{lang.images}</Divider>
@@ -465,11 +492,15 @@ export default class Create extends React.Component {
                                 />
                             </Grid.Column>
                         </Grid>
-
-                        <Form.Button
-                            type="submit"
-                            color='green'
-                        >{lang.submit}</Form.Button>
+                        
+                        <div className="EventTool_create_formNavBar">
+                            <FormNavigationBar
+                                nextText={lang.submit}
+                                backText={lang.back}
+                                hideBack={!hasFrom}
+                                onBackClicked={this.handleBackClick.bind(this)}
+                            />
+                        </div>
                     </Form>
 
                 </Container>

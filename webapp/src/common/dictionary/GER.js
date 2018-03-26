@@ -9,6 +9,10 @@ export default {
         instagram: 'https://www.instagram.com/findyournextevent/',
         twitter: 'https://twitter.com/yournextevent',
     },
+    deleteMessage: {
+        yes: 'Ja',
+        no: 'Nein',
+    },
     time: {
         locale: 'de',
         to: 'bis',
@@ -143,6 +147,12 @@ export default {
         organizer: 'Du musst als Veranstalter registriert sein, um diese Seite aufrufen zu können.',
         default: 'Du hast leider keine Berechtigung diese Seite aufzurufen.',
     },
+    forOrganizers: {
+        forOrganizers: 'Für Veranstalter',
+        createEvent: 'Event hinzufügen',
+        crateLocation: 'Location hinzufügen',
+        dashboard: 'Dashboard',
+    },
     eventTool: {
         create: {
             noResults: 'Keine Ergebnisse gefunden...',
@@ -169,9 +179,21 @@ export default {
             shortDescriptionPlaceholder: 'Bitte gib einen Text ein...',
             shortDescription: 'Kurzbeschreibung',
             submit: 'Abschicken',
+            back: 'Zurück'
+        },
+        delete: {
+            deleteEventMessage: 'Möchtest du das Event wirklich löschen?',
+            deleteEventDescription: 'Wenn du mit "Ja" bestätigst wird das Event unwideruflich gelöscht!',
+        },
+        dashboard: {
+            dashboard: 'Dashboard',
+            id: 'Id',
+            name: 'Name',
+            back: 'Zurück',
         },
         successful: {
             createEvent: 'Du hast ein Event erfolgreich erstellt!',
+            deleteEvent: 'Das Event wurde erfolgreich gelöscht',
             default: 'Aktion erfolgreich ausgeführt',
 
             goBack: 'Zurück'

@@ -52,7 +52,7 @@ export default ({match, language, setLoginData}) => {
             
             {/* Update */}
             <Route
-                path={`${basePath}/update`}
+                path={`${basePath}/update/:id`}
                 render={routeProps => (
                     <Update
                         {...routeProps}
@@ -64,7 +64,7 @@ export default ({match, language, setLoginData}) => {
 
             {/* Delete */}
             <Route
-                path={`${basePath}/delete`}
+                path={`${basePath}/delete/:id`}
                 render={routeProps => (
                     <Delete
                         {...routeProps}

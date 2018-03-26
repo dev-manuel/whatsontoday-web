@@ -123,7 +123,7 @@ export default class Create extends React.Component {
                     successful = false;
                 }
                 if(errorData.shortDescription){
-                    formErrors.descriptionError = true;
+                    formErrors.shortDescriptionError = true;
                     successful = false;
                 }
                 if(errorData.description){
@@ -313,37 +313,43 @@ export default class Create extends React.Component {
     // ─── RENDER ─────────────────────────────────────────────────────────────────────
     //  
     render(){
-        const lang = this.props.language.eventTool.create;
-        const hasFrom = location.state && location.state.from;
+
+        const {
+            language,
+            location,
+        } = this.props;
         const {
             nameError,
             nameValue,
-
+            
             categoryIsFetching,
             categoryOptions,
             categoryValue,
-
+            
             descriptionError,
             descriptionValue,
             shortDescriptionError,
             shortDescriptionValue,
-
+            
             fromError,
             fromValue,
-
+            
             toError,
             toValue,
-
+            
             locationIsFetching,
             locationOptions,
             locationValue,
             locationError,
             // locationSearchQuery,
-
+            
             thumbnailImage,
             sliderImages,
         } = this.state;
-
+        
+        const lang = language.eventTool.create;
+        const hasFrom = location.state && location.state.from;
+        
         return (
             <Segment vertical>
                 <Container text>

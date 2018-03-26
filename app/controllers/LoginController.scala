@@ -39,6 +39,7 @@ import whatson.model._
 import whatson.model.forms._
 import whatson.service._
 import whatson.util.FormErrorJson._
+import whatson.util._
 
 class LoginController @Inject()(cc: ControllerComponents,
                                protected val dbConfigProvider: DatabaseConfigProvider,
@@ -56,7 +57,8 @@ class LoginController @Inject()(cc: ControllerComponents,
                                 userService: UserService,
                                 organizerService: OrganizerService,
                                 mailService: MailService,
-                                avatarService: AvatarService)
+                                avatarService: AvatarService,
+                                applicationConfig: ApplicationConfig)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile]{
@@ -116,7 +118,7 @@ class LoginController @Inject()(cc: ControllerComponents,
     JWTAuthenticator.unserialize(token, encoder, settings) match {
       case Success(auth) => {
         loginService.confirm(auth.loginInfo).map {
-          case Some(l) => Redirect("http://" + request.host + "/web/mailConfirmed")
+          case Some(l) => Redirect(applicationConfig.url ++ "web/mailConfirmed")
           case None => NotFound
         }
       }

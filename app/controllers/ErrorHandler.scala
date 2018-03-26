@@ -27,7 +27,8 @@ class ErrorHandler @Inject()(implicit context: ExecutionContext,
   }
 
   def onServerError(request: RequestHeader, exception: Throwable) = {
-    Future.successful(Redirect(applicationConfig.url ++ "web/500"))
-    //TODO: Inform devs?
+    Future.successful(
+      InternalServerError("A server error occurred: " + exception.getMessage)
+    )
   }
 }

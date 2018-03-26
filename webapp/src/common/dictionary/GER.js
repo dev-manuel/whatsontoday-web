@@ -147,6 +147,12 @@ export default {
         organizer: 'Du musst als Veranstalter registriert sein, um diese Seite aufrufen zu können.',
         default: 'Du hast leider keine Berechtigung diese Seite aufzurufen.',
     },
+    forOrganizers: {
+        forOrganizers: 'Für Veranstalter',
+        createEvent: 'Event hinzenufüg',
+        crateLocation: 'Location hinzufügen',
+        dashboard: 'Dashboard',
+    },
     eventTool: {
         create: {
             noResults: 'Keine Ergebnisse gefunden...',

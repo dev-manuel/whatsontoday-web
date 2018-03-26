@@ -1,16 +1,43 @@
 import React from 'react'
+import log from 'loglevel'
 import {Table, Segment, Container, Icon, Header, Divider} from 'semantic-ui-react'
 
+import {getOwnEvents} from '../../common/api/requests/organizer'
 import DashboardTable from './components/dashboardTable'
 
 export default class Dashboard extends React.Component {
 
     state = {
+        isUnauthorized: false,
+        isFetching: true,
         eventList: [],
     }
 
     componentDidMount(){
-        // Todo...
+        getOwnEvents()
+            .then(eventData => {
+                this.setState({
+                    isFetching: false,
+                    eventList: eventData.map(event => ({
+                        id: event.id,
+                        name: event.name,
+                    }))
+                })
+            })
+            .catch(error => {
+                log.debug('EventTool#dashboard#catch', error);
+
+                switch(error.response.status){
+                    case 401: // Unauthorized
+                        this.setState({
+                            isUnauthorized: true,
+                        })
+                    break;
+
+                    default:
+                    break;
+                }
+            })
     }
 
     render(){

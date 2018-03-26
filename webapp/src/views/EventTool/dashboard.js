@@ -2,6 +2,7 @@ import React from 'react'
 import log from 'loglevel'
 import {Table, Segment, Container, Icon, Header, Divider} from 'semantic-ui-react'
 
+import FormNavigationBar from '../../components/formNavigationBar'
 import {getOwnEvents} from '../../common/api/requests/organizer'
 import DashboardTable from './components/dashboardTable'
 
@@ -40,11 +41,23 @@ export default class Dashboard extends React.Component {
             })
     }
 
+    handeleBackClick(){
+        this.props.history.push(
+            this.props.location.state.from || '/'
+        )
+    }
+
     render(){
 
         const {
             eventList,
         } = this.state;
+        const {
+            language,
+            location,
+        } = this.props
+
+        const hasFrom = location.state && location.state.from;
 
         return (
 
@@ -55,6 +68,12 @@ export default class Dashboard extends React.Component {
                     <DashboardTable
                         eventList={eventList}
                         basePath={this.props.basePath}
+                    />
+                    <FormNavigationBar
+                        backText={'Zurück'}
+                        hideNext
+                        hideBack={!hasFrom}
+                        onBackClicked={this.handeleBackClick.bind(this)}
                     />
                 </Container>
             </Segment>

@@ -179,6 +179,7 @@ export default {
             shortDescriptionPlaceholder: 'Bitte gib einen Text ein...',
             shortDescription: 'Kurzbeschreibung',
             submit: 'Abschicken',
+            back: 'Zurück'
         },
         delete: {
             deleteEventMessage: 'Möchtest du das Event wirklich löschen?',

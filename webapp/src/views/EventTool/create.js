@@ -123,7 +123,7 @@ export default class Create extends React.Component {
                     successful = false;
                 }
                 if(errorData.shortDescription){
-                    formErrors.descriptionError = true;
+                    formErrors.shortDescriptionError = true;
                     successful = false;
                 }
                 if(errorData.description){

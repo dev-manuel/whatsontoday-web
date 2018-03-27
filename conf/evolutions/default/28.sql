@@ -1,5 +1,8 @@
 # --- !Ups
 
+ALTER TABLE event ADD COLUMN organizer_fk BIGINT REFERENCES organizer ON DELETE CASCADE DEFAUlT NULL;
+UPDATE event SET organizer_fk = creator_fk;
+
 ALTER TABLE event
       DROP CONSTRAINT event_creator_fk;
 
@@ -53,6 +56,8 @@ ALTER TABLE event
       DROP CONSTRAINT event_creator_fk;
 
 DELETE FROM event WHERE NOT EXISTS (SELECT o.id FROM organizer o WHERE o.login_fk = creator_fk);
+
+ALTER TABLE event DROP COLUMN organizer_fk;
 
 UPDATE event e SET creator_fk = (
        SELECT o.id FROM organizer o

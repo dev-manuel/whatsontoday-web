@@ -26,14 +26,14 @@ class EventServiceImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
   val format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
-  def insertCSV(file: File, organizer: Organizer): Future[List[EventDetail]] = {
+  def insertCSV(file: File, login: Login): Future[List[EventDetail]] = {
     val reader = CSVReader.open(file)
     val events = reader.allWithHeaders()
 
     events.mapFutureSync { case map =>
       val default = map.map(x => (x._1,Some(x._2))).toMap
       List("Name","From","To","Description", "ShortDescription", "Categories",
-           "LocationName","Country","City","Street").map(default.getOrElse(_,None))
+           "LocationName","Country","City","Street", "OrganizerId").map(default.getOrElse(_,None))
         .foldRight(Some(List()) : Option[List[String]]) {
           case (Some(a),Some(b)) => Some(a :: b)
           case _ => None
@@ -51,7 +51,7 @@ class EventServiceImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
               val event = Event(None, l(0),
                                 new Timestamp(format.parse(l(1)).getTime), Some(new Timestamp(format.parse(l(2)).getTime)),
                                 l(3), l(4),
-                                organizer.id, location.id.getOrElse(-1))
+                                login.id, location.id.getOrElse(-1), Some(l(10).toInt))
               db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,categories))
             }.flatMap {
               case (event,categories) => {

@@ -24,13 +24,15 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Ev
 
   def locationId = column[Int]("location_fk")
 
-  def * = (id.?,name,from,to,description,shortDescription,creatorId,locationId) <> (Event.tupled, Event.unapply)
+  def organizerId = column[Option[Int]]("organizer_fk")
+
+  def * = (id.?,name,from,to,description,shortDescription,creatorId,locationId,organizerId) <> (Event.tupled, Event.unapply)
 
   def creator = foreignKey("creator",creatorId,LoginTable.login)(_.id.?)
   def location = foreignKey("location",locationId,LocationTable.location)(_.id)
   def participants = participant.filter(_.eventID === id).flatMap(_.participant)
   def categories = eventCategory.filter(_.eventID === id).flatMap(_.categoryFK)
-
+  def organizer = foreignKey("organizer",organizerId,OrganizerTable.organizer)(_.id.?)
 
   val entityType = EntityType.Event
 }

@@ -135,7 +135,7 @@ class EventController @Inject()(cc: ControllerComponents,
         db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery)).flatMap { case ((location,images),categories) =>
           val event = Event(None, data.name, data.from, data.to,
                             data.description, data.shortDescription,
-                            login.id, location.id.getOrElse(-1))
+                            login.id, location.id.getOrElse(-1), Some(data.organizerId))
 
           db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,images,categories))
         }.flatMap { case (event,images,categories) =>
@@ -180,7 +180,7 @@ class EventController @Inject()(cc: ControllerComponents,
           case (((location,images),categories),Some(event)) => {
             val event = Event(Some(id), data.name, data.from, data.to,
                               data.description, data.shortDescription,
-                              login.id, location.id.getOrElse(-1))
+                              login.id, location.id.getOrElse(-1), Some(data.organizerId))
 
             val getQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === login.id)
 
@@ -207,13 +207,13 @@ class EventController @Inject()(cc: ControllerComponents,
       })
   }
 
-  def insertCSV = organizerRequest(parse.multipartFormData) { case (request,organizer) =>
+  def insertCSV = withRights(Right.CreateEvent)(parse.multipartFormData) { case (request,login,role) =>
     log.debug("Rest request to insert events by csv")
 
     request.body.file("csv").map { case x =>
       val file = x.ref.path.toFile()
 
-      eventService.insertCSV(file,organizer)
+      eventService.insertCSV(file,login)
      }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
   }
 

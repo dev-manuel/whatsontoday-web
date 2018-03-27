@@ -7,7 +7,7 @@ import slick.jdbc._
 
 case class Event(id: Option[Int], name: String, from: Timestamp, to: Option[Timestamp],
                  description: String, shortDescription: String, creatorId: Option[Int],
-                 locationId: Int) extends HasCopy[Event] {
+                 locationId: Int, organizerId: Option[Int]) extends HasCopy[Event] {
   def cpy(i: Option[Int]) = this.copy(id = i)
 }
 

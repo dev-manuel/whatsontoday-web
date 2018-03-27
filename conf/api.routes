@@ -102,7 +102,7 @@ GET    /location/nearby/:id            controllers.LocationController.getNearby(
 #      type: string
 #  - name: body
 #    schema:
-#      $ref: '#/definitions/whatson.model.Location'
+#      $ref: '#/definitions/whatson.model.forms.LocationForm.Data'
 #  responses:
 #    200:
 #      description: success
@@ -165,6 +165,10 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 #    name: image
 #    type: file
 #    description: The file to upload.
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
 #  responses:
 #    200:
 #      description: success
@@ -172,6 +176,19 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 #        $ref: '#/definitions/whatson.model.Image'
 ###
 POST   /images                    controllers.ImageController.createImage
+
+###
+#  summary: Delete an image
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  responses:
+#    200:
+#      description: Event deleted
+###
+DELETE   /images/:id                         controllers.ImageController.deleteImage(id: Int)
 
 ###
 #  summary: Attach an image

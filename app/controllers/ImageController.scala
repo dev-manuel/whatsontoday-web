@@ -62,17 +62,28 @@ class ImageController @Inject()(cc: ControllerComponents,
   def createImage = withRights(whatson.model.Right.CreateImage)(parse.multipartFormData) { case (request,login,role) =>
     log.debug("Rest request to create image")
 
-    request.body.file("image").zip(request.body.dataParts("data")).flatMap { case (x,data) =>
+    request.body.file("image").flatMap { case x =>
       x.contentType.map { contentType =>
         val file = x.ref.path.toFile()
         val str = new FileInputStream(file)
         val bytes = IOUtils.toByteArray(str)
 
-        val img = Image(None,bytes,contentType)
+        val img = Image(None,bytes,contentType,login.id)
 
         db.run(insertAndReturn[Image,ImageTable](image,img))
       }
     }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
+  }
+
+  def deleteImage(id: Int) = withRights(whatson.model.Right.CreateImage) { case (request,login,role) =>
+    log.debug("Rest request to delete image")
+
+    val q = ImageTable.image.filter(x => x.id === id.bind && x.creatorId === login.id).delete
+
+    db.run(q).map {
+      case 0 => NotFound
+      case x => Ok(Json.toJson(x))
+    }
   }
 
   def attachImage(id: Int, entityType: String, entityId: Int, tag: Option[String]) = userOrganizerRequest(parse.default) { case (request,login) =>

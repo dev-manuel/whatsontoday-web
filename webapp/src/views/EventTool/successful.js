@@ -15,6 +15,10 @@ export default ({language}) => {
             message = lang.createEvent;
         break;
 
+        case 'delete_event':
+            message = lang.deleteEvent;
+        break;
+
         default:
             message = lang.default;
         break;

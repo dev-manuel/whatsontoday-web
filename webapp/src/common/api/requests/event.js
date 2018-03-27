@@ -2,11 +2,21 @@ import log from 'loglevel'
 
 import {axios} from '../index'
 import {sqlTimestampToDate, dateToSqlTimestamp} from '../utils/sqlTimeParsing'
-import {createEventTargetLink} from '../utils/createTargetLinks'
+import {mapEvent} from '../utils/mapEvent'
 
 /**
- * @typedef {{name: string, rating: number, description: string, from: Date, to: Date, categories: [string]}} eventData
+ * @typedef {{id:number,name:string,parentId:string}} categoryResponse
+ *
+ * @typedef {{id:number,name:string,loginFk: number}} OrganizerResponse
+ *
+ * @typedef {{id:number,name:string,latitude:number,longitude:number,country:string,city: string,street:string}} LocationResponse
+ *
+ * @typedef {{id:number,tag:string}} ImageResponse
+ *
+ * @typedef {{id:number,name:string,avgRating:number,description:string,shortDescription:string,from:Date,to:Date,categories:[categoryResponse],location:LocationResponse,images:[ImageResponse],participantCount:number}} EventResponse
  */
+
+export const eventBasePath = '/events'
 
 /**
  * @readonly
@@ -48,7 +58,7 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
     if(category) // Appending a `category` parameter according if is set
         queryParams.category = category;
     
-    return axios.get('events', {
+    return axios.get(`${eventBasePath}`, {
         params: queryParams,
         headers: {
             'X-Page': xPage,
@@ -57,16 +67,7 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
     }).then(result => {
         log.debug('searchEvents#then', result);
         return {
-            eventList: result.data.map((event)=>({
-                id: event.id,
-                name: event.name,
-                from: event.from,
-                to: event.to,
-                categories: event.categories, 
-                description: event.description,
-                imageURI: '#', //Todo
-                target: createEventTargetLink(event.id)
-            })),
+            eventList: result.data.map(eventResponse=> mapEvent(eventResponse)),
             // Total Number of all items that was found with used filter configuration
             itemNumber: result.headers['x-number-items'],
         }
@@ -77,27 +78,10 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
  * @param {number} id
  */
 export const readEvent = id => {
-    return axios.get(`events/${id}`)
+    return axios.get(`${$eventBasePath}/${id}`)
         .then(response => {
             log.debug('readEvent#then', response);
-            const data = response.data;
-
-            /**
-             * @type {eventData}
-            */
-            const event = {
-                id: data.id,
-                rating: data.rating,
-                name: data.name,
-                from: sqlTimestampToDate( data.from),
-                to: sqlTimestampToDate( data.to),
-                description: data.description,
-                categories: data.categories,
-                // creator: data.creator,
-                // location: data.location,
-                // images: data.images,
-            }
-            return event;
+            return mapEvent(response);
         })
 }
 
@@ -105,7 +89,7 @@ export const readEvent = id => {
  * @param {number} id 
  */
 export const participateToEvent = id => {
-    return axios.get(`/event/participate/${id}`)
+    return axios.get(`${eventBasePath}/participate/${id}`)
         .then( response => {
             log.debug('participateToEvent#then', response);
             return response.data;
@@ -116,7 +100,7 @@ export const participateToEvent = id => {
  * @param {number} id 
  */
 export const unparticipateToEvent = id => {
-    return axios.get(`/event/unparticipate/${id}`)
+    return axios.get(`${events}/unparticipate/${id}`)
         .then( response => {
             log.debug('unparticipateToEvent#then', response);
             return response.data;
@@ -127,17 +111,20 @@ export const unparticipateToEvent = id => {
  * 
  * @param {string} name 
  * @param {string} description 
+ * @param {string} shortDescription 
  * @param {number} locationId 
  * @param {Date} from 
  * @param {Date} to
  * @param {[{id: number, tag: (string|undefined)}]} images
  * @param {[{id: number, name: string, parentId: number}]} images
  */
-export const createEvent = (name, description, locationId, from, to, images, categories) => {
-    const location = locationId ? {id: locationId, name: 'void', latitude: 0, longitude: 0} : undefined;
+export const createEvent = (name, description, shortDescription, locationId, from, to, images, categories) => {
+    const location = locationId ? {id: locationId, name: 'void', latitude: 0,
+        longitude: 0, country: 'void', city: 'void', street: 'void'} : undefined;
     const req = {
         name,
         description,
+        shortDescription,
         location,
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
@@ -150,7 +137,7 @@ export const createEvent = (name, description, locationId, from, to, images, cat
     }
     log.debug('createEvent#req', req);  
     
-    return axios.post('/events', req)
+    return axios.post(`${eventBasePath}`, req)
         .then( response => {
             log.debug('createEvent#then', response);
             return response.data;
@@ -161,15 +148,16 @@ export const createEvent = (name, description, locationId, from, to, images, cat
  * @param {number} id
  * @param {string} name 
  * @param {string} description 
+ * @param {string} shortDescription 
  * @param {number} locationId 
  * @param {Date} from 
  * @param {Date} to
  * @param {[{id: number, tag: (string|undefined)}]} images
  * @param {[number]} images
  */
-export const updateEvent = (id, name, description, locationId, from, to, images, categories) => {
-
-    const location = locationId ? {id: locationId, name: 'void', latitude: 0, longitude: 0} : undefined;
+export const updateEvent = (id, name, description, shortDescription, locationId, from, to, images, categories) => {
+    const location = locationId ? {id: locationId, name: 'void', latitude: 0,
+        longitude: 0, country: 'void', city: 'void', street: 'void'} : undefined;
     const req = {
         name,
         description,
@@ -185,7 +173,7 @@ export const updateEvent = (id, name, description, locationId, from, to, images,
     }
     log.debug('updateEvent#req', req);    
 
-    return axios.put('/events', req).then( response => {
+    return axios.put(`${eventBasePath}`, req).then( response => {
             log.debug('updateEvent#then', response);
             return response.data;
     })
@@ -195,9 +183,22 @@ export const updateEvent = (id, name, description, locationId, from, to, images,
  * @param {number} id 
  */
 export const deleteEvent = id => {
-    return axios.delete(`/events/${id}`)
+    return axios.delete(`${eventBasePath}/${id}`)
         .then( response => {
             log.debug('deleteEvent#then', response);
             return response.data;
         })
+}
+
+export const nearbyEvents = (id, xPage, xPageSize) => {
+    return axios.get(`${eventBasePath}/nearby/${id}`,{
+        headers: {
+            'X-Page': xPage,
+            'X-Page-Size': xPageSize,
+        },
+    }.then( response => {
+        log.debug('nearbyEvents#then', response);
+        return response.data;
+        
+    }))
 }

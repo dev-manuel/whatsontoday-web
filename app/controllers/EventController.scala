@@ -29,7 +29,8 @@ class EventController @Inject()(cc: ControllerComponents,
                                 val silhouette: Silhouette[AuthEnv],
                                 val organizerService: OrganizerService,
                                 val userService: UserService,
-                                val roleService: RoleService)
+                                val roleService: RoleService,
+                                eventService: EventService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile]
@@ -113,8 +114,10 @@ class EventController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to create event")
 
-        val locationQuery = (data.location.id match {
-          case None => insertAndReturn[Location,LocationTable](LocationTable.location,data.location)
+        val loc = data.location.toLocation //TODO
+
+        val locationQuery = (loc.id match {
+          case None => insertAndReturn[Location,LocationTable](LocationTable.location,loc)
           case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
         })
 
@@ -130,7 +133,10 @@ class EventController @Inject()(cc: ControllerComponents,
           }).map(_.flatten)
 
         db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery)).flatMap { case ((location,images),categories) =>
-          val event = Event(None, data.name, data.from, data.to, data.description, login.id, location.id.getOrElse(-1))
+          val event = Event(None, data.name, data.from, data.to,
+                            data.description, data.shortDescription,
+                            login.id, location.id.getOrElse(-1))
+
           db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,images,categories))
         }.flatMap { case (event,images,categories) =>
           val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img._1.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event,img._2))
@@ -150,8 +156,10 @@ class EventController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to update event")
 
-        val locationQuery = (data.location.id match {
-          case None => insertAndReturn[Location,LocationTable](LocationTable.location,data.location)
+        val loc = data.location.toLocation //TODO
+
+        val locationQuery = (loc.id match {
+          case None => insertAndReturn[Location,LocationTable](LocationTable.location,loc)
           case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
         })
 
@@ -170,7 +178,9 @@ class EventController @Inject()(cc: ControllerComponents,
 
         db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery).zip(eventQuery)).flatMap {
           case (((location,images),categories),Some(event)) => {
-            val event = Event(Some(id), data.name, data.from, data.to, data.description, login.id, location.id.getOrElse(-1))
+            val event = Event(Some(id), data.name, data.from, data.to,
+                              data.description, data.shortDescription,
+                              login.id, location.id.getOrElse(-1))
 
             val getQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === login.id)
 
@@ -197,7 +207,17 @@ class EventController @Inject()(cc: ControllerComponents,
       })
   }
 
-  def participate(id: Int) = withRights(Right.Participate)(parse.default) { case (request,login,role) =>
+  def insertCSV = organizerRequest(parse.multipartFormData) { case (request,organizer) =>
+    log.debug("Rest request to insert events by csv")
+
+    request.body.file("csv").map { case x =>
+      val file = x.ref.path.toFile()
+
+      eventService.insertCSV(file,organizer)
+     }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
+  }
+
+    def participate(id: Int) = withRights(Right.Participate)(parse.default) { case (request,login,role) =>
     log.debug("Rest request to participate in event")
 
     val q = (event.filter(x => x.id === id.bind).result)

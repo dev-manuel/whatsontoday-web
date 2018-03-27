@@ -12,6 +12,7 @@ import play.api.mvc._
 import java.sql.Timestamp
 import whatson.model._
 import whatson.model.detail._
+import whatson.model.forms._
 
 class LocationControllerSpec extends RestTestSuite {
   "LocationController GET" should {
@@ -69,7 +70,7 @@ class LocationControllerSpec extends RestTestSuite {
 
   "LocationController POST" should {
     "return OK on proper request from admins" in {
-      val location = Location(None, "testlocation", 0, 0, "testcountry", "testcity", "teststreet")
+      val location = LocationForm.Data(None, "testlocation", "testcountry", "testcity", "teststreet")
       val user = Await.result(createUser(roleName = "Admin"), Duration.Inf)
 
       val create = route(app, FakeRequest(POST, "/api/v1/location",
@@ -102,7 +103,7 @@ class LocationControllerSpec extends RestTestSuite {
     }
 
     "return BAD REQUEST on empty name" in {
-      val location = Location(None, "", 0, 0, "testcountry", "testcity", "teststreet")
+      val location = LocationForm.Data(None, "", "testcountry", "testcity", "teststreet")
       val user = Await.result(createUser(roleName = "Admin"), Duration.Inf)
 
       val create = route(app, FakeRequest(POST, "/api/v1/location",
@@ -113,7 +114,7 @@ class LocationControllerSpec extends RestTestSuite {
     }
 
     "return BAD REQUEST on empty country" in {
-      val location = Location(None, "testname", 0, 0, "", "testcity", "teststreet")
+      val location = LocationForm.Data(None, "testname", "", "testcity", "teststreet")
       val user = Await.result(createUser(roleName = "Admin"), Duration.Inf)
 
       val create = route(app, FakeRequest(POST, "/api/v1/location",
@@ -124,7 +125,7 @@ class LocationControllerSpec extends RestTestSuite {
     }
 
     "return BAD REQUEST on empty city" in {
-      val location = Location(None, "testname", 0, 0, "testcountry", "", "teststreet")
+      val location = LocationForm.Data(None, "testname", "testcountry", "", "teststreet")
       val user = Await.result(createUser(roleName = "Admin"), Duration.Inf)
 
       val create = route(app, FakeRequest(POST, "/api/v1/location",
@@ -135,7 +136,7 @@ class LocationControllerSpec extends RestTestSuite {
     }
 
     "return BAD REQUEST on empty street" in {
-      val location = Location(None, "testname", 0, 0, "testcountry", "testcity", "")
+      val location = LocationForm.Data(None, "testname", "testcountry", "testcity", "")
       val user = Await.result(createUser(roleName = "Admin"), Duration.Inf)
 
       val create = route(app, FakeRequest(POST, "/api/v1/location",

@@ -1,29 +1,9 @@
-# --- !Ups
+ALTER TABLE event ADD COLUMN short_description varchar NOT NULL DEFAULT '';
+ALTER TABLE event ALTER COLUMN totime DROP NOT NULL;
 
-CREATE TABLE roles (
-       id BIGSERIAL PRIMARY KEY,
-       name VARCHAR NOT NULL
-);
-
-CREATE TABLE rights (
-       id BIGSERIAL PRIMARY KEY,
-       name VARCHAR NOT NULL
-);
-
-CREATE TABLE rolerights (
-       role_fk BIGINT REFERENCES roles NOT NULL,
-       right_fk BIGINT REFERENCES rights NOT NULL
-);
-
-INSERT INTO roles (name) VALUES ('DEFAULT');
-
-ALTER TABLE login
-      ADD COLUMN role_fk BIGINT REFERENCES roles NOT NULL DEFAULT 1;
 
 # --- !Downs
 
-ALTER TABLE login
-      DROP COLUMN role_fk;
-DROP TABLE rolerights;
-DROP TABLE rights;
-DROP TABLE roles;
+ALTER TABLE event DROP COLUMN short_description;
+UPDATE event SET totime = fromtime WHERE totime IS NULL;
+ALTER TABLE event ALTER COLUMN totime SET NOT NULL;

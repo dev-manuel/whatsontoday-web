@@ -123,17 +123,22 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   }
 
   def createEvent(creator: Option[Login] = None, name: String = "testevent",
-                  from: Timestamp = new Timestamp(0), to: Timestamp = new Timestamp(0),
-                  description: String = "testdescription", locationId: Option[Int] = None): Future[Event] = {
-
+                  from: Timestamp = new Timestamp(0), to: Option[Timestamp] = Some(new Timestamp(0)),
+                  description: String = "testdescription",
+                  shortDescription: String = "short description",
+                  locationId: Option[Int] = None): Future[Event] = {
     creator.map(Future.successful(_)).getOrElse(createUser().map(_._1))
       .zip(locationId.map(Future.successful(_)).getOrElse(createLocation().map(_.id.getOrElse(-1)))).flatMap { case (org,loc) =>
         db.run(insertAndReturn[Event,EventTable](EventTable.event,
-                                                 Event(None, name, from, to, description, org.id, loc)))
+                                                 Event(None, name, from, to,
+                                                       description, shortDescription, org.id, loc)))
     }
   }
 
-  def createImage(contents: Array[Byte] = Array(1,2,3,4)): Future[Image] = {
-    db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, contents,"image/jpeg")))
+  def createImage(contents: Array[Byte] = Array(1,2,3,4),
+                  login: Option[Login] = None): Future[Image] = {
+    login.map(Future.successful(_)).getOrElse(createUser().map(_._1)).flatMap { case login =>
+      db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, contents,"image/jpeg",login.id)))
+    }
   }
 }

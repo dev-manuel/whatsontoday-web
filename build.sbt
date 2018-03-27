@@ -30,7 +30,8 @@ libraryDependencies ++= Seq(
   "com.iheart" %% "ficus" % "1.4.3",
   "com.typesafe.play" %% "play-mailer" % "6.0.1",
   "com.typesafe.play" %% "play-mailer-guice" % "6.0.1",
-  "org.mockito" % "mockito-core" % "2.13.0"
+  "org.mockito" % "mockito-core" % "2.13.0",
+  "com.github.tototoshi" %% "scala-csv" % "1.3.5"
 )
 
 // Adds additional packages into Twirl
@@ -48,3 +49,4 @@ coverageExcludedPackages := """controllers\..*Reverse.*;..*Routes.*;views.html\.
 
 import com.typesafe.sbt.packager.MappingsHelper._
 mappings in Universal ++= directory(baseDirectory.value / "public")
+mappings in Universal ++= directory(baseDirectory.value / "other")

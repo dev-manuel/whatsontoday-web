@@ -6,6 +6,7 @@ import play.api.libs.json.Json
 import java.sql.Timestamp
 import whatson.util.DateTime._
 import whatson.model._
+import whatson.model.forms.LocationForm.Data._
 
 /**
   * The form which handles creating/updating Events.
@@ -14,18 +15,19 @@ object EventForm {
   val map = mapping(
       "name" -> nonEmptyText,
       "from" -> sqlTimestamp("yyyy-MM-dd HH:mm:ss"),
-      "to" -> sqlTimestamp("yyyy-MM-dd HH:mm:ss"),
+      "to" -> optional(sqlTimestamp("yyyy-MM-dd HH:mm:ss")),
       "categories" -> list(CategoryForm.map),
       "location" -> LocationForm.map,
       "images" -> list(TaggedImageForm.map),
-      "description" -> nonEmptyText
+      "description" -> nonEmptyText,
+      "shortDescription" -> nonEmptyText(maxLength = 128)
     )(Data.apply)(Data.unapply)
   val form = Form(map)
 
   case class Data(name: String, from: Timestamp,
-                  to: Timestamp, categories: List[Category],
-                  location: Location, images: List[TaggedImageForm.Data],
-                  description: String)
+                  to: Option[Timestamp], categories: List[Category],
+                  location: LocationForm.Data, images: List[TaggedImageForm.Data],
+                  description: String, shortDescription: String)
 
   object Data {
     implicit val jsonFormat = Json.format[Data]

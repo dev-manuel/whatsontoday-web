@@ -80,7 +80,7 @@ class LocationController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to create location")
 
-        val inserted = db.run(insertAndReturn[Location,LocationTable](location,data))
+        val inserted = db.run(insertAndReturn[Location,LocationTable](location,data.toLocation))
 
         inserted.map(x => Ok(Json.toJson(x)))
       })

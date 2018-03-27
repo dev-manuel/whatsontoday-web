@@ -10,8 +10,8 @@ import whatson.db._
 import scala.concurrent.ExecutionContext
 
 case class EventDetail(id: Option[Int], name: String, from: Timestamp,
-                       to: Timestamp, description: String, creatorId: Option[Int],
-                       categories: List[Category],
+                       to: Option[Timestamp], description: String, shortDescription: String,
+                       creatorId: Option[Int],categories: List[Category],
                        avgRating: Option[Float], location: Location,
                        images: List[TaggedImage], participantCount: Int) extends Rateable with WithTaggedImages
 
@@ -36,8 +36,9 @@ object EventDetail {
             ) yield c
 
             c.result.zip(taggedImgs).map(o => {
-              EventDetail(event.id, event.name, event.from, event.to, event.description, event.creatorId,
-                          o._1.toList, r,location, o._2.toList, pCount)
+              EventDetail(event.id, event.name, event.from, event.to, event.description,
+                          event.shortDescription, event.creatorId, o._1.toList, r,
+                          location, o._2.toList, pCount)
             })
           }
         })

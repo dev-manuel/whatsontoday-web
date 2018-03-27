@@ -4,6 +4,15 @@ import moment from 'moment'
  * @readonly
  */
 export default {
+    externalLinks: {
+        facebook: 'https://www.facebook.com/findyournextevent/',
+        instagram: 'https://www.instagram.com/findyournextevent/',
+        twitter: 'https://twitter.com/yournextevent',
+    },
+    deleteMessage: {
+        yes: 'Ja',
+        no: 'Nein',
+    },
     time: {
         locale: 'de',
         to: 'bis',
@@ -15,6 +24,7 @@ export default {
         signIn: 'Anmelden',
         signUp: 'Registrieren',
         signOut: 'Ausloggen',
+        options: 'Profil verwalten',
         // dropdown...
     },
     home: {
@@ -22,7 +32,12 @@ export default {
         science: 'Wissenschaft',
         party: 'Party',
         culture: 'Kultur',
-        fair: 'Feste'
+        fair: 'Feste',
+        
+        search: 'Event/Beschreibung...',
+        city: 'Stadt...',
+        category: 'Kategorie...',
+        submit: 'Suchen',
     },
     footer: {
         socialMedia: 'Social Media',
@@ -61,12 +76,12 @@ export default {
         email: 'E-Mail Adresse',
         password: 'Passwort',
         passwordRepeat: 'Wiederhole das Passwort',
-        agree: 'Ich akzieptiere die Nutzungsbedingungen',
+        agree: 'Ich akzeptiere die Nutzungsbedingungen',
         submit: 'Los Geht\'s',
         success: 'Fast geschafft! Bitte bestätige noch deine E-Mail Adresse.',
         alreadyLoggedIn: 'Du bist bereits angemeldet!',
-        errorHeading: 'Registrierung Fehlgeschlagen',
-        userAlreadyExistsError: 'Es existiert bereits ein nutzer mit dieser E-Mail Adresse',
+        errorHeading: 'Registrierung fehlgeschlagen',
+        userAlreadyExistsError: 'Es existiert bereits ein Nutzer mit dieser E-Mail Adresse',
         signUpAsOrganizer: 'Als Veranstalter registrieren',
         signUpAsUser: 'Als Nutzer registrieren',
         organizerNamePlaceholder: 'Name',
@@ -95,6 +110,26 @@ export default {
         deleteAccount: 'Account löschen:',
         deleteAccountMessage: 'Möchtest du deinen Account wirklich löschen?',
         deleteAccountDescription: 'Wenn du mit "Ja" bestätigst wird dein Account unwideruflich gelöscht!',
+        changePassword: {
+            password: 'Passwort',
+            passwordRepeat: 'Passwort wiederholen',
+            submit: 'Passwort ändern',
+            error: {
+                password: {
+                    heading: 'Ändern des Passwort fehlgeschlagen!',
+                    description: 'Passwort zu kurz'
+                },
+                match : {
+                    heading: 'Ändern des Passwort fehlgeschlagen!',
+                    description: 'Passwörter stimmen nicht überein'
+                }
+            },
+            modal:{
+                heading: 'Passwort geändert',
+                description: 'Dein Passwort wurde erfolgreich geändert!',
+                button: 'Ok'
+            }
+        }
     },
     modal:{
         heading: 'Oooops',
@@ -102,7 +137,7 @@ export default {
         button: 'Ok',
     },
     confirm:{
-        confirmed: 'Deine E-Mail Adresse wurde erfolgreich bestätigt. Du kannst dich nun Anmelden.'
+        confirmed: 'Deine E-Mail Adresse wurde erfolgreich bestätigt. Du kannst dich nun anmelden.'
     },
     notFound:{
         message: 'Wir haben leider keine Ergebnisse für diese URL gefunden :('
@@ -112,12 +147,18 @@ export default {
         organizer: 'Du musst als Veranstalter registriert sein, um diese Seite aufrufen zu können.',
         default: 'Du hast leider keine Berechtigung diese Seite aufzurufen.',
     },
+    forOrganizers: {
+        forOrganizers: 'Für Veranstalter',
+        createEvent: 'Event hinzufügen',
+        crateLocation: 'Location hinzufügen',
+        dashboard: 'Dashboard',
+    },
     eventTool: {
         create: {
             noResults: 'Keine Ergebnisse gefunden...',
             addEvent: 'Neues Event hinzufügen',
             name: 'Titel',
-            namePlaceholder: 'Bitte Title eingeben...',
+            namePlaceholder: 'Bitte gib einen Title ein...',
             categories: 'Kategorien',
             categoriesPlaceholder: 'Bitte Kategorien auswählen...',
             from: 'Beginn',
@@ -125,20 +166,57 @@ export default {
             to: 'Ende',
             toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
             location: 'Veranstalutngsort',
-            locationPlaceholder: 'Bitte Ort auswählen',
+            locationPlaceholder: 'Bitte wähle einen Ort aus',
+            createNewLocation: 'Neue Location hinzufügen',
             images: 'Bilder',
             thumbnailImageUploadButtonAddImage: 'Thumbnail hinzufügen',
-            thumbnailImageNoFileSelected: 'Keine Deitei ausgewählt',
+            thumbnailImageNoFileSelected: 'Keine Datei ausgewählt',
             sliderImageUploadButtonAddImage: 'Bild hinzufügen',
             sliderImageFileTableFileName: 'Dateiname',
             sliderImageFileTableIsUploaded: 'Hochgeladen',
             description: 'Beschreibung',
-            descriptionPlaceholder: 'Bitte Text eingeben...',
-            submit: 'Abschicken'
+            descriptionPlaceholder: 'Bitte gib einen Text ein...',
+            shortDescriptionPlaceholder: 'Bitte gib einen Text ein...',
+            shortDescription: 'Kurzbeschreibung',
+            submit: 'Abschicken',
+            back: 'Zurück'
+        },
+        delete: {
+            deleteEventMessage: 'Möchtest du das Event wirklich löschen?',
+            deleteEventDescription: 'Wenn du mit "Ja" bestätigst wird das Event unwideruflich gelöscht!',
+        },
+        dashboard: {
+            dashboard: 'Dashboard',
+            id: 'Id',
+            name: 'Name',
+            back: 'Zurück',
         },
         successful: {
-            createEvent: 'Event erfolgreich erstellt',
+            createEvent: 'Du hast ein Event erfolgreich erstellt!',
+            deleteEvent: 'Das Event wurde erfolgreich gelöscht',
             default: 'Aktion erfolgreich ausgeführt',
+
+            goBack: 'Zurück'
         },
-    }
+    },
+    locationTool: {
+        create: {
+            name: 'Name',
+            namePlaceholder: 'Bitte gib den Namen der Location ein...',
+            street: 'Straße',
+            streetPlaceholder: 'Bitte gib die Strße ein...',
+            city: 'Stadt',
+            cityPlaceholder: 'Bitte gib die Stadt ein...',
+            country: 'Land',
+            countryPlaceholder: 'Bitte gib das Land ein...',
+            submit: 'Abschicken',
+            back: 'zurück'
+        },
+        successful: {
+            createLocation: 'Du hast eine Location erfolgreich erstellt!',
+            default: 'Aktion erfolgreich ausgeführt',
+
+            goBack: 'Zurück'
+        },
+    },
 }

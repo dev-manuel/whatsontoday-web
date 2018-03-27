@@ -1,9 +1,11 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import GridColumn, { Segment, Container, Header, Divider, Dropdown, Form, Button, Grid } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import log from 'loglevel'
 
+import FormNavigationBar from '../../components/formNavigationBar'
 import DateSelectFormField from './components/dateSelectFormField'
 import LocationSelectFormField from './components/locationSelectFormField'
 import ImageUploadFormField, {FileEntryStatus} from './components/imageUploadFormField'
@@ -13,6 +15,7 @@ import {getLocations} from '../../common/api/requests/location'
 import {uploadImage} from '../../common/api/requests/image'
 import {createEvent} from '../../common/api/requests/event'
 
+import './create.less'
 import 'react-datepicker/dist/react-datepicker.css'
 
 
@@ -27,6 +30,7 @@ export default class Create extends React.Component {
     state = {
         nameError: false,
         descriptionError: false,
+        shortDescriptionError: false,
         fromError: false,
         toError: false,
         locationError: false,
@@ -45,6 +49,8 @@ export default class Create extends React.Component {
         // locationSearchQuery: '',
 
         descriptionValue: '',
+        shortDescriptionValue: '',
+        
         /**
          * @type {FileEntry}
          */
@@ -80,6 +86,7 @@ export default class Create extends React.Component {
             locationValue,
             // locationSearchQuery,
             descriptionValue,
+            shortDescriptionValue,
             thumbnailImage,
             sliderImages,
         } = this.state;
@@ -88,7 +95,7 @@ export default class Create extends React.Component {
         const parsedTo = toValue ? toValue.toDate() : null;
         const parsedThumbnailImage = (thumbnailImage && thumbnailImage.id) ? [{id: thumbnailImage.id, tag: 'thumbnail'}] : [];
 
-        createEvent(nameValue, descriptionValue, locationValue,
+        createEvent(nameValue, descriptionValue, shortDescriptionValue,locationValue,
             parsedFrom, parsedTo,
             sliderImages.map(fileEntry => ({id: fileEntry.id})).concat(parsedThumbnailImage),
             categoryValue.map(id => id))
@@ -105,6 +112,7 @@ export default class Create extends React.Component {
                 const formErrors = {
                     nameError: false,
                     descriptionError: false,
+                    shortDescriptionError: false,
                     fromError: false,
                     toError: false,
                     locationError: false,
@@ -112,6 +120,10 @@ export default class Create extends React.Component {
 
                 if(errorData.name){
                     formErrors.nameError = true;
+                    successful = false;
+                }
+                if(errorData.shortDescription){
+                    formErrors.shortDescriptionError = true;
                     successful = false;
                 }
                 if(errorData.description){
@@ -138,6 +150,10 @@ export default class Create extends React.Component {
                 log.debug('Create#handleSubmit#handleSubmit#formErrors', formErrors);                
                 log.info('Submit successful:', successful);
             })
+    }
+
+    handleBackClick(){
+        this.props.history.push(this.props.location.state.from);
     }
 
     //
@@ -180,8 +196,8 @@ export default class Create extends React.Component {
     //
     fetchLocations( searchQuery){
         getLocations(searchQuery, 0, 5)
-            .then( data => {
-                const locationOptions = data.map( (locationEntry, index) => ({
+            .then( locationResult => {
+                const locationOptions = locationResult.map( (locationEntry, index) => ({
                     key: index,
                     text: locationEntry.name,
                     value: locationEntry.id,
@@ -297,35 +313,43 @@ export default class Create extends React.Component {
     // ─── RENDER ─────────────────────────────────────────────────────────────────────
     //  
     render(){
-        const lang = this.props.language.eventTool.create;
 
+        const {
+            language,
+            location,
+        } = this.props;
         const {
             nameError,
             nameValue,
-
+            
             categoryIsFetching,
             categoryOptions,
             categoryValue,
-
+            
             descriptionError,
             descriptionValue,
-
+            shortDescriptionError,
+            shortDescriptionValue,
+            
             fromError,
             fromValue,
-
+            
             toError,
             toValue,
-
+            
             locationIsFetching,
             locationOptions,
             locationValue,
             locationError,
             // locationSearchQuery,
-
+            
             thumbnailImage,
             sliderImages,
         } = this.state;
-
+        
+        const lang = language.eventTool.create;
+        const hasFrom = location.state && location.state.from;
+        
         return (
             <Segment vertical>
                 <Container text>
@@ -358,6 +382,14 @@ export default class Create extends React.Component {
                                 />
                             </Form.Field>
                         </Form.Group>
+
+                        <Form.TextArea
+                            error={shortDescriptionError}
+                            label={lang.shortDescription}
+                            placeholder={lang.shortDescriptionPlaceholder}
+                            value={shortDescriptionValue}
+                            onChange={(event, {value}) => this.setState({shortDescriptionValue: value})}
+                        />
 
                         <Form.TextArea
                             error={descriptionError}
@@ -405,6 +437,20 @@ export default class Create extends React.Component {
                             loading={locationIsFetching}
                             noResultsMessage={lang.noResults}                                    
                         />
+
+                        <Link
+                            to={{
+                                pathname: '/location_tool/create',
+                                state: {
+                                    from: this.props.location,
+                                },
+                            }}
+                        >
+                            <Button
+                                color='gray'
+                                content={lang.createNewLocation}
+                            />
+                        </Link>
                         
 
                         <Divider horizontal>{lang.images}</Divider>
@@ -446,11 +492,15 @@ export default class Create extends React.Component {
                                 />
                             </Grid.Column>
                         </Grid>
-
-                        <Form.Button
-                            type="submit"
-                            color='green'
-                        >{lang.submit}</Form.Button>
+                        
+                        <div className="EventTool_create_formNavBar">
+                            <FormNavigationBar
+                                nextText={lang.submit}
+                                backText={lang.back}
+                                hideBack={!hasFrom}
+                                onBackClicked={this.handleBackClick.bind(this)}
+                            />
+                        </div>
                     </Form>
 
                 </Container>

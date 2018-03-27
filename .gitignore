@@ -2,6 +2,9 @@ logs
 .vscode
 public/
 secrets.sh
+conf/production.conf
+other/**
+webapp/coverage/
  
 ### Node ###
 # Logs

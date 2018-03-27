@@ -203,6 +203,16 @@ class EventController @Inject()(cc: ControllerComponents,
       })
   }
 
+  def insertCSV = organizerRequest(parse.multipartFormData) { case (request,organizer) =>
+    log.debug("Rest request to insert events by csv")
+
+    request.body.file("csv").map { case x =>
+      val file = x.ref.path.toFile()
+
+      eventService.insertCSV(file)
+    }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
+  }
+
   def participate(id: Int) = userRequest(parse.default) { case (request,user) =>
     log.debug("Rest request to participate in event")
 

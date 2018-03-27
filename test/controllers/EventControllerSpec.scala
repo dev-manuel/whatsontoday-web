@@ -190,9 +190,9 @@ class EventControllerSpec extends RestTestSuite {
       val user = Await.result(createUser(roleName = "DEFAULT"), Duration.Inf)
       val location = Await.result(createLocation(), Duration.Inf)
 
-      val eventForm = EventForm.Data("testevent", new Timestamp(0), new Timestamp(0), List(),
-                                     Location(None, "testlocation", 0.0f, 0.0f, "testcountry", "testcity", "teststreet"),
-                                     List(), "testdescription")
+      val eventForm = EventForm.Data("testevent", new Timestamp(0), Some(new Timestamp(0)), List(),
+                                     LocationForm.Data(None, "testlocation", "testcountry", "testcity", "teststreet"),
+                                     List(), "testdescription","shortDescription")
 
       val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),
                                           Json.toJson(eventForm))).get
@@ -328,7 +328,7 @@ class EventControllerSpec extends RestTestSuite {
                                      LocationForm.Data(None, "testlocation", "testcountry", "testcity", "teststreet"),
                                      List(), "", "short description")
 
-      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),
                                           Json.toJson(eventForm))).get
 
       status(events) mustBe BAD_REQUEST
@@ -342,7 +342,7 @@ class EventControllerSpec extends RestTestSuite {
                                      LocationForm.Data(None, "testlocation", "testcountry", "testcity", "teststreet"),
                                      List(), "description", "")
 
-      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),
+      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",organizer._3))),
                                           Json.toJson(eventForm))).get
 
       status(events) mustBe BAD_REQUEST

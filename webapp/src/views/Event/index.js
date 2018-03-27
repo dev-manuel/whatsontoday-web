@@ -9,6 +9,8 @@ import OrganizerDetails from './components/organizerDetails'
 import EventRecommender from '../../components/eventRecommender'
 import exampleTileImage from '../../img/example_tile.png'
 
+import './Event.less'
+
 /**
  * @typedef {{name: string, rating: number, description: string, from: Date, to: Date, categories: [string]}} eventData
  */
@@ -106,7 +108,11 @@ export default class Event extends React.Component{
         if(this.state.isLoading){
             return <LoadingView/>
         }else{
-            return <ShowingEventData eventData={this.state.eventData} language={this.props.language}/>
+            return (
+                <div className="Event_container">
+                    <ShowingEventData eventData={this.state.eventData} language={this.props.language}/>
+                </div>
+            )
         }
     }
 

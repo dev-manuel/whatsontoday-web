@@ -209,8 +209,8 @@ class EventController @Inject()(cc: ControllerComponents,
     request.body.file("csv").map { case x =>
       val file = x.ref.path.toFile()
 
-      eventService.insertCSV(file)
-    }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
+      eventService.insertCSV(file,organizer)
+     }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
   }
 
   def participate(id: Int) = userRequest(parse.default) { case (request,user) =>

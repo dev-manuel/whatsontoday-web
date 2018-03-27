@@ -20,6 +20,7 @@ class ImageSlider extends React.Component{
 
     render(){
         const settings = {
+            arrows: false,
             infinite: true,
             speed: 500,
             slidesToShow: 1,

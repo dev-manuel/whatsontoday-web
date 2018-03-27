@@ -78,10 +78,10 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
  * @param {number} id
  */
 export const readEvent = id => {
-    return axios.get(`${$eventBasePath}/${id}`)
+    return axios.get(`${eventBasePath}/${id}`)
         .then(response => {
             log.debug('readEvent#then', response);
-            return mapEvent(response);
+            return mapEvent(response.data);
         })
 }
 

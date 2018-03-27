@@ -29,8 +29,16 @@ export const PrivateRoute = ({ loggedIn, render, path}) => (
  */
 export const PrivateOrganizerRoute = ({loggedIn, isOrganizer, render, path}) => (
     <Route path={path} render={props => {
-        if((loggedIn && isOrganizer) || DISABLE_PRIVATE_ROUTES){ // DISABLE_PRIVATE_ROUTES is defined by the webpack definition plugin
-            return render(props);
+        if(loggedIn || DISABLE_PRIVATE_ROUTES){ // DISABLE_PRIVATE_ROUTES is defined by the webpack definition plugin
+            return isOrganizer || DISABLE_PRIVATE_ROUTES ? 
+                render(props) :
+                <Redirect push to={{
+                    pathname: '/no_access',
+                    search: '?reason=organizer',
+                    state: {
+                        from: props.location,
+                    }
+                }}/>
         }else{
             return (
                 <Redirect push to={{

@@ -28,5 +28,6 @@ export const mapEvent = eventResponse => ({
     shortDescription: eventResponse.shortDescription,
     thumbnailImage: createThumbnailImageLinkFromImages(eventResponse.images),
     sliderImages: createSliderImageLinksFromImages(eventResponse.images),
-    target: createEventTargetLink(eventResponse.id)
+    target: createEventTargetLink(eventResponse.id),
+    location: eventResponse.location,
 })

@@ -1,5 +1,6 @@
 import React from 'react'
-import {Grid, Rating} from 'semantic-ui-react'
+import log from 'loglevel'
+import { Grid, Rating, Divider} from 'semantic-ui-react'
 
 import {readEvent} from '../../common/api/requests/event'
 import EventOverview from './components/eventOverview'
@@ -11,50 +12,6 @@ import exampleTileImage from '../../img/example_tile.png'
 
 import './Event.less'
 
-/**
- * @typedef {{name: string, rating: number, description: string, from: Date, to: Date, categories: [string]}} eventData
- */
-
-let loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ';
-
-const eventData = {
-    name: 'CoolEvent',
-    date: '29. September 2018 (Samstag)',
-    rating: 3,
-    description: loremIpsum,
-    categories: ['#Business'],
-
-    descriptionLong: loremIpsum + loremIpsum +loremIpsum,
-    price: '10€',
-    locationName: 'AwesomeLocation',
-    extraInformation: 'TL;DR',
-}
-
-const organizerData = {
-    name: 'AwesomeOrganizer',
-    description: loremIpsum,
-    rating: 4,
-    contactLink: '#',
-    moreAboutLink: '#',
-    imageURI: '#'
-}
-
-const locationData = {
-    name: 'CoolLocation',
-    rating: 4,
-    description: loremIpsum,
-    target: '#',
-    address: {}}
-
-const recommenderData = [
-        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
-        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
-        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
-        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
-        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
-        {name: 'CoolEventOne', imageURI: exampleTileImage, target: '#'},
-        
-    ]
 
 export const LoadingView = () => (
     <div style={{marginLeft: '11%', marginRight: '11%'}}>
@@ -65,12 +22,14 @@ export const LoadingView = () => (
 export const ShowingEventData = ({language, eventData}) => {
     
     const langData = {language};
+    log.debug('Event#eventData', eventData);
     return (
         <div style={{marginLeft: '11%', marginRight: '11%'}}>
             <EventOverview {...eventData} {...langData}/>
             {/* <EventDetails {...eventData} {...langData}/> */}
-            {/* <LocationDetails {...locationData} {...langData}/>
-            <OrganizerDetails {...organizerData} {...langData}/>
+            {/* <Divider/> */}
+            <LocationDetails {...eventData.location} {...langData}/>
+            {/* <OrganizerDetails {...organizerData} {...langData}/>
             <EventRecommender eventList={recommenderData} {...langData}/> */}
         </div>
     )

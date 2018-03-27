@@ -347,19 +347,6 @@ class EventControllerSpec extends RestTestSuite {
 
       status(events) mustBe BAD_REQUEST
     }
-
-    "return BadRequest for users" in {
-      val user = Await.result(createUser(), Duration.Inf)
-      val location = Await.result(createLocation(), Duration.Inf)
-
-      val eventForm = EventForm.Data("testevent", new Timestamp(0), Some(new Timestamp(0)), List(), location.toForm,
-                                     List(), "testdescription", "short description")
-
-      val events = route(app, FakeRequest(POST, "/api/v1/events", new Headers(List(("Content-Type","application/json"), ("x-auth-token",user._3))),
-                                          Json.toJson(eventForm))).get
-
-      status(events) mustBe BAD_REQUEST
-    }
   }
 
   "EventController DELETE" should {

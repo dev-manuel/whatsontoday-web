@@ -1,3 +1,5 @@
+# --- !Ups
+
 ALTER TABLE event ADD COLUMN short_description varchar NOT NULL DEFAULT '';
 ALTER TABLE event ALTER COLUMN totime DROP NOT NULL;
 

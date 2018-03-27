@@ -75,10 +75,10 @@ class ImageController @Inject()(cc: ControllerComponents,
     }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
   }
 
-  def deleteImage(id: Int) = withRights(whatson.model.Right.CreateImage) { case (request,login,role) =>
+  def deleteImage(id: Int) = withRights(whatson.model.Right.CreateImage)(parse.default) { case (request,login,role) =>
     log.debug("Rest request to delete image")
 
-    val q = ImageTable.image.filter(x => x.id === id.bind && x.creatorId === login.id).delete
+    val q = ImageTable.image.filter(x => x.id === id.bind && x.creatorId === login.id.bind).delete
 
     db.run(q).map {
       case 0 => NotFound

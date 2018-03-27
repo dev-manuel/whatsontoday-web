@@ -15,6 +15,28 @@ CREATE TABLE rolerights (
        right_fk BIGINT REFERENCES rights NOT NULL
 );
 
+INSERT INTO roles (name) VALUES ('DEFAULT');
+
+ALTER TABLE login
+      ADD COLUMN role_fk BIGINT REFERENCES roles NOT NULL DEFAULT 1;
+
+INSERT INTO rights (name) VALUES ('CreateEvent'), ('ConfirmEvent'), ('CreateCategory'), ('CreateLocation'),
+       ('Participate'), ('CreateImage'), ('ConfirmUser');
+
+INSERT INTO roles (name) VALUES ('Admin'), ('ConfirmedUser');
+
+INSERT INTO rolerights
+       (SELECT ro.id,ri.id FROM roles ro, rights ri WHERE ro.name = 'Admin');
+
+INSERT INTO rolerights
+       (SELECT ro.id,ri.id FROM roles ro, rights ri WHERE ro.name = 'ConfirmedUser'
+               AND ri.name in ('CreateEvent', 'ConfirmEvent', 'CreateLocation',
+               'Participate', 'CreateImage'));
+
+INSERT INTO rolerights
+       (SELECT ro.id,ri.id FROM roles ro, rights ri WHERE ro.name = 'DEFAULT'
+               AND ri.name in ('CreateEvent', 'Participate', 'CreateImage'));
+
 ALTER TABLE login
       DROP CONSTRAINT login_role_fk_fkey;
 
@@ -41,28 +63,6 @@ ALTER TABLE rolerights
       FOREIGN KEY (right_fk)
       REFERENCES rights
       ON DELETE CASCADE;
-
-INSERT INTO roles (name) VALUES ('DEFAULT');
-
-ALTER TABLE login
-      ADD COLUMN role_fk BIGINT REFERENCES roles NOT NULL DEFAULT 1;
-
-INSERT INTO rights (name) VALUES ('CreateEvent'), ('ConfirmEvent'), ('CreateCategory'), ('CreateLocation'),
-       ('Participate'), ('CreateImage'), ('ConfirmUser');
-
-INSERT INTO roles (name) VALUES ('Admin'), ('ConfirmedUser');
-
-INSERT INTO rolerights
-       (SELECT ro.id,ri.id FROM roles ro, rights ri WHERE ro.name = 'Admin');
-
-INSERT INTO rolerights
-       (SELECT ro.id,ri.id FROM roles ro, rights ri WHERE ro.name = 'ConfirmedUser'
-               AND ri.name in ('CreateEvent', 'ConfirmEvent', 'CreateLocation',
-               'Participate', 'CreateImage'));
-
-INSERT INTO rolerights
-       (SELECT ro.id,ri.id FROM roles ro, rights ri WHERE ro.name = 'DEFAULT'
-               AND ri.name in ('CreateEvent', 'Participate', 'CreateImage'));
 
 # --- !Downs
 

@@ -10,10 +10,15 @@ import play.api.inject._
 import whatson.service._
 import play.api.mvc._
 import com.google.inject.{AbstractModule, Provides}
+import whatson.service.geocoder.Geocoder
 
-case class TestModule(mailService: MailService) extends AbstractModule {
+case class TestModule(mailService: MailService,
+                      geocoder: Geocoder) extends AbstractModule {
   def configure() {}
 
   @Provides
   def provideMailService(): MailService = mailService
+
+  @Provides
+  def provideGeocoder(): Geocoder = geocoder
 }

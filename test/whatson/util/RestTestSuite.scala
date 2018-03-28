@@ -33,16 +33,18 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
 import whatson.modules._
 import play.api.libs.Files._
 import play.api.inject._
+import whatson.util.MockGeocoder
 
 
 class RestTestSuite extends PlaySpec with TestSuiteMixin
     with GuiceOneAppPerTest with Injecting
     with MockitoSugar {
   val mailService = mock[MailService]
+  val geocoder = new MockGeocoder()
 
   implicit override def newAppForTest(testData: TestData): Application = {
     val app = new GuiceApplicationBuilder()
-      .overrides(TestModule(mailService))
+      .overrides(TestModule(mailService,geocoder))
       .build()
 
     Application.instanceCache[ApplicationLifecycle].apply(app).addStopHook { () =>

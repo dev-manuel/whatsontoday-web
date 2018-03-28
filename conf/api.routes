@@ -95,6 +95,10 @@ GET    /location/nearby/:id            controllers.LocationController.getNearby(
 #  description: >
 #      Create a location. Returns the created location with its id.
 #      This request is callable for all logged in users and organizers.
+#      The backend uses the google geocoding api to find the latitute and
+#      longitude of the location. If they can not be determined, BadRequest
+#      is returned.
+#      The backend checks if a similar location already exists and if so returns that.
 #  parameters:
 #  - in: header
 #    name: x-auth-token
@@ -108,6 +112,10 @@ GET    /location/nearby/:id            controllers.LocationController.getNearby(
 #      description: success
 #      schema:
 #        $ref: '#/definitions/whatson.model.Location'
+#    400:
+#      description: >
+#          Bad Request. This indicates that the geocoding api could not find the
+#          specified location.
 ###
 POST   /location                       controllers.LocationController.createLocation()
 

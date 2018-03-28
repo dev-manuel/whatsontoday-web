@@ -130,6 +130,8 @@ DELETE   /:id                         controllers.EventController.deleteEvent(id
 #    Creates an event. The location and category can either be specified by their id or only by name
 #    and their other attributes. In that case they will be created before creating the event.
 #    Images must be uploaded before creating the event, so they can only be referenced by id.
+#    The specified location gets specified if it does not already exists. The same conditions
+#    apply as for the POST location request.
 #  parameters:
 #  - in: header
 #    name: x-auth-token

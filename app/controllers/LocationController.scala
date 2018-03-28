@@ -19,11 +19,13 @@ import com.mohiva.play.silhouette.api._
 import whatson.auth._
 import whatson.model.forms._
 import whatson.util.FormErrorJson._
+import whatson.service.geocoder._
 
 
 class LocationController @Inject()(cc: ControllerComponents,
                                    protected val dbConfigProvider: DatabaseConfigProvider,
-                                   silhouette: Silhouette[AuthEnv])
+                                   silhouette: Silhouette[AuthEnv],
+                                   geocoder: Geocoder)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] {

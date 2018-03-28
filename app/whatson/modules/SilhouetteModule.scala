@@ -24,6 +24,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
 import whatson.service._
+import whatson.service.geocoder._
 import whatson.auth._
 import whatson.util._
 import com.google.inject._
@@ -45,6 +46,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[OrganizerService].to[OrganizerServiceImpl]
     bind[MailService].to[MailServiceImpl]
     bind[EventService].to[EventServiceImpl]
+    bind[Geocoder].to[GeocoderImpl]
   }
 
   @Provides
@@ -189,5 +191,14 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   def provideApplicationConfig(
     configuration: Configuration): ApplicationConfig = {
     configuration.underlying.as[ApplicationConfig]("application")
+  }
+
+  /**
+    * Provides the GeocoderConfig.
+    */
+  @Provides
+  def provideGeocoderConfig(
+    configuration: Configuration): GeocoderConfig = {
+    configuration.underlying.as[GeocoderConfig]("geocoder")
   }
 }

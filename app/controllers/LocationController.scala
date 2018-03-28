@@ -19,7 +19,7 @@ import com.mohiva.play.silhouette.api._
 import whatson.auth._
 import whatson.model.forms._
 import whatson.util.FormErrorJson._
-import whatson.service.geocoder._
+import whatson.service.geocoder.Geocoder
 
 
 class LocationController @Inject()(cc: ControllerComponents,

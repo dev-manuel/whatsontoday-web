@@ -12,12 +12,23 @@ import whatson.db.Util._
 import whatson.model._
 import whatson.util._
 import play.api.libs.ws._
+import whatson.service.geocoder.Result
+import whatson.service.geocoder.Result._
+import play.api.libs.json.Json
 
 class GeocoderImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider,
                              applicationConfig: ApplicationConfig,
-                             wsClient: WSClient,
+                             ws: WSClient,
                              geoConfig: GeocoderConfig)
                           (implicit context: ExecutionContext)
     extends Geocoder {
-  
+
+  def geocode(address: Address): Future[Result] = {
+    val result = ws.url(geoConfig.url)
+      .addQueryStringParameters("address" -> address.toString, "key" -> geoConfig.apiKey)
+      .get()
+
+
+    result.map(x => x.json.validate[Result].get)
+  }
 }

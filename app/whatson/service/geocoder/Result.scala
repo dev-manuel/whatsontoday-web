@@ -1,7 +1,9 @@
 package whatson.service.geocoder
 
+import play.api.libs.json.Json
+
 case class Result(results: List[Address],
-                  status: StatusCode,
+                  status: String,
                   error_message: Option[String])
 
 case class Address(address_components: List[AddressComponent],
@@ -32,3 +34,20 @@ case object OVER_QUERY_LIMIT extends StatusCode
 case object REQUEST_DENIED extends StatusCode
 case object INVALID_REQUEST extends StatusCode
 case object UNKNOWN_ERROR extends StatusCode
+
+
+object Result {
+  /*implicit val okReads = Json.reads[OK]
+  implicit val zero_resultsReads = Json.reads[ZERO_RESULTS]
+  implicit val over_query_limitReads = Json.reads[OVER_QUERY_LIMIT]
+  implicit val request_deniedReads = Json.reads[REQUEST_DENIED]
+  implicit val invalid_requestReads = Json.reads[INVALID_REQUEST]
+  implicit val unknown_errorReads = Json.reads[UNKNOWN_ERROR]
+  implicit val statusCodeReads = Json.reads[StatusCode]*/
+  implicit val locationReads = Json.reads[Location]
+  implicit val viewportReads = Json.reads[Viewport]
+  implicit val geometryReads = Json.reads[Geometry]
+  implicit val addressComponentReads = Json.reads[AddressComponent]
+  implicit val addressReads = Json.reads[Address]
+  implicit val resultReads = Json.reads[Result]
+}

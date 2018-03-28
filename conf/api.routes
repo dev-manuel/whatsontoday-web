@@ -235,3 +235,13 @@ GET   /images/attach/:id             controllers.ImageController.attachImage(id:
 #        $ref: '#/definitions/whatson.model.Category'
 ###
 POST   /category                       controllers.CategoryController.createCategory()
+
+###
+#  summary: Get a CSRF Token
+#  description: >
+#      Returns an CSRF Token needed for all authenticated non GET Requests
+#  responses:
+#    200:
+#      description: success
+###
+GET    /csrfToken            controllers.CSRFController.getToken

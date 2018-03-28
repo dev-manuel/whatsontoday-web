@@ -75,11 +75,15 @@ GET    /signOut                  controllers.Authentication.signOut
 #      The access token to this account is returned.
 #      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
 #  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/definitions/whatson.model.forms.SignInForm'
-#      description: >
-#        The user data. If rememberMe is true, the authentication token will be valid for several days.
+#  - in: header
+#    name: Csrf-Token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.forms.SignInForm'
+#    description: >
+#      The user data. If rememberMe is true, the authentication token will be valid for several days.
 #  responses:
 #    200:
 #      description: success

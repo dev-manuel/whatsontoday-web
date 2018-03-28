@@ -45,3 +45,7 @@ out
 .settings/
  
 .cache-main
+
+.ensime
+project/.ensime
+.ensime_cache

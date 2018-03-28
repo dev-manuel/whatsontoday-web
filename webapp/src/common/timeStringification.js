@@ -9,8 +9,16 @@ import moment from 'moment'
  */
 export const stringifyTime = (from, to, time) => {
     const momentFrom = moment(from).locale(time.locale);
-    const momentTo = moment(to).locale(time.locale);
 
+    if(!to){ //If `to``is not defined
+        return {
+            firstLine: momentFrom.format('ddd DD MMM YYYY HH:mm'),
+            secondLine: '',
+            isSameDay: true,
+        }
+    } else { 
+    const momentTo = moment(to).locale(time.locale);
+    
     if(momentFrom.isSame(momentTo, 'day')){
         return {
             firstLine: momentFrom.format('ddd DD MMM YYYY'),
@@ -24,6 +32,7 @@ export const stringifyTime = (from, to, time) => {
             isSameDay: false,
         }
     }
+}
     
 }
 

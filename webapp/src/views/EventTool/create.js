@@ -97,7 +97,7 @@ export default class Create extends React.Component {
 
         createEvent(nameValue, descriptionValue, shortDescriptionValue,locationValue,
             parsedFrom, parsedTo,
-            sliderImages.map(fileEntry => ({id: fileEntry.id})).concat(parsedThumbnailImage),
+            sliderImages.map(fileEntry => ({id: fileEntry.id, tag: 'slider'})).concat(parsedThumbnailImage),
             categoryValue.map(id => id))
             .then(data => {
                 log.debug('Create#handleSubmit#handleSubmit#data', data);

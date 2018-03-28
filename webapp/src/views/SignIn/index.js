@@ -3,7 +3,7 @@ import log from 'loglevel'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
 import {Redirect} from 'react-router'
 
-import SignInPanel from '../components/SignInPanel';
+import SignInForm from './components/signInForm';
 
 
 // Inspired by https://react.semantic-ui.com/layouts/login
@@ -35,7 +35,7 @@ export const AlreadyLoggedInView = ({language}) => {
     )
 }
 
-export class ShowingSignInPanel extends React.Component{
+export class ShowingSignInForm extends React.Component{
 
     render(){
         return (
@@ -45,7 +45,7 @@ export class ShowingSignInPanel extends React.Component{
                     textAlign='center'
                 >
                 <Grid.Column style={{ maxWidth: 450 }}>
-                    <SignInPanel
+                    <SignInForm
                         withRedirect={this.props.withRedirect}
                         language={this.props.language}
                         onSuccess={this.onSuccess}
@@ -100,7 +100,7 @@ export default class SignInView extends React.Component {
         const langData = {language: this.props.language}
         return this.props.loginData.loggedIn ? 
             <AlreadyLoggedInView {...langData}/> :
-            <ShowingSignInPanel 
+            <ShowingSignInForm 
                 {...langData} 
                 withRedirect={!(this.props.location.state)}
                 setLoginData={this.handleSuccessfulSignIn.bind(this)}

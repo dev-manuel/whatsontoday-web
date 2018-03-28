@@ -148,6 +148,31 @@ DELETE   /:id                         controllers.EventController.deleteEvent(id
 POST     /                            controllers.EventController.createEvent
 
 ###
+#  summary: Upload events from a csv
+#  description: >
+#    Reads event data from a csv and returns a list of the inserted events.
+#  parameters:
+#  - in: formData
+#    name: csv
+#    type: file
+#    description: The csv file to upload.
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  consumes:
+#  - multipart/form-data
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.Event'
+###
+POST     /csv                            controllers.EventController.insertCSV
+
+###
 #  summary: Update an event with a specific id
 #  description: >
 #    Updates an event. The location and category can either be specified by their id or only by name

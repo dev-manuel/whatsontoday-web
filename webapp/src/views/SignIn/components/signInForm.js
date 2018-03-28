@@ -3,8 +3,8 @@ import log from 'loglevel'
 import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
 import {withRouter, Link} from 'react-router-dom'
 
-import ModalError from '../modal'
-import {signIn} from '../../common/api/requests/login'
+import ModalError from '../../../components/modal'
+import {signIn} from '../../../common/api/requests/login'
 
 class SignInPanel extends React.Component {
 

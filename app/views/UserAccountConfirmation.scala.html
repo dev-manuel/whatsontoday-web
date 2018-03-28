@@ -5,7 +5,7 @@
 
 <div>
     <p style="text-align: center; line-height: 1.5;">
-        <img src="@{url}assets/logo.svg" width="200px" height="200px"/><br/>
+        @logo()
         <span style="font-size: 50px; color: #4CB471">What's On Today</span><br/>
         <span style="font-size: 30px; color: #4CB471">
             Find your next event - soon at
@@ -19,9 +19,6 @@
         Did you not sign up to Whats`On? Just ignore this email.
         <br/>
         <br/>
-        <a href="https://www.facebook.com/findyournextevent/"><img src="@{url}assets/facebook.svg" height="40px" style="margin-right:20px"></img></a>
-        <a href="https://twitter.com/yournextevent"><img src="@{url}assets/twitter.svg" height="40px" style="margin-right:20px"></img></a>
-        <a href="https://www.instagram.com/findyournextevent/"><img src="@{url}assets/instagram.svg" height="40px" style="margin-right:20px"></img></a>
-        <a href="mailto: mail@@whats-on.today"><img src="@{url}assets/mail.svg" height="40px"></img></a>
+        @social()
     </p>
 </div>

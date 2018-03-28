@@ -28,7 +28,8 @@ class EventController @Inject()(cc: ControllerComponents,
                                 protected val dbConfigProvider: DatabaseConfigProvider,
                                 val silhouette: Silhouette[AuthEnv],
                                 val organizerService: OrganizerService,
-                                val userService: UserService)
+                                val userService: UserService,
+                                eventService: EventService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile]
@@ -200,6 +201,16 @@ class EventController @Inject()(cc: ControllerComponents,
           case None => BadRequest
         }
       })
+  }
+
+  def insertCSV = organizerRequest(parse.multipartFormData) { case (request,organizer) =>
+    log.debug("Rest request to insert events by csv")
+
+    request.body.file("csv").map { case x =>
+      val file = x.ref.path.toFile()
+
+      eventService.insertCSV(file,organizer)
+     }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
   }
 
   def participate(id: Int) = userRequest(parse.default) { case (request,user) =>

@@ -1,16 +1,17 @@
 import React from 'react'
 import {Grid, Rating} from 'semantic-ui-react'
 
-import {stringifyTime} from '../../common/timeStringification'
-import ImageSlider from '../imageSlider'
-import exampleImage from '../../img/example_image.jpg'
+import {createSliderImageLinksFromImages} from '../../../common/api/utils/imageUtils'
+import {stringifyTime} from '../../../common/timeStringification'
+import ImageSlider from '../../../components/imageSlider'
+import exampleImage from '../../../img/example_image.jpg'
 import './eventOverview.less'
 
 /**
  * 
  * @param {{name: string, rating: number, from: Date, to: Date, description: string}} props 
  */
-const EventOverview = ({name, rating, from, to, description, categories, language}) => {
+const EventOverview = ({name, rating, from, to, description, categories, sliderImages, language}) => {
     const hasRating = rating instanceof Number;
     const stringifiedTime = stringifyTime(from, to, language.time);
 
@@ -19,7 +20,7 @@ const EventOverview = ({name, rating, from, to, description, categories, languag
             <Grid>
                 <Grid.Row>
                     <Grid.Column width="8">
-                        <ImageSlider imageURIList={[exampleImage, exampleImage, exampleImage, exampleImage]} />
+                        <ImageSlider imageURIList={sliderImages} />
                     </Grid.Column>
                     <Grid.Column width="8">
                         

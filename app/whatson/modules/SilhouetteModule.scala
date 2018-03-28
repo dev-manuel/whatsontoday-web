@@ -44,6 +44,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[UserService].to[UserServiceImpl]
     bind[OrganizerService].to[OrganizerServiceImpl]
     bind[MailService].to[MailServiceImpl]
+    bind[EventService].to[EventServiceImpl]
   }
 
   @Provides

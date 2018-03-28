@@ -33,7 +33,7 @@ trait LoginService extends IdentityService[Login] {
    * @param profile The social profile to save.
    * @return The user for whom the profile was saved.
    */
-  def save(profile: CommonSocialProfile, userType: String): Future[Login]
+  def save(profile: CommonSocialProfile, avatar: Option[String]): Future[Login]
 
   def confirm(loginInfo: LoginInfo): Future[Option[Login]]
 

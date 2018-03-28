@@ -168,11 +168,11 @@ class LoginController @Inject()(cc: ControllerComponents,
              case Left(result) => Future.successful(result)
              case Right(authInfo) => for {
                profile <- p.retrieveProfile(authInfo)
-               login <- loginService.save(profile)
+               avatar <- avatarService.retrieveURL(profile.email.getOrElse(""))
+               login <- loginService.save(profile,avatar)
                authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
                authenticator <- silhouette.env.authenticatorService.create(profile.loginInfo)
                token <- silhouette.env.authenticatorService.init(authenticator)
-               avatar <- avatarService.retrieveURL(profile.email.getOrElse(""))
              } yield {
                silhouette.env.eventBus.publish(LoginEvent(login, request))
                Redirect("http://" + request.host + "?token=" + token)
@@ -241,12 +241,12 @@ class LoginController @Inject()(cc: ControllerComponents,
             val authInfo = passwordHasher.hash(data.password)
             for {
               defaultRole <- roleService.getByName("DEFAULT")
+              avatar <- avatarService.retrieveURL(data.email)
               login <- loginService.save(
-                Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, "user", defaultRole.flatMap(_.id).getOrElse(-1)))
+                Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, defaultRole.flatMap(_.id).getOrElse(-1), avatar))
               authInfo <- authInfoRepository.add(loginInfo, authInfo)
               authenticator <- silhouette.env.authenticatorService.create(loginInfo)
               token <- silhouette.env.authenticatorService.init(authenticator)
-              avatar <- avatarService.retrieveURL(data.email)
             } yield {
               silhouette.env.eventBus.publish(SignUpEvent(login, request))
               silhouette.env.eventBus.publish(LoginEvent(login, request))

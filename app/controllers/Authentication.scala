@@ -64,7 +64,7 @@ class Authentication@Inject() (
           }.flatMap { authenticator =>
             silhouette.env.eventBus.publish(LoginEvent(login, request))
             silhouette.env.authenticatorService.init(authenticator).map { token =>
-              Ok(Json.obj("token" -> token, "userType" -> login.userType))
+              Ok(Json.obj("token" -> token))
             }
           }
           case None => Future.failed(new IdentityNotFoundException("Couldn't find user"))

@@ -76,7 +76,7 @@ class LoginServiceImpl @Inject()(
    * @param profile The social profile to save.
    * @return The user for whom the profile was saved.
    */
-  def save(profile: CommonSocialProfile, userType: String) = {
+  def save(profile: CommonSocialProfile, avatar: Option[String]) = {
     val q = for {
       l <- login if l.providerId === profile.loginInfo.providerID && lower(l.providerKey) === lower(profile.loginInfo.providerKey)
     } yield l
@@ -87,12 +87,12 @@ class LoginServiceImpl @Inject()(
     db.run(qa.update(l)).zip(roleService.getByName("DEFAULT")).flatMap {
       case (0,defId) => {
         val loginInsert = Login(None,profile.email.getOrElse(""),None,None,None,
-                                profile.loginInfo.providerID,profile.loginInfo.providerKey,true, userType, defId.flatMap(_.id).getOrElse(-1))
+                                profile.loginInfo.providerID,profile.loginInfo.providerKey,true, defId.flatMap(_.id).getOrElse(-1), avatar)
         db.run(login += loginInsert)
       }
       case (i,_) => Future(i)
     }.flatMap(_ => db.run(q.result)).map(_.head)
   }
 
-  def save(profile: CommonSocialProfile) = this.save(profile, "user")
+  def save(profile: CommonSocialProfile) = save(profile, None)
 }

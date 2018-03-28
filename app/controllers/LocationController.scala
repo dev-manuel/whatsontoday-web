@@ -20,6 +20,7 @@ import whatson.auth._
 import whatson.model.forms._
 import whatson.util.FormErrorJson._
 import whatson.service.geocoder.Geocoder
+import whatson.service.geocoder.Result._
 
 
 class LocationController @Inject()(cc: ControllerComponents,
@@ -77,9 +78,28 @@ class LocationController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to create location")
 
-        val inserted = db.run(insertAndReturn[Location,LocationTable](location,data.toLocation))
+        geocoder.getPosition(Geocoder.Address(data.country,data.city,data.street)).flatMap {
+          case Some(pos) => {
+            val inserted = db.run(insertAndReturn[Location,LocationTable]
+                                    (location,data.toLocation(pos.lat,pos.lng)))
 
-        inserted.map(x => Ok(Json.toJson(x)))
+            inserted.map(x => Ok(Json.toJson(x)))
+          }
+          case None => Future.successful(BadRequest)
+        }
+      })
+  }
+
+  def geocode = Action.async(parse.json) { implicit request =>
+    LocationForm.form.bindFromRequest()(request).fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      },
+      data => {
+        log.debug("Rest request to geocode location")
+
+        geocoder.geocode(Geocoder.Address(data.country,data.city,data.street))
+          .map(x => Ok(Json.toJson(x)))
       })
   }
 }

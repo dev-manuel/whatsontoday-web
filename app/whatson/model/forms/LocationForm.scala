@@ -18,7 +18,7 @@ object LocationForm {
 
   case class Data(id: Option[Int], name: String, country: String,
                   city: String, street: String) {
-    def toLocation = Location(id,name,0.0f,0.0f,country,city,street)
+    def toLocation(lat: Float = 0.0f, long: Float = 0.0f) = Location(id,name,lat,long,country,city,street)
   }
 
   object Data {

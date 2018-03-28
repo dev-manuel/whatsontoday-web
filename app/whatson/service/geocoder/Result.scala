@@ -21,8 +21,8 @@ case class Geometry(location: Location,
                     viewport: Viewport)
 
 
-case class Location(lat: Double,
-                    lng: Double)
+case class Location(lat: Float,
+                    lng: Float)
 
 case class Viewport(northeast: Location,
                     southwest: Location)
@@ -44,10 +44,10 @@ object Result {
   implicit val invalid_requestReads = Json.reads[INVALID_REQUEST]
   implicit val unknown_errorReads = Json.reads[UNKNOWN_ERROR]
   implicit val statusCodeReads = Json.reads[StatusCode]*/
-  implicit val locationReads = Json.reads[Location]
-  implicit val viewportReads = Json.reads[Viewport]
-  implicit val geometryReads = Json.reads[Geometry]
-  implicit val addressComponentReads = Json.reads[AddressComponent]
-  implicit val addressReads = Json.reads[Address]
-  implicit val resultReads = Json.reads[Result]
+  implicit val locationFormat = Json.format[Location]
+  implicit val viewportFormat = Json.format[Viewport]
+  implicit val geometryFormat = Json.format[Geometry]
+  implicit val addressComponentFormat = Json.format[AddressComponent]
+  implicit val addressFormat = Json.format[Address]
+  implicit val resultFormat = Json.format[Result]
 }

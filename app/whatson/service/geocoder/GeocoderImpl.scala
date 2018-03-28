@@ -23,7 +23,7 @@ class GeocoderImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
                           (implicit context: ExecutionContext)
     extends Geocoder {
 
-  def geocode(address: Address): Future[Result] = {
+  def geocode(address: Geocoder.Address): Future[Result] = {
     val result = ws.url(geoConfig.url)
       .addQueryStringParameters("address" -> address.toString, "key" -> geoConfig.apiKey)
       .get()
@@ -31,4 +31,10 @@ class GeocoderImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
 
     result.map(x => x.json.validate[Result].get)
   }
+
+  def getPosition(address: Geocoder.Address): Future[Option[Location]] = geocode(address)
+    .map {
+      case Result(loc :: _, "OK", _) => Some(loc.geometry.location)
+      case _ => None
+    }
 }

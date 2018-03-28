@@ -29,7 +29,6 @@ class ImageController @Inject()(cc: ControllerComponents,
                                 protected val dbConfigProvider: DatabaseConfigProvider,
                                 val silhouette: Silhouette[AuthEnv],
                                 val organizerService: OrganizerService,
-                                val userService: UserService,
                                 val roleService: RoleService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)

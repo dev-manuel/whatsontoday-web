@@ -6,14 +6,13 @@ import com.mohiva.play.silhouette.api.actions._
 
 import scala.concurrent._
 import com.mohiva.play.silhouette.api._
-import whatson.model.{Organizer, User, Login}
+import whatson.model.{Organizer, Login}
 import whatson.service._
 import whatson.model.detail._
 
 trait Util {
   val silhouette: Silhouette[AuthEnv]
   val organizerService: OrganizerService
-  val userService: UserService
 
   val Unauthorized: Result
   val roleService: RoleService

@@ -28,7 +28,6 @@ class EventController @Inject()(cc: ControllerComponents,
                                 protected val dbConfigProvider: DatabaseConfigProvider,
                                 val silhouette: Silhouette[AuthEnv],
                                 val organizerService: OrganizerService,
-                                val userService: UserService,
                                 val roleService: RoleService,
                                 eventService: EventService)
     (implicit context: ExecutionContext)

@@ -44,7 +44,6 @@ class OrganizerController@Inject() (
   passwordHasher: PasswordHasher,
   protected val dbConfigProvider: DatabaseConfigProvider,
   val organizerService: OrganizerService,
-  val userService: UserService,
   mailService: MailService,
   avatarService: AvatarService,
   val roleService: RoleService)

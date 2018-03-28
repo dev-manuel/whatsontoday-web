@@ -1,6 +1,7 @@
 import React from 'react';
 import {Grid, Rating} from 'semantic-ui-react';
 
+import './locationDetails.less'
 
 const floatRight = {style: {float: 'right'}};
 
@@ -16,7 +17,7 @@ const LocationDetails = ({name, city, country, street, language}) => {
                     <Grid.Column width="8">
                         <h2>Location:</h2>
                         {/* <h2>{name} <span {...floatRight}><Rating defaultRating={rating} maxRating={5} disabled /></span></h2> */}
-                        <p style={{textAlign: 'center'}}>
+                        <p className="Event_locationDetails_locationAddress">
                             {street} <br/>
                             {city} <br/>
                             {country} <br/>

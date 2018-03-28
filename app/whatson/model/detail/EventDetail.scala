@@ -8,12 +8,14 @@ import whatson.db.EventTable
 import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import scala.concurrent.ExecutionContext
+import scala.math.BigDecimal
 
 case class EventDetail(id: Option[Int], name: String, from: Timestamp,
                        to: Option[Timestamp], description: String, shortDescription: String,
                        creator: Organizer, categories: List[Category],
                        avgRating: Option[Float], location: Location,
-                       images: List[TaggedImage], participantCount: Int) extends Rateable with WithTaggedImages
+                       images: List[TaggedImage], participantCount: Int,
+                       priceMin: Option[BigDecimal], priceMax: Option[BigDecimal]) extends Rateable with WithTaggedImages
 
 object EventDetail {
   implicit val eventDetailReads = Json.reads[EventDetail]
@@ -39,7 +41,7 @@ object EventDetail {
             c.result.zip(taggedImgs).map(o => {
               EventDetail(event.id, event.name, event.from, event.to, event.description,
                           event.shortDescription, creator, o._1.toList, r,
-                          location, o._2.toList, pCount)
+                          location, o._2.toList, pCount, event.priceMin, event.priceMax)
             })
           }
         })

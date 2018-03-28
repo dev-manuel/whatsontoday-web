@@ -14,6 +14,7 @@ import whatson.db.Util._
 import whatson.model._
 import whatson.service._
 import whatson.util._
+import whatson.util.ListUtil._
 
 class LoginServiceImpl @Inject()(
   protected val dbConfigProvider: DatabaseConfigProvider,
@@ -84,15 +85,18 @@ class LoginServiceImpl @Inject()(
 
     val l = profile.email.getOrElse("")
 
-    db.run(qa.update(l)).zip(roleService.getByName("DEFAULT")).flatMap {
-      case (0,defId) => {
+    db.run(qa.update(l)).flatMap {
+      case 0 => {
         val loginInsert = Login(None,profile.email.getOrElse(""),None,None,None,
-                                profile.loginInfo.providerID,profile.loginInfo.providerKey,true, defId.flatMap(_.id).getOrElse(-1), avatar)
+                                profile.loginInfo.providerID,profile.loginInfo.providerKey,true, avatar)
         db.run(login += loginInsert)
       }
-      case (i,_) => Future(i)
+      case i => Future(i)
     }.flatMap(_ => db.run(q.result)).map(_.head)
   }
 
   def save(profile: CommonSocialProfile) = save(profile, None)
+
+  def getRoles(id: Int) = db.run(UserRolesTable.userRoles.filter(x => x.loginId === id).result)
+      .flatMap(_.toList.mapFuture(r => roleService.getDetailed(r.roleId).map(x => (x.get,r.scope))))
 }

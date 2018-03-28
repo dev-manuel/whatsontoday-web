@@ -31,22 +31,21 @@ import whatson.db.Util._
 import whatson.model.detail.EventDetail._
 
 
-class OrganizerController@Inject() (
-  val silhouette: Silhouette[AuthEnv],
-  loginService: LoginService,
-  authInfoRepository: AuthInfoRepository,
-  credentialsProvider: CredentialsProvider,
-  socialProviderRegistry: SocialProviderRegistry,
-  configuration: Configuration,
-  clock: Clock,
-  cc: ControllerComponents,
-  cache: AsyncCacheApi,
-  passwordHasher: PasswordHasher,
-  protected val dbConfigProvider: DatabaseConfigProvider,
-  val organizerService: OrganizerService,
-  mailService: MailService,
-  avatarService: AvatarService,
-  val roleService: RoleService)
+class OrganizerController@Inject() (val silhouette: Silhouette[AuthEnv],
+                                    val loginService: LoginService,
+                                    authInfoRepository: AuthInfoRepository,
+                                    credentialsProvider: CredentialsProvider,
+                                    socialProviderRegistry: SocialProviderRegistry,
+                                    configuration: Configuration,
+                                    clock: Clock,
+                                    cc: ControllerComponents,
+                                    cache: AsyncCacheApi,
+                                    passwordHasher: PasswordHasher,
+                                    protected val dbConfigProvider: DatabaseConfigProvider,
+                                    val organizerService: OrganizerService,
+                                    mailService: MailService,
+                                    avatarService: AvatarService,
+                                    val roleService: RoleService)
     extends AbstractController(cc) with HasDatabaseConfigProvider[JdbcProfile]
     with Util{
 

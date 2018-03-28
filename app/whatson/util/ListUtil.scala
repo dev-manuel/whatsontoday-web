@@ -10,5 +10,8 @@ object ListUtil {
         case None => Future.successful(List())
       }
     }
+
+    def mapFuture[B](f: A => Future[B])(implicit context: ExecutionContext): Future[List[B]] =
+      Future.sequence(l.map(f))
   }
 }

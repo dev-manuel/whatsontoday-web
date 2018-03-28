@@ -45,11 +45,11 @@ import whatson.model.detail.EventDetail._
 import whatson.util._
 
 class LoginController @Inject()(cc: ControllerComponents,
-                               protected val dbConfigProvider: DatabaseConfigProvider,
+                                protected val dbConfigProvider: DatabaseConfigProvider,
                                 val silhouette: Silhouette[AuthEnv],
                                 encoder: AuthenticatorEncoder,
                                 settings: JWTAuthenticatorSettings,
-                                loginService: LoginService,
+                                val loginService: LoginService,
                                 authInfoRepository: AuthInfoRepository,
                                 credentialsProvider: CredentialsProvider,
                                 socialProviderRegistry: SocialProviderRegistry,
@@ -240,10 +240,9 @@ class LoginController @Inject()(cc: ControllerComponents,
           case None =>
             val authInfo = passwordHasher.hash(data.password)
             for {
-              defaultRole <- roleService.getByName("DEFAULT")
               avatar <- avatarService.retrieveURL(data.email)
               login <- loginService.save(
-                Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, defaultRole.flatMap(_.id).getOrElse(-1), avatar))
+                Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, avatar))
               authInfo <- authInfoRepository.add(loginInfo, authInfo)
               authenticator <- silhouette.env.authenticatorService.create(loginInfo)
               token <- silhouette.env.authenticatorService.init(authenticator)

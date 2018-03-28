@@ -29,7 +29,8 @@ class EventController @Inject()(cc: ControllerComponents,
                                 val silhouette: Silhouette[AuthEnv],
                                 val organizerService: OrganizerService,
                                 val roleService: RoleService,
-                                eventService: EventService)
+                                eventService: EventService,
+                                val loginService: LoginService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile]
@@ -146,7 +147,7 @@ class EventController @Inject()(cc: ControllerComponents,
       })
   }
 
-  def updateEvent(id: Int) = withRights(Right.CreateEvent)(parse.json) { case (request,login,role) =>
+  def updateEvent(id: Int) = withRights(Right.CreateEvent)(parse.json) { case (request,login,roles) =>
     //TODO: Check Role for creating location, categories
     EventForm.form.bindFromRequest()(request).fold(
       form => {
@@ -216,7 +217,7 @@ class EventController @Inject()(cc: ControllerComponents,
      }.map(_.map(x => Ok(Json.toJson(x)))).headOption.getOrElse(Future.successful(BadRequest))
   }
 
-    def participate(id: Int) = withRights(Right.Participate)(parse.default) { case (request,login,role) =>
+  def participate(id: Int) = withRights(Right.Participate)(parse.default) { case (request,login,role) =>
     log.debug("Rest request to participate in event")
 
     val q = (event.filter(x => x.id === id.bind).result)
@@ -232,7 +233,7 @@ class EventController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def unparticipate(id: Int) = withRights(Right.CreateEvent)(parse.default) { case (request,login,role) =>
+  def unparticipate(id: Int) = withRights(Right.Participate)(parse.default) { case (request,login,role) =>
     log.debug("Rest request to unparticipate in event")
 
     db.run(ParticipantTable.participant.filter(x => x.eventID === id.bind && x.loginID === login.id.getOrElse(-1).bind).delete)

@@ -21,7 +21,8 @@ class RatingController @Inject()(cc: ControllerComponents,
                                  protected val dbConfigProvider: DatabaseConfigProvider,
                                  val silhouette: Silhouette[AuthEnv],
                                  val organizerService: OrganizerService,
-                                 val roleService: RoleService)
+                                 val roleService: RoleService,
+                                 val loginService: LoginService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] with Util {

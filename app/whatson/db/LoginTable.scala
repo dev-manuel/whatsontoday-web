@@ -18,11 +18,9 @@ class LoginTable(tag: Tag) extends Table[Login](tag, "login") with HasID[Login] 
 
   def confirmed = column[Boolean]("confirmed")
 
-  def roleId = column[Int]("role_fk")
-
   def avatar = column[Option[String]]("avatar")
 
-  def * = (id.?,email,pwHash.?, pwSalt.?, pwHasher.? ,providerId, providerKey, confirmed, roleId, avatar) <> (Login.tupled, Login.unapply)
+  def * = (id.?,email,pwHash.?, pwSalt.?, pwHasher.? ,providerId, providerKey, confirmed, avatar) <> (Login.tupled, Login.unapply)
 
   def events = ParticipantTable.participant.filter(_.loginID === id).flatMap(_.eventFK)
 }

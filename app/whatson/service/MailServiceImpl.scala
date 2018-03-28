@@ -18,27 +18,13 @@ class MailServiceImpl @Inject()(mailerClient: MailerClient,
                                 applicationConfig: ApplicationConfig)(implicit context: ExecutionContext)
     extends MailService {
 
-  def sendUserConfirmation(userMail: String,
+  def sendConfirmation(userMail: String,
                            confirmationToken: String) = {
     val email = Email(
       "Confirm your email address",
       "Whats On <no-reply@whats-on.today>",
       Seq(userMail),
-      bodyHtml = Some(new UserAccountConfirmation(userMail,applicationConfig.url,confirmationToken)().toString())
-    )
-
-    if(applicationConfig.confirmationMails)
-      mailerClient.send(email)
-  }
-
-  def sendOrganizerConfirmation(userMail: String,
-                               name: String,
-                               confirmationToken: String) = {
-    val email = Email(
-      "Confirm your email address",
-      "Whats On <no-reply@whats-on.today>",
-      Seq(userMail),
-      bodyHtml = Some(new OrganizerAccountConfirmation(userMail,name,applicationConfig.url,confirmationToken)().toString())
+      bodyHtml = Some(new AccountConfirmation(userMail,applicationConfig.url,confirmationToken)().toString())
     )
 
     if(applicationConfig.confirmationMails)

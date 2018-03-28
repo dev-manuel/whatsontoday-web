@@ -161,29 +161,22 @@ class LoginController @Inject()(cc: ControllerComponents,
     * @param provider The ID of the provider to authenticate against.
     * @return The result to display.
     */
-  def authenticate(provider: String, userType: Option[String]) = Action.async { r =>
+  def authenticate(provider: String) = Action.async { r =>
     cacheAuthTokenForOauth1(r) { implicit request =>
       (socialProviderRegistry.get[SocialProvider](provider) match {
          case Some(p: OAuth2Provider with CommonSocialProfileBuilder) =>
-           p.authenticate(UserStateItem(List("type"->userType.getOrElse("user")).toMap)).flatMap {
+           p.authenticate().flatMap {
              case Left(result) => Future.successful(result)
-             case Right(StatefulAuthInfo(authInfo,state)) => for {
+             case Right(authInfo) => for {
                profile <- p.retrieveProfile(authInfo)
-               login <- loginService.save(profile, userType.getOrElse("user"))
+               login <- loginService.save(profile)
                authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
                authenticator <- silhouette.env.authenticatorService.create(profile.loginInfo)
                token <- silhouette.env.authenticatorService.init(authenticator)
                avatar <- avatarService.retrieveURL(profile.email.getOrElse(""))
              } yield {
-               state.state.get("type") match {
-                 case Some("user") => userService.save(login,avatar)
-                 case Some("organizer") => organizerService.save(login,
-                                                                 profile.firstName.getOrElse("") + " " + profile.lastName.getOrElse(""),
-                                                                 avatar)
-                 case _ =>
-               }
                silhouette.env.eventBus.publish(LoginEvent(login, request))
-               Redirect("http://" + request.host + "?token=" + token + "&userType=" + userType.getOrElse("user"))
+               Redirect("http://" + request.host + "?token=" + token)
              }
            }
          case _ => Future.failed(new ProviderException(s"Cannot authenticate with unexpected social provider $provider"))
@@ -228,5 +221,40 @@ class LoginController @Inject()(cc: ControllerComponents,
     val s = q.queryPaged(request).detailed
 
     returnPaged(s,q,db)
+  }
+
+  /**
+   * Handles the submitted JSON data.
+   *
+   * @return The result to display.
+   */
+  def signUp = Action.async(parse.json) { implicit request =>
+    SignUpForm.form.bindFromRequest.fold(
+      form => {
+        Future.successful(BadRequest(Json.toJson(form.errors)))
+      },
+      data => {
+        val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
+        loginService.retrieveAll(loginInfo).flatMap {
+          case Some(login) =>
+            Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
+          case None =>
+            val authInfo = passwordHasher.hash(data.password)
+            for {
+              defaultRole <- roleService.getByName("DEFAULT")
+              login <- loginService.save(
+                Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, "user", defaultRole.flatMap(_.id).getOrElse(-1)))
+              authInfo <- authInfoRepository.add(loginInfo, authInfo)
+              authenticator <- silhouette.env.authenticatorService.create(loginInfo)
+              token <- silhouette.env.authenticatorService.init(authenticator)
+              avatar <- avatarService.retrieveURL(data.email)
+            } yield {
+              silhouette.env.eventBus.publish(SignUpEvent(login, request))
+              silhouette.env.eventBus.publish(LoginEvent(login, request))
+              mailService.sendConfirmation(data.email,token)
+              Ok(Json.obj("message" -> "mail.sent"))
+            }
+        }
+      })
   }
 }

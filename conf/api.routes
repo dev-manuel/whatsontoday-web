@@ -2,8 +2,6 @@
 
 ->     /login                          login.Routes
 
-->     /user                           user.Routes
-
 ->     /organizer                      organizer.Routes
 
 

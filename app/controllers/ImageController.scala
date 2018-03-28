@@ -86,18 +86,18 @@ class ImageController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def attachImage(id: Int, entityType: String, entityId: Int, tag: Option[String]) = userOrganizerRequest(parse.default) { case (request,login) =>
+  def attachImage(id: Int, entityType: String, entityId: Int, tag: Option[String]) = withRights(whatson.model.Right.CreateImage)(parse.default) { case (request,login,role) =>
     log.debug("Rest request to attach image")
 
     val authorized = (EntityType.withName(entityType), login) match {
-      case (EntityType.Event,Right(Organizer(idOrg,_,_,_))) => {
-        val q = for(e <- EventTable.event if e.id === id.bind && e.creatorId === idOrg) yield e;
+      case (EntityType.Event, login) => {
+        val q = for(e <- EventTable.event if e.id === id.bind && e.creatorId === login.id) yield e;
         db.run(q.result).map(_.headOption).map {
           case Some(e) => true
           case None => false
         }
       }
-      case (EntityType.Organizer,Right(Organizer(idOrg,_,_,_))) => Future.successful(entityId == idOrg.getOrElse(-1))
+      case (EntityType.Organizer, login) => Future.successful(true) //TODO
       case (EntityType.Location,_) => Future.successful(true)
       case _ => Future.successful(false)
     }

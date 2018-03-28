@@ -14,6 +14,4 @@ class OrganizerServiceImpl @Inject()(protected val dbConfigProvider: DatabaseCon
     extends OrganizerService with HasDatabaseConfigProvider[JdbcProfile] {
 
   def save(organizer: Organizer) = db.run(insertAndReturn[Organizer,OrganizerTable](OrganizerTable.organizer,organizer))
-
-  def getByLogin(login: Login) = db.run(OrganizerTable.organizer.filter(_.loginFk === login.id.getOrElse(-1)).result).map(_.headOption)
 }

@@ -1,35 +1,4 @@
 ###
-#  summary: Get the events of the currently logged in organizer
-#  parameters:
-#  - in: header
-#    name: X-Page
-#    schema:
-#      type: integer
-#    default: 0
-#  - in: header
-#    name: X-Page-Size
-#    schema:
-#      type: integer
-#    default: 20
-#  - in: header
-#    name: x-auth-token
-#    schema:
-#      type: string
-#  responses:
-#    200:
-#      description: success
-#      headers:
-#        x-number-items:
-#          type: integer
-#          description: The total number of items on all pages
-#      schema:
-#        type: array
-#        items:
-#          $ref: '#/definitions/whatson.model.detail.EventDetail'
-###
-GET   /eventsCurrent                   controllers.OrganizerController.getLoggedInEvents
-
-###
 #  summary: Get the public account of an organizer
 #  responses:
 #    200:
@@ -55,7 +24,7 @@ GET   /:id                   controllers.OrganizerController.get(id: Int)
 #    400:
 #      description: Organizer already exists
 ###
-POST   /signUp                   controllers.OrganizerController.signUp
+#POST   /signUp                   controllers.OrganizerController.signUp
 
 ###
 #  summary: Get the events of an organizer

@@ -7,17 +7,13 @@ import whatson.model._
 class OrganizerTable(tag: Tag) extends Table[Organizer](tag, "organizer") with HasRatings[Organizer] with HasImages[Organizer] {
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
 
-  def loginFk = column[Int]("login_fk")
-
   def name = column[String]("name")
 
   def avatar = column[Option[String]]("avatar")
 
-  def * = (id.?,name,loginFk,avatar) <> (Organizer.tupled, Organizer.unapply)
+  def * = (id.?,name,avatar) <> (Organizer.tupled, Organizer.unapply)
 
-  def login = foreignKey("login", loginFk,LoginTable.login)(_.id)
-
-
+  
   val entityType = EntityType.Organizer
 }
 

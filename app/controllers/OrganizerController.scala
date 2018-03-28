@@ -75,25 +75,12 @@ class OrganizerController@Inject() (
     returnPaged(s,q,db)
   }
 
-  def getLoggedInEvents = organizerRequest(parse.default) { case (request,organizer) =>
-    log.debug("Rest request to get events of currently logged in organizer")
-
-    implicit val r = request
-
-    val q = for {
-      e <- EventTable.event if e.creatorId === organizer.id.getOrElse(-1)
-    } yield e
-
-    val s = q.queryPaged.detailed
-    returnPaged(s,q,db)
-  }
-
   /**
    * Handles the submitted JSON data.
    *
    * @return The result to display.
    */
-  def signUp = Action.async(parse.json) { implicit request =>
+  /*def signUp = Action.async(parse.json) { implicit request =>
     OrganizerSignUpForm.form.bindFromRequest.fold(
       form => {
         Future.successful(BadRequest(Json.toJson(form.errors)))
@@ -121,5 +108,5 @@ class OrganizerController@Inject() (
           }
       }
     })
-  }
+  }*/
 }

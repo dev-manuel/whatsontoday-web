@@ -78,7 +78,8 @@ class Home extends React.Component {
                     ]}
                 />
                 <div className="Home_search">
-                    <h1>Find your next event!</h1>
+                    <h1>Find your next Event!</h1>
+		    </br>
                     <div className="Home_searchPanel">
                         <SearchPanel
                             language={language}

@@ -34,10 +34,10 @@ export default {
         culture: 'Kultur',
         fair: 'Feste',
         
-        search: 'Event/Beschreibung...',
-        city: 'Stadt...',
-        category: 'Kategorie...',
-        submit: 'Suchen',
+        search: 'Suche',
+        city: 'Stadt',
+        category: 'Kategorie',
+        submit: 'Los geht\'s!',
     },
     footer: {
         socialMedia: 'Social Media',

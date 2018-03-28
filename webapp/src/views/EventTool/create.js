@@ -38,12 +38,12 @@ export default class Create extends React.Component {
         nameValue: '',
         categoryValue: [],
         categoryOptions: [],
-        categoryIsFetching: false,
+        categoryIsFetching: true, // fetch when page is loaded --> componentDidMount
 
         fromValue: null,
         toValue: null,
 
-        locationIsFetching: false,
+        locationIsFetching: true, // fetch when page is loaded --> componentDidMount
         locationOptions: [],
         locationValue: null,
         // locationSearchQuery: '',
@@ -62,10 +62,8 @@ export default class Create extends React.Component {
     }
 
     componentDidMount(){
-        this.setState({
-            categoryIsFetching: true,
-        });
         this.fetchCategory();
+        this.fetchLocations(''); // "default"-value = "empty string" 
     }
 
     //

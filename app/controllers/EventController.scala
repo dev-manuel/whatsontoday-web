@@ -130,7 +130,8 @@ class EventController @Inject()(cc: ControllerComponents,
           case ((images,categories),Some(location)) => {
             val event = Event(None, data.name, data.from, data.to,
                               data.description, data.shortDescription,
-                              organizer.id, location.id.getOrElse(-1))
+                              organizer.id, location.id.getOrElse(-1),
+                              data.priceMin, data.priceMax)
             db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,images,categories))
           }.flatMap { case (event,images,categories) =>
               val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img._1.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event,img._2))
@@ -170,7 +171,8 @@ class EventController @Inject()(cc: ControllerComponents,
           case (((images,categories),Some(event)),Some(location)) => {
             val event = Event(Some(id), data.name, data.from, data.to,
                               data.description, data.shortDescription,
-                              organizer.id, location.id.getOrElse(-1))
+                              organizer.id, location.id.getOrElse(-1),
+                              data.priceMin, data.priceMax)
 
             val getQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === organizer.id)
 

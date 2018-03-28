@@ -31,7 +31,7 @@ object EventForm {
                   to: Option[Timestamp], categories: List[Category],
                   location: LocationForm.Data, images: List[TaggedImageForm.Data],
                   description: String, shortDescription: String,
-                  priceMin: Option[BigDecimal], priceMax: Option[BigDecimal])
+                  priceMin: Option[BigDecimal] = None, priceMax: Option[BigDecimal] = None)
 
   object Data {
     implicit val jsonFormat = Json.format[Data]

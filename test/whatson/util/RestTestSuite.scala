@@ -123,12 +123,13 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
                   from: Timestamp = new Timestamp(0), to: Option[Timestamp] = Some(new Timestamp(0)),
                   description: String = "testdescription",
                   shortDescription: String = "short description",
-                  locationId: Option[Int] = None): Future[Event] = {
+                  locationId: Option[Int] = None, priceMin: Option[BigDecimal] = None,
+                  priceMax: Option[BigDecimal] = None): Future[Event] = {
     org.map(Future.successful(_)).getOrElse(createOrganizer().map(_._2))
       .zip(locationId.map(Future.successful(_)).getOrElse(createLocation().map(_.id.getOrElse(-1)))).flatMap { case (org,loc) =>
         db.run(insertAndReturn[Event,EventTable](EventTable.event,
-                                                 Event(None, name, from, to,
-                                                       description, shortDescription, org.id, loc)))
+                                                 Event(None, name, from, to, description,
+                                                       shortDescription, org.id, loc, priceMin, priceMax)))
     }
   }
 

@@ -27,8 +27,7 @@ import whatson.service._
 import whatson.util.FormErrorJson._
 import whatson.db.Util._
 import whatson.model.detail.EventDetail._
-import whatson.db.Util._
-import whatson.model.detail.EventDetail._
+import whatson.db._
 
 
 class OrganizerController@Inject() (val silhouette: Silhouette[AuthEnv],
@@ -74,14 +73,22 @@ class OrganizerController@Inject() (val silhouette: Silhouette[AuthEnv],
   }
 
   def createOrganizer() = withRights(Right.CreateOrganizer)(parse.json) { case (request,login,role) =>
-    EventForm.form.bindFromRequest()(request).fold(
+    OrganizerForm.form.bindFromRequest()(request).fold(
       form => {
         Future.successful(BadRequest(Json.toJson(form.errors)))
       },
       data => {
         log.debug("Rest request to create organizer")
 
-        //TODO
+        for{
+          org <- db.run(insertAndReturn[Organizer,OrganizerTable](OrganizerTable.organizer,Organizer(None,data.name,None)))
+          adminRole <- roleService.getByName(Role.OrganizerAdmin)
+        } yield {
+          db.run(UserRolesTable.userRoles += UserRole(adminRole.get.id.get,login.id.get,
+                                                      UserRole.OrganizerScope(org.id.getOrElse(-1))))
+          Ok(Json.toJson(org))
+        }
+
       })
   }
 }

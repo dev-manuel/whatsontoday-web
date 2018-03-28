@@ -14,4 +14,8 @@ object Role {
   implicit val roleWrites = Json.writes[Role]
 
   val tupled = (this.apply _).tupled
+
+  val DEFAULT = "DEFAULT"
+  val Admin = "Admin"
+  val OrganizerAdmin = "OrganizerAdmin"
 }

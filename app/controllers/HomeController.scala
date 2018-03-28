@@ -30,13 +30,7 @@ class HomeController @Inject()(cc: ControllerComponents,
 
   def indexWeb(any: String) = Action { implicit request: Request[AnyContent] =>
     log.debug("Rest request for the main page")
-    if(!request.secure && play.api.Play.current.mode == Mode.Prod) {
-      if(any == "")
-        Redirect(applicationConfig.url ++ "web", MOVED_PERMANENTLY)
-      else
-        Redirect(applicationConfig.url ++ "web/" ++ any, MOVED_PERMANENTLY)
-    } else {
-      Ok.sendFile(new java.io.File("./public/index.html"))
-    }
+    
+    Ok.sendFile(new java.io.File("./public/index.html"))
   }
 }

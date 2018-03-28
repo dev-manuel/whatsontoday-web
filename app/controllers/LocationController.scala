@@ -21,12 +21,14 @@ import whatson.model.forms._
 import whatson.util.FormErrorJson._
 import whatson.service.geocoder.Geocoder
 import whatson.service.geocoder.Result._
+import whatson.service._
 
 
 class LocationController @Inject()(cc: ControllerComponents,
                                    protected val dbConfigProvider: DatabaseConfigProvider,
                                    silhouette: Silhouette[AuthEnv],
-                                   geocoder: Geocoder)
+                                   geocoder: Geocoder,
+                                   locationService: LocationService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] {
@@ -78,28 +80,10 @@ class LocationController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to create location")
 
-        geocoder.getPosition(Geocoder.Address(data.country,data.city,data.street)).flatMap {
-          case Some(pos) => {
-            val inserted = db.run(insertAndReturn[Location,LocationTable]
-                                    (location,data.toLocation(pos.lat,pos.lng)))
-
-            inserted.map(x => Ok(Json.toJson(x)))
-          }
-          case None => Future.successful(BadRequest)
+        locationService.insertOrGet(data).map {
+          case Some(loc) => Ok(Json.toJson(loc))
+          case None => BadRequest
         }
-      })
-  }
-
-  def geocode = Action.async(parse.json) { implicit request =>
-    LocationForm.form.bindFromRequest()(request).fold(
-      form => {
-        Future.successful(BadRequest(Json.toJson(form.errors)))
-      },
-      data => {
-        log.debug("Rest request to geocode location")
-
-        geocoder.geocode(Geocoder.Address(data.country,data.city,data.street))
-          .map(x => Ok(Json.toJson(x)))
       })
   }
 }

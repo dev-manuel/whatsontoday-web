@@ -29,7 +29,8 @@ class EventController @Inject()(cc: ControllerComponents,
                                 val silhouette: Silhouette[AuthEnv],
                                 val organizerService: OrganizerService,
                                 val userService: UserService,
-                                eventService: EventService)
+                                eventService: EventService,
+                                locationService: LocationService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile]
@@ -112,12 +113,7 @@ class EventController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to create event")
 
-        val loc = data.location.toLocation //TODO
-
-        val locationQuery = (loc.id match {
-          case None => insertAndReturn[Location,LocationTable](LocationTable.location,loc)
-          case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
-        })
+        val location = locationService.insertOrGet(data.location)
 
         val imagesQuery = DBIO.sequence(data.images.map(x => ImageTable.image.filter(_.id === x.id.bind).result.map(l => l.map(r => (r,x.tag))))).map(_.flatten)
 
@@ -130,17 +126,20 @@ class EventController @Inject()(cc: ControllerComponents,
               }
           }).map(_.flatten)
 
-        db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery)).flatMap { case ((location,images),categories) =>
-          val event = Event(None, data.name, data.from, data.to,
-                            data.description, data.shortDescription,
-                            organizer.id, location.id.getOrElse(-1))
-          db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,images,categories))
-        }.flatMap { case (event,images,categories) =>
-          val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img._1.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event,img._2))
-          val categoriesAdd = EventCategoryTable.eventCategory ++= categories.map(cat => (cat.id.getOrElse(-1),event.id.getOrElse(-1)))
-          val eventDetailed = EventTable.event.filter(_.id === event.id.getOrElse(-1)).detailed
-          db.run(imagesAdd.zip(categoriesAdd) >> eventDetailed)
-        }.map(x => Ok(Json.toJson(x.head)))
+        db.run(imagesQuery.zip(categoriesQuery)).zip(location).flatMap {
+          case ((images,categories),Some(location)) => {
+            val event = Event(None, data.name, data.from, data.to,
+                              data.description, data.shortDescription,
+                              organizer.id, location.id.getOrElse(-1))
+            db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,images,categories))
+          }.flatMap { case (event,images,categories) =>
+              val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img._1.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event,img._2))
+              val categoriesAdd = EventCategoryTable.eventCategory ++= categories.map(cat => (cat.id.getOrElse(-1),event.id.getOrElse(-1)))
+              val eventDetailed = EventTable.event.filter(_.id === event.id.getOrElse(-1)).detailed
+              db.run(imagesAdd.zip(categoriesAdd) >> eventDetailed)
+          }.map(x => Ok(Json.toJson(x.head)))
+          case _ => Future.successful(BadRequest)
+        }
       })
   }
 
@@ -152,12 +151,7 @@ class EventController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to update event")
 
-        val loc = data.location.toLocation //TODO
-
-        val locationQuery = (loc.id match {
-          case None => insertAndReturn[Location,LocationTable](LocationTable.location,loc)
-          case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
-        })
+        val location = locationService.insertOrGet(data.location)
 
         val imagesQuery = DBIO.sequence(data.images.map(x => ImageTable.image.filter(_.id === x.id.bind).result.map(l => l.map(r => (r,x.tag))))).map(_.flatten)
 
@@ -172,8 +166,8 @@ class EventController @Inject()(cc: ControllerComponents,
 
         val eventQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === organizer.id).result.map(_.headOption)
 
-        db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery).zip(eventQuery)).flatMap {
-          case (((location,images),categories),Some(event)) => {
+        db.run(imagesQuery.zip(categoriesQuery).zip(eventQuery)).zip(location).flatMap {
+          case (((images,categories),Some(event)),Some(location)) => {
             val event = Event(Some(id), data.name, data.from, data.to,
                               data.description, data.shortDescription,
                               organizer.id, location.id.getOrElse(-1))
@@ -183,7 +177,7 @@ class EventController @Inject()(cc: ControllerComponents,
             db.run(getQuery.update(event) >> getQuery.result.map(_.head))
               .map(r => Some((r,images,categories)))
           }
-          case (((_,_),_),None) => Future.successful(None)
+          case _ => Future.successful(None)
         }.flatMap {
           case Some((event,images,categories)) => {
             val dropImages = ImageEntityTable.imageEntity.filter(x => x.entityId === id && x.entityType === EntityType.Event).delete

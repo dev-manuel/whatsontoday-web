@@ -112,20 +112,6 @@ GET    /location/nearby/:id            controllers.LocationController.getNearby(
 POST   /location                       controllers.LocationController.createLocation()
 
 ###
-#  summary: Get latitude & longitude from a location
-#  parameters:
-#  - name: body
-#    schema:
-#      $ref: '#/definitions/whatson.model.forms.LocationForm.Data'
-#  responses:
-#    200:
-#      description: success
-#      schema:
-#        $ref: '#/definitions/whatson.model.Location'
-###
-POST   /geocode                       controllers.LocationController.geocode
-
-###
 #  summary: Rate a specific entity
 #  description: >
 #      Rate a given entity. This action is only callable for logged in users. If a user has already rated the same entity

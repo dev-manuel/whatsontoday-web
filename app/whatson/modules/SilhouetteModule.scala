@@ -47,6 +47,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[MailService].to[MailServiceImpl]
     bind[EventService].to[EventServiceImpl]
     bind[Geocoder].to[GeocoderImpl]
+    bind[LocationService].to[LocationServiceImpl]
   }
 
   @Provides

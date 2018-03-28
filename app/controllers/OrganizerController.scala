@@ -66,45 +66,22 @@ class OrganizerController@Inject() (val silhouette: Silhouette[AuthEnv],
     log.debug("Rest request to get events of organizer")
 
     val q = for {
-      e <- EventTable.event if e.creatorId === id
+      e <- EventTable.event if e.organizerId === id
     } yield e
 
     val s = q.sortColumn(sort,sortDir).queryPaged.detailed
     returnPaged(s,q,db)
   }
 
-  /**
-   * Handles the submitted JSON data.
-   *
-   * @return The result to display.
-   */
-  /*def signUp = Action.async(parse.json) { implicit request =>
-    OrganizerSignUpForm.form.bindFromRequest.fold(
+  def createOrganizer() = withRights(Right.CreateOrganizer)(parse.json) { case (request,login,role) =>
+    EventForm.form.bindFromRequest()(request).fold(
       form => {
         Future.successful(BadRequest(Json.toJson(form.errors)))
-      }, { data =>
-      val loginInfo = LoginInfo(CredentialsProvider.ID, data.email)
-      loginService.retrieveAll(loginInfo).flatMap {
-        case Some(login) =>
-          Future.successful(BadRequest(Json.obj("message" -> "user.exists")))
-        case None =>
-          val authInfo = passwordHasher.hash(data.password)
-          for {
-            defaultRole <- roleService.getByName("DEFAULT")
-            login <- loginService.save(
-              Login(None, data.email, None, None, None, loginInfo.providerID, loginInfo.providerKey, false, "organizer", defaultRole.flatMap(_.id).getOrElse(-1)))
-            authInfo <- authInfoRepository.add(loginInfo, authInfo)
-            authenticator <- silhouette.env.authenticatorService.create(loginInfo)
-            token <- silhouette.env.authenticatorService.init(authenticator)
-            avatar <- avatarService.retrieveURL(data.email)
-          } yield {
-            silhouette.env.eventBus.publish(SignUpEvent(login, request))
-            silhouette.env.eventBus.publish(LoginEvent(login, request))
-            organizerService.save(login,data.name,avatar)
-            mailService.sendOrganizerConfirmation(data.email,data.name,token)
-            Ok(Json.obj("message" -> "mail.sent"))
-          }
-      }
-    })
-  }*/
+      },
+      data => {
+        log.debug("Rest request to create organizer")
+
+        //TODO
+      })
+  }
 }

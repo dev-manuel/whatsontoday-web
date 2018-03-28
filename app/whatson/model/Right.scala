@@ -21,4 +21,6 @@ object Right {
   val Participate = "Participate"
   val CreateImage = "CreateImage"
   val ConfirmUser = "ConfirmUser"
+  val CreateOrganizer = "CreateOrganizer"
+  val ConfirmOrganizer = "ConfirmOrganizer"
 }

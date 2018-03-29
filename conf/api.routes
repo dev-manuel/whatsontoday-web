@@ -173,6 +173,10 @@ GET    /images/bytes/:id            controllers.ImageController.getBytes(id: Int
 #    name: image
 #    type: file
 #    description: The file to upload.
+#  - in: formData
+#    name: copyright
+#    type: string
+#    description: The copyright data
 #  - in: header
 #    name: x-auth-token
 #    schema:

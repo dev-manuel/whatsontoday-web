@@ -31,7 +31,8 @@ object EventDetail {
       val t = s.result.flatMap(y => {
         DBIO.sequence(y.map {
           case (((event,pCount,r), creator), location) => {
-            val taggedImgs = EventTable.event.filter(_.id === event.id).flatMap(_.taggedImages).result.map(l => l.map(x => TaggedImage(x._2.id,x._1)))
+            val taggedImgs = EventTable.event.filter(_.id === event.id).flatMap(_.taggedImages).result
+              .map(l => l.map(x => TaggedImage(x._2.id,x._1,x._2.copyright)))
 
             val c = for (
               j <- EventCategoryTable.eventCategory if j.eventID === event.id;

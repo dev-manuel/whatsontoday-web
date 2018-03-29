@@ -24,7 +24,7 @@ object OrganizerPublic {
         DBIO.sequence(y.map {
           case (organizer, avg) => {
             val imgTagged = OrganizerTable.organizer.filter(_.id === organizer.id).flatMap(_.taggedImages)
-              .result.map(l => l.map(x => TaggedImage(x._2.id,x._1)))
+              .result.map(l => l.map(x => TaggedImage(x._2.id,x._1,x._2.copyright)))
 
             imgTagged.map(o => {
               OrganizerPublic(organizer.id, organizer.name, avg, o.toList, organizer.avatar)

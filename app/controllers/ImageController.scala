@@ -67,7 +67,7 @@ class ImageController @Inject()(cc: ControllerComponents,
         val str = new FileInputStream(file)
         val bytes = IOUtils.toByteArray(str)
 
-        val img = Image(None,bytes,contentType,request.identity.id)
+        val img = Image(None,bytes,contentType,request.identity.id, request.body.dataParts.get("copyright").map(_.fold(""){ case (a,b) => a ++ b}))
 
         db.run(insertAndReturn[Image,ImageTable](image,img))
       }

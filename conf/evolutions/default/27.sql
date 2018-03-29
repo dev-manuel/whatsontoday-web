@@ -72,7 +72,7 @@ DELETE FROM rights WHERE name in ('CreateEvent', 'ConfirmEvent', 'CreateCategory
 DELETE FROM roles name WHERE name in ('Admin', 'ConfirmedUser');
 
 ALTER TABLE login
-      DROP CONSTRAINT login_role_fk;
+      DROP CONSTRAINT login_role_fk_fkey;
 
 ALTER TABLE login
       ADD CONSTRAINT login_role_fk_fkey

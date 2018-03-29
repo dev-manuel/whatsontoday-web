@@ -4,6 +4,31 @@ import moment from 'moment'
  * @readonly
  */
 export default {
+    categories: {
+        all: 'Alle',
+        culture: 'Kultur',
+        startup: 'Startup',
+        club: 'Club',
+        dance: 'Tanzen',
+        festivals: 'Festivals',
+        rock: 'rock', 
+        'heavy metall': 'Heavy Metall',
+        hiphop: 'Hiphop',
+        rnb: 'RnB',
+        jazz: 'Jazz',
+        pop: 'Pop',
+        'folk music': 'Volksmusik',
+        classic: 'Klassische Musik',
+        reading: 'Lesung',
+        opera: 'Oper',
+        theater: 'Theater',
+        musical: 'Musical',
+        show: 'Show',
+        exhibition: 'Ausstellung',
+        science: 'Wissenschaft',
+        lecture: 'Vorlesung',
+        meetup: 'Meetup',
+    },
     externalLinks: {
         facebook: 'https://www.facebook.com/findyournextevent/',
         instagram: 'https://www.instagram.com/findyournextevent/',

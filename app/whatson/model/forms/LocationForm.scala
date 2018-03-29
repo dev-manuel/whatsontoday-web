@@ -20,9 +20,9 @@ object LocationForm {
     "link" -> optional(nonEmptyText))(Data.apply)(Data.unapply)
 
   case class Data(id: Option[Int], name: String, country: String,
-                  city: String, street: String, website: Option[String],
-                  phone: Option[String], comment: Option[String],
-                  link: Option[String]) {
+                  city: String, street: String, website: Option[String] = None,
+                  phone: Option[String] = None, comment: Option[String] = None,
+                  link: Option[String] = None) {
     def toLocation(lat: Float = 0.0f, long: Float = 0.0f) = Location(id, name, lat, long, country, city, street, website, phone, comment, link)
   }
 

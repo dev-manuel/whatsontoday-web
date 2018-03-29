@@ -55,7 +55,7 @@ class LocationControllerSpec extends RestTestSuite {
 
       status(get) mustBe OK
       val content = contentAsJson(get).as[List[LocationDetail]]
-      content.sortBy(x => Location(x.id,x.name,x.latitude,x.longitude,x.country,x.city,x.street).distance(location1)) must equal (content)
+      content.sortBy(x => x.toLocation.distance(location1)) must equal (content)
     }
 
     "return NotFound for nearby on non existing location" in {

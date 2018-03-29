@@ -32,6 +32,8 @@ import './BaseView.less'
 
 class BaseView extends React.Component {
 
+    localStorage = window.localStorage;
+
     state = {
         loginData: {
             loggedIn: false,
@@ -56,6 +58,25 @@ class BaseView extends React.Component {
     }
 
     /**
+     * 
+     * @param {boolean} storeToken 
+     * @param {string} token 
+     * @param {string} userMail 
+     * @param {*} redirect 
+     */
+    handleSignIn(storeToken, token, userMail, redirect){
+        this.setState({
+            loginData: {
+                loggedIn: true,
+                token: token,
+                userMail: userMail,
+            },
+            redirectTo: redirectTo,
+        })
+        this.localStorage.setItem('token', token);
+    }
+
+    /**
      * This method will be invoked after a SUCCESSFUL signOut
     */
     handleSignOut(){
@@ -68,6 +89,7 @@ class BaseView extends React.Component {
                 isOrganizer: false,
             },
         })
+        this.localStorage.removeItem('token');
     }
 
     render() {

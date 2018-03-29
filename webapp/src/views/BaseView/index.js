@@ -1,5 +1,6 @@
 import React from 'react'
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
+import {Dimmer, Loader} from 'semantic-ui-react'
 import log from 'loglevel'
 
 import Header from '../Header'
@@ -36,6 +37,7 @@ class BaseView extends React.Component {
     localStorage = window.localStorage;
 
     state = {
+        isLoading: false,
         loginData: {
             loggedIn: false,
             token: null,
@@ -97,6 +99,7 @@ class BaseView extends React.Component {
 
     componentDidMount(){
         if(this.localStorage.hasOwnProperty('token')){
+            this.setState({isLoading: true});
             log.info('Token property is set inside the localStorage');
             const token = this.localStorage.getItem('token');
 
@@ -115,6 +118,8 @@ class BaseView extends React.Component {
                 log.debug('BaseView#getLoggedInData#catch', error);
                 removeToken();
                 this.localStorage.removeItem('token');    
+            }).then(() => {
+                this.setState({isLoading: false}); // Disable loader after previous `then` or `catch`
             })
         }
     }
@@ -130,7 +135,11 @@ class BaseView extends React.Component {
             <Redirect to={this.state.redirectTo}/> :
             <div 
                 className={ smBarActive ? "BaseView_container_smBar" : "BaseView_container"}
-            >
+            >   
+
+                <Dimmer active inverted disabled={!this.state.isLoading}>
+                    <Loader size='large' disabled={!this.state.isLoading}/>
+                </Dimmer>
 
                 <div className="BaseView_header">
                     <Header {...this.state} handleSignOut={this.handleSignOut.bind(this)}/>

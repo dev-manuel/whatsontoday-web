@@ -42,7 +42,7 @@ class EventServiceImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
           case Some(l) => {
             val categoryQuery = CategoryTable.category.filter(x => x.name inSetBind (l(5).split(";")))
 
-            val loc = Location(None,l(6),0.0f,0.0f,l(7),l(8),l(9))
+            val loc = Location(None,l(6),0.0f,0.0f,l(7),l(8),l(9),None,None,None,None)
             val locationQuery = db.run(LocationTable.location.filter(x => x.country === l(7) && x.city === l(8) && x.street === l(9)).result).map(_.headOption).flatMap {
               case Some(l) => Future.successful(l)
               case None => db.run(insertAndReturn[Location,LocationTable](LocationTable.location,loc))

@@ -24,7 +24,7 @@ object LocationDetail {
         DBIO.sequence(y.map {
           case (location,avg) => {
             val imgTagged = LocationTable.location.filter(_.id === location.id).flatMap(_.taggedImages)
-              .result.map(l => l.map(x => TaggedImage(x._2.id,x._1)))
+              .result.map(l => l.map(x => TaggedImage(x._2.id,x._1,x._2.copyright)))
 
             imgTagged.map(o => {
                             LocationDetail(location.id, location.name, location.latitude, location.longitude,

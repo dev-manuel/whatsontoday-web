@@ -39,6 +39,7 @@ class BaseView extends React.Component {
             loggedIn: false,
             token: null,
             userMail: null,
+            isOrganizer: false
         },
         language: GER,
 
@@ -50,11 +51,7 @@ class BaseView extends React.Component {
      * @param {{loggedIn: boolean, token: string, userMail: string}} loginData 
      */
     setLoginData(loginData, redirectTo){
-        setToken( loginData.token);
-        this.setState({
-            loginData,
-            redirectTo,
-        });
+       log.warn('setLoginData is deprecated!')
     }
 
     /**
@@ -64,23 +61,28 @@ class BaseView extends React.Component {
      * @param {string} userMail 
      * @param {*} redirect 
      */
-    handleSignIn(storeToken, token, userMail, redirect){
+    handleSignIn(storeToken, token, userMail, isOrganizer, redirectTo){
+        setToken(token);
+        if(storeToken){
+            this.localStorage.setItem('token', token);
+        }
         this.setState({
             loginData: {
                 loggedIn: true,
                 token: token,
                 userMail: userMail,
+                isOrganizer,
             },
-            redirectTo: redirectTo,
+            redirectTo,
         })
-        this.localStorage.setItem('token', token);
     }
 
     /**
      * This method will be invoked after a SUCCESSFUL signOut
     */
-    handleSignOut(){
+    handleSignOut(redirectTo){
         removeToken();
+        this.localStorage.removeItem('token');
         this.setState({
             loginData: {
                 loggedIn: false,
@@ -88,8 +90,8 @@ class BaseView extends React.Component {
                 userMail: null,
                 isOrganizer: false,
             },
+            redirectTo,
         })
-        this.localStorage.removeItem('token');
     }
 
     render() {
@@ -120,7 +122,7 @@ class BaseView extends React.Component {
                                 <Options
                                     {...language}
                                     {...routeParams}
-                                    setLoginData={this.setLoginData.bind(this)}
+                                    handleSignOut={this.handleSignOut.bind(this)}
                                 />
                             )}
                         />
@@ -171,7 +173,7 @@ class BaseView extends React.Component {
                             {...language}
                             {...routeParams}
                             loginData={this.state.loginData}
-                            setLoginData={this.setLoginData.bind(this)}
+                            handleSignIn={this.handleSignIn.bind(this)}
                         />}/>
                         <Route path='/signup'         render={() => <SignUp {...language} loginData={this.state.loginData} />}/>
                         <Route path='/mailConfirmed'  render={() => <Confirm {...language} />} />

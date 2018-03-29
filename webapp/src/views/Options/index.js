@@ -12,7 +12,7 @@ export const optionLinks = {
     deleteAccount: 'delete_account',
 }
 
-export default ({match, language, setLoginData}) => {
+export default ({match, language, handleSignOut}) => {
     const basePath = match.path
     return (
         <React.Fragment>
@@ -23,7 +23,7 @@ export default ({match, language, setLoginData}) => {
                 render={routeProps => (
                     <DeleteAccount
                         {...routeProps}
-                        setLoginData={setLoginData}
+                        handleSignOut={handleSignOut}
                         language={language}
                     />
                 )}

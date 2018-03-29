@@ -27,11 +27,7 @@ export default class OptionView extends React.Component {
     handleAccountDeletion(){
         deleteUser()
             .then( data => {
-                this.props.setLoginData({
-                    loggedIn: false,
-                    token: null,
-                    userMail: null,
-                }, '/')
+                this.props.handleSignOut('/');
             })
             .catch( error => {
                 log.debug('deleteUser#catch', error);

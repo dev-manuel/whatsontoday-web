@@ -21,6 +21,7 @@ import Footer from '../Footer'
 
 import SocialMediaBar from './components/socialMediaBar'
 
+import {getLoggedInUser} from '../../common/api/requests/login'
 import {PrivateRoute, PrivateOrganizerRoute} from '../../components/routes'
 import {setToken, removeToken} from '../../common/api'
 import GER from '../../common/dictionary/GER'
@@ -92,6 +93,30 @@ class BaseView extends React.Component {
             },
             redirectTo,
         })
+    }
+
+    componentDidMount(){
+        if(this.localStorage.hasOwnProperty('token')){
+            log.info('Token property is set inside the localStorage');
+            const token = this.localStorage.getItem('token');
+
+            setToken(token);
+            getLoggedInUser({
+            }).then(data => {
+                this.setState({
+                    loginData: {
+                        loggedIn: true,
+                        token: token,
+                        userMail: data.email,
+                        isOrganizer: data.userType === 'organizer',
+                    },
+                })
+            }).catch(error => {
+                log.debug('BaseView#getLoggedInData#catch', error);
+                removeToken();
+                this.localStorage.removeItem('token');    
+            })
+        }
     }
 
     render() {

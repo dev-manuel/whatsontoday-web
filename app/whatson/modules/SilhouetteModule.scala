@@ -42,12 +42,6 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
     bind[AuthInfoRepository].to[AuthInfoService]
     bind[LoginService].to[LoginServiceImpl]
-    bind[UserService].to[UserServiceImpl]
-    bind[OrganizerService].to[OrganizerServiceImpl]
-    bind[MailService].to[MailServiceImpl]
-    bind[EventService].to[EventServiceImpl]
-    bind[Geocoder].to[GeocoderImpl]
-    bind[LocationService].to[LocationServiceImpl]
   }
 
   @Provides
@@ -183,23 +177,5 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   def provideCsrfStateSettings(
     configuration: Configuration): CsrfStateSettings = {
     configuration.underlying.as[CsrfStateSettings]("silhouette.csrfState")
-  }
-
-  /**
-    * Provides the ApplicationConfig.
-    */
-  @Provides
-  def provideApplicationConfig(
-    configuration: Configuration): ApplicationConfig = {
-    configuration.underlying.as[ApplicationConfig]("application")
-  }
-
-  /**
-    * Provides the GeocoderConfig.
-    */
-  @Provides
-  def provideGeocoderConfig(
-    configuration: Configuration): GeocoderConfig = {
-    configuration.underlying.as[GeocoderConfig]("geocoder")
   }
 }

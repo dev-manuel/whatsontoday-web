@@ -134,9 +134,10 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   }
 
   def createImage(contents: Array[Byte] = Array(1,2,3,4),
-                  login: Option[Login] = None): Future[Image] = {
+                  login: Option[Login] = None,
+                  copyright: Option[String] = None): Future[Image] = {
     login.map(Future.successful(_)).getOrElse(createUser().map(_._1)).flatMap { case login =>
-      db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, contents,"image/jpeg",login.id)))
+      db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, contents,"image/jpeg",login.id,copyright)))
     }
   }
 }

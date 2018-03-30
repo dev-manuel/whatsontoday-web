@@ -27,7 +27,7 @@ const LocationDetails = ({name, city, country, street, language, website, commen
                             {country} <br/>
                         </p>
                         <ConditionalHide hide={hasNoWebsite}>
-                            <a {...floatRight} href={website}>{lang.moreAbout(name)}</a>
+                            <a  {...floatRight} href={website} target="_blank">{lang.moreAbout(name)}</a>
                         </ConditionalHide>
                     </Grid.Column>
                 </Grid.Row>

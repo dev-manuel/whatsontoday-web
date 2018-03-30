@@ -10,9 +10,9 @@ export default class SocialMediaBar extends React.Component {
         return (
             <div className="BaseView_socialMediaBar">
                 <div className="BaseView_buttonContainer">
-                    <Button href={lang.facebook} size={socialMediaSize} circular color='facebook' icon='facebook f' />
-                    <Button href={lang.twitter} size={socialMediaSize} circular color='twitter' icon='twitter' />
-                    <Button href={lang.instagram} size={socialMediaSize} circular color='instagram' icon='instagram' />
+                    <Button target="_blank" href={lang.facebook} size={socialMediaSize} circular color='facebook' icon='facebook f' />
+                    <Button target="_blank" href={lang.twitter} size={socialMediaSize} circular color='twitter' icon='twitter' />
+                    <Button target="_blank" href={lang.instagram} size={socialMediaSize} circular color='instagram' icon='instagram' />
                 </div>
             </div>
         )

@@ -11,7 +11,7 @@ export default {
         club: 'Club',
         dance: 'Tanzen',
         festivals: 'Festivals',
-        rock: 'rock', 
+        rock: 'Rock', 
         'heavy metall': 'Heavy Metall',
         hiphop: 'Hiphop',
         rnb: 'RnB',

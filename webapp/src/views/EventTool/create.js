@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import log from 'loglevel'
 
+import {categoryTranslation} from '../../common/api/utils/categoryeTranslation'
 import FormNavigationBar from '../../components/formNavigationBar'
 import DateSelectFormField from './components/dateSelectFormField'
 import LocationSelectFormField from './components/locationSelectFormField'
@@ -164,7 +165,7 @@ export default class Create extends React.Component {
                     .filter(category => category.id!==1)
                     .map((category, index) => ({
                         key: category.id,
-                        text: category.name,
+                        text: categoryTranslation(category.name, this.props.language.categories),
                         value: category.id,
                     }))
                 log.debug('Create#fetchCategory#categoryOptions', categoryOptions);

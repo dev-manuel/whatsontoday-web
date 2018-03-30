@@ -246,6 +246,7 @@ export default {
         },
         successful: {
             createEvent: 'Du hast ein Event erfolgreich erstellt!',
+            updateEvent: 'Du hast ein Event erfolgreich bearbeitet!',
             deleteEvent: 'Das Event wurde erfolgreich gelöscht',
             default: 'Aktion erfolgreich ausgeführt',
 

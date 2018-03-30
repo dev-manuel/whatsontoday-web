@@ -263,8 +263,13 @@ export default {
             cityPlaceholder: 'Bitte gib die Stadt ein...',
             country: 'Land',
             countryPlaceholder: 'Bitte gib das Land ein...',
+            website: 'Website',
+            websitePlaceholder: 'Bitte gib die Webadresse ein...',
+            comment: 'Beschreibung',
+            commentPlaceholder: 'Bitte gib eine kurze Beschreibung ein...',
             submit: 'Abschicken',
-            back: 'zurück'
+            back: 'zurück',
+            extra: 'Extra Informationen',
         },
         successful: {
             createLocation: 'Du hast eine Location erfolgreich erstellt!',

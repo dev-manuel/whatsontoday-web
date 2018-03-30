@@ -161,6 +161,7 @@ export const updateEvent = (id, name, description, shortDescription, locationId,
     const req = {
         name,
         description,
+        shortDescription,
         location,
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
@@ -173,7 +174,7 @@ export const updateEvent = (id, name, description, shortDescription, locationId,
     }
     log.debug('updateEvent#req', req);    
 
-    return axios.put(`${eventBasePath}`, req).then( response => {
+    return axios.put(`${eventBasePath}/${id}`, req).then( response => {
             log.debug('updateEvent#then', response);
             return response.data;
     })

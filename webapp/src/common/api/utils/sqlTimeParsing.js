@@ -28,6 +28,8 @@ export const sqlTimestampToDate = timestamp => {
  */
 export const dateToSqlTimestamp = date => {
 
+    log.debug('sqlTimeParsing#dateToSqlTimestamp#date', date);
+
     if(!date){
         return '';
     }

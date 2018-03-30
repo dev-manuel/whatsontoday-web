@@ -37,7 +37,7 @@ class BaseView extends React.Component {
     localStorage = window.localStorage;
 
     state = {
-        isLoading: false,
+        isLoading: true,
         loginData: {
             loggedIn: false,
             token: null,
@@ -99,7 +99,6 @@ class BaseView extends React.Component {
 
     componentDidMount(){
         if(this.localStorage.hasOwnProperty('token')){
-            this.setState({isLoading: true});
             log.info('Token property is set inside the localStorage');
             const token = this.localStorage.getItem('token');
 
@@ -107,6 +106,7 @@ class BaseView extends React.Component {
             getLoggedInUser({
             }).then(data => {
                 this.setState({
+                    isLoading: false,
                     loginData: {
                         loggedIn: true,
                         token: token,
@@ -118,9 +118,10 @@ class BaseView extends React.Component {
                 log.debug('BaseView#getLoggedInData#catch', error);
                 removeToken();
                 this.localStorage.removeItem('token');    
-            }).then(() => {
-                this.setState({isLoading: false}); // Disable loader after previous `then` or `catch`
+                this.setState({isLoading: false});
             })
+        } else {
+            this.setState({isLoading: false});
         }
     }
 
@@ -133,14 +134,15 @@ class BaseView extends React.Component {
 
         return this.state.redirectTo ?
             <Redirect to={this.state.redirectTo}/> :
+
+            this.state.isLoading ?
+            <Dimmer active inverted disabled={!this.state.isLoading}>
+                <Loader size='large' disabled={!this.state.isLoading}/>
+            </Dimmer> :
+
             <div 
                 className={ smBarActive ? "BaseView_container_smBar" : "BaseView_container"}
             >   
-
-                <Dimmer active inverted disabled={!this.state.isLoading}>
-                    <Loader size='large' disabled={!this.state.isLoading}/>
-                </Dimmer>
-
                 <div className="BaseView_header">
                     <Header {...this.state} handleSignOut={this.handleSignOut.bind(this)}/>
                 </div>

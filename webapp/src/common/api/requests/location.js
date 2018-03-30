@@ -4,7 +4,7 @@ import {axios} from '../index'
 
 
 /**
- * @typedef {{id:number,name:string,latitude:number,longitude:number,country:string,city: string,street:string}} LocationResult
+ * @typedef {{id:number,name:string,latitude:number,longitude:number,country:string,city: string,street:string,website:string,comment:string}} LocationResult
  */
 
 

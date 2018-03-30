@@ -45,7 +45,7 @@ export default {
     },
     header: {
         blog: 'Blog',
-        addEvent : 'Event hinzufügen',
+        forOrganizers : 'Für Veranstalter',
         signIn: 'Anmelden',
         signUp: 'Registrieren',
         signOut: 'Ausloggen',

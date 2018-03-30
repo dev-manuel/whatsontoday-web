@@ -64,12 +64,12 @@ export const getNearbyLocations = (id, xPage = 0, xPageSize = 20) => {
 /**
  * 
  * @param {string} name 
- * @param {string} country 
+ * @param {string} country
  * @param {string} city 
  * @param {string} street 
  * @returns {Promise<LocationResult>}
  */
-export const createLocation = (name, country, city, street) => {
+export const createLocation = (name, country, city, street, website, comment) => {
     return axios.post('/location', {
         name,
         latitude: 0,
@@ -77,6 +77,8 @@ export const createLocation = (name, country, city, street) => {
         country,
         city,
         street,
+        website,
+        comment,
       }).then( response => {
             log.debug('createLocation#then', response);
             return response.data;

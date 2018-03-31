@@ -75,8 +75,9 @@ export default {
         theTeam: 'Das Team',
         faq: 'FAQ',
 
-        slogan: 'Finde dein nächstes Event',
+        slogan: 'Find your next event!',
         terms: 'AGB',
+        siteNotice: 'Impressum',
         privacyPolicy: 'Datenschutzerklärung'
     },
     serp:{

@@ -2,6 +2,7 @@ import React from 'react'
 import {Icon} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 
+import {categoryTranslation} from '../../../common/api/utils/categoryeTranslation'
 import ConditionalHide from '../../../components/conditionalHide'
 import {stringifyTime} from '../../../common/timeStringification'
 import {maxNameMapping} from '../../../common/api/utils/categoryUtils'
@@ -43,7 +44,7 @@ export default ({name, from, to, categories, description, shortDescription, thum
                             <ConditionalHide hide={noCategories}>
                                 <Icon name="tags"/>
                             </ConditionalHide>
-                            {categoryNameList.map(category => `#${category}`).join(' ')} 
+                            {categoryNameList.map(category => `#${categoryTranslation(category, language.categories)}`).join(' ')} 
                         </div>
                     </div>
 

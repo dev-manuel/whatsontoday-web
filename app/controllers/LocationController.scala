@@ -19,11 +19,16 @@ import com.mohiva.play.silhouette.api._
 import whatson.auth._
 import whatson.model.forms._
 import whatson.util.FormErrorJson._
+import whatson.service.geocoder.Geocoder
+import whatson.service.geocoder.Result._
+import whatson.service._
 
 
 class LocationController @Inject()(cc: ControllerComponents,
                                    protected val dbConfigProvider: DatabaseConfigProvider,
-                                   silhouette: Silhouette[AuthEnv])
+                                   silhouette: Silhouette[AuthEnv],
+                                   geocoder: Geocoder,
+                                   locationService: LocationService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] {
@@ -75,9 +80,10 @@ class LocationController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to create location")
 
-        val inserted = db.run(insertAndReturn[Location,LocationTable](location,data.toLocation))
-
-        inserted.map(x => Ok(Json.toJson(x)))
+        locationService.insertOrGet(data).map {
+          case Some(loc) => Ok(Json.toJson(loc))
+          case None => BadRequest
+        }
       })
   }
 }

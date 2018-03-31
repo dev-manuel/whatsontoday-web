@@ -1,11 +1,16 @@
 import React from 'react';
 import {Grid, Rating} from 'semantic-ui-react';
 
+import ConditionalHide from '../../../components/conditionalHide';
+
+import './locationDetails.less'
 
 const floatRight = {style: {float: 'right'}};
 
-const LocationDetails = ({name, city, country, street, language}) => {
+const LocationDetails = ({name, city, country, street, language, website, comment}) => {
     const lang = language.event;
+    const hasNoWebsite = !website;
+
     return (
         <div>
             <Grid>
@@ -16,12 +21,14 @@ const LocationDetails = ({name, city, country, street, language}) => {
                     <Grid.Column width="8">
                         <h2>Location:</h2>
                         {/* <h2>{name} <span {...floatRight}><Rating defaultRating={rating} maxRating={5} disabled /></span></h2> */}
-                        <p style={{textAlign: 'center'}}>
+                        <p className="Event_locationDetails_locationAddress">
                             {street} <br/>
                             {city} <br/>
                             {country} <br/>
                         </p>
-                        {/* <a {...floatRight} href={'/'}>{lang.moreAbout(name)}</a>                       */}
+                        <ConditionalHide hide={hasNoWebsite}>
+                            <a  {...floatRight} href={website} target="_blank">{lang.moreAbout(name)}</a>
+                        </ConditionalHide>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

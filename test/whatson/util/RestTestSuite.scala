@@ -33,16 +33,18 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
 import whatson.modules._
 import play.api.libs.Files._
 import play.api.inject._
+import whatson.util.MockGeocoder
 
 
 class RestTestSuite extends PlaySpec with TestSuiteMixin
     with GuiceOneAppPerTest with Injecting
     with MockitoSugar {
   val mailService = mock[MailService]
+  val geocoder = new MockGeocoder()
 
   implicit override def newAppForTest(testData: TestData): Application = {
     val app = new GuiceApplicationBuilder()
-      .overrides(TestModule(mailService))
+      .overrides(TestModule(mailService,geocoder))
       .build()
 
     Application.instanceCache[ApplicationLifecycle].apply(app).addStopHook { () =>
@@ -107,8 +109,10 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   }
 
   def createLocation(name: String = "testlocation", lat: Float = 0.0f, long: Float = 0.0f,
-                     country: String = "testcountry", city: String = "testcity", street: String = "teststreet"): Future[Location] = {
-    db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long, country, city, street)))
+                     country: String = "testcountry", city: String = "testcity", street: String = "teststreet",
+                     website: Option[String] = None, phone: Option[String] = None, comment: Option[String] = None, 
+                     link: Option[String] = None): Future[Location] = {
+    db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long, country, city, street,website,phone,comment,link)))
   }
 
   def createCategory(name: String = "testcategory", parentId: Option[Int] = None): Future[Category] = {
@@ -121,19 +125,21 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
                   from: Timestamp = new Timestamp(0), to: Option[Timestamp] = Some(new Timestamp(0)),
                   description: String = "testdescription",
                   shortDescription: String = "short description",
-                  locationId: Option[Int] = None): Future[Event] = {
+                  locationId: Option[Int] = None, priceMin: Option[BigDecimal] = None,
+                  priceMax: Option[BigDecimal] = None): Future[Event] = {
     org.map(Future.successful(_)).getOrElse(createOrganizer().map(_._2))
       .zip(locationId.map(Future.successful(_)).getOrElse(createLocation().map(_.id.getOrElse(-1)))).flatMap { case (org,loc) =>
         db.run(insertAndReturn[Event,EventTable](EventTable.event,
-                                                 Event(None, name, from, to,
-                                                       description, shortDescription, org.id, loc)))
+                                                 Event(None, name, from, to, description,
+                                                       shortDescription, org.id, loc, priceMin, priceMax)))
     }
   }
 
   def createImage(contents: Array[Byte] = Array(1,2,3,4),
-                  login: Option[Login] = None): Future[Image] = {
+                  login: Option[Login] = None,
+                  copyright: Option[String] = None): Future[Image] = {
     login.map(Future.successful(_)).getOrElse(createUser().map(_._1)).flatMap { case login =>
-      db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, contents,"image/jpeg",login.id)))
+      db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, contents,"image/jpeg",login.id,copyright)))
     }
   }
 }

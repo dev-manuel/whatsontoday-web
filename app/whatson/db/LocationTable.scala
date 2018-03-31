@@ -16,8 +16,13 @@ class LocationTable(tag: Tag) extends Table[Location](tag, "location") with HasR
   def city = column[String]("city")
 
   def street = column[String]("street")
+  
+  def website = column[Option[String]]("website")
+  def phone = column[Option[String]]("phone")
+  def comment = column[Option[String]]("comment")
+  def link = column[Option[String]]("link")
 
-  def * = (id.?,name,latitude,longitude,country,city,street) <> (Location.tupled, Location.unapply)
+  def * = (id.?,name,latitude,longitude,country,city,street,website,phone,comment,link) <> (Location.tupled, Location.unapply)
   
   val entityType = EntityType.Location
 }

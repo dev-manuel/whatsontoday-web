@@ -24,7 +24,10 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Ev
 
   def locationId = column[Int]("location_fk")
 
-  def * = (id.?,name,from,to,description,shortDescription,creatorId,locationId) <> (Event.tupled, Event.unapply)
+  def priceMin = column[Option[BigDecimal]]("price_min")
+  def priceMax = column[Option[BigDecimal]]("price_max")
+
+  def * = (id.?,name,from,to,description,shortDescription,creatorId,locationId,priceMin,priceMax) <> (Event.tupled, Event.unapply)
 
   def creator = foreignKey("creator",creatorId,OrganizerTable.organizer)(_.id.?)
   def location = foreignKey("location",locationId,LocationTable.location)(_.id)
@@ -44,6 +47,8 @@ object EventTable {
       case "from" => q.sortBy(_.from.dir(dir))
       case "to" => q.sortBy(_.to.dir(dir))
       case "rating" => q.sortBy(_.avgRating.getOrElse(0.0f).dir(dir))
+      case "priceMin" => q.sortBy(_.priceMin.dir(dir))
+      case "priceMax" => q.sortBy(_.priceMax.dir(dir))
       case _ => q.sortBy(_.id.dir(dir))
     }
 
@@ -58,8 +63,6 @@ object EventTable {
       }
       case n => q.sortColumn(n,dir)
     }
-
-
 
     val defaultSort = "id"
   }

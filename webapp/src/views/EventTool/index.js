@@ -10,7 +10,7 @@ import NotFound from '../404'
 import Successful from './successful';
 
 
-export default ({match, language, setLoginData}) => {
+export default ({match, language}) => {
     const basePath = match.path;
     return (
         <Switch>

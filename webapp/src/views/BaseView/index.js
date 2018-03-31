@@ -1,5 +1,6 @@
 import React from 'react'
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
+import {Dimmer, Loader} from 'semantic-ui-react'
 import log from 'loglevel'
 
 import Header from '../Header'
@@ -21,6 +22,7 @@ import Footer from '../Footer'
 
 import SocialMediaBar from './components/socialMediaBar'
 
+import {getLoggedInUser} from '../../common/api/requests/login'
 import {PrivateRoute, PrivateOrganizerRoute} from '../../components/routes'
 import {setToken, removeToken} from '../../common/api'
 import GER from '../../common/dictionary/GER'
@@ -32,11 +34,15 @@ import './BaseView.less'
 
 class BaseView extends React.Component {
 
+    localStorage = window.localStorage;
+
     state = {
+        isLoading: true,
         loginData: {
             loggedIn: false,
             token: null,
             userMail: null,
+            isOrganizer: false
         },
         language: GER,
 
@@ -48,18 +54,38 @@ class BaseView extends React.Component {
      * @param {{loggedIn: boolean, token: string, userMail: string}} loginData 
      */
     setLoginData(loginData, redirectTo){
-        setToken( loginData.token);
+       log.warn('setLoginData is deprecated!')
+    }
+
+    /**
+     * 
+     * @param {boolean} storeToken 
+     * @param {string} token 
+     * @param {string} userMail 
+     * @param {*} redirect 
+     */
+    handleSignIn(storeToken, token, userMail, isOrganizer, redirectTo){
+        setToken(token);
+        if(storeToken){
+            this.localStorage.setItem('token', token);
+        }
         this.setState({
-            loginData,
+            loginData: {
+                loggedIn: true,
+                token: token,
+                userMail: userMail,
+                isOrganizer,
+            },
             redirectTo,
-        });
+        })
     }
 
     /**
      * This method will be invoked after a SUCCESSFUL signOut
     */
-    handleSignOut(){
+    handleSignOut(redirectTo){
         removeToken();
+        this.localStorage.removeItem('token');
         this.setState({
             loginData: {
                 loggedIn: false,
@@ -67,7 +93,36 @@ class BaseView extends React.Component {
                 userMail: null,
                 isOrganizer: false,
             },
+            redirectTo,
         })
+    }
+
+    componentDidMount(){
+        if(this.localStorage.hasOwnProperty('token')){
+            log.info('Token property is set inside the localStorage');
+            const token = this.localStorage.getItem('token');
+
+            setToken(token);
+            getLoggedInUser({
+            }).then(data => {
+                this.setState({
+                    isLoading: false,
+                    loginData: {
+                        loggedIn: true,
+                        token: token,
+                        userMail: data.email,
+                        isOrganizer: data.userType === 'organizer',
+                    },
+                })
+            }).catch(error => {
+                log.debug('BaseView#getLoggedInData#catch', error);
+                removeToken();
+                this.localStorage.removeItem('token');    
+                this.setState({isLoading: false});
+            })
+        } else {
+            this.setState({isLoading: false});
+        }
     }
 
     render() {
@@ -79,10 +134,15 @@ class BaseView extends React.Component {
 
         return this.state.redirectTo ?
             <Redirect to={this.state.redirectTo}/> :
+
+            this.state.isLoading ?
+            <Dimmer active inverted disabled={!this.state.isLoading}>
+                <Loader size='large' disabled={!this.state.isLoading}/>
+            </Dimmer> :
+
             <div 
                 className={ smBarActive ? "BaseView_container_smBar" : "BaseView_container"}
-            >
-
+            >   
                 <div className="BaseView_header">
                     <Header {...this.state} handleSignOut={this.handleSignOut.bind(this)}/>
                 </div>
@@ -98,7 +158,7 @@ class BaseView extends React.Component {
                                 <Options
                                     {...language}
                                     {...routeParams}
-                                    setLoginData={this.setLoginData.bind(this)}
+                                    handleSignOut={this.handleSignOut.bind(this)}
                                 />
                             )}
                         />
@@ -149,7 +209,7 @@ class BaseView extends React.Component {
                             {...language}
                             {...routeParams}
                             loginData={this.state.loginData}
-                            setLoginData={this.setLoginData.bind(this)}
+                            handleSignIn={this.handleSignIn.bind(this)}
                         />}/>
                         <Route path='/signup'         render={() => <SignUp {...language} loginData={this.state.loginData} />}/>
                         <Route path='/mailConfirmed'  render={() => <Confirm {...language} />} />

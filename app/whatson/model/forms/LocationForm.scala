@@ -7,18 +7,23 @@ import play.api.libs.json.Json
 
 object LocationForm {
   val map = mapping(
-    "id" -> optional(number(min=1)),
+    "id" -> optional(number(min = 1)),
     "name" -> nonEmptyText,
     /*"latitude" -> bigDecimal.transform(x => x.toFloat,(x: Float) => BigDecimal(x)),
     "longitude" -> ignored(0.0f)bigDecimal.transform(x => x.toFloat,(x: Float) => BigDecimal(x)),*/
     "country" -> nonEmptyText,
     "city" -> nonEmptyText,
-    "street" -> nonEmptyText
-  )(Data.apply)(Data.unapply)
+    "street" -> nonEmptyText,
+    "website" -> optional(nonEmptyText),
+    "phone" -> optional(nonEmptyText),
+    "comment" -> optional(nonEmptyText),
+    "link" -> optional(nonEmptyText))(Data.apply)(Data.unapply)
 
   case class Data(id: Option[Int], name: String, country: String,
-                  city: String, street: String) {
-    def toLocation = Location(id,name,0.0f,0.0f,country,city,street)
+                  city: String, street: String, website: Option[String] = None,
+                  phone: Option[String] = None, comment: Option[String] = None,
+                  link: Option[String] = None) {
+    def toLocation(lat: Float = 0.0f, long: Float = 0.0f) = Location(id, name, lat, long, country, city, street, website, phone, comment, link)
   }
 
   object Data {

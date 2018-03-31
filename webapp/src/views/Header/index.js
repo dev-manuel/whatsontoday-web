@@ -32,9 +32,12 @@ const LoggedInButtons = ({language, onSignOut}) => {
     return (
         <React.Fragment>
             <Menu.Item>
-                <a onClick={onSignOut}>
+                <div
+                    className="Header_signOut"
+                    onClick={onSignOut}
+                >
                     {language.signOut}
-                </a>
+                </div>
             </Menu.Item>
             <Menu.Item>
                 <Link to='/options'>
@@ -130,8 +133,8 @@ class Header extends React.Component{
                                 </Link>
                             </Menu.Item> */}
                             <Menu.Item>
-                                <Link to='/event_tool/create'>                            
-                                    {language.addEvent}
+                                <Link to='/for_organizers'>                            
+                                    {language.forOrganizers}
                                 </Link>
                             </Menu.Item>
                             {conditionalButtons}

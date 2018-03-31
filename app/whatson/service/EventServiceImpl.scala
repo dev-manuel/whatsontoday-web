@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat
 import java.sql.Timestamp
 import whatson.model.detail.EventDetail._
 import whatson.model.detail._
+import whatson.util.StringUtil._
 
 class EventServiceImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
                               (implicit context: ExecutionContext)
@@ -33,7 +34,7 @@ class EventServiceImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     events.mapFutureSync { case map =>
       val default = map.map(x => (x._1,Some(x._2))).toMap
       List("Name","From","To","Description", "ShortDescription", "Categories",
-           "LocationName","Country","City","Street").map(default.getOrElse(_,None))
+           "LocationName","Country","City","Street","PriceMin","PriceMax").map(default.getOrElse(_,None))
         .foldRight(Some(List()) : Option[List[String]]) {
           case (Some(a),Some(b)) => Some(a :: b)
           case _ => None
@@ -41,7 +42,7 @@ class EventServiceImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
           case Some(l) => {
             val categoryQuery = CategoryTable.category.filter(x => x.name inSetBind (l(5).split(";")))
 
-            val loc = Location(None,l(6),0.0f,0.0f,l(7),l(8),l(9))
+            val loc = Location(None,l(6),0.0f,0.0f,l(7),l(8),l(9),None,None,None,None)
             val locationQuery = db.run(LocationTable.location.filter(x => x.country === l(7) && x.city === l(8) && x.street === l(9)).result).map(_.headOption).flatMap {
               case Some(l) => Future.successful(l)
               case None => db.run(insertAndReturn[Location,LocationTable](LocationTable.location,loc))
@@ -50,8 +51,8 @@ class EventServiceImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
             db.run(categoryQuery.result).zip(locationQuery).flatMap { case (categories,location) =>
               val event = Event(None, l(0),
                                 new Timestamp(format.parse(l(1)).getTime), Some(new Timestamp(format.parse(l(2)).getTime)),
-                                l(3), l(4),
-                                organizer.id, location.id.getOrElse(-1))
+                                l(3), l(4), organizer.id, location.id.getOrElse(-1),
+                                l(10).toBigDecimal,l(11).toBigDecimal)
               db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,categories))
             }.flatMap {
               case (event,categories) => {

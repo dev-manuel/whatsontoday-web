@@ -14,7 +14,7 @@ const headingStyle = {
     top: '50%',
     transform: 'translateY(-50%)',
     color: 'rgb(41, 47, 50)',
-    fontSize: 33,
+    fontSize: 44,
 }
 
 export default class Example extends React.Component {
@@ -27,7 +27,8 @@ export default class Example extends React.Component {
                 <h2
                     style={headingStyle}
                 >
-                    Lorem ipsum Dolor
+                    What's On Today <br/>
+                    Find your next event!
                 </h2>
             </div>
         )

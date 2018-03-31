@@ -1,6 +1,8 @@
 import log from 'loglevel'
 
-import exampleImage from '../../../img/example_tile.png'
+import sliderPlaceholderImage from '../../../img/placeholderBig.png'
+import thumbnailPlaceholderImage from '../../../img/placeholder.png'
+
 
 export const createThumbnailImageLinkFromImages = images => {
     const baseUrl = API_BASE_URL; // Defined by the webpack definition plugin
@@ -15,7 +17,7 @@ export const createThumbnailImageLinkFromImages = images => {
         };
     }else{
         return {
-            uri: exampleImage,
+            uri: thumbnailPlaceholderImage,
         };
     }
 }
@@ -35,6 +37,6 @@ export const createSliderImageLinksFromImages = images => {
         }
     ));
     }else{
-        return [{uri: exampleImage}];
+        return [{uri: sliderPlaceholderImage}];
     }
 }

@@ -11,7 +11,7 @@ import Slider from './components/slider'
 // import EvenTileTable from '../../components/eventTileTable'
 import SearchPanel from './components/searchPanel'
 
-import ExampleSlide from './slides/example'
+import WhatsOnSlide from './slides/whatsOn'
 import DecompiledSlide from './slides/decompiled'
 import FlipFlop from './slides/flipflop'
 
@@ -82,9 +82,9 @@ class Home extends React.Component {
                 <Slider
                     language={language}
                     slides={[
-                        // <ExampleSlide/>,
                         <DecompiledSlide/>,
-                        <FlipFlop/>
+                        <FlipFlop/>,
+                        <WhatsOnSlide/>,
                     ]}
                 />
                 <div className="Home_search">

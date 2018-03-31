@@ -43,6 +43,7 @@ export default class FileTable extends React.Component {
                 <Table.Cell>{fileEntry.file.name}</Table.Cell>
                 <Table.Cell>
                     <Form.Input
+                        placeholder='---'
                         value={fileEntry.copyright}
                         onChange={(event, {value}) => this.props.onChange(value, index)}
                     />
@@ -59,7 +60,7 @@ export default class FileTable extends React.Component {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>{this.props.textFileName}</Table.HeaderCell>
-                        <Table.HeaderCell>{'copyright'}</Table.HeaderCell>
+                        <Table.HeaderCell>{this.props.copyright}</Table.HeaderCell>
                         <Table.HeaderCell>{this.props.textIsUploaded}</Table.HeaderCell>                        
                     </Table.Row>
                 </Table.Header>

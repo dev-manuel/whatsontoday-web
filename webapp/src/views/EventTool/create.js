@@ -481,7 +481,8 @@ export default class Create extends React.Component {
                                 <Grid.Column width={6}>
                                         <Form.Input
                                             disabled={!thumbnailImage}
-                                            label='copyright'
+                                            label={lang.copyright}
+                                            placeholder={lang.copyrightPlaceholder}
                                             onChange={(event, {value}) => this.setState(({thumbnailImage}) => {
                                                 const newThumbnailImage = thumbnailImage;
                                                 newThumbnailImage.copyright = value;
@@ -507,7 +508,7 @@ export default class Create extends React.Component {
                                 <Button
                                     type='button'
                                     disabled={!thumbnailImage}
-                                    content={'upload thumbnail'}
+                                    content={lang.uploadThumbnail}
                                     onClick={this.handleThumbnailImageUpload.bind(this)}
                                     style={{margin: 'auto'}}
                                 />
@@ -526,6 +527,7 @@ export default class Create extends React.Component {
                                 </Grid.Column>
                                 <Grid.Column width={12}>
                                     <FileTable
+                                        copyright={lang.copyright}
                                         textFileName={lang.sliderImageFileTableFileName}
                                         textIsUploaded={lang.sliderImageFileTableIsUploaded}
                                         fileEntryList={sliderImages}
@@ -544,7 +546,7 @@ export default class Create extends React.Component {
                                 <Button
                                     type='button'
                                     disabled={sliderImages.length===0}
-                                    content={'upload slider images'}
+                                    content={lang.uploadSliderImages}
                                     onClick={this.handleSliderImageUpload.bind(this)}
                                     style={{margin: 'auto'}}
                                 />

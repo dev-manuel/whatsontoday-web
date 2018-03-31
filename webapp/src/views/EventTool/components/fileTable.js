@@ -1,11 +1,11 @@
 import React from 'react'
-import {Table, Icon, Loader} from 'semantic-ui-react'
+import {Table, Icon, Loader, Form} from 'semantic-ui-react'
 import log from 'loglevel'
 
 import {FileEntryStatus} from './imageUploadFormField'
 
 /**
- * @typedef {{status: FileEntryStatus, file: File, key: number, id: number}} FileEntry
+ * @typedef {{status: FileEntryStatus, file: File, key: number, id: number, copyright: string}} FileEntry
  * @typedef {[FileEntry]} FileEntryList
  */
 
@@ -31,8 +31,6 @@ export const getIconByFileEntryStatus = status =>{
 
 export default class FileTable extends React.Component {
 
-
-
     render(){
         /**
          * @type {FileEntryList}
@@ -43,6 +41,13 @@ export default class FileTable extends React.Component {
         const tableEntries = fileEntryList.map((fileEntry, index) => (
             <Table.Row key={index}>
                 <Table.Cell>{fileEntry.file.name}</Table.Cell>
+                <Table.Cell>
+                    <Form.Input
+                        placeholder='---'
+                        value={fileEntry.copyright}
+                        onChange={(event, {value}) => this.props.onChange(value, index)}
+                    />
+                </Table.Cell>                
                 <Table.Cell>
                     {getIconByFileEntryStatus(fileEntry.status)}
                 </Table.Cell>
@@ -55,7 +60,8 @@ export default class FileTable extends React.Component {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>{this.props.textFileName}</Table.HeaderCell>
-                        <Table.HeaderCell>{this.props.textIsUploaded}</Table.HeaderCell>
+                        <Table.HeaderCell>{this.props.copyright}</Table.HeaderCell>
+                        <Table.HeaderCell>{this.props.textIsUploaded}</Table.HeaderCell>                        
                     </Table.Row>
                 </Table.Header>
         
@@ -65,6 +71,7 @@ export default class FileTable extends React.Component {
                         tableEntries :
                         (
                             <Table.Row>
+                                <Table.Cell>---</Table.Cell>
                                 <Table.Cell>---</Table.Cell>
                                 <Table.Cell>---</Table.Cell>
                             </Table.Row>   

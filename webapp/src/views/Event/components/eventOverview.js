@@ -20,7 +20,7 @@ const EventOverview = ({name, rating, from, to, description, categories, sliderI
             <Grid>
                 <Grid.Row>
                     <Grid.Column width="8">
-                        <ImageSlider imageURIList={sliderImages} />
+                        <ImageSlider imageList={sliderImages} />
                     </Grid.Column>
                     <Grid.Column width="8">
                         

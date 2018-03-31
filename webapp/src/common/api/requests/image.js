@@ -16,11 +16,13 @@ export const entityType = {
 
 /**
  * @param {File} file
- * @param {string} name
+ * @param {string} copyright
  */
-export const uploadImage = file => {
+export const uploadImage = (file, copyright) => {
     const data = new FormData();
     data.set('image', file);
+    if(copyright)
+        data.set('copyright', copyright);
     data.set('data',JSON.stringify({
         name: name,
     }))

@@ -18,7 +18,7 @@ export default ({name, from, to, categories, description, shortDescription, thum
     return (
         <Link to={target}>
             <div className="eventTileBig_main">
-                <img src={thumbnailImage} className="eventTileBig_image"/>
+                <img src={thumbnailImage.uri} className="eventTileBig_image"/>
                 <div className="eventTileBig_body">
                 
                     <div className="eventTileBig_sectionTop">

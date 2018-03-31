@@ -9,9 +9,14 @@ export const createThumbnailImageLinkFromImages = images => {
     })
 
     if(thumbnailImage){
-        return `${baseUrl}/images/bytes/${thumbnailImage.id}`;
+        return {
+            uri: `${baseUrl}/images/bytes/${thumbnailImage.id}`,
+            copyright: thumbnailImage.copyright,
+        };
     }else{
-        return exampleImage;
+        return {
+            uri: exampleImage,
+        };
     }
 }
 
@@ -24,8 +29,12 @@ export const createSliderImageLinksFromImages = images => {
     log.debug('createSliderImageLinksFromImages#sliderImages', sliderImages)
 
     if(sliderImages.length !== 0){
-        return sliderImages.map(image => `${baseUrl}/images/bytes/${image.id}`);
+        return sliderImages.map(image => ({
+            uri: `${baseUrl}/images/bytes/${image.id}`,
+            copyright: image.copyright,
+        }
+    ));
     }else{
-        return [exampleImage];
+        return [{uri: exampleImage}];
     }
 }

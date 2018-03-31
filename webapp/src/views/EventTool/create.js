@@ -238,7 +238,6 @@ export default class Create extends React.Component {
     //
     // ─── THUMBNAILIMAGE ─────────────────────────────────────────────────────────────
     //
-
     handleThumbnailImageSelection(event, files){
         log.debug('handleThumbnailImageSelection#event', event);
         log.debug('handleThumbnailImageSelection#files', files);
@@ -261,7 +260,7 @@ export default class Create extends React.Component {
             thumbnailImage,
         })
         
-        uploadImage(thumbnailImage.file)
+        uploadImage(thumbnailImage.file, thumbnailImage.copyright!==''?thumbnailImage.copyright:null)
             .then(data => {
                 this.setState((prevState, props) => {
                     const newThumbnailImage = prevState.thumbnailImage;
@@ -303,7 +302,7 @@ export default class Create extends React.Component {
         }))
 
         sliderImages.forEach(fileEntry => {
-            uploadImage(fileEntry.file)
+            uploadImage(fileEntry.file, fileEntry.copyright!==''?fileEntry.copyright:null)
                 .then(data => {
                     this.setState((prevState, props) => {
                         const index = prevState.sliderImages.findIndex(entry => entry.key===fileEntry.key);

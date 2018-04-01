@@ -34,10 +34,18 @@ export const readOrganizer = id => {
 /**
  * 
  */
-export const getOwnEvents = () => {
-    return axios.get(`${organizerBasePath}/eventsCurrent`)
+export const getOwnEvents = (page, pageSize) => {
+    return axios.get(`${organizerBasePath}/eventsCurrent`, {
+        headers: {
+            'X-Page-Size': pageSize,
+            'X-Page': page,
+        }
+    })
         .then( response => {
             log.debug('getOwnEvents#then', response);
-            return response.data;
+            return {
+                events: response.data,
+                itemNumber: response.headers['x-number-items'],
+            };
         })
 }

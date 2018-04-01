@@ -26,34 +26,29 @@ export default ({name, from, to, categories, description, shortDescription, thum
                     </div>
                 </div>
                 <div className="eventTileMobile_heading">{name}</div>
-                {/* <div className="eventTileMobile_body">
-                
-                    <div className="eventTileMobile_sectionTop">
-                        <div className="eventTileMobile_date">
-                            <div className="fistLine">{firstLine}</div>
-                            <div className="secondLine">{secondLine}</div>
-                        </div>
-                    </div>
+                <div className="eventTileMobile_date">
+                    <div className="fistLine">{firstLine}</div>
+                    <div className="secondLine">{secondLine}</div>
+                </div>
+                <div className="eventTileMobile_description">
+                    {shortDescription}
+                </div>
+                <div className="eventTileMobile_categories">
+                    <ConditionalHide hide={noCategories}>
+                        <Icon name="tags"/>
+                    </ConditionalHide>
+                    {categoryNameList.map(category => `#${categoryTranslation(category, language.categories)}`).join(' ')} 
+                </div>
 
-                    <div className="eventTileMobile_sectionMiddle">
-                        <div className="eventTileMobile_description">
-                            {shortDescription}
-                        </div>
-                    </div>
 
+                {/* 
                     <div className="eventTileMobile_sectionBottom">
                         <div className="eventTileMobile_price">
                             {'LoremIpsum'} 
                         </div>
-                        <div className="eventTileMobile_categories">
-                            <ConditionalHide hide={noCategories}>
-                                <Icon name="tags"/>
-                            </ConditionalHide>
-                            {categoryNameList.map(category => `#${categoryTranslation(category, language.categories)}`).join(' ')} 
-                        </div>
                     </div>
 
-                </div> */}
+                */}
             </div>
         </Link>
     )

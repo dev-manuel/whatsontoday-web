@@ -8,6 +8,7 @@ const divStyle = {
     width: '100%',
 }
 
+
 const headingStyle = {
     textAlign: 'center',
     position: 'relative',
@@ -17,20 +18,27 @@ const headingStyle = {
     fontSize: 44,
 }
 
+const pStyle= {
+    fontSize: 24,
+}
+
 export default class Example extends React.Component {
 
     render(){
         return (
-            <div
-                style={divStyle}
-            >
-                <h2
-                    style={headingStyle}
+            <a href='https://www.facebook.com/findyournextevent/' target='_blank'>
+                <div
+                    style={divStyle}
                 >
-                    What's On Today <br/>
-                    Find your next event!
-                </h2>
-            </div>
+                    <h2
+                        style={headingStyle}
+                    >
+                        What's On Today <br/>
+                        Find your next event! <br/>
+                        <span style={pStyle}>(Folge uns auf Facebook)</span>
+                    </h2>
+                </div>
+            </a>
         )
     }
 }

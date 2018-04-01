@@ -82,9 +82,9 @@ class Home extends React.Component {
                 <Slider
                     language={language}
                     slides={[
+                        <WhatsOnSlide/>,
                         <DecompiledSlide/>,
                         <FlipFlop/>,
-                        <WhatsOnSlide/>,
                     ]}
                 />
                 <div className="Home_search">

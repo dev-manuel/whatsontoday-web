@@ -1,12 +1,10 @@
 import React from 'react'
+import log from 'loglevel'
 
 import ModalSuccess from '../../components/modalSuccess'
-
 import { updatePassword } from '../../common/api/requests/login'
+import { Button, Form, Header, Image, Message, Segment, Grid} from 'semantic-ui-react'
 
-import { Button, Form, Header, Image, Message, Segment } from 'semantic-ui-react'
-
-import log from 'loglevel'
 
 export default class OptionView extends React.Component {
 
@@ -21,43 +19,52 @@ export default class OptionView extends React.Component {
 
     render(){
         const lang = this.props.language.options.changePassword;
-        return <div>
+        return (
+            <Grid
+                style={{marginTop: 20}}
+                textAlign='center'
+                verticalAlign='middle'
+            >
+                <Grid.Column style={{ maxWidth: 450 }}>
                    <ModalSuccess message={lang.modal} show={this.state.showModalSuccess}
-                       onClose={()=>{ this.props.history.push('/options')}}/>
+                        onClose={()=>{ this.props.history.push('/options')}}
+                    />
 
-                <Form size='large'>
-                    <Segment>
-                        <Message negative hidden={!this.state.showMatchError}>
-                            <Message.Header>{lang.error.match.heading}</Message.Header>
-                            <p>{lang.error.match.description}</p>
-                        </Message>
-                        <Message negative hidden={!this.state.showPasswordError}>
-                            <Message.Header>{lang.error.password.heading}</Message.Header>
-                            <p>{lang.error.password.description}</p>
-                        </Message>
-                        <Form.Input
-                            value={this.state.passwordValue}
-                            fluid
-                            icon='lock'
-                            iconPosition='left'
-                            placeholder={lang.password}
-                            type='password'
-                            onChange={ event => { this.setState({passwordValue: event.target.value}) }}
-                        />
-                        <Form.Input
-                            value={this.state.passwordRepeat}
-                            fluid
-                            icon='lock'
-                            iconPosition='left'
-                            placeholder={lang.passwordRepeat}
-                            type='password'
-                            onChange={ event => { this.setState({passwordRepeatValue: event.target.value}) }}
-                        />
+                    <Form size='large'>
+                        <Segment>
+                            <Message negative hidden={!this.state.showMatchError}>
+                                <Message.Header>{lang.error.match.heading}</Message.Header>
+                                <p>{lang.error.match.description}</p>
+                            </Message>
+                            <Message negative hidden={!this.state.showPasswordError}>
+                                <Message.Header>{lang.error.password.heading}</Message.Header>
+                                <p>{lang.error.password.description}</p>
+                            </Message>
+                            <Form.Input
+                                value={this.state.passwordValue}
+                                fluid
+                                icon='lock'
+                                iconPosition='left'
+                                placeholder={lang.password}
+                                type='password'
+                                onChange={ event => { this.setState({passwordValue: event.target.value}) }}
+                            />
+                            <Form.Input
+                                value={this.state.passwordRepeat}
+                                fluid
+                                icon='lock'
+                                iconPosition='left'
+                                placeholder={lang.passwordRepeat}
+                                type='password'
+                                onChange={ event => { this.setState({passwordRepeatValue: event.target.value}) }}
+                            />
 
-                        <Button color='olive' fluid size='large' onClick={this.handleSubmit.bind(this)}>{lang.submit}</Button>
-                    </Segment>
-                </Form>
-            </div>
+                            <Button color='olive' fluid size='large' onClick={this.handleSubmit.bind(this)}>{lang.submit}</Button>
+                        </Segment>
+                    </Form>
+                </Grid.Column>
+            </Grid>
+        )
     }
 
     handleSubmit(){

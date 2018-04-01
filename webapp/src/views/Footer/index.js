@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import { Segment, Container, Grid, Header, List, Divider } from 'semantic-ui-react'
 
 export default ({language}) => {
@@ -12,14 +13,14 @@ export default ({language}) => {
             <Container textAlign="center">
                 <Grid textAlign="center" columns={3} divided inverted stackable>
                     <Grid.Row>
-                        <Grid.Column width={3}>
+                        {/* <Grid.Column width={3}>
                             <Header inverted as='h4' content={lang.about} />
                             <List link inverted>
                                 <List.Item as='a'>{lang.contactUs}</List.Item>
                                 <List.Item as='a'>{lang.theTeam}</List.Item>
                                 <List.Item as='a'>{lang.faq}</List.Item>                    
                             </List>
-                        </Grid.Column>
+                        </Grid.Column> */}
                         <Grid.Column width={3}>
                             <Header inverted as='h4' content={lang.socialMedia} />
                             <List link inverted>
@@ -29,7 +30,7 @@ export default ({language}) => {
                             </List>
                         </Grid.Column>
                         <Grid.Column width={7}>
-                            <Header as='h4' inverted>What's On</Header>
+                            <Header as='h4' inverted>What's On Today</Header>
                             <p>
                                 {lang.slogan}
                             </p>
@@ -42,7 +43,7 @@ export default ({language}) => {
                             <List.Item>
                                 <List.Content>
                                     <List.Header>
-                                        <a href="#Contact">
+                                        <a href="mailto:mail@whats-on.today">
                                             {lang.contactUs}
                                         </a>
                                     </List.Header>
@@ -51,18 +52,18 @@ export default ({language}) => {
                             <List.Item>
                                 <List.Content>
                                     <List.Header>
-                                        <a href="#Terms">
+                                        <Link to='/terms_of_conditions'>
                                             {lang.terms}
-                                        </a>
+                                        </Link>
                                     </List.Header>
                                 </List.Content>
                             </List.Item>
                             <List.Item>
                                 <List.Content>
                                     <List.Header>
-                                        <a href="#PrivacyPolicy">
-                                            {lang.privacyPolicy}
-                                        </a>
+                                        <Link to='/site_notice'>
+                                            {lang.siteNotice}
+                                        </Link>
                                     </List.Header>
                                 </List.Content>
                             </List.Item>

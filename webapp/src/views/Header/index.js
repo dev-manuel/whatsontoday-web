@@ -113,6 +113,9 @@ class Header extends React.Component{
                             <Link to='/'>
                                 What's On Today
                             </Link>
+                            <h3>
+                                (<i className="Header_betaIcon"/>-Version)
+                            </h3>
                         </Menu.Item>
 
                         {/* <Menu.Item className='headerSearch'>

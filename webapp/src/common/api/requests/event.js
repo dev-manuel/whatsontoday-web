@@ -57,6 +57,8 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
     };
     if(category) // Appending a `category` parameter according if is set
         queryParams.category = category;
+
+    log.debug('searchEvents#queryParams', queryParams); 
     
     return axios.get(`${eventBasePath}`, {
         params: queryParams,

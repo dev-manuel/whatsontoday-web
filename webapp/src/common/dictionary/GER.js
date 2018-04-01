@@ -75,8 +75,9 @@ export default {
         theTeam: 'Das Team',
         faq: 'FAQ',
 
-        slogan: 'Finde dein nächstes Event',
+        slogan: 'Find your next event!',
         terms: 'AGB',
+        siteNotice: 'Impressum',
         privacyPolicy: 'Datenschutzerklärung'
     },
     serp:{
@@ -199,6 +200,10 @@ export default {
             sliderImageUploadButtonAddImage: 'Bild hinzufügen',
             sliderImageFileTableFileName: 'Dateiname',
             sliderImageFileTableIsUploaded: 'Hochgeladen',
+            uploadThumbnail: 'Thumbnail hochladen',
+            uploadSliderImages: 'Bilder hochladen',            
+            copyright: 'Copyright',
+            copyrightPlaceholder: 'Bitte hier eingeben...',
             description: 'Beschreibung',
             descriptionPlaceholder: 'Bitte gib einen Text ein...',
             shortDescriptionPlaceholder: 'Bitte gib einen Text ein...',
@@ -227,6 +232,10 @@ export default {
             sliderImageUploadButtonAddImage: 'Bild hinzufügen',
             sliderImageFileTableFileName: 'Dateiname',
             sliderImageFileTableIsUploaded: 'Hochgeladen',
+            uploadThumbnail: 'Thumbnail hochladen',
+            uploadSliderImages: 'Bilder hochladen',            
+            copyright: 'Copyright',
+            copyrightPlaceholder: 'Bitte hier eingeben...',
             description: 'Beschreibung',
             descriptionPlaceholder: 'Bitte gib einen Text ein...',
             shortDescriptionPlaceholder: 'Bitte gib einen Text ein...',

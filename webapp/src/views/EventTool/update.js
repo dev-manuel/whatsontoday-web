@@ -98,19 +98,21 @@ export default class Create extends React.Component {
 
         const parsedFrom = fromValue ? fromValue.toDate() : null;
         const parsedTo = toValue ? toValue.toDate() : null;
-        const parsedThumbnailImage = (thumbnailImage && thumbnailImage.id) ? [{id: thumbnailImage.id, tag: 'thumbnail'}] : [];
-        const parsedSliderImage = sliderImages.map(fileEntry => ({id: fileEntry.id, tag: 'slider'}));
+        const parsedThumbnailImage = (thumbnailImage && thumbnailImage.status===FileEntryStatus.UPLOADED) ?
+            [{id: thumbnailImage.id, tag: 'thumbnail'}] : [];
+        const parsedSliderImages = sliderImages.filter(image => image.status===FileEntryStatus.UPLOADED)
+            .map(fileEntry => ({id: fileEntry.id, tag: 'slider'}));
 
         const updateThumbnailImage = (parsedThumbnailImage.length === 0) ?
             [eventData.images.find(image => image.tag === 'thumbnail')].filter(value => !!value) :
             parsedThumbnailImage;
-        const updateSliderImage = (parsedSliderImage.length === 0) ?
+        const updateSliderImages = (parsedSliderImages.length === 0) ?
             eventData.images.filter(image => image.tag === 'slider') :
-            parsedSliderImage;
+            parsedSliderImages;
 
         updateEvent(this.props.match.params.id ,nameValue, descriptionValue, shortDescriptionValue, locationValue || eventData.location.id,
             parsedFrom, parsedTo,
-            updateSliderImage.concat(updateThumbnailImage),
+            updateSliderImages.concat(updateThumbnailImage),
             categoryValue)
             .then(data => {
                 log.debug('Update#handleSubmit#handleSubmit#data', data);
@@ -273,18 +275,24 @@ export default class Create extends React.Component {
         log.debug('handleThumbnailImageSelection#files', files);
 
         const thumbnailImage = {
-            status: FileEntryStatus.LOADING,
+            status: FileEntryStatus.LOCAL,
             key: 0,
             id: null,
             file: files.item(0),
+            copyright: '',
         }
-
         this.setState({
             thumbnailImage,
         })
-
+    }
+    handleThumbnailImageUpload(event, files){  
+        const thumbnailImage = this.state.thumbnailImage;
+        thumbnailImage.status = FileEntryStatus.LOADING;
+        this.setState({
+            thumbnailImage,
+        })
         
-        uploadImage(thumbnailImage.file)
+        uploadImage(thumbnailImage.file, thumbnailImage.copyright!==''?thumbnailImage.copyright:null)
             .then(data => {
                 this.setState((prevState, props) => {
                     const newThumbnailImage = prevState.thumbnailImage;
@@ -296,7 +304,7 @@ export default class Create extends React.Component {
                 })
             })
             .catch(error => {
-                log.debug('handleSliderImageSelection#error', error);
+                log.debug('handleThumbnailImageUpload#error', error);
             })
     }
     
@@ -308,25 +316,31 @@ export default class Create extends React.Component {
         log.debug('handleSliderImageSelection#files', files);
 
         const sliderImages = Array.from(files).map( (file, index) => ({
-            status: FileEntryStatus.LOADING,
+            status: FileEntryStatus.LOCAL,
             key: index,
             id: null,
             file,
         }));
-
         this.setState({
             sliderImages,
         })
+    }
+    handleSliderImageUpload(){
+        const sliderImages = this.state.sliderImages.slice()
+            .filter(image => image.status===FileEntryStatus.LOCAL);
+        sliderImages.map( ({status, ...rest}) => ({
+            ...rest,
+            status: FileEntryStatus.LOADING,
+        }))
 
         sliderImages.forEach(fileEntry => {
-            uploadImage(fileEntry.file)
+            uploadImage(fileEntry.file, fileEntry.copyright!==''?fileEntry.copyright:null)
                 .then(data => {
                     this.setState((prevState, props) => {
-
                         const index = prevState.sliderImages.findIndex(entry => entry.key===fileEntry.key);
                         if(index === -1){ // Not found
                         } else {
-                            const newSliderImages = prevState.sliderImages;
+                            const newSliderImages = prevState.sliderImages.slice();
                             newSliderImages[index].status = FileEntryStatus.UPLOADED;
                             newSliderImages[index].id = data.id;
                             return {
@@ -336,7 +350,7 @@ export default class Create extends React.Component {
                     })
                 })
                 .catch(error => {
-                    log.debug('handleSliderImageSelection#error', error);
+                    log.debug('handleSliderImageUpload#error', error);
                 })
         })
     }
@@ -492,41 +506,87 @@ export default class Create extends React.Component {
                         <Divider horizontal>{lang.images}</Divider>
 
                         <Grid columns={2}>
-                            <Grid.Column width={4}>
-                                <ImageUploadFormField
-                                    text={lang.thumbnailImageUploadButtonAddImage}
-                                    onChange={this.handleThumbnailImageSelection.bind(this)}
-                                    fluid
+                            <Grid.Row>
+                                <Grid.Column width={4}>
+                                    <ImageUploadFormField
+                                        text={lang.thumbnailImageUploadButtonAddImage}
+                                        onChange={this.handleThumbnailImageSelection.bind(this)}
+                                        fluid
+                                    />
+                                </Grid.Column>
+                                <Grid.Column width={6}>
+                                        <Form.Input
+                                            disabled={!thumbnailImage}
+                                            label={lang.copyright}
+                                            placeholder={lang.copyrightPlaceholder}
+                                            onChange={(event, {value}) => this.setState(({thumbnailImage}) => {
+                                                const newThumbnailImage = thumbnailImage;
+                                                newThumbnailImage.copyright = value;
+                                                newThumbnailImage.status = FileEntryStatus.LOCAL;
+                                                return {
+                                                    thumbnailImage: newThumbnailImage,
+                                                }
+                                            })}
+                                        />
+                                </Grid.Column>
+                                <Grid.Column width={6}>
+                                        {
+                                            thumbnailImage ?
+                                            (<p>
+                                                {thumbnailImage.file.name}
+                                                {getIconByFileEntryStatus(thumbnailImage.status)}
+                                            </p>) :
+                                            <p>{lang.thumbnailImageNoFileSelected}</p>
+                                        }
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Button
+                                    type='button'
+                                    disabled={!thumbnailImage}
+                                    content={lang.uploadThumbnail}
+                                    onClick={this.handleThumbnailImageUpload.bind(this)}
+                                    style={{margin: 'auto'}}
                                 />
-                            </Grid.Column>
-                            <Grid.Column width={12}>
-                                    {
-                                        thumbnailImage ?
-                                        (<p>
-                                            {thumbnailImage.file.name}
-                                            {getIconByFileEntryStatus(thumbnailImage.status)}
-                                        </p>) :
-                                        <p>{lang.thumbnailImageNoFileSelected}</p>
-                                    }
-                            </Grid.Column>
+                            </Grid.Row>
                         </Grid>
 
                         <Grid columns={2}>
-                            <Grid.Column width={4}>
-                                <ImageUploadFormField
-                                    text={lang.sliderImageUploadButtonAddImage}
-                                    onChange={this.handleSliderImageSelection.bind(this)}
-                                    multiple
-                                    fluid
+                            <Grid.Row>
+                                <Grid.Column width={4}>
+                                    <ImageUploadFormField
+                                        text={lang.sliderImageUploadButtonAddImage}
+                                        onChange={this.handleSliderImageSelection.bind(this)}
+                                        multiple
+                                        fluid
+                                    />
+                                </Grid.Column>
+                                <Grid.Column width={12}>
+                                    <FileTable
+                                        copyright={lang.copyright}
+                                        textFileName={lang.sliderImageFileTableFileName}
+                                        textIsUploaded={lang.sliderImageFileTableIsUploaded}
+                                        fileEntryList={sliderImages}
+                                        onChange={(copyrightValue, index) => {
+                                            this.setState(({sliderImages}) => {
+                                                const newSliderImages = sliderImages.slice();
+                                                newSliderImages[index].copyright = copyrightValue;
+                                                newSliderImages[index].status = FileEntryStatus.LOCAL;
+                                                return {sliderImages: newSliderImages};
+                                            })
+                                        }}
+                                    />
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Button
+                                    type='button'
+                                    disabled={sliderImages.length===0}
+                                    content={lang.uploadSliderImages}
+                                    onClick={this.handleSliderImageUpload.bind(this)}
+                                    style={{margin: 'auto'}}
                                 />
-                            </Grid.Column>
-                            <Grid.Column width={12}>
-                                <FileTable
-                                    textFileName={lang.sliderImageFileTableFileName}
-                                    textIsUploaded={lang.sliderImageFileTableIsUploaded}
-                                    fileEntryList={sliderImages}
-                                />
-                            </Grid.Column>
+                            </Grid.Row>
                         </Grid>
                         
                         <div className="EventTool_create_formNavBar">

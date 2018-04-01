@@ -10,12 +10,18 @@ import ThumbnailList from './thumbnailList';
 class ImageSlider extends React.Component{
     
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {
+            currentSliderIndex:0,
+        }
         this.goTo = this.goTo.bind(this);
     }
 
     goTo( index) {
         this.slider.slickGoTo( index);
+        this.setState({
+            currentSliderIndex: index,
+        })
     }
 
     render(){
@@ -29,25 +35,28 @@ class ImageSlider extends React.Component{
             adaptiveHeight: true
         };
 
-        const imageCount = this.props.imageURIList.length;
+        const imageCount = this.props.imageList.length;
         const sliderEntries = [];
 
-        // create a slider entry for each image (max 4); Todo: pretty display if only one image
+        // create a slider entry for each image (max 4)
         for(let imageIndex = 0; imageIndex < imageCount && imageIndex < 4; imageIndex++){
             sliderEntries.push(
-                <div><img src={this.props.imageURIList[imageIndex]}/></div>
+                <div><img src={this.props.imageList[imageIndex].uri}/></div>
             )
         }
 
         return (
             <div>
-                <div className="imageSliderContainer">
+                <div className="imageSlider_Container">
                     <Slick ref={ slider => {this.slider = slider}} {...settings}>
                         {sliderEntries}
                     </Slick>
                 </div>
+                <div className="imageSlider_copyright">
+                    {this.props.imageList[this.state.currentSliderIndex].copyright}
+                </div>
                 <ThumbnailList
-                    imageURIList={this.props.imageURIList}
+                    imageURIList={this.props.imageList.map(image => image.uri)}
                     goTo={this.goTo}
                     global={this.props.global}
                 />  

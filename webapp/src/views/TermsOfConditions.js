@@ -1,0 +1,69 @@
+import React from 'react'
+import {Segment, Container} from 'semantic-ui-react'
+
+export default () => {
+    return (
+        <Segment vertical>
+            <Container text>      
+                <h1>Allgemeine Geschäftsbedingungen</h1><a href='http://www.deutsche-anwaltshotline.de/recht-auf-ihrer-website/agb-generator' rel="nofollow"> AGB erstellt</a> über den Generator der Deutschen Anwaltshotline AG<br /><h2>Vertragspartner</h2>Auf Grundlage dieser Allgemeinen Geschäftsbedingungen (AGB) kommt zwischen dem Kunden und <br />What's On UG (haftungsbeschränkt)<br />Vertreten durch Benjamin Wolba<br />Adresse: Gostritzer Straße 61 01217 Dresden<br />Tel: +4935146333572<br />E-Mail-Adresse: mail@whats-on.today<br /><br />Handelsregister: Dresden<br />Handelsregisternummer: tbd<br />Umsatzsteuer-Identifikationsnummer: tbd<br /> , nachfolgend Anbieter genannt, der Vertrag zustande.<h2>Vertragsgegenstand</h2>Durch diesen Vertrag wird der Verkauf von Dienstleistungen  aus dem Bereich/den Bereichen Werbung für Veranstaltungen und Veranstaltungstickets über den Online-Shop des Anbieters geregelt. Wegen der Details des jeweiligen Angebotes wird auf die Produktbeschreibung der Angebotsseite verwiesen.<h2>Vertragsschluss</h2>Der Vertrag kommt im elektronischen Geschäftsverkehr über das Shop-System oder über andere Fernkommunikationsmittel wie Telefon und E-Mail zustande. Dabei stellen die dargestellten Angebote eine unverbindliche Aufforderung zur Abgabe eines Anbgebots durch die Kundenbestellung dar, das der Anbieter dann annehmen kann.
+
+                Der Bestellvorgang zum Vertragsschluss umfasst im Shop-System folgende Schritte: <li>Auswahl des Angebots in der gewünschten Spezifikation (Größe, Farbe, Anzahl)</li><li>Einlegen des Angebots in den Warenkorb</li><li>Betätigen des Buttons 'bestellen'</li><li>Eingabe der Rechnungs- und Lieferadresse</li><li>Auswahl der Bezahlmethode</li><li>Überprüfung und Bearbeitung der Bestellung und aller Eingaben</li><li>Betätigen des Buttons 'kostenpflichtig bestellen'</li><li>Bestätigungsmail, dass Bestellung eingegangen ist</li>
+
+                Bestellungen können neben dem Shop-System auch über Fernkommunikationsmittel (Telefon/E-Mail) aufgegeben werden, wodurch der Bestellvorgang zum Vertragsschluss folgende Schritte umfasst: <li>Anruf bei der Bestellhotline / Übersendung der Bestellmail</li><li>Bestätigungsmail, dass Bestellung eingegangen ist</li> Mit der Zusendung der Bestellbestätigung kommt der Vertrag zustande.<h2>Vertragsdauer</h2>Der Vertrag wird auf unbestimmte Zeit geschlossen.<h2>Eigentumsvorbehalt</h2>Bis zur vollständigen Bezahlung bleibt die gelieferte Ware im Eigentum des Anbieters.<h2>Vorbehalte</h2>Der Anbieter behält sich vor, im Falle der Nichtverfügbarkeit der versprochenen Leistung diese nicht zu erbringen.<h2>Preise, Versandkosten, Rücksendekosten</h2>Alle Preise sind Endpreise und enthalten die gesetzliche Umsatzsteuer. Neben den Endpreisen fallen je nach Versandart weitere Kosten an, die vor Versendung der Bestellung angezeigt werden. Besteht ein Widerrufsrecht und wird von diesem Gebraucht gemacht, trägt der Kunde die Kosten der Rücksendung.<h2>Zahlungsbedingungen</h2>Der Kunde hat ausschließlich folgende Möglichkeiten zur Zahlung: Rechnung bei Lieferung, Nachnahme. Weitere Zahlungsarten werden nicht angeboten und werden zurückgewiesen.<br /> Der Rechnungsbetrag ist nach Zugang der Rechnung, die alle Angaben für die Überweisung enthält und mit der Lieferung verschickt wird, auf das dort angegebene Konto vorab zu überweisen. Bei Lieferung gegen Nachnahme wird der Nachnahmebetrag bei Zustellung bar an den Zusteller gezahlt, wobei der Zusteller eine Nachnahmegebühr erhebt. Der Kunde ist verpflichtet innerhalb von 14 Tagen nach Erhalt der Rechnung den ausgewiesenen Betrag auf das auf der Rechnung angegebene Konto einzuzahlen oder zu überweisen. Die Zahlung ist ab Rechnungsdatum ohne Abzug fällig. Nach Ablauf der Zahlungsfrist, die somit kalendermäßig bestimmt ist, kommt der Kunde auch ohne Mahnung in Verzug.  Ein Zurückbehaltungsrecht des Kunden, welches nicht auf demselben Vertragsverhältnis beruht, wird ausgeschlossen. Die Aufrechnung mit Forderungen des Kunden ist ausgeschlossen, es sei denn diese sind unbestritten oder rechtskräftig festgestellt.<h2>Lieferbedingungen</h2>Die Ware wird umgehend nach Eingang der Bestellung versandt. Der Versand erfolgt durchschnittlich spätestens nach 1 Tagen. Der Unternehmer verpflichtet sich zur Lieferung am 4 Tag nach Bestelleingang. Die Regellieferzeit beträgt 1 Tage, wenn in der Artikelbeschreibung nichts anderes angegeben ist. Der Anbieter versendet die Bestellung aus eigenem Lager, sobald die gesamte Bestellung dort vorrätig ist.<h2>Vertragsgestaltung</h2>Der Kunde hat keine Möglichkeit selbst direkt auf den gespeicherten Vertragstext zuzugreifen. Der Kunde kann Fehler in der Eingabe während des Bestellvorganges korrigieren. Hierzu kann er folgendermaßen vorgehen: per eMail.<h2>Widerrufsrecht und Kundendienst</h2>
+
+
+                <b>Widerrufsbelehrung</b><br /><br />
+
+                Widerrufsrecht<br /><br />
+
+                Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.<br /><br />
+
+                Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag, <br /><br />
+
+                <ul><li>Im Falle eines Kaufvertrags: an dem Sie oder ein von Ihnen benannter Dritter, der nicht der Beförderer ist, die letzte Ware in Besitz genommen haben bzw. hat.</li>
+                <li>Im Falle einer Vertrags über mehrere Waren, die der Verbraucher im Rahmen einer einheitlichen Bestellung bestellt hat und die getrennt geliefert werden: an dem Sie oder ein von Ihnen benannter Dritter, der nicht Beförderer ist, die letzte Ware in Besitz genommen haben bzw. hat.</li>
+                <li>Im Falle eines Vertrags über die Lieferung einer Ware in mehreren Teilsendungen oder Stücken: an dem Sie oder ein von Ihnen benannter Dritter, der nicht Beförderer ist, die letzte Teilsendung oder das letzte Stück in Besitz genommen haben bzw. hat.</li>
+                <li>Im Falle eines Vertrages zur regelmäßigen Lieferung von Waren über einen festgelegten Zeitraum hinweg: an dem Sie oder ein von Ihnen benannter Dritter, der nicht Beförderer ist, die erste Ware in Besitz genommen haben bzw. hat.</li>
+                </ul>
+                Beim Zusammentreffen mehrerer Alternativen ist der jeweils letzte Zeitpunkt maßgeblich.<br /><br />
+
+                Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (What's On UG (haftungsbeschränkt), Benjamin Wolba, Gostritzer Straße 61 01217 Dresden +4935146333572 mail@whats-on.today) mittels einer eindeutigen Erklärung (z.B. ein mit der Post versandter Brief, Telefax, oder E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür das beigefügte Muster-Widerrufsformular verwenden, das jedoch nicht vorgeschrieben ist.<br /><br />
+
+                Zur Wahrung der Widerrufsfrist reicht es aus, dass Sie die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absenden.<br /><br />
+
+                Folgen des Widerrufs<br /><br />
+
+                Wenn Sie diesen Vertag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, einschließlich der Lieferkosten (mit Ausnahmen der zusätzlichen Kosten, die sich daraus ergeben, dass Sie einer andere Art der Lieferung als die von uns angebotene, günstige Standardlieferung gewählt haben), unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrags bei uns eingegangen ist. Für diese Rückzahlung verwenden wir dasselbe Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, es sei denn, mit Ihnen wurde ausdrücklich etwas anderes vereinbart; in keinem Fall werden Ihnen wegen dieser Rückzahlung Entgelte berechnet. Wir können die Rückzahlung verweigern, bis wir die Waren wieder zurückerhalten haben oder bis Sie den Nachweis erbracht haben, dass Sie die Waren zurückgesandt haben, je nachdem, welches der frühere Zeitpunkt ist.<br /><br />
+
+                Sie haben die Waren unverzüglich und in jedem Fall spätestens binnen vierzehn Tagen ab dem Tag, an dem Sie uns über den Widerruf dieses Vertrags unterrichten, an What's On UG (haftungsbeschränkt), Benjamin Wolba, Gostritzer Straße 61 01217 Dresden +4935146333572 mail@whats-on.today uns zurückzusenden oder zu übergeben. Die Frist ist gewahrt, wenn Sie die Waren vor Ablauf der Frist von vierzehn Tagen absenden.<br /><br />
+
+                Sie tragen die unmittelbaren Kosten der Rücksendung der Waren.<br /><br />
+
+                Sie müssen für einen etwaigen Wertverlust der Waren nur aufkommen, wenn dieser Wertverlust auf einen zur Prüfung der Beschaffenheit, Eigenschaften und Funktionsweise der Waren nicht notwendigen Umgang mit ihnen zurückzuführen ist.<br /><br />
+
+                Ende der Widerrufsbelehrung<b/><br /><br />
+                <h2>Haftungsausschluss</h2>Schadensersatzansprüche des Kunden sind ausgeschlossen, soweit sich aus den nachfolgenden Gründen nicht etwas anderes ergibt. Dies gilt auch für den Vertreter und Erfüllungsgehilfen des Anbieters, falls der Kunde gegen diese Ansprüche auf Schadensersatz erhebt. Ausgenommen sind Schadensersatzansprüche des Kunden wegen Verletzung des Lebens, des Körpers, der Gesundheit oder wesentlicher Vertragspflichten, welche zur Erreichung des Vertragszieles notwendigerweise erfüllt werden müssen. Ebenso gilt dies nicht für Schadensersatzansprüche nach grob fahrlässiger oder vorsätzlicher Pflichtverletzung des Anbieters oder seines gesetzlichen Vertreters oder Erfüllungsgehilfen.<h2>Abtretungs- und Verpfändungsverbot</h2>Ansprüche oder Rechte des Kunden gegen den Anbieter dürfen ohne dessen Zustimmung nicht abgetreten oder verpfändet werden, es sei denn der Kunde hat ein berechtigtes Interesse an der Abtretung oder Verpfändung nachgewiesen.<h2>Sprache, Gerichtsstand und anzuwendendes Recht</h2>Der Vertrag wird in Deutsch abgefasst. Die weitere Durchführung der Vertragsbeziehung erfolgt in Deutsch. Es findet ausschließlich das Recht der Bundesrepublik Deutschland Anwendung. Für Verbraucher gilt dies nur insoweit, als dadurch keine gesetzlichen Bestimmungen des Staates eingeschränkt werden, in dem der Kunde seinen Wohnsitz oder gewöhnlichen Aufenthalt hat. Gerichtsstand ist bei Streitigkeiten mit Kunden, die kein Verbraucher, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen sind, Sitz des Anbieters.<h2>Datenschutz</h2>Im Zusammenhang mit der Anbahnung, Abschluss, Abwicklung und Rückabwicklung eines Kaufvertrages auf Grundlage dieser AGB werden vom Anbieter Daten erhoben, gespeichert und verarbeitet. Dies geschieht im Rahmen der gesetzlichen Bestimmungen.  Der Anbieter gibt keine personenbezogenen Daten des Kunden an Dritte weiter, es sei denn, dass er hierzu gesetzlich verpflichtet wäre oder der Kunde vorher ausdrücklich eingewilligt hat. Wird ein Dritter für Dienstleistungen im Zusammenhang mit der Abwicklung von Verarbeitungsprozessen eingesetzt, so werden die Bestimmungen des Bundesdatenschutzgesetzes eingehalten. Die vom Kunden im Wege der Bestellung mitgeteilten Daten werden ausschließlich zur Kontaktaufnahme innerhalb des Rahmens der Vertragsabwicklung und nur zu dem Zweck verarbeitet, zu dem der Kunde die Daten zur Verfügung gestellt hat.  Die Daten werden nur soweit notwendig an das Versandunternehmen, das die Lieferung der Ware auftragsgemäß übernimmt, weitergegeben. Die Zahlungsdaten werden an das mit der Zahlung beauftragte Kreditinstitut weitergegeben. Soweit den Anbieter Aufbewahrungsfristen handels- oder steuerrechtlicher Natur treffen, kann die Speicherung einiger Daten bis zu zehn Jahre dauern.  Während des Besuchs im Internet-Shop des Anbieters werden anonymisierte Daten, die keine Rückschlüssen auf personenbezogene Daten zulassen und auch nicht beabsichtigen, insbesondere IP-Adresse, Datum, Uhrzeit, Browsertyp, Betriebssystem und besuchte Seiten, protokolliert.  Auf Wunsch des Kunden werden im Rahmen der gesetzlichen Bestimmungen die personenbezogenen Daten gelöscht, korrigiert oder gesperrt. Eine unentgeltliche Auskunft über alle personenbezogenen Daten des Kunden ist möglich.  Für Fragen und Anträge auf Löschung, Korrektur oder Sperrung personenbezogener Daten sowie Erhebung, Verarbeitung und Nutzung kann sich der Kunde an folgende Adresse wenden:
+                What's On UG (haftungsbeschränkt), Benjamin Wolba, Gostritzer Straße 61 01217 Dresden +4935146333572 mail@whats-on.today.<h2>Salvatorische Klausel</h2>Die Unwirksamkeit einer Bestimmung dieser AGB hat keine Auswirkungen auf die Wirksamkeit der sonstigen Bestimmungen.
+                Muster-Widerrufsformular gem. Art. 246a § 1 Abs. 2 Nr. 1 und § 2 Abs. 2 Nr. 2 EGBGB
+
+                Muster-Widerrufsformular
+
+                (Wenn Sie den Vertrag widerrufen wollen, dann füllen Sie bitte dieses Formular aus und senden Sie
+                es zurück.)
+
+                - An [hier ist der Name, die Anschrift und gegebenenfalls die Telefaxnummer und E-MailAdresse
+                des Unternehmers durch den Unternehmer einzufügen]:
+                - Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über den Kauf
+                der folgenden Waren (*)/die Erbringung der folgenden Dienstleistung (*)
+                - Bestellt am (*)/erhalten am (*)
+                - Name des/der Verbraucher(s)
+                - Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier)
+                - Datum
+
+
+                ------------
+                (*) Unzutreffendes streichen.
+            </Container>
+        </Segment>
+    )
+}

@@ -2,6 +2,7 @@ import React from 'react'
 import Bla, {Grid, Segment, Container, Card} from 'semantic-ui-react'
 
 import EventTileDesktop from './eventTileDesktop'
+import EventTileMobile from './eventTileMobile'
 import './eventTileTable.less'
 
 /**
@@ -12,7 +13,7 @@ export default ({eventList, itemNumber, pageSize, language}) => {
 
     // Create a big EventTile for all entries in the eventList
     const bigEventTiles = eventList.map( (eventListEntry, index) =>  (
-        <EventTileDesktop key= {index} {...eventListEntry} language={language}/>
+        <EventTileMobile key= {index} {...eventListEntry} language={language}/>
     ))
 
     return (

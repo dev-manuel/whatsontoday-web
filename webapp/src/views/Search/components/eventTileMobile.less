@@ -1,0 +1,170 @@
+@import "../../../common/less/colors";
+
+@tileWidth: 440px;
+
+@thumbnailDimension: 150px;
+@imageBorderDistance: 6px;
+@imageDistanceLeft: 55px;
+@tileBorderRadius: 8px;
+@lineThickness: 2px;
+@lineColor: @mainLightGray2;
+@imageBorderTopMargin: 30px;
+
+@topDistance: 16px;
+@sideDistance: 24px;
+@bottomDistance: 15px;
+
+@bgColor: @mainLightGray3;
+@hedingColor: rgb(199, 199, 199);
+@secondaryColor: rgb(161, 161, 161);
+
+.eventTileMobile_main {
+    position: relative;
+    height: 360px;
+    width: @tileWidth;
+    border-radius: @tileBorderRadius;
+    margin: auto;
+    margin-top: 25px;
+    background: @bgColor;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+    border: 0.8px solid @mainDarkGray1;
+
+    &:hover {
+    background: darken(@bgColor, 3);
+    }
+}
+
+.eventTileMobile_imageBox {
+    position: absolute;
+    left: @imageDistanceLeft;
+    top: @imageBorderTopMargin;
+    height: @thumbnailDimension + @imageBorderDistance * 2;
+    width: @thumbnailDimension + @imageBorderDistance * 2;
+    border-radius: @tileBorderRadius;
+    border: 2px solid @lineColor;
+
+    div {
+        position: relative;
+        width: 100%;
+        height: 100%; 
+    }
+}
+
+.eventTileMobile_image {
+    position: absolute;
+    left: @imageBorderDistance - @lineThickness;
+    top: @imageBorderDistance - @lineThickness;
+    height: @thumbnailDimension;
+    width: @thumbnailDimension;
+    border-radius: @tileBorderRadius - 2px;
+}
+
+@lineTopDistance: 0.5*(@thumbnailDimension + 2*@lineThickness + 2*@imageBorderDistance) + @imageBorderTopMargin;
+@lineRightWidth: @tileWidth - @imageDistanceLeft - @lineThickness - 2*@imageBorderDistance - @thumbnailDimension;
+
+.eventTileMobile_leftLine {
+    position: absolute;
+    width: @imageDistanceLeft;
+    height: @lineTopDistance;
+    border-bottom: @lineThickness solid @lineColor;
+}
+
+.eventTileMobile_rightLine {
+    position: absolute;
+    width: @lineRightWidth;
+    right: 0px;
+    height: @lineTopDistance;
+    border-bottom: @lineThickness solid @lineColor;
+}
+
+// .eventTileMobile_heading {
+//     position: absolute;
+//     right: 0px;
+//     top: @lineTopDistance;
+
+//     height: @lineTopDistance - @imageBorderTopMargin;
+//     width: @lineRightWidth;
+
+//     //font-family: Nobile;
+//     font-style: normal;
+//     font-weight: normal;
+//     line-height: normal;
+//     font-size: 20px;
+    
+//     padding: 10px;
+    
+//     color: @hedingColor;
+//     //border: 1px solid red;    
+// }
+
+.eventTileMobile_heading {
+    position: absolute;
+    top: 2*@lineTopDistance - @imageBorderTopMargin + @topDistance;;
+    left: 0px;
+
+    height: @lineTopDistance - @imageBorderTopMargin;
+    width: 100%;
+
+    //font-family: Nobile;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 20px;
+    
+    padding-left:  @sideDistance;
+    padding-right:  @sideDistance;
+    
+    color: @hedingColor;
+    //border: 1px solid red;    
+}
+
+.eventTileMobile_date {
+    position: absolute;
+    right: @sideDistance;
+    top: @topDistance;
+
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 16px;
+    text-align: center;
+
+    color: @secondaryColor;
+
+    .firstLine {
+        // Insert style here
+    }
+    .secondLine {
+        // Insert style here
+    }
+}
+
+.eventTileMobile_description {
+    position: absolute;
+    top: 2*@lineTopDistance - @imageBorderTopMargin + @topDistance + 38px;
+    left: @sideDistance;
+
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 16px;
+
+    padding-right: 128px;
+    word-wrap: break-word;
+
+    color: @secondaryColor;
+}
+
+.eventTileMobile_categories {
+    position: absolute;
+    right: @sideDistance;
+    bottom: @bottomDistance;
+
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 16px;
+    word-spacing: 4px;
+
+    color: @secondaryColor;
+}

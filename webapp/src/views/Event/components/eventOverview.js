@@ -1,5 +1,5 @@
 import React from 'react'
-import {Grid, Rating} from 'semantic-ui-react'
+import {Grid, Rating, Responsive} from 'semantic-ui-react'
 
 import {createSliderImageLinksFromImages} from '../../../common/api/utils/imageUtils'
 import {stringifyTime} from '../../../common/timeStringification'
@@ -14,6 +14,7 @@ import './eventOverview.less'
 const EventOverview = ({name, rating, from, to, description, categories, sliderImages, language}) => {
     const hasRating = rating instanceof Number;
     const stringifiedTime = stringifyTime(from, to, language.time);
+    const responsiveBreakPoint = 1380;
 
     const formattedDescription = description.split('\n').map((item, index) => {
         return (
@@ -25,28 +26,57 @@ const EventOverview = ({name, rating, from, to, description, categories, sliderI
 
     return (
         <div>
-            <Grid>
-                <Grid.Row>
-                    <Grid.Column width="8">
-                        <ImageSlider imageList={sliderImages} />
-                    </Grid.Column>
-                    <Grid.Column width="8">
-                        
-                        {/* Event Title */}
-                        <h2 className="eventOverviewName">{name}</h2>
+            <Responsive
+                minWidth={responsiveBreakPoint}
+            >
+                <Grid>
+                    <Grid.Row>
+                        <Grid.Column width="8">
+                            <ImageSlider imageList={sliderImages} />
+                        </Grid.Column>
+                        <Grid.Column width="8">
+                            <div className="eventOverview_desktopTextContainer">
+                                {/* Event Title */}
+                                <h2 className="eventOverview_name">{name}</h2>
 
-                        {/* Display the dates */}
-                        <div className="eventOverviewDate">
-                            {stringifiedTime.firstLine}
-                            <br/>
-                            {stringifiedTime.secondLine}
-                        </div>
+                                {/* Display the dates */}
+                                <div className="eventOverview_date">
+                                    {stringifiedTime.firstLine}
+                                    <br/>
+                                    {stringifiedTime.secondLine}
+                                </div>
 
-                        {/* <Rating defaultRating={rating || 0} maxRating={5} disabled={!hasRating} /> */}
+                                {/* <Rating defaultRating={rating || 0} maxRating={5} disabled={!hasRating} /> */}
+                                <div className="eventOverview_description">
+                                    {formattedDescription}
+                                </div>
+                            </div>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Responsive>
+            <Responsive
+                maxWidth={responsiveBreakPoint-1}
+            >
+                <ImageSlider imageList={sliderImages} />
+
+                <div className="eventOverview_mobileTextContainer">
+                    {/* Event Title */}
+                    <h2 className="eventOverview_name">{name}</h2>
+
+                    {/* Display the dates */}
+                    <div className="eventOverview_date">
+                        {stringifiedTime.firstLine}
+                        <br/>
+                        {stringifiedTime.secondLine}
+                    </div>
+
+                    {/* <Rating defaultRating={rating || 0} maxRating={5} disabled={!hasRating} /> */}
+                    <div className="eventOverview_description">
                         {formattedDescription}
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+                    </div>
+                </div>
+            </Responsive>
         </div>
     )
 }

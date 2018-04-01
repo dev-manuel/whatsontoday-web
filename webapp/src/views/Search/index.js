@@ -6,7 +6,7 @@ import {Grid, Pagination, Segment, Container, Header, Button, Icon } from 'seman
 
 import './Search.less'
 import FilterPanel from '../../components/filterPanel'
-import EventTileTableBig from './components/eventTileTableBig'
+import EventTileTableBig from './components/eventTileTable'
 import {searchEvents, sortDirection as SortDirectionEnum, sort as SortEnum} from '../../common/api/requests/event'
 
 

@@ -15,6 +15,14 @@ const EventOverview = ({name, rating, from, to, description, categories, sliderI
     const hasRating = rating instanceof Number;
     const stringifiedTime = stringifyTime(from, to, language.time);
 
+    const formattedDescription = description.split('\n').map((item, index) => {
+        return (
+            <React.Fragment>
+                <p>{item}</p>
+            </React.Fragment>
+        )
+    })
+
     return (
         <div>
             <Grid>
@@ -35,7 +43,7 @@ const EventOverview = ({name, rating, from, to, description, categories, sliderI
                         </div>
 
                         {/* <Rating defaultRating={rating || 0} maxRating={5} disabled={!hasRating} /> */}
-                        <p>{description}</p>
+                        {formattedDescription}
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

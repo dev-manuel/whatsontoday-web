@@ -19,15 +19,16 @@ const LocationDetails = ({name, city, country, street, language, website, commen
                         {/* <p>Ohhhh. I'm a map!</p> */}
                     </Grid.Column>
                     <Grid.Column width="8">
-                        <h2>Location:</h2>
+                        <h2>{lang.location}:</h2>
                         {/* <h2>{name} <span {...floatRight}><Rating defaultRating={rating} maxRating={5} disabled /></span></h2> */}
+                        <h3>{name}</h3>
                         <p className="Event_locationDetails_locationAddress">
                             {street} <br/>
                             {city} <br/>
                             {country} <br/>
                         </p>
                         <ConditionalHide hide={hasNoWebsite}>
-                            <a  {...floatRight} href={website} target="_blank">{lang.moreAbout(name)}</a>
+                            <a href={website} target="_blank">{lang.moreAbout(name)}</a>
                         </ConditionalHide>
                     </Grid.Column>
                 </Grid.Row>

@@ -92,6 +92,7 @@ export default {
         where: 'Wo?',
         cost: 'Kosten',
         moreInformation: 'Weitere Informationen',
+        location: 'Veranstaltungsort',
         moreAbout: (x) => `Mehr zu ${x}`,
         contact: (x) => `${x} kontaktieren`,
 

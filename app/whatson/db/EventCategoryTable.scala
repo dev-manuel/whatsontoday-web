@@ -11,7 +11,7 @@ class EventCategoryTable(tag: Tag) extends Table[(Int,Int)](tag, "eventcategory"
     
   def * = (categoryID,eventID)
     
-  def categoryFK = foreignKey("category", eventID,category)(_.id)
+  def categoryFK = foreignKey("category", categoryID,category)(_.id)
   def eventFK = foreignKey("event", eventID,event)(_.id)
 }
 

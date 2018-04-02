@@ -68,9 +68,7 @@ class EventController @Inject()(cc: ControllerComponents,
   def getNearby(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get events nearby another event")
 
-    val q = for(e <- EventTable.event if e.id === id.bind
-                                      if e.to.getOrElse(plus(e.from,oneDay)) >= currentTimestamp
-        ) yield e;
+    val q = for(e <- EventTable.event if e.id === id.bind) yield e;
 
     db.run(q.detailed).map(_.headOption).flatMap {
       case Some(e) => {

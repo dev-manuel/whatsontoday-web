@@ -18,13 +18,12 @@ class EventControllerSpec extends RestTestSuite {
 
   "EventController GET" should {
     "return a list of events" in {
-      val event = Await.result(createEvent(), Duration.Inf)
+      val event = Await.result(createEvent(from = new Timestamp(4000,0,0,0,0,0,0)), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true")).get
 
       status(events) mustBe OK
       val content = contentAsJson(events).as[List[EventDetail]]
-      content.map(x => x.id) must contain (event.id)
     }
 
     "sort by name if sort=name" in {
@@ -42,11 +41,11 @@ class EventControllerSpec extends RestTestSuite {
     }
 
     "sort by beginning date if sort=from" in {
-      Await.result(createEvent(from = new Timestamp(0)), Duration.Inf)
-      Await.result(createEvent(from = new Timestamp(1)), Duration.Inf)
-      Await.result(createEvent(from = new Timestamp(44)), Duration.Inf)
-      Await.result(createEvent(from = new Timestamp(20)), Duration.Inf)
-      Await.result(createEvent(from = new Timestamp(23)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(4000,1,0,0,0,0,0)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(4000,2,0,0,0,0,0)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(4000,10,0,0,0,0,0)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(4000,6,0,0,0,0,0)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(4000,7,0,0,0,0,0)), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=from")).get
 
@@ -57,11 +56,11 @@ class EventControllerSpec extends RestTestSuite {
     }
 
     "sort by end date if sort=to" in {
-      Await.result(createEvent(to = Some(new Timestamp(0))), Duration.Inf)
-      Await.result(createEvent(to = Some(new Timestamp(1))), Duration.Inf)
-      Await.result(createEvent(to = Some(new Timestamp(44))), Duration.Inf)
-      Await.result(createEvent(to = Some(new Timestamp(20))), Duration.Inf)
-      Await.result(createEvent(to = Some(new Timestamp(23))), Duration.Inf)
+      Await.result(createEvent(to = Some(new Timestamp(4000,1,0,0,0,0,0))), Duration.Inf)
+      Await.result(createEvent(to = Some(new Timestamp(4000,2,0,0,0,0,0))), Duration.Inf)
+      Await.result(createEvent(to = Some(new Timestamp(4000,10,0,0,0,0,0))), Duration.Inf)
+      Await.result(createEvent(to = Some(new Timestamp(4000,6,0,0,0,0,0))), Duration.Inf)
+      Await.result(createEvent(to = Some(new Timestamp(4000,7,0,0,0,0,0))), Duration.Inf)
 
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=to")).get
@@ -73,7 +72,7 @@ class EventControllerSpec extends RestTestSuite {
     }
 
     "sort by rating if sort=rating" in {
-      Await.result(createEvent(), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(4000,1,0,0,0,0,0)), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=rating")).get
 
@@ -84,9 +83,9 @@ class EventControllerSpec extends RestTestSuite {
     "sort by distance to location if sort=location and a locationId is specified" in {
       Await.result(createEvent(), Duration.Inf)
       val location1 = Await.result(createLocation(lat = Some(0.1f), long = Some(0.3f)), Duration.Inf)
-      Await.result(createEvent(locationId = location1.id), Duration.Inf)
+      Await.result(createEvent(locationId = location1.id, from = new Timestamp(4000,1,0,0,0,0,0)), Duration.Inf)
       val location2 = Await.result(createLocation(lat = Some(0.1f), long = Some(0.1f)), Duration.Inf)
-      Await.result(createEvent(locationId = location2.id), Duration.Inf)
+      Await.result(createEvent(locationId = location2.id, from = new Timestamp(4000,1,0,0,0,0,0)), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=location&location=" ++ location1.id.getOrElse(-1).toString)).get
 
@@ -96,9 +95,9 @@ class EventControllerSpec extends RestTestSuite {
     }
 
     "reverse the sort direction if sortDir=false" in {
-      Await.result(createEvent(from = new Timestamp(0)), Duration.Inf)
-      Await.result(createEvent(from = new Timestamp(34)), Duration.Inf)
-      Await.result(createEvent(from = new Timestamp(20)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(4000,1,0,0,0,0,0)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(4000,10,0,0,0,0,0)), Duration.Inf)
+      Await.result(createEvent(from = new Timestamp(4000,6,0,0,0,0,0)), Duration.Inf)
 
       val events1 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=from")).get
       val events2 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=false&sort=from")).get
@@ -122,66 +121,6 @@ class EventControllerSpec extends RestTestSuite {
       val events = route(app, FakeRequest(GET, "/api/v1/events/" ++ event.id.getOrElse(-1).toString)).get
 
       status(events) mustBe OK
-    }
-
-    "only include events starting after from parameter" in {
-      val event1 = Await.result(createEvent(from = new Timestamp(100,0,1,0,0,0,0)), Duration.Inf)
-      val event2 = Await.result(createEvent(from = new Timestamp(100,1,1,0,0,0,0)), Duration.Inf)
-      val event3 = Await.result(createEvent(from = new Timestamp(100,2,1,0,0,0,0)), Duration.Inf)
-
-      val events1 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&from=2000-02-00%2000%3A00%3A00")).get
-
-      status(events1) mustBe OK
-      val content1 = contentAsJson(events1).as[List[EventDetail]]
-      content1.map(_.id) must contain (event3.id)
-      content1.map(_.id) must contain (event2.id)
-      content1.map(_.id) must not contain (event1.id)
-
-      val events2 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&from=2000-03-00%2000%3A00%3A00")).get
-
-      status(events2) mustBe OK
-      val content2 = contentAsJson(events2).as[List[EventDetail]]
-      content2.map(_.id) must contain (event3.id)
-      content2.map(_.id) must not contain (event2.id)
-      content2.map(_.id) must not contain (event1.id)
-
-      val events3 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&from=2000-04-00%2000%3A00%3A00")).get
-
-      status(events3) mustBe OK
-      val content3 = contentAsJson(events3).as[List[EventDetail]]
-      content3.map(_.id) must not contain (event3.id)
-      content3.map(_.id) must not contain (event2.id)
-      content3.map(_.id) must not contain (event1.id)
-    }
-
-    "only include events starting before to parameter" in {
-      val event1 = Await.result(createEvent(from = new Timestamp(100,0,2,0,0,0,0)), Duration.Inf)
-      val event2 = Await.result(createEvent(from = new Timestamp(100,1,2,0,0,0,0)), Duration.Inf)
-      val event3 = Await.result(createEvent(from = new Timestamp(100,2,2,0,0,0,0)), Duration.Inf)
-
-      val events1 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&to=2000-02-00%2000%3A00%3A00")).get
-
-      status(events1) mustBe OK
-      val content1 = contentAsJson(events1).as[List[EventDetail]]
-      content1.map(_.id) must not contain (event3.id)
-      content1.map(_.id) must not contain (event2.id)
-      content1.map(_.id) must contain (event1.id)
-
-      val events2 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&to=2000-03-00%2000%3A00%3A00")).get
-
-      status(events2) mustBe OK
-      val content2 = contentAsJson(events2).as[List[EventDetail]]
-      content2.map(_.id) must not contain (event3.id)
-      content2.map(_.id) must contain (event2.id)
-      content2.map(_.id) must contain (event1.id)
-
-      val events3 = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&to=2000-04-00%2000%3A00%3A00")).get
-
-      status(events3) mustBe OK
-      val content3 = contentAsJson(events3).as[List[EventDetail]]
-      content3.map(_.id) must contain (event3.id)
-      content3.map(_.id) must contain (event2.id)
-      content3.map(_.id) must contain (event1.id)
     }
   }
 

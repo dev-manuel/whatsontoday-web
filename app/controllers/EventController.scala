@@ -52,12 +52,13 @@ class EventController @Inject()(cc: ControllerComponents,
   def searchEvents(search: Option[String], location: Option[Int], category: Option[Int],
                    sort: Option[String], sortDir: Boolean, from: Option[Timestamp], to: Option[Timestamp]) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to search events")
-
+    
     val q = for {
       e <- event if similar(e.name,search.getOrElse("").bind) || search.getOrElse("").bind === ""
                  if e.categories.filter(_.id === category.getOrElse(-1)).exists || category.getOrElse(-1).bind === -1
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
                  if e.from >= from.getOrElse(new Timestamp(0,0,0,0,0,0,0)) && e.from <= to.getOrElse(new Timestamp(4000,0,0,0,0,0,0))
+                 if e.to.getOrElse(plus(e.from,oneDay)) >= currentTimestamp
     } yield e
 
     val s = q.sortColumn(sort,sortDir).queryPaged.detailed
@@ -67,7 +68,9 @@ class EventController @Inject()(cc: ControllerComponents,
   def getNearby(id: Int) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to get events nearby another event")
 
-    val q = for(e <- EventTable.event if e.id === id.bind) yield e;
+    val q = for(e <- EventTable.event if e.id === id.bind
+                                      if e.to.getOrElse(plus(e.from,oneDay)) >= currentTimestamp
+        ) yield e;
 
     db.run(q.detailed).map(_.headOption).flatMap {
       case Some(e) => {

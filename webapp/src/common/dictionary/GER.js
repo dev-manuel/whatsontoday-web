@@ -12,7 +12,7 @@ export default {
         dance: 'Tanzen',
         festivals: 'Festivals',
         rock: 'Rock', 
-        'heavy metall': 'Heavy Metall',
+        'heavy metall': 'Heavy Metal',
         hiphop: 'Hiphop',
         rnb: 'RnB',
         jazz: 'Jazz',
@@ -75,7 +75,7 @@ export default {
         theTeam: 'Das Team',
         faq: 'FAQ',
 
-        slogan: 'Find your next event!',
+        slogan: 'Finde dein nächstes Event!',
         terms: 'AGB',
         siteNotice: 'Impressum',
         privacyPolicy: 'Datenschutzerklärung'
@@ -176,7 +176,7 @@ export default {
     forOrganizers: {
         forOrganizers: 'Für Veranstalter',
         createEvent: 'Event hinzufügen',
-        crateLocation: 'Location hinzufügen',
+        crateLocation: 'Ort hinzufügen',
         dashboard: 'Dashboard',
     },
     eventTool: {
@@ -184,16 +184,16 @@ export default {
             noResults: 'Keine Ergebnisse gefunden...',
             addEvent: 'Neues Event hinzufügen',
             name: 'Titel',
-            namePlaceholder: 'Bitte gib einen Title ein...',
+            namePlaceholder: 'Bitte gib einen Titel ein...',
             categories: 'Kategorien',
             categoriesPlaceholder: 'Bitte Kategorien auswählen...',
             from: 'Beginn',
             fromPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
             to: 'Ende',
             toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
-            location: 'Veranstalutngsort',
+            location: 'Veranstaltungsort',
             locationPlaceholder: 'Bitte wähle einen Ort aus',
-            createNewLocation: 'Neue Location hinzufügen',
+            createNewLocation: 'Neuen Ort hinzufügen',
             images: 'Bilder',
             thumbnailImageUploadButtonAddImage: 'Thumbnail hinzufügen',
             thumbnailImageNoFileSelected: 'Keine Datei ausgewählt',
@@ -212,7 +212,7 @@ export default {
             back: 'Zurück',
         },
         update: {
-            hint: 'Nicht wundern! Kategorien, Location und Bilder des Events werden hier nicht angezeigt! Fülle einfach die entscprechenden Felder aus um die aktuellen Werte zu überschreiben.',
+            hint: 'Nicht wundern! Kategorien, Ort und Bilder des Events werden hier nicht angezeigt! Fülle einfach die entsprechenden Felder aus, um die aktuellen Werte zu überschreiben.',
             noResults: 'Keine Ergebnisse gefunden...',
             updateEvent: 'Event bearbeiten',
             name: 'Titel',
@@ -223,9 +223,9 @@ export default {
             fromPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
             to: 'Ende',
             toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
-            location: 'Veranstalutngsort',
+            location: 'Veranstaltungsort',
             locationPlaceholder: 'Bitte wähle einen Ort aus',
-            createNewLocation: 'Neue Location hinzufügen',
+            createNewLocation: 'Neuen Ort hinzufügen',
             images: 'Bilder',
             thumbnailImageUploadButtonAddImage: 'Thumbnail hinzufügen',
             thumbnailImageNoFileSelected: 'Keine Datei ausgewählt',
@@ -256,7 +256,7 @@ export default {
         successful: {
             createEvent: 'Du hast ein Event erfolgreich erstellt!',
             updateEvent: 'Du hast ein Event erfolgreich bearbeitet!',
-            deleteEvent: 'Das Event wurde erfolgreich gelöscht',
+            deleteEvent: 'Das Event wurde erfolgreich gelöscht.',
             default: 'Aktion erfolgreich ausgeführt',
 
             goBack: 'Zurück'
@@ -265,9 +265,9 @@ export default {
     locationTool: {
         create: {
             name: 'Name',
-            namePlaceholder: 'Bitte gib den Namen der Location ein...',
+            namePlaceholder: 'Bitte gib den Namen des Ortes ein...',
             street: 'Straße',
-            streetPlaceholder: 'Bitte gib die Strße ein...',
+            streetPlaceholder: 'Bitte gib die Straße ein...',
             city: 'Stadt',
             cityPlaceholder: 'Bitte gib die Stadt ein...',
             country: 'Land',
@@ -281,7 +281,7 @@ export default {
             extra: 'Extra Informationen',
         },
         successful: {
-            createLocation: 'Du hast eine Location erfolgreich erstellt!',
+            createLocation: 'Du hast erfolgreich einen Ort erstellt!',
             default: 'Aktion erfolgreich ausgeführt',
 
             goBack: 'Zurück'

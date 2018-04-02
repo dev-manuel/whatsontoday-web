@@ -54,11 +54,11 @@ object EventTable {
 
     override def sortColumn[U,C[D]](name: String, dir: Boolean, param: Option[Location]) = name match {
       case "location" => {
-        val lat = param.map(_.latitude).getOrElse(0.0f)
-        val long = param.map(_.longitude).getOrElse(0.0f)
+        val lat = param.map(_.latitude).flatten.getOrElse(0.0f)
+        val long = param.map(_.longitude).flatten.getOrElse(0.0f)
 
         val s = q.join(LocationTable.location).on(_.locationId === _.id)
-          .sortBy(x => geoDistance(x._2.latitude,x._2.longitude,lat,long).dir(dir)).map(_._1)
+          .sortBy(x => geoDistance(x._2.latitude.getOrElse(0.0f),x._2.longitude.getOrElse(0.0f),lat,long).dir(dir)).map(_._1)
         s
       }
       case n => q.sortColumn(n,dir)

@@ -24,9 +24,8 @@ class LocationServiceImpl @Inject()(protected val dbConfigProvider: DatabaseConf
     form.id match {
       case None => {
         geocoder.getPosition(Geocoder.Address(form.country,form.city,form.street)).flatMap {
-          case Some(pos) => db.run(insertAndReturn[Location,LocationTable]
-                                    (LocationTable.location,form.toLocation(pos.lat,pos.lng))).map(Some(_))
-          case None => Future.successful(None)
+          case x => db.run(insertAndReturn[Location,LocationTable]
+                                    (LocationTable.location,form.toLocation(x.map(_.lat),x.map(_.lng)))).map(Some(_))
         }
       }
       case Some(id) => db.run(LocationTable.location.filter(_.id === id).result).map(_.headOption)

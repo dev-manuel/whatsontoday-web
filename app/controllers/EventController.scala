@@ -72,7 +72,8 @@ class EventController @Inject()(cc: ControllerComponents,
     db.run(q.detailed).map(_.headOption).flatMap {
       case Some(e) => {
         val q = EventTable.event.join(LocationTable.location).on(_.locationId === _.id)
-          .sortBy(y => geoDistance(e.location.latitude, e.location.longitude, y._2.latitude, y._2.longitude))
+          .sortBy(y => geoDistance(e.location.latitude.getOrElse(0.0f).bind, e.location.longitude.getOrElse(0.0f).bind, 
+              y._2.latitude.getOrElse(0.0f), y._2.longitude.getOrElse(0.0f)))
           .map(_._1).filter(y => y.id =!= e.id && y.from >= currentTimestamp)
         val s = q.queryPaged.detailed
         returnPaged(s,q,db)

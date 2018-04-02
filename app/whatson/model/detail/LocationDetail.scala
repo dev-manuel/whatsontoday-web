@@ -8,7 +8,7 @@ import whatson.db._
 import whatson.model._
 import whatson.model.detail._
 
-case class LocationDetail(id: Option[Int], name: String, latitude: Float, longitude: Float,
+case class LocationDetail(id: Option[Int], name: String, latitude: Option[Float], longitude: Option[Float],
                           country: String, city: String, street: String,
                           avgRating: Option[Float], images: List[TaggedImage],
                           website: Option[String], phone: Option[String], comment: Option[String], 

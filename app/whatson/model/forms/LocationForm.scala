@@ -23,7 +23,7 @@ object LocationForm {
                   city: String, street: String, website: Option[String] = None,
                   phone: Option[String] = None, comment: Option[String] = None,
                   link: Option[String] = None) {
-    def toLocation(lat: Float = 0.0f, long: Float = 0.0f) = Location(id, name, lat, long, country, city, street, website, phone, comment, link)
+    def toLocation(lat: Option[Float] = None, long: Option[Float] = None) = Location(id, name, lat, long, country, city, street, website, phone, comment, link)
   }
 
   object Data {

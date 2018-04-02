@@ -64,7 +64,8 @@ class LocationController @Inject()(cc: ControllerComponents,
 
     db.run(q.detailed).map(_.headOption).flatMap {
       case Some(r) => {
-        val q = location.sortBy(y => geoDistance(r.latitude, r.longitude, y.latitude, y.longitude))
+        val q = location.sortBy(y => geoDistance(r.latitude.getOrElse(0.0f).bind, r.longitude.getOrElse(0.0f).bind, 
+            y.latitude.getOrElse(0.0f), y.longitude.getOrElse(0.0f)))
         val s = q.queryPaged.detailed
         returnPaged(s,q,db)
       }

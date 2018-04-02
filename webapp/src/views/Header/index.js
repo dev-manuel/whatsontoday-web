@@ -114,7 +114,7 @@ class Header extends React.Component{
                                 What's On Today
                             </Link>
                             <h3>
-                                (<i className="Header_betaIcon"/>-Version)
+                                <b><i>beta</i></b>
                             </h3>
                         </Menu.Item>
 

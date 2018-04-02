@@ -83,9 +83,9 @@ class EventControllerSpec extends RestTestSuite {
 
     "sort by distance to location if sort=location and a locationId is specified" in {
       Await.result(createEvent(), Duration.Inf)
-      val location1 = Await.result(createLocation(lat = 0.1f, long = 0.3f), Duration.Inf)
+      val location1 = Await.result(createLocation(lat = Some(0.1f), long = Some(0.3f)), Duration.Inf)
       Await.result(createEvent(locationId = location1.id), Duration.Inf)
-      val location2 = Await.result(createLocation(lat = 0.1f, long = 0.1f), Duration.Inf)
+      val location2 = Await.result(createLocation(lat = Some(0.1f), long = Some(0.1f)), Duration.Inf)
       Await.result(createEvent(locationId = location2.id), Duration.Inf)
 
       val events = route(app, FakeRequest(GET, "/api/v1/events?sortDir=true&sort=location&location=" ++ location1.id.getOrElse(-1).toString)).get
@@ -574,8 +574,8 @@ class EventControllerSpec extends RestTestSuite {
 
     "sort by distance" in {
       val location1 = Await.result(createLocation(), Duration.Inf)
-      val location2 = Await.result(createLocation(lat = 10.0f, long = 10.0f), Duration.Inf)
-      val location3 = Await.result(createLocation(lat = 10.0f, long = -20.0f), Duration.Inf)
+      val location2 = Await.result(createLocation(lat = Some(10.0f), long = Some(10.0f)), Duration.Inf)
+      val location3 = Await.result(createLocation(lat = Some(10.0f), long = Some(-20.0f)), Duration.Inf)
 
       val event1 = Await.result(createEvent(locationId = location1.id, from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)
       val event2 = Await.result(createEvent(locationId = location3.id, from = new Timestamp(3000, 0, 0, 0, 0, 0, 0)), Duration.Inf)

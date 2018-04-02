@@ -108,7 +108,7 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
     }
   }
 
-  def createLocation(name: String = "testlocation", lat: Float = 0.0f, long: Float = 0.0f,
+  def createLocation(name: String = "testlocation", lat: Option[Float] = None, long: Option[Float] = None,
                      country: String = "testcountry", city: String = "testcity", street: String = "teststreet",
                      website: Option[String] = None, phone: Option[String] = None, comment: Option[String] = None, 
                      link: Option[String] = None): Future[Location] = {

@@ -37,25 +37,17 @@ class SignUpPanel extends React.Component {
             repeatPasswordError: false,
             userAlreadyExistsError: false,
         }
-        
-        // Check if repeat-password is valid
-        const repeatPassword = this.state.repeatPasswordValue;
-        const password = this.state.passwordValue;
-        if( repeatPassword !== password){
-            validationErrors.repeatPasswordError = true;
-            readyToSubmitRegistrationRequest = false;
-        }
 
-        // Check if (accept) checkbox is valid        
-        const accept = this.state.acceptedTermsValue;
-        if(!accept){
-            validationErrors.acceptedTermsError = true;
-            readyToSubmitRegistrationRequest = false;
-        }
+        const {
+            emailValue,
+            passwordValue,
+            repeatPasswordValue,
+            acceptedTermsValue,
+        } = this.state;
         
         // When no error will occur during the api request no error will displayed
         if(readyToSubmitRegistrationRequest){
-            userSignUp(this.state.emailValue, this.state.passwordValue)
+            userSignUp(emailValue, passwordValue, repeatPasswordValue, acceptedTermsValue)
                 .then(() => {
                     this.props.onSuccess();
                 })
@@ -77,6 +69,10 @@ class SignUpPanel extends React.Component {
                                     validationErrors.passwordError = true;
                                 if(reqBody.message = 'user.exists')
                                     validationErrors.userAlreadyExistsError = true;
+                                if(reqBody.acceptedTerms)
+                                    validationErrors.acceptedTermsError = true;
+                                if(reqBody[''] === 'repeatedPassword')
+                                    validationErrors.repeatPasswordError = true;
                                 
                                 this.setState(validationErrors);
                             break;

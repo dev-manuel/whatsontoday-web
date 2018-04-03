@@ -9,11 +9,13 @@ export const organizerBasePath = '/organizer';
  * @param {string} password
  * @param {string} name
  */
-export const organizerSignUp = (email, password, name) => {
+export const organizerSignUp = (email, password, name, repeatedPassword, acceptedTerms) => {
     return axios.post(`${organizerBasePath}/signUp`, {
         email,
         password,
         name,
+        repeatedPassword,
+        acceptedTerms,
     }).then(response => {
         log.debug('organizerSignUp#then', response);
         return response.data;

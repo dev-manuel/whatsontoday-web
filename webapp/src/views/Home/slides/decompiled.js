@@ -22,14 +22,16 @@ export default class Example extends React.Component {
 
     render(){
         return (
-            <div
-                style={divStyle}
-            >
-                <h2 style={headingStyle}>  
-                    DecompileD Conference <br/>
-                    06. April 2018, Dresden
-                </h2>
-            </div>
+            <a href='https://www.decompiled.de/' target="_blank" >
+                <div
+                    style={divStyle}
+                >
+                    <h2 style={headingStyle}>  
+                        DecompileD Conference <br/>
+                        06. April 2018, Dresden
+                    </h2>
+                </div>
+            </a>
         )
     }
 }

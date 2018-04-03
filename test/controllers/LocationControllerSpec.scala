@@ -46,8 +46,8 @@ class LocationControllerSpec extends RestTestSuite {
 
     "return OK for proper get Nearby request" in {
       val location1 = Await.result(createLocation(), Duration.Inf)
-      val location2 = Await.result(createLocation(lat = 10.0f, long = 10.0f), Duration.Inf)
-      val location3 = Await.result(createLocation(lat = 10.0f, long = -10.0f), Duration.Inf)
+      val location2 = Await.result(createLocation(lat = Some(10.0f), long = Some(10.0f)), Duration.Inf)
+      val location3 = Await.result(createLocation(lat = Some(10.0f), long = Some(-10.0f)), Duration.Inf)
 
       val get = route(app, FakeRequest(GET, "/api/v1/location/nearby/" ++ location1.id.getOrElse(-1).toString,
                                        new Headers(List(("Accept", "application/json"))),

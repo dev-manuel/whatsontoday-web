@@ -52,12 +52,13 @@ class EventController @Inject()(cc: ControllerComponents,
   def searchEvents(search: Option[String], location: Option[Int], category: Option[Int],
                    sort: Option[String], sortDir: Boolean, from: Option[Timestamp], to: Option[Timestamp]) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to search events")
-
+    
     val q = for {
       e <- event if similar(e.name,search.getOrElse("").bind) || search.getOrElse("").bind === ""
                  if e.categories.filter(_.id === category.getOrElse(-1)).exists || category.getOrElse(-1).bind === -1
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
                  if e.from >= from.getOrElse(new Timestamp(0,0,0,0,0,0,0)) && e.from <= to.getOrElse(new Timestamp(4000,0,0,0,0,0,0))
+                 if e.to.getOrElse(plus(e.from,oneDay)) >= currentTimestamp
     } yield e
 
     val s = q.sortColumn(sort,sortDir).queryPaged.detailed
@@ -72,7 +73,8 @@ class EventController @Inject()(cc: ControllerComponents,
     db.run(q.detailed).map(_.headOption).flatMap {
       case Some(e) => {
         val q = EventTable.event.join(LocationTable.location).on(_.locationId === _.id)
-          .sortBy(y => geoDistance(e.location.latitude, e.location.longitude, y._2.latitude, y._2.longitude))
+          .sortBy(y => geoDistance(e.location.latitude.getOrElse(0.0f).bind, e.location.longitude.getOrElse(0.0f).bind, 
+              y._2.latitude.getOrElse(0.0f), y._2.longitude.getOrElse(0.0f)))
           .map(_._1).filter(y => y.id =!= e.id && y.from >= currentTimestamp)
         val s = q.queryPaged.detailed
         returnPaged(s,q,db)

@@ -1,3 +1,59 @@
-.sliderContainer {
+@arrowDemensions: 70px;
+@arrowContainerWidth: 100px;
+@arrowContainerHoverColor: rgba(0, 0, 0, 0.212);
+
+
+.slider_Container {
     height: 350px;
+    position: relative;
+}
+
+.Home_slider_nextContainer {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    width: @arrowContainerWidth;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: @arrowContainerHoverColor;
+    }
+
+    > .nextIcon {
+        margin: auto;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+
+        height: @arrowDemensions;
+        width: @arrowDemensions;
+
+        background: url('../../../img/icons/next.svg');
+    }
+}
+
+.Home_slider_backContainer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: @arrowContainerWidth;
+    cursor: pointer;
+
+    &:hover {
+        background-color: @arrowContainerHoverColor;
+    }
+
+    > .backIcon {
+        margin: auto;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+
+        height: @arrowDemensions;
+        width: @arrowDemensions;
+
+        background: url('../../../img/icons/back.svg');
+    }
 }

@@ -22,13 +22,15 @@ export default class Example extends React.Component {
 
     render(){
         return (
-            <div
-                style={divStyle}
-            >
-                {/* <h2 style={headingStyle}>  
-                    
-                </h2> */}
-            </div>
+            <a href='http://www.gruendernest.com/event/8-fliptheflop-night-dresden' target='_blank'>
+                <div
+                    style={divStyle}
+                >
+                    {/* <h2 style={headingStyle}>  
+                        
+                    </h2> */}
+                </div>
+            </a>
         )
     }
 }

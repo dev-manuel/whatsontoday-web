@@ -7,9 +7,9 @@ class LocationTable(tag: Tag) extends Table[Location](tag, "location") with HasR
   def id = column[Int]("id",O.PrimaryKey,O.AutoInc)
   def name = column[String]("name",O.Unique)
   
-  def latitude = column[Float]("latitude")
+  def latitude = column[Option[Float]]("latitude")
   
-  def longitude = column[Float]("longitude")
+  def longitude = column[Option[Float]]("longitude")
 
   def country = column[String]("country")
 

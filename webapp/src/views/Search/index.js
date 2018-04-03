@@ -207,7 +207,7 @@ class SERP extends React.Component{
 
         // Sending AJAX api request to receive event data
         // Page starts to count with 0, (parsedPage with 1) so we have to subtract one
-        searchEvents( undefined /* parsedCategories */, parsedSearch, parsedSortDirection, parsedSort, parsedPage-1, parsedPageSize)
+        searchEvents(parsedCategories, parsedSearch, parsedSortDirection, parsedSort, parsedPage-1, parsedPageSize)
             .then( resultObject => {
                 this.setState( () => ({
                     eventList: resultObject.eventList,

@@ -24,7 +24,7 @@ class UserControllerSpec extends RestTestSuite {
 
     "send a confirmation email" in {
       val signUp = route(app, FakeRequest(POST, "/api/v1/user/signUp", new Headers(List(("Content-Type","application/json"))),
-                                          Json.toJson(Data("testuser@test.de","testpass")))).get
+                                          Json.toJson(Data("testuser@test.de","testpass", "testpass", true)))).get
 
       status(signUp) mustBe OK
 
@@ -36,7 +36,7 @@ class UserControllerSpec extends RestTestSuite {
 
     "return OK on correct sign up" in {
       val signUp = route(app, FakeRequest(POST, "/api/v1/user/signUp", new Headers(List(("Content-Type","application/json"))),
-                                          Json.toJson(Data("testuser@test.de","testpass")))).get
+                                          Json.toJson(Data("testuser@test.de","testpass", "testpass", true)))).get
 
       status(signUp) mustBe OK
     }
@@ -44,26 +44,26 @@ class UserControllerSpec extends RestTestSuite {
 
     "not allow the same signUp twice" in {
       val signUp1 = route(app, FakeRequest(POST, "/api/v1/user/signUp", new Headers(List(("Content-Type","application/json"))),
-                                          Json.toJson(Data("testuser@test.de","testpass")))).get
+                                          Json.toJson(Data("testuser@test.de","testpass", "testpass", true)))).get
 
       status(signUp1) mustBe OK
 
       val signUp2 = route(app, FakeRequest(POST, "/api/v1/user/signUp", new Headers(List(("Content-Type","application/json"))),
-                                          Json.toJson(Data("testuser@test.de","testpass")))).get
+                                          Json.toJson(Data("testuser@test.de","testpass", "testpass", true)))).get
 
       status(signUp2) mustBe BAD_REQUEST
     }
 
     "not allow short passwords" in {
       val signUp = route(app, FakeRequest(POST, "/api/v1/user/signUp", new Headers(List(("Content-Type","application/json"))),
-                                           Json.toJson(Data("testuser@test.de","t")))).get
+                                           Json.toJson(Data("testuser@test.de","t", "testpass", true)))).get
 
       status(signUp) mustBe BAD_REQUEST
     }
 
     "not allow wrong emails" in {
       val signUp = route(app, FakeRequest(POST, "/api/v1/user/signUp", new Headers(List(("Content-Type","application/json"))),
-                                          Json.toJson(Data("testuser","testpass")))).get
+                                          Json.toJson(Data("testuser","testpass", "testpass", true)))).get
 
       status(signUp) mustBe BAD_REQUEST
     }

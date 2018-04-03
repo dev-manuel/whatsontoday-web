@@ -92,7 +92,8 @@ class OrganizerController@Inject() (
    *
    * @return The result to display.
    */
-  def signUp = Action.async(parse.json) { implicit request =>
+  def signUp = organizerRequest(parse.json) { case (request,organizer) =>
+    implicit val req = request
     OrganizerSignUpForm.form.bindFromRequest.fold(
       form => {
         Future.successful(BadRequest(Json.toJson(form.errors)))

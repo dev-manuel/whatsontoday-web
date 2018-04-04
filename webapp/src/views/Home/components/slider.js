@@ -27,7 +27,58 @@ const BackArrow = ({onClick}) => {
 	)
 }
 
+export class ProgressBar extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			progress: 0, // In percent
+		}
+
+		this.rate = 26.0; // FPS
+		this.duration = 6; // Seconds
+	}
+
+	componentDidMount(){
+
+
+		this.interval = setInterval(this.createProgressUpdate(this.rate, this.duration), 1 / this.rate * 1000);
+	}
+
+	createProgressUpdate(rate, duration){
+		const widthDelta = 100 / (rate * duration);
+
+		return () => {
+			if(!this.props.pause){
+				this.setState(({progress}) => {
+					const newProgress = progress + widthDelta;
+					if(newProgress >= 100)
+						this.props.next();
+					return {
+						progress: newProgress%100,
+					}
+				});
+			}
+		}
+	}
+
+	render(){
+		return (
+			<div className="Home_slider_progressContainer">
+				<div
+					o
+					className="Home_slider_progress"
+					style={{width: `${this.state.progress}%`}}
+				/>
+			</div>
+		)
+	}
+}
+
 class Slider extends React.Component {
+
+	state = {
+		pauseProgress: false,
+	}
 
 	back(){
 		this.slider.slickPrev();
@@ -39,7 +90,7 @@ class Slider extends React.Component {
 
     render() {
         const settings = {
-			autoplay: true,
+			autoplay: false,
 			dots: false,
 			infinite: true,
 			speed: 500,
@@ -52,7 +103,15 @@ class Slider extends React.Component {
 		} = this.props;
 
         return (
-          	<div className="slider_Container">
+			<div
+			  	className="slider_Container"
+				onMouseOver={()=>this.setState({pauseProgress:true})}
+				onMouseOut={()=>this.setState({pauseProgress:false})}
+			>
+			  	<ProgressBar
+					next={this.next.bind(this)}
+					pause={this.state.pauseProgress}
+				/>
 				<Slick
 					ref={ slider => {this.slider = slider}}
 					{...settings}

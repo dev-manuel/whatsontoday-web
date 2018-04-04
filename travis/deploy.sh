@@ -7,7 +7,7 @@ then
     cd $TRAVIS_BUILD_DIR
     cd webapp
     npm install
-    npm run build -- --env.API_BASE_URL=https://www.whats-on.today:3443/api/v1 --env.LOG_LEVEL=debug
+    npm run build -- --env.API_BASE_URL=https://www.whats-on.today:443/api/v1 --env.LOG_LEVEL=debug
     cd ..
     sbt dist
     export SSHPASS=$DEPLOY_PASS

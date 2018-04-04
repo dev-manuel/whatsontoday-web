@@ -45,10 +45,14 @@ GET   /:id                   controllers.OrganizerController.get(id: Int)
 #      A new account gets created. The access token to this account is returned.
 #      All secured endpoints require the access token in the header parameter called 'x-auth-token'.
 #  parameters:
-#    - name: body
-#      schema:
-#        $ref: '#/definitions/whatson.model.forms.OrganizerSignUpForm.Data'
-#      description: The user data. The password must not be hashed.
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.forms.OrganizerSignUpForm.Data'
+#    description: The user data. The password must not be hashed.
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
 #  responses:
 #    200:
 #      description: Success. A login/confirmation is required after this.

@@ -61,7 +61,7 @@ const SignUp =  ({match, language, loginData}) => {
             />
             
             {/* Organizer */}
-            <Route
+            {/* <Route
                 path={`${basePath}/${signUpRoutes.organizer}`}
                 render={routeProps => (
                     <Organizer
@@ -69,7 +69,7 @@ const SignUp =  ({match, language, loginData}) => {
                         language={language}
                     />
                 )}
-            />
+            /> */}
 
             {/* NotFound */}
             <Route

@@ -142,9 +142,9 @@ class SignUpPanel extends React.Component {
                         <Button color='olive' fluid size='large'>{lang.submit}</Button>
                     </Segment>
                 </Form>
-                <Message>
+                {/* <Message>
                     <Link to='/signup/organizer'>{lang.signUpAsOrganizer}</Link>
-                </Message>
+                </Message> */}
             </div>
         )
     }

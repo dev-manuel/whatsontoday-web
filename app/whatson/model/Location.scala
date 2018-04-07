@@ -5,7 +5,7 @@ import whatson.model.forms._
 
 case class Location(id: Option[Int], name: String, latitude: Option[Float], longitude: Option[Float],
                     country: String, city: String, street: String, website: Option[String],
-                    phone: Option[String], comment: Option[String], link: Option[String]) extends HasCopy[Location] {
+                    phone: Option[String], comment: Option[String], link: Option[String], zip: Option[String]) extends HasCopy[Location] {
   def cpy(i: Option[Int]) = this.copy(id = i)
 
   def distance(b: Location) = {

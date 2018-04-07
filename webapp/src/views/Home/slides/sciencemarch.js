@@ -1,6 +1,7 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
-import backgroundImage from '../../../img/slider/decompiledBg.jpg'
+import backgroundImage from '../../../img/slider/sciencemarch.png'
 
 const divStyle = {
     background: `url(${backgroundImage}) no-repeat center center`,
@@ -15,23 +16,22 @@ const headingStyle = {
     top: '50%',
     transform: 'translateY(-50%)',
     color: 'rgb(255, 255, 255)',
-    fontSize: 44,
+    fontSize: 33,
 }
 
 export default class Example extends React.Component {
 
     render(){
         return (
-            <a href='https://www.decompiled.de/' target="_blank" >
+            <Link to='/event/216'>
                 <div
                     style={divStyle}
                 >
-                    <h2 style={headingStyle}>  
-                        DecompileD Conference <br/>
-                        06. April 2018, Dresden
-                    </h2>
+                    {/* <h2 style={headingStyle}>  
+                        
+                    </h2> */}
                 </div>
-            </a>
+            </Link>
         )
     }
 }

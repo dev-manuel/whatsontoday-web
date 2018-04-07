@@ -33,7 +33,6 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
 import whatson.modules._
 import play.api.libs.Files._
 import play.api.inject._
-import whatson.util.MockGeocoder
 
 
 class RestTestSuite extends PlaySpec with TestSuiteMixin

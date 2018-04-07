@@ -62,3 +62,21 @@ GET   /:id                   controllers.OrganizerController.get(id: Int)
 #          $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
 GET   /events/:id                   controllers.OrganizerController.getEvents(id: Int, sort: Option[String], sortDir: Boolean)
+
+###
+#  summary: Create an organizer
+#  parameters:
+#  - in: header
+#    name: x-auth-token
+#    schema:
+#      type: string
+#  - name: body
+#    schema:
+#      $ref: '#/definitions/whatson.model.forms.OrganizerForm.Data'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/definitions/whatson.model.Organizer'
+###
+POST     /                    controllers.OrganizerController.createOrganizer

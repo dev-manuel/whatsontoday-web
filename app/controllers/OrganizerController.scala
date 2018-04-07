@@ -73,7 +73,7 @@ class OrganizerController@Inject() (val silhouette: Silhouette[AuthEnv],
   }
 
 
-  def createOrganizer() = withRights(Right.CreateOrganizer)(parse.json) { case (request,login,role) =>
+  def createOrganizer = withRights(Right.CreateOrganizer)(parse.json) { case (request,login,role) =>
     OrganizerForm.form.bindFromRequest()(request).fold(
       form => {
         Future.successful(BadRequest(Json.toJson(form.errors)))

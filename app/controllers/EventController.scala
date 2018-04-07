@@ -238,4 +238,11 @@ class EventController @Inject()(cc: ControllerComponents,
       case _ => Future.successful(BadRequest)
     }
   }
+  
+   
+  def getSliderEvents = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get events for slider")
+
+    db.run(SliderEventTable.sliderEvent.sortBy(_.number).flatMap(_.event).detailed).map(x => Ok(Json.toJson(x)))
+  }
 }

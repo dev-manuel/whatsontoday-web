@@ -1,0 +1,14 @@
+### NoDocs ###
+GET    /                         controllers.HomeController.index
+
+### NoDocs ###
+GET    /web                     controllers.HomeController.indexWeb(any="")
+
+### NoDocs ###
+GET    /web/*any                 controllers.HomeController.indexWeb(any: String)
+
+->     /api/v1                   api.Routes
+
+# Map static resources from the /public folder to the /assets URL path
+### NoDocs ###
+GET    /assets/*file             controllers.Assets.versioned(path="/public", file: Asset)

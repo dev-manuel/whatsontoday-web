@@ -36,6 +36,7 @@
   <logger name="api.organizer" level="DEBUG" />
   <logger name="api.rating" level="DEBUG" />
   <logger name="api.user" level="DEBUG" />
+  <logger name="service.geocoder" level="DEBUG" />
 
   <!-- Off these ones as they are annoying, and anyway we manage configuration ourselves -->
   <logger name="com.avaje.ebean.config.PropertyMapLoader" level="OFF" />

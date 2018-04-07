@@ -15,6 +15,7 @@ import play.api.libs.ws._
 import whatson.service.geocoder.Result
 import whatson.service.geocoder.Result._
 import play.api.libs.json.Json
+import play.api._
 
 class GeocoderImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider,
                              applicationConfig: ApplicationConfig,
@@ -23,13 +24,18 @@ class GeocoderImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
                           (implicit context: ExecutionContext)
     extends Geocoder {
 
+  val log = Logger("service.geocoder")
+  
   def geocode(address: Geocoder.Address): Future[Result] = {
     val result = ws.url(geoConfig.url)
       .addQueryStringParameters("address" -> address.toString, "key" -> geoConfig.apiKey)
       .get()
 
 
-    result.map(x => x.json.validate[Result].get)
+    result.map { case x => 
+      log.debug("Got response from geocoding api: " + x.body)
+      x.json.validate[Result].get
+    }
   }
 
   def getPosition(address: Geocoder.Address): Future[Option[Location]] = geocode(address)

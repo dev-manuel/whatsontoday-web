@@ -12,7 +12,7 @@
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%coloredLevel %logger{15} - %message%n%xException{30}</pattern>
+      <pattern>%coloredLevel %logger{200} - %message%n%xException{30}</pattern>
     </encoder>
   </appender>
 
@@ -43,6 +43,12 @@
   <logger name="com.avaje.ebeaninternal.server.core.XmlConfigLoader" level="OFF" />
   <logger name="com.avaje.ebeaninternal.server.lib.BackgroundThread" level="OFF" />
   <logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF" />
+  
+  <logger name="play.api.libs.ws.ahc" level="WARN"/>
+  <logger name="play.shaded.ahc.org.asynchttpclient.netty.channel" level="WARN"/>
+  <logger name="play.shaded.ahc.io.netty.handler.ssl" level="WARN"/>
+  <logger name="play.shaded.ahc.org.asynchttpclient.netty.handler" level="WARN"/>
+  <logger name="play.shaded.ahc.io.netty.util" level="WARN"/>
 
   <root level="WARN">
     <!--<appender-ref ref="ASYNCFILE" />-->

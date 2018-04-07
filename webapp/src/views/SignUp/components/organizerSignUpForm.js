@@ -26,17 +26,7 @@ export default class OrganizerSignUpForm extends React.Component {
         showModalError: false,
     }
 
-    validate(){
-
-        const {
-            repeatPasswordValue,
-            passwordValue,
-            acceptedTermsValue,
-        } = this.state;
-
-        // Determines if the api request for registration is send
-        // This variable is set to false if the terms of condition are not accepted or the password was repeated wrong
-        let readyToSubmitRegistrationRequest = true;
+    handleSubmit(){
 
         const validationErrors = {
             emailError: false,
@@ -46,32 +36,8 @@ export default class OrganizerSignUpForm extends React.Component {
             userAlreadyExistsError: false,
         }
         
-        // Check if repeat-password is valid
-        if( repeatPasswordValue !== passwordValue){
-            validationErrors.repeatPasswordError = true;
-            readyToSubmitRegistrationRequest = false;
-        }
-
-        // Check if (acceptedTermsValue) checkbox is valid        
-        if(!acceptedTermsValue){
-            validationErrors.acceptedTermsError = true;
-            readyToSubmitRegistrationRequest = false;
-        }
-
-        return {
-            readyToSubmitRegistrationRequest,
-            validationErrors,
-        }
-    }
-
-    handleSubmit(){
-        const {
-            readyToSubmitRegistrationRequest,
-            validationErrors,
-        } = this.validate();
-        
-        // When no error will occur during the api request no error will displayed
-        if(readyToSubmitRegistrationRequest){
+        // // When no error will occur during the api request no error will displayed
+        // if(readyToSubmitRegistrationRequest){
             const {
                 emailValue,
                 passwordValue,
@@ -101,6 +67,10 @@ export default class OrganizerSignUpForm extends React.Component {
                                     validationErrors.passwordError = true;
                                 if(reqBody.message = 'user.exists')
                                     validationErrors.userAlreadyExistsError = true;
+                                if(reqBody.acceptedTerms)
+                                    validationErrors.acceptedTermsError = true;
+                                if(reqBody[''] === 'repeatedPassword')
+                                    validationErrors.repeatPasswordError = true;
                                 
                                 this.setState(validationErrors);
                             break;
@@ -111,9 +81,6 @@ export default class OrganizerSignUpForm extends React.Component {
                             break;
                         }
                 })
-        }else{
-            this.setState(validationErrors);
-        }
     }
     
 

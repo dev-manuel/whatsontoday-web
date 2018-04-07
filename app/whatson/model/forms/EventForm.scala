@@ -7,6 +7,7 @@ import java.sql.Timestamp
 import whatson.util.DateTime._
 import whatson.model._
 import whatson.model.forms.LocationForm.Data._
+import scala.math.BigDecimal
 
 /**
   * The form which handles creating/updating Events.
@@ -21,7 +22,9 @@ object EventForm {
       "images" -> list(TaggedImageForm.map),
       "description" -> nonEmptyText,
       "shortDescription" -> nonEmptyText(maxLength = 128),
-      "organizerId" -> number(min=1)
+      "organizerId" -> number(min=1),
+      "priceMin" -> optional(bigDecimal),
+      "priceMax" -> optional(bigDecimal)
     )(Data.apply)(Data.unapply)
   val form = Form(map)
 
@@ -29,7 +32,7 @@ object EventForm {
                   to: Option[Timestamp], categories: List[Category],
                   location: LocationForm.Data, images: List[TaggedImageForm.Data],
                   description: String, shortDescription: String,
-                  organizerId: Int)
+                  organizerId: Int, priceMin: Option[BigDecimal] = None, priceMax: Option[BigDecimal] = None)
 
   object Data {
     implicit val jsonFormat = Json.format[Data]

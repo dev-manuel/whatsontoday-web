@@ -33,16 +33,18 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
 import whatson.modules._
 import play.api.libs.Files._
 import play.api.inject._
+import whatson.util.MockGeocoder
 
 
 class RestTestSuite extends PlaySpec with TestSuiteMixin
     with GuiceOneAppPerTest with Injecting
     with MockitoSugar {
   val mailService = mock[MailService]
+  val geocoder = new MockGeocoder()
 
   implicit override def newAppForTest(testData: TestData): Application = {
     val app = new GuiceApplicationBuilder()
-      .overrides(TestModule(mailService))
+      .overrides(TestModule(mailService,geocoder))
       .build()
 
     Application.instanceCache[ApplicationLifecycle].apply(app).addStopHook { () =>
@@ -80,22 +82,17 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   def getToken(login: Login): Future[String] = authenticatorService.create(LoginInfo("credentials", login.email))
     .flatMap(x => authenticatorService.init(x))
 
-  def createLogin(mail: String, confirmed: Boolean = true, userType: String = "user", roleName: String = "DEFAULT"): Future[Login] = {
+  def createLogin(mail: String, confirmed: Boolean = true): Future[Login] = {
     val pwInfo = passwordHasher.hash("")
 
-    db.run(RoleTable.role.filter(_.name === roleName).result.map(_.headOption)).map {
-      case Some(role) => role.id.getOrElse(-1)
-      case None => -1
-    }.flatMap { case roleId =>
-        val login = Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, confirmed, userType, roleId)
+    val login = Login(None, mail, Some(pwInfo.password), Some(pwInfo.salt.getOrElse("")), Some(pwInfo.hasher), "credentials", mail, confirmed, None)
 
-        db.run(insertAndReturn[Login,LoginTable](LoginTable.login,login))
-    }
+    db.run(insertAndReturn[Login,LoginTable](LoginTable.login,login))
   }
 
-  def createOrganizer(name: String = "testorganizer", mail: String = "testorganizer@test.de", confirmed: Boolean = true, roleName: String = "DEFAULT"): Future[(Login,Organizer,String)] = {
-    createLogin(mail, confirmed, "organizer", roleName).flatMap { case login =>
-      db.run(insertAndReturn[Organizer,OrganizerTable](OrganizerTable.organizer,Organizer(None, name, login.id.getOrElse(-1), None)))
+  def createOrganizer(name: String = "testorganizer", mail: String = "testorganizer@test.de", confirmed: Boolean = true): Future[(Login,Organizer,String)] = {
+    createLogin(mail, confirmed).flatMap { case login =>
+      db.run(insertAndReturn[Organizer,OrganizerTable](OrganizerTable.organizer,Organizer(None, name, None)))
         .map(o => (login,o))
     }.flatMap { case (l,o) =>
         getToken(l).map(t => (l,o,t))
@@ -103,7 +100,7 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
   }
 
   def createUser(mail: String = "testuser@test.de", roleName: String = "DEFAULT"): Future[(Login,User,String)] = {
-    createLogin(mail, true, "user", roleName).flatMap { case login =>
+    createLogin(mail, true).flatMap { case login =>
       db.run(insertAndReturn[User,UserTable](UserTable.user,User(None, login.id.getOrElse(-1), None)))
         .map(o => (login,o))
     }.flatMap { case (l,o) =>
@@ -111,9 +108,11 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
     }
   }
 
-  def createLocation(name: String = "testlocation", lat: Float = 0.0f, long: Float = 0.0f,
-                     country: String = "testcountry", city: String = "testcity", street: String = "teststreet"): Future[Location] = {
-    db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long, country, city, street)))
+  def createLocation(name: String = "testlocation", lat: Option[Float] = None, long: Option[Float] = None,
+                     country: String = "testcountry", city: String = "testcity", street: String = "teststreet",
+                     website: Option[String] = None, phone: Option[String] = None, comment: Option[String] = None, 
+                     link: Option[String] = None, zip: Option[String] = None): Future[Location] = {
+    db.run(insertAndReturn[Location,LocationTable](LocationTable.location,Location(None, name, lat, long, country, city, street,website,phone,comment,link,zip)))
   }
 
   def createCategory(name: String = "testcategory", parentId: Option[Int] = None): Future[Category] = {
@@ -126,19 +125,21 @@ class RestTestSuite extends PlaySpec with TestSuiteMixin
                   from: Timestamp = new Timestamp(0), to: Option[Timestamp] = Some(new Timestamp(0)),
                   description: String = "testdescription",
                   shortDescription: String = "short description",
-                  locationId: Option[Int] = None): Future[Event] = {
+                  locationId: Option[Int] = None, priceMin: Option[BigDecimal] = None,
+                  priceMax: Option[BigDecimal] = None): Future[Event] = {
     creator.map(Future.successful(_)).getOrElse(createUser().map(_._1))
       .zip(locationId.map(Future.successful(_)).getOrElse(createLocation().map(_.id.getOrElse(-1)))).flatMap { case (org,loc) =>
         db.run(insertAndReturn[Event,EventTable](EventTable.event,
-                                                 Event(None, name, from, to,
-                                                       description, shortDescription, org.id, loc)))
+                                                 Event(None, name, from, to, description,
+                                                       shortDescription, org.id, loc, org.id, priceMin, priceMax)))
     }
   }
 
   def createImage(contents: Array[Byte] = Array(1,2,3,4),
-                  login: Option[Login] = None): Future[Image] = {
+                  login: Option[Login] = None,
+                  copyright: Option[String] = None): Future[Image] = {
     login.map(Future.successful(_)).getOrElse(createUser().map(_._1)).flatMap { case login =>
-      db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, contents,"image/jpeg",login.id)))
+      db.run(insertAndReturn[Image,ImageTable](ImageTable.image,Image(None, contents,"image/jpeg",login.id,copyright)))
     }
   }
 }

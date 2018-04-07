@@ -72,6 +72,7 @@ class OrganizerController@Inject() (val silhouette: Silhouette[AuthEnv],
     returnPaged(s,q,db)
   }
 
+
   def createOrganizer() = withRights(Right.CreateOrganizer)(parse.json) { case (request,login,role) =>
     OrganizerForm.form.bindFromRequest()(request).fold(
       form => {

@@ -26,6 +26,11 @@ object Util extends Results {
     SimpleFunction[String]("lower").apply(Seq(a))
 
   def currentTimestamp = SimpleLiteral[java.sql.Timestamp]("current_timestamp")
+  
+  def oneDay = SimpleLiteral[java.sql.Timestamp]("interval '24 hours'")
+  
+  def plus(a: Rep[java.sql.Timestamp], b:Rep[java.sql.Timestamp]) =
+    SimpleBinaryOperator[java.sql.Timestamp]("+").apply(a,b)
 
   def insertAndReturn[T, U <: HasID[T]](a: TableQuery[U], b: U#TableElementType) = {
     (a returning a.map(x => x.id) into ((event,i) => event.cpy(Some(i))) += b)

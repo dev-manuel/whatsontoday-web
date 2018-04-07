@@ -6,7 +6,7 @@ import {Grid, Pagination, Segment, Container, Header, Button, Icon } from 'seman
 
 import './Search.less'
 import FilterPanel from '../../components/filterPanel'
-import EventTileTableBig from './components/eventTileTableBig'
+import EventTileTableBig from './components/eventTileTable'
 import {searchEvents, sortDirection as SortDirectionEnum, sort as SortEnum} from '../../common/api/requests/event'
 
 
@@ -194,6 +194,8 @@ class SERP extends React.Component{
 
         // Getting query-parameter from url ad parse it!
         const queryParams = parse(location.search);
+        const parsedQueryParams = this.parseQueryParams(queryParams);
+        log.debug('Search#requestPageData#parsedQueryParams', parsedQueryParams);
         const {
             parsedCategories,
             parsedSearch,
@@ -201,11 +203,11 @@ class SERP extends React.Component{
             parsedPageSize,
             parsedSort,
             parsedSortDirection
-        } = this.parseQueryParams(queryParams);
+        } = parsedQueryParams;
 
         // Sending AJAX api request to receive event data
         // Page starts to count with 0, (parsedPage with 1) so we have to subtract one
-        searchEvents(0, parsedSearch, parsedSortDirection, parsedSort, parsedPage-1, parsedPageSize)
+        searchEvents(parsedCategories, parsedSearch, parsedSortDirection, parsedSort, parsedPage-1, parsedPageSize)
             .then( resultObject => {
                 this.setState( () => ({
                     eventList: resultObject.eventList,

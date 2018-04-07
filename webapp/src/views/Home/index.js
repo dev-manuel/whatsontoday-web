@@ -4,12 +4,16 @@ import {Button} from 'semantic-ui-react'
 import {withRouter} from 'react-router-dom'
 import {stringify} from 'query-string'
 
+import {categoryTranslation} from '../../common/api/utils/categoryeTranslation'
 import {getCategories} from '../../common/api/requests/category'
 import Slider from './components/slider'
 // import CategoryTileTable from '../../components/categoryTileTable'
 // import EvenTileTable from '../../components/eventTileTable'
 import SearchPanel from './components/searchPanel'
-import ExampleSlide from './slides/example'
+
+import WhatsOnSlide from './slides/whatsOn'
+import DecompiledSlide from './slides/decompiled'
+import FlipFlop from './slides/flipflop'
 
 import './Home.less'
 
@@ -23,15 +27,19 @@ class Home extends React.Component {
     componentDidMount(){
         this.setState({isCategoryFetching: true})
 
+        // Fetch categories
         getCategories()
             .then( data => {
                 this.setState({
                     isCategoryFetching: false,
                     categoryOptions: data.map( category => ({
-                        text: category.name,
+                        text: categoryTranslation(category.name, this.props.language.categories),
                         value: category.id,
                     })),
                 })
+            })
+            .catch( error => {
+                log.debug('Home#getCategories#catch', error);
             })
     }
 
@@ -74,11 +82,13 @@ class Home extends React.Component {
                 <Slider
                     language={language}
                     slides={[
-                        <ExampleSlide/>
+                        <DecompiledSlide/>,
+                        <FlipFlop/>,
+                        <WhatsOnSlide/>,
                     ]}
                 />
                 <div className="Home_search">
-                    <h1>Find your next event!</h1>
+                    <h1>Find your next Event!</h1>
                     <div className="Home_searchPanel">
                         <SearchPanel
                             language={language}

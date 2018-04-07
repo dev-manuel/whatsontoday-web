@@ -30,7 +30,8 @@ class EventController @Inject()(cc: ControllerComponents,
                                 val organizerService: OrganizerService,
                                 val roleService: RoleService,
                                 eventService: EventService,
-                                val loginService: LoginService)
+                                val loginService: LoginService,
+                                locationService: LocationService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile]
@@ -52,12 +53,13 @@ class EventController @Inject()(cc: ControllerComponents,
   def searchEvents(search: Option[String], location: Option[Int], category: Option[Int],
                    sort: Option[String], sortDir: Boolean, from: Option[Timestamp], to: Option[Timestamp]) = Action.async { implicit request: Request[AnyContent] =>
     log.debug("Rest request to search events")
-
+    
     val q = for {
       e <- event if similar(e.name,search.getOrElse("").bind) || search.getOrElse("").bind === ""
                  if e.categories.filter(_.id === category.getOrElse(-1)).exists || category.getOrElse(-1).bind === -1
                  if e.locationId - location.getOrElse(-1).bind === 0 || location.getOrElse(-1).bind === -1
                  if e.from >= from.getOrElse(new Timestamp(0,0,0,0,0,0,0)) && e.from <= to.getOrElse(new Timestamp(4000,0,0,0,0,0,0))
+                 if e.to.getOrElse(plus(e.from,oneDay)) >= currentTimestamp
     } yield e
 
     val s = q.sortColumn(sort,sortDir).queryPaged.detailed
@@ -72,7 +74,8 @@ class EventController @Inject()(cc: ControllerComponents,
     db.run(q.detailed).map(_.headOption).flatMap {
       case Some(e) => {
         val q = EventTable.event.join(LocationTable.location).on(_.locationId === _.id)
-          .sortBy(y => geoDistance(e.location.latitude, e.location.longitude, y._2.latitude, y._2.longitude))
+          .sortBy(y => geoDistance(e.location.latitude.getOrElse(0.0f).bind, e.location.longitude.getOrElse(0.0f).bind, 
+              y._2.latitude.getOrElse(0.0f), y._2.longitude.getOrElse(0.0f)))
           .map(_._1).filter(y => y.id =!= e.id && y.from >= currentTimestamp)
         val s = q.queryPaged.detailed
         returnPaged(s,q,db)
@@ -114,12 +117,7 @@ class EventController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to create event")
 
-        val loc = data.location.toLocation //TODO
-
-        val locationQuery = (loc.id match {
-          case None => insertAndReturn[Location,LocationTable](LocationTable.location,loc)
-          case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
-        })
+        val location = locationService.insertOrGet(data.location)
 
         val imagesQuery = DBIO.sequence(data.images.map(x => ImageTable.image.filter(_.id === x.id.bind).result.map(l => l.map(r => (r,x.tag))))).map(_.flatten)
 
@@ -132,18 +130,22 @@ class EventController @Inject()(cc: ControllerComponents,
               }
           }).map(_.flatten)
 
-        db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery)).flatMap { case ((location,images),categories) =>
-          val event = Event(None, data.name, data.from, data.to,
-                            data.description, data.shortDescription,
-                            login.id, location.id.getOrElse(-1), Some(data.organizerId))
+          db.run(imagesQuery.zip(categoriesQuery)).zip(location).flatMap {
+            case ((images, categories), Some(location)) => {
+              val event = Event(None, data.name, data.from, data.to,
+                data.description, data.shortDescription, login.id,
+                location.id.getOrElse(-1), Some(data.organizerId), data.priceMin, data.priceMax)
 
-          db.run(insertAndReturn[Event,EventTable](EventTable.event,event)).map(r => (r,images,categories))
-        }.flatMap { case (event,images,categories) =>
-          val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img._1.id.getOrElse(-1),event.id.getOrElse(-1),EntityType.Event,img._2))
-          val categoriesAdd = EventCategoryTable.eventCategory ++= categories.map(cat => (cat.id.getOrElse(-1),event.id.getOrElse(-1)))
-          val eventDetailed = EventTable.event.filter(_.id === event.id.getOrElse(-1)).detailed
-          db.run(imagesAdd.zip(categoriesAdd) >> eventDetailed)
-        }.map(x => Ok(Json.toJson(x.head)))
+              db.run(insertAndReturn[Event, EventTable](EventTable.event, event)).map(r => (r, images, categories))
+            }.flatMap {
+              case (event, images, categories) =>
+                val imagesAdd = ImageEntityTable.imageEntity ++= images.map(img => ImageEntity(img._1.id.getOrElse(-1), event.id.getOrElse(-1), EntityType.Event, img._2))
+                val categoriesAdd = EventCategoryTable.eventCategory ++= categories.map(cat => (cat.id.getOrElse(-1), event.id.getOrElse(-1)))
+                val eventDetailed = EventTable.event.filter(_.id === event.id.getOrElse(-1)).detailed
+                db.run(imagesAdd.zip(categoriesAdd) >> eventDetailed)
+            }.map(x => Ok(Json.toJson(x.head)))
+            case _ => Future.successful(BadRequest)
+        }
       })
   }
 
@@ -156,12 +158,7 @@ class EventController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to update event")
 
-        val loc = data.location.toLocation //TODO
-
-        val locationQuery = (loc.id match {
-          case None => insertAndReturn[Location,LocationTable](LocationTable.location,loc)
-          case Some(id) => LocationTable.location.filter(_.id === id).result.map(_.head)
-        })
+        val location = locationService.insertOrGet(data.location)
 
         val imagesQuery = DBIO.sequence(data.images.map(x => ImageTable.image.filter(_.id === x.id.bind).result.map(l => l.map(r => (r,x.tag))))).map(_.flatten)
 
@@ -176,18 +173,19 @@ class EventController @Inject()(cc: ControllerComponents,
 
         val eventQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === login.id).result.map(_.headOption)
 
-        db.run(locationQuery.zip(imagesQuery).zip(categoriesQuery).zip(eventQuery)).flatMap {
-          case (((location,images),categories),Some(event)) => {
+        db.run(imagesQuery.zip(categoriesQuery).zip(eventQuery)).zip(location).flatMap {
+          case (((images,categories),Some(event)),Some(location)) => {
             val event = Event(Some(id), data.name, data.from, data.to,
                               data.description, data.shortDescription,
-                              login.id, location.id.getOrElse(-1), Some(data.organizerId))
+                              login.id, location.id.getOrElse(-1), Some(data.organizerId),
+                              data.priceMin, data.priceMax)
 
             val getQuery = EventTable.event.filter(x => x.id === id.bind && x.creatorId === login.id)
 
             db.run(getQuery.update(event) >> getQuery.result.map(_.head))
               .map(r => Some((r,images,categories)))
           }
-          case (((_,_),_),None) => Future.successful(None)
+          case _ => Future.successful(None)
         }.flatMap {
           case Some((event,images,categories)) => {
             val dropImages = ImageEntityTable.imageEntity.filter(x => x.entityId === id && x.entityType === EntityType.Event).delete
@@ -243,5 +241,12 @@ class EventController @Inject()(cc: ControllerComponents,
       }
       case _ => Future.successful(BadRequest)
     }
+  }
+  
+   
+  def getSliderEvents = Action.async { implicit request: Request[AnyContent] =>
+    log.debug("Rest request to get events for slider")
+
+    db.run(SliderEventTable.sliderEvent.sortBy(_.number).flatMap(_.event).detailed).map(x => Ok(Json.toJson(x)))
   }
 }

@@ -46,8 +46,8 @@ class LocationControllerSpec extends RestTestSuite {
 
     "return OK for proper get Nearby request" in {
       val location1 = Await.result(createLocation(), Duration.Inf)
-      val location2 = Await.result(createLocation(lat = 10.0f, long = 10.0f), Duration.Inf)
-      val location3 = Await.result(createLocation(lat = 10.0f, long = -10.0f), Duration.Inf)
+      val location2 = Await.result(createLocation(lat = Some(10.0f), long = Some(10.0f)), Duration.Inf)
+      val location3 = Await.result(createLocation(lat = Some(10.0f), long = Some(-10.0f)), Duration.Inf)
 
       val get = route(app, FakeRequest(GET, "/api/v1/location/nearby/" ++ location1.id.getOrElse(-1).toString,
                                        new Headers(List(("Accept", "application/json"))),
@@ -55,7 +55,7 @@ class LocationControllerSpec extends RestTestSuite {
 
       status(get) mustBe OK
       val content = contentAsJson(get).as[List[LocationDetail]]
-      content.sortBy(x => Location(x.id,x.name,x.latitude,x.longitude,x.country,x.city,x.street).distance(location1)) must equal (content)
+      content.sortBy(x => x.toLocation.distance(location1)) must equal (content)
     }
 
     "return NotFound for nearby on non existing location" in {

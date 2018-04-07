@@ -1,4 +1,16 @@
 ###
+#  summary: Get events supposed to be displayed in the slider
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        type: array
+#        items:
+#          $ref: '#/definitions/whatson.model.detail.EventDetail'
+###
+GET      /slider              controllers.EventController.getSliderEvents
+
+###
 #  summary: Query all events by name, location, categories
 #  parameters:
 #  - in: header
@@ -43,7 +55,7 @@
 #        items:
 #          $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
-GET      /   controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort:Option[String], sortDir: Boolean, from: Option[Timestamp], to: Option[Timestamp])
+GET      /                    controllers.EventController.searchEvents(search: Option[String], location: Option[Int], category: Option[Int], sort:Option[String], sortDir: Boolean, from: Option[Timestamp], to: Option[Timestamp])
 
 ###
 #  summary: Query the event with a specific id
@@ -53,7 +65,7 @@ GET      /   controllers.EventController.searchEvents(search: Option[String], lo
 #      schema:
 #        $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
-GET      /:id                         controllers.EventController.getEvent(id: Int)
+GET      /:id                 controllers.EventController.getEvent(id: Int)
 
 ###
 #  summary: Query events nearby another event
@@ -81,7 +93,7 @@ GET      /:id                         controllers.EventController.getEvent(id: I
 #        items:
 #          $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
-GET      /nearby/:id                         controllers.EventController.getNearby(id: Int)
+GET      /nearby/:id          controllers.EventController.getNearby(id: Int)
 
 ###
 #  summary: Query events other participants also particpate in
@@ -109,7 +121,7 @@ GET      /nearby/:id                         controllers.EventController.getNear
 #        items:
 #          $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
-GET      /alsoViewed/:id                         controllers.EventController.getSameViewed(id: Int)
+GET      /alsoViewed/:id      controllers.EventController.getSameViewed(id: Int)
 
 ###
 #  summary: Delete an event
@@ -122,7 +134,7 @@ GET      /alsoViewed/:id                         controllers.EventController.get
 #    200:
 #      description: Event deleted
 ###
-DELETE   /:id                         controllers.EventController.deleteEvent(id: Int)
+DELETE   /:id                 controllers.EventController.deleteEvent(id: Int)
 
 ###
 #  summary: Create an event
@@ -130,6 +142,8 @@ DELETE   /:id                         controllers.EventController.deleteEvent(id
 #    Creates an event. The location and category can either be specified by their id or only by name
 #    and their other attributes. In that case they will be created before creating the event.
 #    Images must be uploaded before creating the event, so they can only be referenced by id.
+#    The specified location gets specified if it does not already exists. The same conditions
+#    apply as for the POST location request.
 #  parameters:
 #  - in: header
 #    name: x-auth-token
@@ -145,7 +159,7 @@ DELETE   /:id                         controllers.EventController.deleteEvent(id
 #      schema:
 #        $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
-POST     /                            controllers.EventController.createEvent
+POST     /                    controllers.EventController.createEvent
 
 ###
 #  summary: Upload events from a csv
@@ -170,7 +184,7 @@ POST     /                            controllers.EventController.createEvent
 #        items:
 #          $ref: '#/definitions/whatson.model.Event'
 ###
-POST     /csv                            controllers.EventController.insertCSV
+POST     /csv                 controllers.EventController.insertCSV
 
 ###
 #  summary: Update an event with a specific id
@@ -193,7 +207,7 @@ POST     /csv                            controllers.EventController.insertCSV
 #      schema:
 #        $ref: '#/definitions/whatson.model.detail.EventDetail'
 ###
-PUT      /:id                         controllers.EventController.updateEvent(id: Int)
+PUT      /:id                 controllers.EventController.updateEvent(id: Int)
 
 ###
 #  summary: Participate in an event
@@ -211,7 +225,7 @@ PUT      /:id                         controllers.EventController.updateEvent(id
 #    409:
 #      description: The user is already participating.
 ###
-GET     /participate/:id                          controllers.EventController.participate(id: Int)
+GET      /participate/:id     controllers.EventController.participate(id: Int)
 
 ###
 #  summary: Remove participation in an event
@@ -227,4 +241,4 @@ GET     /participate/:id                          controllers.EventController.pa
 #    400:
 #      description: The user is not one of the participants
 ###
-GET     /unparticipate/:id                          controllers.EventController.unparticipate(id: Int)
+GET      /unparticipate/:id   controllers.EventController.unparticipate(id: Int)

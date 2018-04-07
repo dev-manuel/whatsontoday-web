@@ -26,7 +26,10 @@ class EventTable(tag: Tag) extends Table[Event](tag, "event") with HasRatings[Ev
 
   def organizerId = column[Option[Int]]("organizer_fk")
 
-  def * = (id.?,name,from,to,description,shortDescription,creatorId,locationId,organizerId) <> (Event.tupled, Event.unapply)
+  def priceMin = column[Option[BigDecimal]]("price_min")
+  def priceMax = column[Option[BigDecimal]]("price_max")
+
+  def * = (id.?,name,from,to,description,shortDescription,creatorId,locationId,organizerId,priceMin,priceMax) <> (Event.tupled, Event.unapply)
 
   def creator = foreignKey("creator",creatorId,LoginTable.login)(_.id.?)
   def location = foreignKey("location",locationId,LocationTable.location)(_.id)
@@ -46,16 +49,18 @@ object EventTable {
       case "from" => q.sortBy(_.from.dir(dir))
       case "to" => q.sortBy(_.to.dir(dir))
       case "rating" => q.sortBy(_.avgRating.getOrElse(0.0f).dir(dir))
+      case "priceMin" => q.sortBy(_.priceMin.dir(dir))
+      case "priceMax" => q.sortBy(_.priceMax.dir(dir))
       case _ => q.sortBy(_.id.dir(dir))
     }
 
     override def sortColumn[U,C[D]](name: String, dir: Boolean, param: Option[Location]) = name match {
       case "location" => {
-        val lat = param.map(_.latitude).getOrElse(0.0f)
-        val long = param.map(_.longitude).getOrElse(0.0f)
+        val lat = param.map(_.latitude).flatten.getOrElse(0.0f)
+        val long = param.map(_.longitude).flatten.getOrElse(0.0f)
 
         val s = q.join(LocationTable.location).on(_.locationId === _.id)
-          .sortBy(x => geoDistance(x._2.latitude,x._2.longitude,lat,long).dir(dir)).map(_._1)
+          .sortBy(x => geoDistance(x._2.latitude.getOrElse(0.0f),x._2.longitude.getOrElse(0.0f),lat,long).dir(dir)).map(_._1)
         s
       }
       case n => q.sortColumn(n,dir)

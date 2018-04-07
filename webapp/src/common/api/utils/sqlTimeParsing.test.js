@@ -22,9 +22,7 @@ describe('sqlTimeToDate', () => {
         ]
 
         failingExamples.forEach(data => {
-            expect(()=>{
-                let date = sqlTimestampToDate(data);
-            }).toThrow();
+            expect(sqlTimestampToDate(data)).toBeNull();
         })
     })
 })

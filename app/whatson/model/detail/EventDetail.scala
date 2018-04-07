@@ -8,13 +8,14 @@ import whatson.db.EventTable
 import slick.jdbc.PostgresProfile.api._
 import whatson.db._
 import scala.concurrent.ExecutionContext
+import scala.math.BigDecimal
 
 case class EventDetail(id: Option[Int], name: String, from: Timestamp,
                        to: Option[Timestamp], description: String, shortDescription: String,
                        creatorId: Option[Int],categories: List[Category],
                        avgRating: Option[Float], location: Location,
                        images: List[TaggedImage], participantCount: Int,
-                       organizerId: Option[Int]) extends Rateable with WithTaggedImages
+                       organizerId: Option[Int], priceMin: Option[BigDecimal], priceMax: Option[BigDecimal]) extends Rateable with WithTaggedImages
 
 object EventDetail {
   implicit val eventDetailReads = Json.reads[EventDetail]
@@ -29,7 +30,8 @@ object EventDetail {
       val t = s.result.flatMap(y => {
         DBIO.sequence(y.map {
           case ((event,pCount,r), location) => {
-            val taggedImgs = EventTable.event.filter(_.id === event.id).flatMap(_.taggedImages).result.map(l => l.map(x => TaggedImage(x._2.id,x._1)))
+            val taggedImgs = EventTable.event.filter(_.id === event.id).flatMap(_.taggedImages).result
+              .map(l => l.map(x => TaggedImage(x._2.id,x._1,x._2.copyright)))
 
             val c = for (
               j <- EventCategoryTable.eventCategory if j.eventID === event.id;
@@ -39,7 +41,7 @@ object EventDetail {
             c.result.zip(taggedImgs).map(o => {
               EventDetail(event.id, event.name, event.from, event.to, event.description,
                           event.shortDescription, event.creatorId, o._1.toList, r,
-                          location, o._2.toList, pCount, event.organizerId)
+                          location, o._2.toList, pCount, event.organizerId, event.priceMin, event.priceMax)
             })
           }
         })

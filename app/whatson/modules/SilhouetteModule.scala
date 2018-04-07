@@ -24,6 +24,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSClient
 import play.api.mvc.DefaultCookieHeaderEncoding
 import whatson.service._
+import whatson.service.geocoder._
 import whatson.auth._
 import whatson.util._
 import com.google.inject._
@@ -41,10 +42,6 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
     bind[AuthInfoRepository].to[AuthInfoService]
     bind[LoginService].to[LoginServiceImpl]
-    bind[OrganizerService].to[OrganizerServiceImpl]
-    bind[MailService].to[MailServiceImpl]
-    bind[RoleService].to[RoleServiceImpl]
-    bind[EventService].to[EventServiceImpl]
   }
 
   @Provides
@@ -180,14 +177,5 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   def provideCsrfStateSettings(
     configuration: Configuration): CsrfStateSettings = {
     configuration.underlying.as[CsrfStateSettings]("silhouette.csrfState")
-  }
-
-  /**
-    * Provides the ApplicationConfig.
-    */
-  @Provides
-  def provideApplicationConfig(
-    configuration: Configuration): ApplicationConfig = {
-    configuration.underlying.as[ApplicationConfig]("application")
   }
 }

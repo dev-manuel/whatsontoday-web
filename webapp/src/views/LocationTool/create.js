@@ -12,11 +12,15 @@ export default class Create extends React.Component {
         streetError: false,
         cityError: false,
         countryError: false,
+        websiteError: false,
+        commentError: false,
 
         nameValue: '',
         streetValue: '',
         cityValue: '',
         countryValue: '',
+        websiteValue: '',
+        commentValue: '',
     }
 
     handleBackClick(){
@@ -31,6 +35,8 @@ export default class Create extends React.Component {
             streetValue,
             cityValue,
             countryValue,
+            websiteValue,
+            commentValue
         } = this.state;
         const {
             history,
@@ -39,7 +45,8 @@ export default class Create extends React.Component {
         } = this.props;
 
 
-        createLocation(nameValue, countryValue, cityValue, streetValue)
+        createLocation(nameValue, countryValue, cityValue, streetValue,
+            websiteValue===''?undefined:websiteValue, commentValue===''?undefined:commentValue)
             .then( locationResult => {
                 log.debug('LocationTool#create#submit', location.state);
                 history.push({
@@ -56,6 +63,8 @@ export default class Create extends React.Component {
                     streetError: false,
                     cityError: false,
                     countryError: false,
+                    websiteError: false,
+                    commentError: false,
                 }
                 const errorData = error.response.data;
                 
@@ -67,6 +76,10 @@ export default class Create extends React.Component {
                     formErrors.cityError = true;
                 if(errorData.country)
                     formErrors.countryError = true;
+                if(errorData.website)
+                    formErrors.websiteError = true;
+                if(errorData.comment)
+                    formErrors.commentError = true;
 
                 this.setState(formErrors);
             })
@@ -80,11 +93,15 @@ export default class Create extends React.Component {
             cityError,
             streetError,
             countryError,
+            websiteError,
+            commentError,
 
             nameValue,
             streetValue,
             cityValue,
             countryValue,
+            websiteValue,
+            commentValue,
         } = this.state;
 
         const {location} = this.props;
@@ -97,6 +114,7 @@ export default class Create extends React.Component {
                     <Divider/>
                     <Form onSubmit={this.handleSubmit.bind(this)}>
                         <Form.Input
+                            required
                             error={nameError}
                             label={lang.name}
                             fluid
@@ -105,6 +123,7 @@ export default class Create extends React.Component {
                             onChange={(event, {value}) => this.setState({nameValue: value})}
                         />
                         <Form.Input
+                            required
                             error={streetError}
                             label={lang.street}
                             fluid
@@ -113,6 +132,7 @@ export default class Create extends React.Component {
                             onChange={(event, {value}) => this.setState({streetValue: value})}
                         />
                         <Form.Input
+                            required
                             error={cityError}
                             label={lang.city}
                             fluid
@@ -121,6 +141,7 @@ export default class Create extends React.Component {
                             onChange={(event, {value}) => this.setState({cityValue: value})}
                         />
                         <Form.Input
+                            required
                             error={countryError}
                             label={lang.country}
                             fluid
@@ -129,6 +150,33 @@ export default class Create extends React.Component {
                             onChange={(event, {value}) => this.setState({countryValue: value})}
                         />
 
+
+                        <Divider
+                            horizontal
+                            content={lang.extra}
+                        />
+
+                        <Form.Group
+                            widths='equal'
+                        >
+                            <Form.Input
+                                error={websiteError}
+                                label={lang.website}
+                                fluid
+                                placeholder={lang.websitePlaceholder}
+                                value={websiteValue}
+                                onChange={(event, {value}) => this.setState({websiteValue: value})}
+                            />
+                            <Form.Input
+                                error={commentError}
+                                label={lang.comment}
+                                fluid
+                                placeholder={lang.commentPlaceholder}
+                                value={commentValue}
+                                onChange={(event, {value}) => this.setState({commentValue: value})}
+                            />
+                        </Form.Group>
+                        
                         <FormNavigationBar
                             nextText={lang.submit}
                             backText={lang.back}

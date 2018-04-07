@@ -39,8 +39,10 @@ class OrganizerControllerSpec extends RestTestSuite {
   "OrganizerController POST" should {
 
     "send a confirmation email" in {
-      val signUp = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"))),
-                                          Json.toJson(Data("testuser@test.de","testpass","testorganizer")))).get
+      val org = Await.result(createOrganizer("testorganizer2", "testuser2@test.de"), Duration.Inf)
+      
+      val signUp = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"),"x-auth-token"->org._3)),
+                                          Json.toJson(Data("testuser@test.de","testpass","testorganizer", "testpass", true)))).get
 
       status(signUp) mustBe OK
 
@@ -52,37 +54,54 @@ class OrganizerControllerSpec extends RestTestSuite {
     }
 
     "return OK on correct sign up" in {
-      val signUp = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"))),
-                                          Json.toJson(Data("testuser@test.de","testpass", "testorganizer")))).get
+      val org = Await.result(createOrganizer("testorganizer2", "testuser2@test.de"), Duration.Inf)
+      
+      val signUp = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"),"x-auth-token"->org._3)),
+                                          Json.toJson(Data("testuser@test.de","testpass", "testorganizer", "testpass", true)))).get
 
       status(signUp) mustBe OK
     }
 
 
     "not allow the same signUp twice" in {
-      val signUp1 = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"))),
-                                          Json.toJson(Data("testuser@test.de","testpass","testorganizer")))).get
+      val org = Await.result(createOrganizer("testorganizer2", "testuser2@test.de"), Duration.Inf)
+      
+      val signUp1 = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"),"x-auth-token"->org._3)),
+                                          Json.toJson(Data("testuser@test.de","testpass","testorganizer", "testpass", true)))).get
 
       status(signUp1) mustBe OK
 
-      val signUp2 = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"))),
-                                           Json.toJson(Data("testuser@test.de","testpass", "testorganizer")))).get
+      val signUp2 = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"),"x-auth-token"->org._3)),
+                                           Json.toJson(Data("testuser@test.de","testpass", "testorganizer", "testpass", true)))).get
 
       status(signUp2) mustBe BAD_REQUEST
     }
 
     "not allow short passwords" in {
-      val signUp = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"))),
-                                           Json.toJson(Data("testuser@test.de","t","testorganizer")))).get
+      val org = Await.result(createOrganizer("testorganizer2", "testuser2@test.de"), Duration.Inf)
+      
+      val signUp = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"),"x-auth-token"->org._3)),
+                                           Json.toJson(Data("testuser@test.de","t","testorganizer", "testpass", true)))).get
 
       status(signUp) mustBe BAD_REQUEST
     }
 
     "not allow wrong emails" in {
-      val signUp = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"))),
-                                          Json.toJson(Data("testuser","testpass","testorganizer")))).get
+      val org = Await.result(createOrganizer("testorganizer2", "testuser2@test.de"), Duration.Inf)
+      
+      val signUp = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"),"x-auth-token"->org._3)),
+                                          Json.toJson(Data("testuser","testpass","testorganizer", "testpass", true)))).get
 
       status(signUp) mustBe BAD_REQUEST
+    }
+    
+    "return unauthorized for users" in {
+      val user = Await.result(createUser("testuser2@test.de"), Duration.Inf)
+      
+      val signUp = route(app, FakeRequest(POST, "/api/v1/organizer/signUp", new Headers(List(("Content-Type","application/json"),"x-auth-token"->user._3)),
+                                          Json.toJson(Data("testuser@test.de","testpass", "testorganizer", "testpass", true)))).get
+
+      status(signUp) mustBe UNAUTHORIZED
     }
   }
 

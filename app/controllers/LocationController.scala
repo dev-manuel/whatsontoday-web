@@ -19,6 +19,8 @@ import com.mohiva.play.silhouette.api._
 import whatson.auth._
 import whatson.model.forms._
 import whatson.util.FormErrorJson._
+import whatson.service.geocoder.Geocoder
+import whatson.service.geocoder.Result._
 import whatson.service._
 
 
@@ -27,7 +29,9 @@ class LocationController @Inject()(cc: ControllerComponents,
                                    val silhouette: Silhouette[AuthEnv],
                                    val organizerService: OrganizerService,
                                    val roleService: RoleService,
-                                   val loginService: LoginService)
+                                   val loginService: LoginService,
+                                   geocoder: Geocoder,
+                                   locationService: LocationService)
     (implicit context: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile]
@@ -64,7 +68,8 @@ class LocationController @Inject()(cc: ControllerComponents,
 
     db.run(q.detailed).map(_.headOption).flatMap {
       case Some(r) => {
-        val q = location.sortBy(y => geoDistance(r.latitude, r.longitude, y.latitude, y.longitude))
+        val q = location.sortBy(y => geoDistance(r.latitude.getOrElse(0.0f).bind, r.longitude.getOrElse(0.0f).bind, 
+            y.latitude.getOrElse(0.0f), y.longitude.getOrElse(0.0f)))
         val s = q.queryPaged.detailed
         returnPaged(s,q,db)
       }
@@ -80,9 +85,10 @@ class LocationController @Inject()(cc: ControllerComponents,
       data => {
         log.debug("Rest request to create location")
 
-        val inserted = db.run(insertAndReturn[Location,LocationTable](location,data.toLocation))
-
-        inserted.map(x => Ok(Json.toJson(x)))
+        locationService.insertOrGet(data).map {
+          case Some(loc) => Ok(Json.toJson(loc))
+          case None => BadRequest
+        }
       })
   }
 }

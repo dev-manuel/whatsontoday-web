@@ -57,6 +57,8 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
     };
     if(category) // Appending a `category` parameter according if is set
         queryParams.category = category;
+
+    log.debug('searchEvents#queryParams', queryParams); 
     
     return axios.get(`${eventBasePath}`, {
         params: queryParams,
@@ -78,10 +80,10 @@ export const searchEvents = (category, search = '', sortDirection=true, sort='id
  * @param {number} id
  */
 export const readEvent = id => {
-    return axios.get(`${$eventBasePath}/${id}`)
+    return axios.get(`${eventBasePath}/${id}`)
         .then(response => {
             log.debug('readEvent#then', response);
-            return mapEvent(response);
+            return mapEvent(response.data);
         })
 }
 
@@ -161,6 +163,7 @@ export const updateEvent = (id, name, description, shortDescription, locationId,
     const req = {
         name,
         description,
+        shortDescription,
         location,
         from: dateToSqlTimestamp(from),
         to: dateToSqlTimestamp(to),
@@ -173,7 +176,7 @@ export const updateEvent = (id, name, description, shortDescription, locationId,
     }
     log.debug('updateEvent#req', req);    
 
-    return axios.put(`${eventBasePath}`, req).then( response => {
+    return axios.put(`${eventBasePath}/${id}`, req).then( response => {
             log.debug('updateEvent#then', response);
             return response.data;
     })

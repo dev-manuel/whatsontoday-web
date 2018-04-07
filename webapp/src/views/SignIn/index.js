@@ -3,7 +3,7 @@ import log from 'loglevel'
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
 import {Redirect} from 'react-router'
 
-import SignInPanel from '../components/SignInPanel';
+import SignInForm from './components/signInForm';
 
 
 // Inspired by https://react.semantic-ui.com/layouts/login
@@ -35,7 +35,7 @@ export const AlreadyLoggedInView = ({language}) => {
     )
 }
 
-export class ShowingSignInPanel extends React.Component{
+export class ShowingSignInForm extends React.Component{
 
     render(){
         return (
@@ -45,11 +45,11 @@ export class ShowingSignInPanel extends React.Component{
                     textAlign='center'
                 >
                 <Grid.Column style={{ maxWidth: 450 }}>
-                    <SignInPanel
+                    <SignInForm
                         withRedirect={this.props.withRedirect}
                         language={this.props.language}
                         onSuccess={this.onSuccess}
-                        setLoginData={this.props.setLoginData}
+                        handleSignIn={this.props.handleSignIn}
                     />
                 </Grid.Column>
                 </Grid>
@@ -87,23 +87,23 @@ export default class SignInView extends React.Component {
         }
     }
     
-    handleSuccessfulSignIn(loginData){
+    handleSuccessfulSignIn(storeToken, token, userMail, isOrganizer){
         
         const locationState = this.props.location.state;
-        const redirectTo = this.getRedirectLink(locationState, loginData.isOrganizer);
+        const redirectTo = this.getRedirectLink(locationState, isOrganizer);
         log.debug('SignInView#redirectTo', redirectTo);
 
-        this.props.setLoginData(loginData, redirectTo);
+        this.props.handleSignIn(storeToken, token, userMail, isOrganizer, redirectTo);
     }
 
     render(){
         const langData = {language: this.props.language}
         return this.props.loginData.loggedIn ? 
             <AlreadyLoggedInView {...langData}/> :
-            <ShowingSignInPanel 
+            <ShowingSignInForm 
                 {...langData} 
                 withRedirect={!(this.props.location.state)}
-                setLoginData={this.handleSuccessfulSignIn.bind(this)}
+                handleSignIn={this.handleSuccessfulSignIn.bind(this)}
             />
     }
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import log from 'loglevel'
 import {Route, Redirect} from 'react-router-dom'
 
 /**
@@ -27,20 +28,32 @@ export const PrivateRoute = ({ loggedIn, render, path}) => (
  * If the user is (or will) signIn as a "normal" user he will redirected to the NoAccess view;
  * Otherwise it behaves like a regular PrivateRoute and shows its content
  */
-export const PrivateOrganizerRoute = ({loggedIn, isOrganizer, render, path}) => (
-    <Route path={path} render={props => {
-        if((loggedIn && isOrganizer) || DISABLE_PRIVATE_ROUTES){ // DISABLE_PRIVATE_ROUTES is defined by the webpack definition plugin
-            return render(props);
-        }else{
-            return (
-                <Redirect push to={{
-                    pathname: "/signIn",
-                    state: {
-                        from: props.location,
-                        organizerRightsNeeded: true,
-                    }
-                }}/>
-            )
-        }
-    }}/>
-)
+export const PrivateOrganizerRoute = ({loggedIn, isOrganizer, render, path}) => {
+    log.debug('PrivateOrganizerRoute', loggedIn, isOrganizer)
+
+    return (
+        <Route path={path} render={props => {
+            if(loggedIn || DISABLE_PRIVATE_ROUTES){ // DISABLE_PRIVATE_ROUTES is defined by the webpack definition plugin
+                return isOrganizer || DISABLE_PRIVATE_ROUTES ? 
+                    render(props) :
+                    <Redirect push to={{
+                        pathname: '/no_access',
+                        search: '?reason=organizer',
+                        state: {
+                            from: props.location,
+                        }
+                    }}/>
+            }else{
+                return (
+                    <Redirect push to={{
+                        pathname: "/signIn",
+                        state: {
+                            from: props.location,
+                            organizerRightsNeeded: true,
+                        }
+                    }}/>
+                )
+            }
+        }}/>
+    )
+}

@@ -45,6 +45,7 @@
   <logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF" />
   
   <logger name="play.api.libs.ws.ahc" level="WARN"/>
+  <logger name="play.api.libs.ws.ssl" level="OFF"/>
   <logger name="play.shaded.ahc.org.asynchttpclient.netty.channel" level="WARN"/>
   <logger name="play.shaded.ahc.io.netty.handler.ssl" level="WARN"/>
   <logger name="play.shaded.ahc.org.asynchttpclient.netty.handler" level="WARN"/>

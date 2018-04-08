@@ -19,7 +19,7 @@ const headingStyle = {
 }
 
 const pStyle= {
-    fontSize: 24,
+    fontSize: 34,
 }
 
 export default class Example extends React.Component {
@@ -34,8 +34,7 @@ export default class Example extends React.Component {
                         style={headingStyle}
                     >
                         What's On Today <br/>
-                        Find your next event! <br/>
-                        <span style={pStyle}>(Folge uns auf Facebook)</span>
+                        <span style={pStyle}>Folgt uns auf Facebook!</span>
                     </h2>
                 </div>
             </a>

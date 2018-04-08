@@ -63,6 +63,8 @@ export default {
         city: 'Stadt',
         category: 'Kategorie',
         submit: 'Los geht\'s!',
+
+        slogan: 'Finde dein nächstes Event!',
     },
     footer: {
         socialMedia: 'Social Media',
@@ -177,7 +179,7 @@ export default {
     forOrganizers: {
         forOrganizers: 'Für Veranstalter',
         createEvent: 'Event hinzufügen',
-        crateLocation: 'Ort hinzufügen',
+        crateLocation: 'Location hinzufügen',
         dashboard: 'Dashboard',
     },
     eventTool: {
@@ -193,8 +195,8 @@ export default {
             to: 'Ende',
             toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
             location: 'Veranstaltungsort',
-            locationPlaceholder: 'Bitte wähle einen Ort aus',
-            createNewLocation: 'Neuen Ort hinzufügen',
+            locationPlaceholder: 'Bitte wähle eine Location aus',
+            createNewLocation: 'Neue Location hinzufügen',
             images: 'Bilder',
             thumbnailImageUploadButtonAddImage: 'Thumbnail hinzufügen',
             thumbnailImageNoFileSelected: 'Keine Datei ausgewählt',
@@ -213,7 +215,7 @@ export default {
             back: 'Zurück',
         },
         update: {
-            hint: 'Nicht wundern! Kategorien, Ort und Bilder des Events werden hier nicht angezeigt! Fülle einfach die entsprechenden Felder aus, um die aktuellen Werte zu überschreiben.',
+            hint: 'Nicht wundern! Kategorien, Location und Bilder des Events werden hier nicht angezeigt! Fülle einfach die entsprechenden Felder aus, um die aktuellen Werte zu überschreiben.',
             noResults: 'Keine Ergebnisse gefunden...',
             updateEvent: 'Event bearbeiten',
             name: 'Titel',
@@ -225,8 +227,8 @@ export default {
             to: 'Ende',
             toPlaceholder: 'Bitte wähle ein Datum und Uhrzeit aus...',
             location: 'Veranstaltungsort',
-            locationPlaceholder: 'Bitte wähle einen Ort aus',
-            createNewLocation: 'Neuen Ort hinzufügen',
+            locationPlaceholder: 'Bitte wähle eine Location aus',
+            createNewLocation: 'Neue Location hinzufügen',
             images: 'Bilder',
             thumbnailImageUploadButtonAddImage: 'Thumbnail hinzufügen',
             thumbnailImageNoFileSelected: 'Keine Datei ausgewählt',
@@ -266,7 +268,7 @@ export default {
     locationTool: {
         create: {
             name: 'Name',
-            namePlaceholder: 'Bitte gib den Namen des Ortes ein...',
+            namePlaceholder: 'Bitte gib den Namen der Location ein...',
             street: 'Straße',
             streetPlaceholder: 'Bitte gib die Straße ein...',
             city: 'Stadt',
@@ -282,7 +284,7 @@ export default {
             extra: 'Extra Informationen',
         },
         successful: {
-            createLocation: 'Du hast erfolgreich einen Ort erstellt!',
+            createLocation: 'Du hast erfolgreich eine Location erstellt!',
             default: 'Aktion erfolgreich ausgeführt',
 
             goBack: 'Zurück'

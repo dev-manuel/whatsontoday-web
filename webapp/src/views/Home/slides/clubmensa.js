@@ -1,6 +1,7 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
-import backgroundImage from '../../../img/slider/fliptheflop.jpg'
+import backgroundImage from '../../../img/slider/clubmensa2.png'
 
 const divStyle = {
     background: `url(${backgroundImage}) no-repeat center center`,
@@ -15,22 +16,23 @@ const headingStyle = {
     top: '50%',
     transform: 'translateY(-50%)',
     color: 'rgb(255, 255, 255)',
-    fontSize: 33,
+    fontSize: 44,
 }
 
 export default class Example extends React.Component {
 
     render(){
         return (
-            <a href='http://www.gruendernest.com/event/8-fliptheflop-night-dresden' target='_blank'>
+            <Link to='/event/215'>
                 <div
                     style={divStyle}
                 >
                     {/* <h2 style={headingStyle}>  
-                        
+                        DecompileD Conference <br/>
+                        06. April 2018, Dresden
                     </h2> */}
                 </div>
-            </a>
+            </Link>
         )
     }
 }

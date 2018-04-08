@@ -17,13 +17,15 @@ object LocationForm {
     "website" -> optional(nonEmptyText),
     "phone" -> optional(nonEmptyText),
     "comment" -> optional(nonEmptyText),
-    "link" -> optional(nonEmptyText))(Data.apply)(Data.unapply)
+    "link" -> optional(nonEmptyText),
+    "zip" -> optional(nonEmptyText)
+    )(Data.apply)(Data.unapply)
 
   case class Data(id: Option[Int], name: String, country: String,
                   city: String, street: String, website: Option[String] = None,
                   phone: Option[String] = None, comment: Option[String] = None,
-                  link: Option[String] = None) {
-    def toLocation(lat: Option[Float] = None, long: Option[Float] = None) = Location(id, name, lat, long, country, city, street, website, phone, comment, link)
+                  link: Option[String] = None, zip: Option[String] = None) {
+    def toLocation(lat: Option[Float] = None, long: Option[Float] = None) = Location(id, name, lat, long, country, city, street, website, phone, comment, link, zip)
   }
 
   object Data {

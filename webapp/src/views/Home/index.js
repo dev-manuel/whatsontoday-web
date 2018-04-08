@@ -12,8 +12,8 @@ import Slider from './components/slider'
 import SearchPanel from './components/searchPanel'
 
 import WhatsOnSlide from './slides/whatsOn'
-import DecompiledSlide from './slides/decompiled'
-import FlipFlop from './slides/flipflop'
+import ClubMensaSlide from './slides/clubmensa'
+import ScienceMarchSlide from './slides/sciencemarch'
 
 import './Home.less'
 
@@ -82,13 +82,13 @@ class Home extends React.Component {
                 <Slider
                     language={language}
                     slides={[
-                        <DecompiledSlide/>,
-                        <FlipFlop/>,
+                        <ClubMensaSlide/>,
+                        <ScienceMarchSlide/>,
                         <WhatsOnSlide/>,
                     ]}
                 />
                 <div className="Home_search">
-                    <h1>Find your next Event!</h1>
+                    <h1>{language.home.slogan}</h1>
                     <div className="Home_searchPanel">
                         <SearchPanel
                             language={language}
